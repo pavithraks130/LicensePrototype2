@@ -22,8 +22,6 @@ namespace License.Core.Model
         public string Email { get; set; }
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         public string PhoneNumber { get; set; }
-        public Team Team { get; set; }
-        public string ManagerId { get; set; }
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email Address is Required")]
         public override string UserName
@@ -38,6 +36,8 @@ namespace License.Core.Model
             }
         }
 
+        public  int TeamId { get; set; }
+        
         [NotMapped]
         public string Name
         {

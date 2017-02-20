@@ -47,6 +47,15 @@ namespace License.Logic.ServiceLogic
             return team;
         }
 
+        public Team UpdateTeam(Team team)
+        {
+            var _team = AutoMapper.Mapper.Map<Team, License.Core.Model.Team>(team);
+            _team = Work.TeamLicenseRepository.Update(_team);
+            Work.Save();
+            team = AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(_team);
+            return team;
+        }
+
         public bool DeleteTeam(object id)
         {
             var status = Work.TeamLicenseRepository.Delete(id);

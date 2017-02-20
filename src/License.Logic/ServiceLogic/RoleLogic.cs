@@ -21,7 +21,6 @@ namespace License.Logic.ServiceLogic
             return listRoles;
         }
 
-
         public IdentityResult CreateRole(Role r)
         {
             try
@@ -33,6 +32,24 @@ namespace License.Logic.ServiceLogic
             {
                 throw ex;
             }
+        }
+
+        public IdentityResult UpdateRole(Role r)
+        {
+            var role = AutoMapper.Mapper.Map<Model.Model.Role, Core.Model.Role>(r);
+            return RoleManager.Update(role);
+        }
+
+        public Role GetRoleById(string id)
+        {
+            var r = RoleManager.FindById(id);
+            return AutoMapper.Mapper.Map<Core.Model.Role, Model.Model.Role>(r);
+        }
+
+        public IdentityResult DeleteRole(string id)
+        {
+            var r = RoleManager.FindById(id);
+            return RoleManager.Delete(r);
         }
     }
 }

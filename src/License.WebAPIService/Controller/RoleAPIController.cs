@@ -46,5 +46,47 @@ namespace License.WebAPIService.Controller
             else
                 return this.GetErrorResult(result);
         }
+
+        [Route("Update/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateRole(string id, Role role)
+        {
+            if (logic.UserManager == null)
+                logic.UserManager = UserManager;
+            if (logic.RoleManager == null)
+                logic.RoleManager = RoleManager;
+            IdentityResult result = logic.UpdateRole(role);
+            if (result.Succeeded)
+                return Request.CreateResponse(HttpStatusCode.OK, "Updated Successfuly");
+            else
+                return this.GetErrorResult(result);
+        }
+
+        [Route("Get/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetRoleById(string id)
+        {
+            if (logic.UserManager == null)
+                logic.UserManager = UserManager;
+            if (logic.RoleManager == null)
+                logic.RoleManager = RoleManager;
+            var result = logic.GetRoleById(id);
+            return Ok(result);
+        }
+
+        [Route("Delete/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteRole(string id)
+        {
+            if (logic.UserManager == null)
+                logic.UserManager = UserManager;
+            if (logic.RoleManager == null)
+                logic.RoleManager = RoleManager;
+            IdentityResult result = logic.DeleteRole(id);
+            if (result.Succeeded)
+                return Request.CreateResponse(HttpStatusCode.OK, "Deleted Successfuly");
+            else
+                return this.GetErrorResult(result);
+        }
     }
 }

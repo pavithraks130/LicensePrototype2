@@ -36,19 +36,40 @@ namespace License.Logic.ServiceLogic
             Model.Model.Team t = logic.GetTeamByName(teamName);
             if (t == null)
                 t = logic.CreateTeam(new Model.Model.Team() { Name = u.OrganizationName });
-            ur.Organization = t;
+            ur.TeamId = t.Id;
             AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
             {
                 result = UserManager.Create(user, u.Password);
-               
+
             }
             catch (Exception ex)
             {
                 throw ex;
             }
             return result;
+        }
+
+        public User GetUserById(string id)
+        {
+            var u = UserManager.FindById(id);
+            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
+            TeamLogic logic = new TeamLogic();
+            user.Organization = logic.GetTeamById(user.TeamId);
+            return user;
+        }
+
+        public IdentityResult UpdateUser(string id, User user)
+        {
+            var u = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(user);
+            return UserManager.Update(u);
+        }
+
+        public IdentityResult DeleteUser(string id)
+        {
+            var user = UserManager.FindById(id);
+            return UserManager.Delete(user);
         }
     }
 }
