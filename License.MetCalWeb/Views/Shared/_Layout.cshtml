@@ -1,0 +1,51 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - FLUKE Calibration</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Resources/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body style="background:#000000">
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("LogIn","Account")">
+                    <img src="~/Resources/logo.png" />
+                </a>
+                <p class="image-centre-place-center" style="color: #3D1400" href="@Url.Action("LogIn","Account")">
+                    <img src="~/Resources/fcal-tagline-321x66.gif" />
+                </p>
+            </div>
+            <div class="float-right">
+                <nav>
+                    <ul id="menu">
+                        <li>@Html.ActionLink("Register", "Register", "Account")</li>
+                        <li>@Html.ActionLink("Log in", "LogIn", "Account")</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </header>
+
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - FLUKE Calibration</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
