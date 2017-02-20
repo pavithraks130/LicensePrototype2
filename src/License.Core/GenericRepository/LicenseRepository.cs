@@ -32,11 +32,7 @@ namespace License.Core.GenericRepository
                 return orderby(query).ToList();
             return query.ToList();
         }
-        // if Key is Iinteger
-        public T GetById(int id)
-        {
-            return _dbSet.Find(id);
-        }
+       
         //If Key is String
         public T GetById(object id)
         {
@@ -61,6 +57,12 @@ namespace License.Core.GenericRepository
         {
             _context.Entry(obj).State = EntityState.Modified;
            return _dbSet.Attach(obj);
+        }
+
+        public T Create(T obj)
+        {
+            _context.Entry(obj).State = EntityState.Added;
+           return  _dbSet.Add(obj);
         }
     }
 }

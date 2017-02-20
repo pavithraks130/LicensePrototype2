@@ -13,7 +13,7 @@ namespace License.Core.GenericRepository
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
         private LicenseRepository<Team> _teamLicenseRepository = null;
 
-        public LicenseRepository<Team> TeaLicenseRepository
+        public LicenseRepository<Team> TeamLicenseRepository
         {
             get { return _teamLicenseRepository ?? (_teamLicenseRepository = new LicenseRepository<Team>(_dbContext)); }
         }

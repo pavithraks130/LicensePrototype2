@@ -17,13 +17,13 @@ namespace License.WebAPIService.Controller
         private readonly AppUserManager _calUserManage = null;
         public AppUserManager UserManager
         {
-            get { return _calUserManage ?? Request.GetOwinContext().Get<AppUserManager>(); }
+            get { return _calUserManage ?? Request.GetOwinContext().GetUserManager<AppUserManager>(); }
         }
 
         private AppRoleManager _calRoleManager = null;
         public AppRoleManager RoleManager
         {
-            get { return _calRoleManager ?? Request.GetOwinContext().Get<AppRoleManager>(); }
+            get { return _calRoleManager ?? Request.GetOwinContext().GetUserManager<AppRoleManager>(); }
         }
 
         protected HttpResponseMessage GetErrorResult(IdentityResult result)

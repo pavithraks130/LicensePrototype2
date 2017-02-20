@@ -24,8 +24,15 @@ namespace License.Logic.ServiceLogic
 
         public IdentityResult CreateRole(Role r)
         {
-            var obj = AutoMapper.Mapper.Map<Role, License.Core.Model.Role>(r);
-            return RoleManager.Create(obj);
+            try
+            {
+                var obj = AutoMapper.Mapper.Map<Role, License.Core.Model.Role>(r);
+                return RoleManager.Create(obj);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

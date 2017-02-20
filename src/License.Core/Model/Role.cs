@@ -9,7 +9,6 @@ namespace License.Core.Model
 {
     public class Role : IdentityRole
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get { return base.Name; } set { base.Name = value; } }
     }
 }

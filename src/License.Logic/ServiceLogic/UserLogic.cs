@@ -31,6 +31,7 @@ namespace License.Logic.ServiceLogic
             ur.Email = u.Email;
             ur.PhoneNumber = u.PhoneNumber;
             ur.UserName = u.Email;
+            
             AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
             var result = UserManager.Create(user, u.Password);
             return result;
