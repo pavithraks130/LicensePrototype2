@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("License.Logic")]
+[assembly: AssemblyTitle("License.MetCalWeb.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("License.Logic")]
+[assembly: AssemblyProduct("License.MetCalWeb.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("deab2c25-59f2-4ea5-b28f-6b713cc5c7aa")]
+[assembly: Guid("1ed08be7-861a-4878-8f96-62c7648bdc9b")]
 
 // Version information for an assembly consists of the following four values:
 //
