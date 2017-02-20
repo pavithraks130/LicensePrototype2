@@ -31,9 +31,23 @@ namespace License.Logic.ServiceLogic
             ur.Email = u.Email;
             ur.PhoneNumber = u.PhoneNumber;
             ur.UserName = u.Email;
-            
+            var teamName = u.OrganizationName;
+            TeamLogic logic = new TeamLogic();
+            Model.Model.Team t = logic.GetTeamByName(teamName);
+            if (t == null)
+                t = logic.CreateTeam(new Model.Model.Team() { Name = u.OrganizationName });
+            ur.Organization = t;
             AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
-            var result = UserManager.Create(user, u.Password);
+            IdentityResult result;
+            try
+            {
+                result = UserManager.Create(user, u.Password);
+               
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return result;
         }
     }

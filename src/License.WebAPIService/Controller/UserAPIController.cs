@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 
 namespace License.WebAPIService.Controller
 {
+    [RoutePrefix("api/User")]
     public class UserAPIController : BaseApiController
     {
         private UserLogic logic = null;
@@ -20,7 +21,8 @@ namespace License.WebAPIService.Controller
         {
             logic = new UserLogic();
         }
-
+        [Route("All")]
+        [HttpGet]
         public IHttpActionResult GetUsers()
         {
             if (logic.UserManager == null)
@@ -29,7 +31,8 @@ namespace License.WebAPIService.Controller
                 logic.RoleManager = RoleManager;
             return Ok(logic.GetUsers());
         }
-
+        [Route("Create")]
+        [HttpPost]
         public HttpResponseMessage CreateUser(Registration user)
         {
             if (logic.UserManager == null)

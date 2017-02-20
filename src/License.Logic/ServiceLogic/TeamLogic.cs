@@ -33,6 +33,8 @@ namespace License.Logic.ServiceLogic
         {
             var obj =
                 Work.TeamLicenseRepository.GetData().FirstOrDefault(t => t.Name.ToLower() == name.ToString().ToLower());
+            if (obj == null)
+                return null;
             return AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(obj);
         }
 
@@ -40,12 +42,16 @@ namespace License.Logic.ServiceLogic
         {
             var _team = AutoMapper.Mapper.Map<Team, License.Core.Model.Team>(team);
             _team = Work.TeamLicenseRepository.Create(_team);
-            return AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(_team);
+            Work.Save();
+            team = AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(_team);
+            return team;
         }
 
         public bool DeleteTeam(object id)
         {
-            return Work.TeamLicenseRepository.Delete(id);
+            var status = Work.TeamLicenseRepository.Delete(id);
+            Work.Save();
+            return status;
         }
     }
 }
