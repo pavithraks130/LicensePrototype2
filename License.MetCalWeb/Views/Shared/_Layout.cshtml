@@ -12,7 +12,7 @@
 </head>
 <body style="background:#000000">
     <header>
-        <div class="content-wrapper">
+        <div class="content-wrapper"  >
             <div class="float-left">
                 <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("LogIn","Account")">
                     <img src="~/Resources/logo.png" />
@@ -21,7 +21,7 @@
                     <img src="~/Resources/fcal-tagline-321x66.gif" />
                 </p>
             </div>
-            <div class="float-right">
+            <div class="float-right" >
                 <nav>
                     <ul id="menu">
                         <li>@Html.ActionLink("Register", "Register", "Account")</li>
@@ -32,6 +32,10 @@
         </div>
 
     </header>
+    <div class="tab-section">
+        <div></div>
+
+    </div>
 
     <div id="body">
         @RenderSection("featured", required: false)
