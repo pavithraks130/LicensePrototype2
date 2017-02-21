@@ -15,12 +15,18 @@ namespace License.WebAPIService
         public void Configuration(IAppBuilder app)
         {
             HttpConfiguration httpConfig = new HttpConfiguration();
+            //creating the User manager and Role manager instance globally
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
-            app.UseWebApi(httpConfig);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-            httpConfig.MapHttpAttributeRoutes();
+            
+            //Registering the Web Api Configuration
+            WebApiConfig.Register(httpConfig);
+            app.UseWebApi(httpConfig);
+
+            //Initializing AutoMapper
+            License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
         }
     }
 }
