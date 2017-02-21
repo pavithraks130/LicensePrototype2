@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace License.MetCalWeb.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private UserLogic logic = new UserLogic();
 
@@ -28,6 +28,7 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
+            ViewData["SucessMessageDisplay"] = false;
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
@@ -35,7 +36,10 @@ namespace License.MetCalWeb.Controllers
                 if (logic.RoleManager == null)
                     logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 IdentityResult result = logic.CreateUser(model.RegistratoinModel);
-               return View("LogIn");
+                if (result.Succeeded)
+                    ViewData["SucessMessageDisplay"] = true;
+                else
+                    GetErrorResult(result);
             }
             return View();
         }
