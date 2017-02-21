@@ -44,6 +44,7 @@ namespace License.MetCalWeb.Models
         public string ConfirmPassword { get; set; }
         
         [Display(Name = "Contact Number")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         public string PhoneNumber { get { return RegistratoinModel.PhoneNumber; } set { RegistratoinModel.PhoneNumber = value; } }
 
         [Required]
