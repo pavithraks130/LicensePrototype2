@@ -73,6 +73,18 @@ namespace License.Logic.ServiceLogic
             return UserManager.Delete(user);
         }
 
+        public IdentityResult ResetPassword(string userId, string token, string password)
+        {
+            return UserManager.ResetPassword(userId, token, password);
+        }
+
+
+        public User ForgotPassword(string email)
+        {
+            AppUser user = UserManager.FindByEmail(email);
+            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+        }
+
         public User AutheticateUser(string userName, string password)
         {
             AppUser user = UserManager.Find(userName, password);
@@ -82,7 +94,7 @@ namespace License.Logic.ServiceLogic
         public ClaimsIdentity CreateIdentity(User user)
         {
             var u = AutoMapper.Mapper.Map<User, Core.Model.AppUser>(user);
-            return  UserManager.CreateIdentity(u, DefaultAuthenticationTypes.ApplicationCookie);
+            return UserManager.CreateIdentity(u, DefaultAuthenticationTypes.ApplicationCookie);
         }
     }
 }

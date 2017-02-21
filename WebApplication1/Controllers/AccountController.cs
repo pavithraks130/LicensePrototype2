@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
             {
                 if (logic.UserManager == null)
                     logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
-                 IdentityResult result = logic.CreateUser(model.RegistratoinModel);
+                IdentityResult result = logic.CreateUser(model.RegistratoinModel);
                 if (result.Succeeded)
                     ViewData["SucessMessageDisplay"] = true;
                 else
@@ -56,7 +56,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  ActionResult LogIn(LoginViewModel model)
+        public ActionResult LogIn(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -70,17 +70,74 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("","invalid Credentials");
+                    ModelState.AddModelError("", "invalid Credentials");
                 }
             }
             return View();
         }
 
-        private void  SignInAsync(User user, bool isPersistent)
+        private void SignInAsync(User user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = logic.CreateIdentity(user);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        }
+
+        public ActionResult ResetPassword(string userId, string token)
+        {
+            License.MetCalWeb.Models.ResetPassword model = new ResetPassword();
+            model.Token = token;
+            model.UserId = userId;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPassword model, string userId, string token)
+        {
+            string email = string.Empty;
+            if (ModelState.IsValid)
+            {
+                if (logic.UserManager == null)
+                    logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                IdentityResult result = logic.ResetPassword(userId, token, model.Password);
+                if (result.Succeeded)
+                {
+                    ViewBag.Display = "inline";
+                    ViewBag.ResetMessage = "Success";
+                }
+                else
+                    GetErrorResult(result);
+            }
+            return View();
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            ViewBag.Message = "";
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPassword model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (logic.UserManager == null)
+                    logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                var user = logic.ForgotPassword(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Enter Valid Email ");
+                    return View();
+                }
+                string token = logic.UserManager.GeneratePasswordResetToken(user.UserId);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.UserId, code = token }, protocol: Request.Url.Scheme);
+                await logic.UserManager.SendEmailAsync(user.UserId, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+                ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
+            }
+            return View();
         }
     }
 }
