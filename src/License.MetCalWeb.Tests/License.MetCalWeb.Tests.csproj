@@ -68,12 +68,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\License.MetCalWeb\License.MetCalWeb.csproj">
-      <Project>{D1C62D14-0A7B-4BE0-95D5-D74EAF13F869}</Project>
-      <Name>License.MetCalWeb</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

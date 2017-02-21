@@ -107,6 +107,7 @@
     <Compile Include="GenericRepository\UnitOfWork.cs" />
     <Compile Include="Manager\AppRoleManager.cs" />
     <Compile Include="Manager\AppUserManager.cs" />
+    <Compile Include="Manager\EmailService.cs" />
     <Compile Include="Migrations\201702200930205_init.cs" />
     <Compile Include="Migrations\201702200930205_init.Designer.cs">
       <DependentUpon>201702200930205_init.cs</DependentUpon>

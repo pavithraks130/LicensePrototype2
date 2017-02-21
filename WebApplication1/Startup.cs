@@ -4,6 +4,8 @@ using Microsoft.Owin;
 using Owin;
 using License.Core.DBContext;
 using License.Core.Manager;
+using License.Core.Model;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.OAuth;
 
 
