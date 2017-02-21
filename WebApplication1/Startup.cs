@@ -19,6 +19,8 @@ namespace WebApplication1
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
+            //Intialize AutoMapper
+            License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
         }
     }
 }

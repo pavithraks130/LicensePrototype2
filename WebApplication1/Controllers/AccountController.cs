@@ -40,5 +40,16 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogIn(int id)
+        {
+            return View("Index");
+        }
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
     }
 }
