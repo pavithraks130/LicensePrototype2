@@ -4,6 +4,7 @@ using Microsoft.Owin;
 using Owin;
 using License.Core.DBContext;
 using License.Core.Manager;
+using Microsoft.Owin.Security.OAuth;
 
 
 [assembly: OwinStartup(typeof(WebApplication1.Startup))]
@@ -21,6 +22,21 @@ namespace WebApplication1
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
 
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
+
+            ConfigureOAuth(app);
+        }
+
+        private void ConfigureOAuth(IAppBuilder app)
+        {
+            OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
+            {
+                TokenEndpointPath = new PathString("/token"),
+                AllowInsecureHttp = true,
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                Provider = new OAuthAuthorizationServerProvider()
+            };
+
+            app.UseOAuthAuthorizationServer(options);
         }
     }
 }
