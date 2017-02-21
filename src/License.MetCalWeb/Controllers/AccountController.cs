@@ -14,14 +14,18 @@ namespace License.MetCalWeb.Controllers
 {
     public class AccountController : Controller
     {
-        private UserLogic logic = null;
+        private UserLogic logic = new UserLogic();
+
+
         public ActionResult Register()
         {
+            ViewData["SucessMessageDisplay"] = false;
             return View();
 
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)

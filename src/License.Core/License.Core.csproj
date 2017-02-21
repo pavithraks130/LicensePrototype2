@@ -115,6 +115,10 @@
     <Compile Include="Migrations\201702201001409_Remove Role.Designer.cs">
       <DependentUpon>201702201001409_Remove Role.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702210613543_User-TeamId.cs" />
+    <Compile Include="Migrations\201702210613543_User-TeamId.Designer.cs">
+      <DependentUpon>201702210613543_User-TeamId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\Role.cs" />
@@ -132,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702201001409_Remove Role.resx">
       <DependentUpon>201702201001409_Remove Role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702210613543_User-TeamId.resx">
+      <DependentUpon>201702210613543_User-TeamId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
