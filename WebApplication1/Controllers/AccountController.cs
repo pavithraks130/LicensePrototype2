@@ -87,6 +87,7 @@ namespace License.MetCalWeb.Controllers
                 {
                     SignInAsync(user, model.RememberMe);
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
+                    LicenseSessionState.Instance.IsAuthenticated = true;
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -160,6 +161,13 @@ namespace License.MetCalWeb.Controllers
             }
 
             return View();
+        }
+
+        public ActionResult LogOut()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            System.Web.HttpContext.Current.Session.Clear();
+            return View("Login");
         }
     }
 }

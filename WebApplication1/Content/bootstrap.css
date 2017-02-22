@@ -301,7 +301,7 @@ html {
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.428571429;
   color: #333333;
   background-color: #ffffff;
@@ -4490,7 +4490,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 }
 
 .navbar-inverse {
-  background-color: #222222;
+  background-color: #000000;
   border-color: #080808;
 }
 

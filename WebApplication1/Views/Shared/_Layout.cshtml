@@ -9,61 +9,34 @@
     <link href="~/Resources/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
-<body style="background:#000000">
-    <header>
-        <div class="content-wrapper">
-            <div class="float-left">
-                <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("LogIn","Account")">
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("LogIn", "Account")">
                     <img src="~/Resources/logo.png" />
                 </a>
-                <p class="image-centre-place-center" style="color: #3D1400" href="@Url.Action("LogIn","Account")">
+                <p class="image-centre-place-center" style="color: #3D1400" href="@Url.Action("LogIn", "Account")">
                     <img src="~/Resources/fcal-tagline-321x66.gif" />
                 </p>
             </div>
-            <div class="float-right">
-                <nav>
-                    <ul id="menu">
-                        <li>@Html.ActionLink("Register", "Register", "Account")</li>
-                        <li>@Html.ActionLink("Log in", "LogIn", "Account")</li>
-                    </ul>
-                </nav>
+            <div class="navbar-collapse collapse">
+                @Html.Partial("_LoginPartial")
+                <ul id="menu" class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Home", "Home", "Tab")</li>
+                    <li>@Html.ActionLink("Products", "Products", "Tab")</li>
+                    <li>@Html.ActionLink("About Us", "About", "Tab")</li>
+                </ul>
             </div>
-        </div>
-    </header>
-    <div id="body">
-        <div class="tab-section">
-            <div class="float-right">
-                <nav>
-                    <ul id="menu">
-                        <li>@Html.ActionLink("Home", "Home", "Tab")</li>
-                        <li>@Html.ActionLink("Products", "Products", "Tab")</li>
-                        <li>@Html.ActionLink("About Us", "About", "Tab")</li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-            @*<div class="partial-view-section">
-                <div class="float-right">
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Register", "Register", "Account")</li>
-                            <li>@Html.ActionLink("Log in", "LogIn", "Account")</li>
-                            <li>@Html.ActionLink("Reset Password", "ResetPassword", "Account")</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>*@
 
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
         </div>
-    <footer>
-        <div class="content-wrapper">
-            <div class="float-left">
-                <p>&copy; @DateTime.Now.Year - FLUKE Calibration</p>
-            </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <footer class="navbar-fixed-bottom navbar-fixed-bottom-custom">
+        <div class="container">
+            <p>&copy; @DateTime.Now.Year - FLUKE Calibration</p>
         </div>
     </footer>
 </body>
