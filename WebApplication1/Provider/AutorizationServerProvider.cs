@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 
-namespace WebApplication1.Provider
+namespace License.MetCalWeb.Provider
 {
     public class AutorizationServerProvider : OAuthAuthorizationServerProvider
     {

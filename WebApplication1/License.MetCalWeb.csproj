@@ -218,7 +218,6 @@
     <Content Include="Views\Tab\About.cshtml" />
     <Content Include="Views\Tab\Products.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\_UserActivity.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

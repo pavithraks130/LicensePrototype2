@@ -15,7 +15,7 @@ using License.Model.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
-namespace WebApplication1.Controllers
+namespace License.MetCalWeb.Controllers
 {
     public class AccountController : BaseController
     {

@@ -9,9 +9,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.OAuth;
 
 
-[assembly: OwinStartup(typeof(WebApplication1.Startup))]
+[assembly: OwinStartup(typeof(License.MetCalWeb.Startup))]
 
-namespace WebApplication1
+namespace License.MetCalWeb
 {
     public class Startup
     {

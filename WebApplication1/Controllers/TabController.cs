@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebApplication1.Controllers
+namespace License.MetCalWeb.Controllers
 {
     public class TabController : Controller
     {
