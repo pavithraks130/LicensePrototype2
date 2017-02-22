@@ -20,8 +20,16 @@ namespace License.Core.Manager
         public static AppUserManager Create(IdentityFactoryOptions<AppUserManager> factory, IOwinContext context)
         {
             var dbcontext = context.Get<ApplicationDbContext>();
-            var userMgr = new AppUserManager(new UserStore<AppUser>(dbcontext));
-            return userMgr;
+            var usermanager = new AppUserManager(new UserStore<AppUser>(dbcontext));
+            // allow alphanumeric characters in username
+            usermanager.UserValidator = new UserValidator<AppUser>(usermanager)
+            {
+                AllowOnlyAlphanumericUserNames = false
+            };
+
+            usermanager.EmailService = new EmailService();
+            usermanager.ClaimsIdentityFactory = new ClaimsIdentityFactory<AppUser>();
+            return usermanager;
         }
     }
 }

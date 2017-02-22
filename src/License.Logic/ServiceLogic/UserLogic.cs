@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using License.Core.Model;
@@ -70,6 +71,30 @@ namespace License.Logic.ServiceLogic
         {
             var user = UserManager.FindById(id);
             return UserManager.Delete(user);
+        }
+
+        public IdentityResult ResetPassword(string userId, string token, string password)
+        {
+            return UserManager.ResetPassword(userId, token, password);
+        }
+
+
+        public User ForgotPassword(string email)
+        {
+            AppUser user = UserManager.FindByEmail(email);
+            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+        }
+
+        public User AutheticateUser(string userName, string password)
+        {
+            AppUser user = UserManager.Find(userName, password);
+            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+        }
+
+        public ClaimsIdentity CreateIdentity(User user)
+        {
+            var u = AutoMapper.Mapper.Map<User, Core.Model.AppUser>(user);
+            return UserManager.CreateIdentity(u, DefaultAuthenticationTypes.ApplicationCookie);
         }
     }
 }

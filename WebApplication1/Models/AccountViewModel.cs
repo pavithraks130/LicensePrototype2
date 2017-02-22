@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using License.Model.Model;
+using Microsoft.AspNet.Identity;
 
 namespace License.MetCalWeb.Models
 {
@@ -40,9 +42,9 @@ namespace License.MetCalWeb.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        
+
         [Display(Name = "Contact Number")]
         public string PhoneNumber { get { return RegistratoinModel.PhoneNumber; } set { RegistratoinModel.PhoneNumber = value; } }
 
@@ -74,6 +76,26 @@ namespace License.MetCalWeb.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+    }
+
+    public class ResetPassword
+    {
+        [Display(Name = "New Password")]
+        public string Password { get; set; }
+
+        [Display(Name = "Confirm Password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "New Password and Confirm Password not matching")]
+        public string ConfirmPassword { get; set; }
+
+        public string UserId { get; set; }
+
+        public string Token { get; set; }
+    }
+
+    public class ForgotPassword
+    {
+        [Display(Name ="Email")]
+        public string Email { get; set; }
     }
 
 
