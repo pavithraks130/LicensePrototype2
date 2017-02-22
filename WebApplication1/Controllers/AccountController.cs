@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Owin.Security;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -38,7 +39,7 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             ViewData["SucessMessageDisplay"] = false;
             if (ModelState.IsValid)
@@ -49,7 +50,17 @@ namespace License.MetCalWeb.Controllers
                     logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 IdentityResult result = logic.CreateUser(model.RegistratoinModel);
                 if (result.Succeeded)
+                {
+                    AppUser user = logic.UserManager.FindByEmail(model.Email);
                     ViewData["SucessMessageDisplay"] = true;
+                    FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
+                    StreamReader reader = new StreamReader(stream);
+                    string str = reader.ReadToEnd();
+                    reader.Close();
+                    stream.Close();
+                    stream.Dispose();
+                    await logic.UserManager.SendEmailAsync(user.Id, "Welcome to Fluke", str);
+                }
                 else
                     GetErrorResult(result);
             }
@@ -93,24 +104,24 @@ namespace License.MetCalWeb.Controllers
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
-        public ActionResult ResetPassword(string userId, string token)
+        public ActionResult ResetPassword(string userId, string code)
         {
             License.MetCalWeb.Models.ResetPassword model = new ResetPassword();
-            model.Token = token;
+            model.Token = code;
             model.UserId = userId;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetPassword(ResetPassword model, string userId, string token)
+        public ActionResult ResetPassword(ResetPassword model, string userId, string code)
         {
             string email = string.Empty;
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
                     logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
-                IdentityResult result = logic.ResetPassword(userId, token, model.Password);
+                IdentityResult result = logic.ResetPassword(userId, code, model.Password);
                 if (result.Succeeded)
                 {
                     ViewBag.Display = "inline";
@@ -147,7 +158,7 @@ namespace License.MetCalWeb.Controllers
                 await logic.UserManager.SendEmailAsync(user.UserId, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
             }
-            
+
             return View();
         }
     }

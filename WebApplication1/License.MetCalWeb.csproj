@@ -170,6 +170,11 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="EmailTemplate\WelcometoFlukeCalibration.htm" />
+    <Content Include="EmailTemplate\Welcome to Fluke Calibration_files\colorschememapping.xml" />
+    <Content Include="EmailTemplate\Welcome to Fluke Calibration_files\filelist.xml" />
+    <Content Include="EmailTemplate\Welcome to Fluke Calibration_files\image001.jpg" />
+    <Content Include="EmailTemplate\Welcome to Fluke Calibration_files\image002.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Resources\favicon.ico" />
@@ -178,6 +183,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
+    <Content Include="EmailTemplate\Welcome to Fluke Calibration_files\themedata.thmx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
