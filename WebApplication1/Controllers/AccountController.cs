@@ -1,5 +1,9 @@
-﻿using Microsoft.Owin.Security;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Owin.Security;
 using System.Net;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -137,6 +141,7 @@ namespace WebApplication1.Controllers
                 await logic.UserManager.SendEmailAsync(user.UserId, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
             }
+            
             return View();
         }
     }
