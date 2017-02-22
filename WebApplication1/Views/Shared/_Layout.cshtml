@@ -35,24 +35,13 @@
             <div class="float-right">
                 <nav>
                     <ul id="menu">
-                        <li>@Html.ActionLink("Home", "Home", "Tab")</li>
-                        <li>@Html.ActionLink("Products", "Products", "Tab")</li>
-                        <li>@Html.ActionLink("About Us", "About", "Tab")</li>
+                        <li>@Html.ActionLink("Home", "Home", "Tab")</li>|
+                        <li>@Html.ActionLink("Products", "Products", "Tab")</li>|
+                        <li>@Html.ActionLink("About Us", "About", "Tab")</li>|
                     </ul>
                 </nav>
             </div>
         </div>
-            @*<div class="partial-view-section">
-                <div class="float-right">
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Register", "Register", "Account")</li>
-                            <li>@Html.ActionLink("Log in", "LogIn", "Account")</li>
-                            <li>@Html.ActionLink("Reset Password", "ResetPassword", "Account")</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>*@
 
             @RenderSection("featured", required: false)
             <section class="content-wrapper main-content clear-fix">
