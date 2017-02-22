@@ -43,7 +43,15 @@ namespace License.Logic.ServiceLogic
             try
             {
                 result = UserManager.Create(user, u.Password);
-
+                var roleName = "Admin";
+                if (RoleManager.FindByName(roleName) == null)
+                {
+                    RoleLogic rolelogic = new RoleLogic();
+                    rolelogic.RoleManager = RoleManager;
+                    result = rolelogic.CreateRole(new Model.Model.Role() { Name = roleName });
+                }
+                var roleId = RoleManager.FindByName(roleName).Id;
+                UserManager.AddToRole(user.Id, roleName);
             }
             catch (Exception ex)
             {
@@ -85,16 +93,15 @@ namespace License.Logic.ServiceLogic
             return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
         }
 
-        public User AutheticateUser(string userName, string password)
+        public AppUser AutheticateUser(string userName, string password)
         {
             AppUser user = UserManager.Find(userName, password);
-            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+            return user;
         }
-
-        public ClaimsIdentity CreateIdentity(User user)
+        
+        public User GetUserDataByAppuser(AppUser user)
         {
-            var u = AutoMapper.Mapper.Map<User, Core.Model.AppUser>(user);
-            return UserManager.CreateIdentity(u, DefaultAuthenticationTypes.ApplicationCookie);
+            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
         }
     }
 }

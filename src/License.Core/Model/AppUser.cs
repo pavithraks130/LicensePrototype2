@@ -14,14 +14,33 @@ namespace License.Core.Model
 {
     public class AppUser : IdentityUser
     {
+        [NotMapped]
+        public string UserId
+        {
+            get { return base.Id; }
+        }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         [DataType(DataType.EmailAddress, ErrorMessage = "Please enter Valid Email Address")]
         [Required(ErrorMessage = "The Email Address is Requuired")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string Email { get; set; }
+        public override string Email
+        {
+            get { return base.Email; }
+            set { base.Email = value; }
+        }
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
-        public string PhoneNumber { get; set; }
+        public override string PhoneNumber
+        {
+            get
+            {
+                return base.PhoneNumber;
+            }
+            set
+            {
+                base.PhoneNumber = value;
+            }
+        }
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email Address is Required")]
         public override string UserName
@@ -36,8 +55,8 @@ namespace License.Core.Model
             }
         }
 
-        public  int TeamId { get; set; }
-        
+        public int TeamId { get; set; }
+
         [NotMapped]
         public string Name
         {

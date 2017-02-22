@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using License.Core.Manager;
+using License.Core.Model;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb.Models;
 using License.Model.Model;
@@ -44,6 +45,8 @@ namespace WebApplication1.Controllers
             {
                 if (logic.UserManager == null)
                     logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                if (logic.RoleManager == null)
+                    logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 IdentityResult result = logic.CreateUser(model.RegistratoinModel);
                 if (result.Succeeded)
                     ViewData["SucessMessageDisplay"] = true;
@@ -66,10 +69,13 @@ namespace WebApplication1.Controllers
             {
                 if (logic.UserManager == null)
                     logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
-                User user = logic.AutheticateUser(model.Email, model.Password);
+                if (logic.RoleManager == null)
+                    logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                AppUser user = logic.AutheticateUser(model.Email, model.Password);
                 if (user != null)
                 {
                     SignInAsync(user, model.RememberMe);
+                    LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -80,10 +86,10 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        private void SignInAsync(User user, bool isPersistent)
+        private void SignInAsync(AppUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = logic.CreateIdentity(user);
+            var identity = logic.UserManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 

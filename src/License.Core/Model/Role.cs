@@ -11,4 +11,6 @@ namespace License.Core.Model
     {
         public string Name { get { return base.Name; } set { base.Name = value; } }
     }
+
+
 }
