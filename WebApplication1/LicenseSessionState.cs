@@ -6,7 +6,7 @@ using License.Core.Manager;
 using License.Core.Model;
 using License.Model.Model;
 
-namespace WebApplication1
+namespace License.MetCalWeb
 {
     public class LicenseSessionState
     {

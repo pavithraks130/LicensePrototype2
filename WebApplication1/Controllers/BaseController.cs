@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 
-namespace WebApplication1.Controllers
+namespace License.MetCalWeb.Controllers
 {
     public class BaseController : Controller
     {
