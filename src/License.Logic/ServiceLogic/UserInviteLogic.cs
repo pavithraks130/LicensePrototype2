@@ -7,7 +7,7 @@ using License.Model.Model;
 
 namespace License.Logic.ServiceLogic
 {
-    public class UserInviteLogic :BaseLogic
+    public class UserInviteLogic : BaseLogic
     {
         public UserInvite CreateInvite(UserInvite invit)
         {
@@ -16,6 +16,28 @@ namespace License.Logic.ServiceLogic
             return AutoMapper.Mapper.Map<License.Core.Model.UserInvite, UserInvite>(obj);
         }
 
+        public UserInviteList GetUserInviteDetails(string adminId)
+        {
+            UserInviteList inviteList = new UserInviteList();
+            var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
+            foreach (var data in listData)
+            {
+                
+            }
+            return inviteList;
+        }
 
+        public UserInvite VerifyUserInvited(string email, string adminid)
+        {
+            var obj = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminid && t.InviteeEmail == email).FirstOrDefault();
+            return AutoMapper.Mapper.Map<License.Core.Model.UserInvite, UserInvite>(obj);
+        }
+
+        public void UpdateInviteStatus(string inviteId, string status)
+        {
+            Core.Model.UserInvite invite = Work.UserInviteLicenseRepository.GetById(inviteId);
+            invite.InviteeStatus = status;
+            Work.UserInviteLicenseRepository.Update(invite);
+        }
     }
 }

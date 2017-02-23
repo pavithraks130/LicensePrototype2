@@ -33,6 +33,7 @@ namespace License.Logic
             cfg.CreateMap<Model.Model.UserInvite, License.Core.Model.UserInvite>()
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
+
         }
 
     }

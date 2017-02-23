@@ -99,7 +99,7 @@ namespace License.MetCalWeb.Models
     }
 
 
-    public class UserModel
+    public class UserInviteModel
     {
         public Registration RegistratoinModel = new Registration();
 

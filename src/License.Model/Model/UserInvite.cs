@@ -18,4 +18,10 @@ namespace License.Model.Model
         public User AdminUser { get; set; }
         public User InviteeUser { get; set; }
     }
+
+    public class UserInviteList
+    {
+        public List<UserInvite> PendingInvites { get; set; }
+        public List<UserInvite> AcceptedInvites { get; set; }
+    }
 }

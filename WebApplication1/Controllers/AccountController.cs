@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using License.Core.Manager;
 using License.Core.Model;
 using License.Logic.ServiceLogic;
+using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
 using License.Model.Model;
 using Microsoft.AspNet.Identity;
@@ -168,6 +169,20 @@ namespace License.MetCalWeb.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
             return View("Login");
+        }
+
+        public ActionResult Confirm(string invite, string status, string token)
+        {
+            string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
+            string data = EncryptDecrypt.DecryptString(invite, passPhrase);
+            var details = data.Split(new char[] { ',' });
+            string teamId = details[0];
+            string adminId = details[1];
+            string inviteId = details[2];
+
+            UserInviteLogic logic = new UserInviteLogic();
+            logic.UpdateInviteStatus(inviteId, status);
+            return View();
         }
     }
 }

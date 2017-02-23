@@ -75,7 +75,6 @@ namespace License.Logic.ServiceLogic
             appuser.LastName = user.LastName;
             appuser.Email = user.Email;
             appuser.PhoneNumber = user.PhoneNumber;
-            
             return UserManager.Update(appuser);
         }
 
