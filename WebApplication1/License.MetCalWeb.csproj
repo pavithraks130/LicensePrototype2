@@ -216,7 +216,7 @@
     </Compile>
     <Compile Include="LicenseSessionState.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
-    <Compile Include="Models\DashboardModel.cs" />
+    <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\AutorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -253,7 +253,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Team\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\License.Core\License.Core.csproj">

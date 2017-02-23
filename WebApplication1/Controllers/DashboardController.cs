@@ -32,11 +32,7 @@ namespace License.MetCalWeb.Controllers
         // GET: Dashboard
         public ActionResult Dashboard()
         {
-            Model.Model.UserInviteList inviteList = logic.GetUserInviteDetails(LicenseSessionState.Instance.User.UserId);
-            DashboardModel model = new DashboardModel();
-            model.PendinigUsers = inviteList.PendingInvites;
-            model.AcceptedUsers = inviteList.AcceptedInvites;
-            return View(inviteList);
+            return View();
         }
 
         public ActionResult Invite()

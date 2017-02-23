@@ -6,7 +6,7 @@ using License.Model.Model;
 
 namespace License.MetCalWeb.Models
 {
-    public class DashboardModel
+    public class TeamModel
     {
         public List<UserInvite> PendinigUsers { get; set; }
         public List<UserInvite> AcceptedUsers { get; set; }
