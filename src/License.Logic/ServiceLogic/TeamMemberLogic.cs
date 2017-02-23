@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using License.Core.Model;
 using License.Logic.Common;
 using License.Model.Model;
+using Microsoft.AspNet.Identity;
+using TeamMembers = License.Model.Model.TeamMembers;
 
 namespace License.Logic.ServiceLogic
 {
@@ -19,13 +22,21 @@ namespace License.Logic.ServiceLogic
 
         public UserInviteList GetUserInviteDetails(string adminId)
         {
+            AppUser user = UserManager.FindById(adminId);
             UserInviteList inviteList = new UserInviteList();
             List<TeamMembers> teamMembers = new List<TeamMembers>();
             var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
             foreach (var data in listData)
                 teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMembers, Model.Model.TeamMembers>(data));
-            inviteList.PendingInvites = teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
-            inviteList.AcceptedInvites = teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
+            if (teamMembers.Count > 0)
+            {
+                inviteList.PendingInvites =
+                    teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
+                inviteList.AcceptedInvites =
+                    teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
+                inviteList.AcceptedInvites.Add(new TeamMembers() { AdminId = adminId, InviteeEmail = user.Email,
+                    InviteeStatus = InviteStatus.Accepted.ToString(), InviteeUserId = adminId, TeamId = user.OrganizationId, IsAdmin = true });
+            }
             return inviteList;
         }
 
