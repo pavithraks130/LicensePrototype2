@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace License.Model.Model
 {
-    public class UserInvite
+    public class TeamMembers
     {
         public int Id { get; set; }
         public string AdminId { get; set; }
@@ -21,7 +21,7 @@ namespace License.Model.Model
 
     public class UserInviteList
     {
-        public List<UserInvite> PendingInvites { get; set; }
-        public List<UserInvite> AcceptedInvites { get; set; }
+        public List<TeamMembers> PendingInvites { get; set; }
+        public List<TeamMembers> AcceptedInvites { get; set; }
     }
 }

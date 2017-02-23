@@ -9,11 +9,11 @@ namespace License.Logic.ServiceLogic
 {
     public class UserInviteLogic : BaseLogic
     {
-        public UserInvite CreateInvite(UserInvite invit)
+        public TeamMembers CreateInvite(TeamMembers invit)
         {
-            License.Core.Model.UserInvite userinvit = AutoMapper.Mapper.Map<Model.Model.UserInvite, License.Core.Model.UserInvite>(invit);
+            License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
             var obj = Work.UserInviteLicenseRepository.Create(userinvit);
-            return AutoMapper.Mapper.Map<License.Core.Model.UserInvite, UserInvite>(obj);
+            return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
         public UserInviteList GetUserInviteDetails(string adminId)
@@ -27,15 +27,15 @@ namespace License.Logic.ServiceLogic
             return inviteList;
         }
 
-        public UserInvite VerifyUserInvited(string email, string adminid)
+        public TeamMembers VerifyUserInvited(string email, string adminid)
         {
             var obj = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminid && t.InviteeEmail == email).FirstOrDefault();
-            return AutoMapper.Mapper.Map<License.Core.Model.UserInvite, UserInvite>(obj);
+            return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
         public void UpdateInviteStatus(string inviteId, string status)
         {
-            Core.Model.UserInvite invite = Work.UserInviteLicenseRepository.GetById(inviteId);
+            Core.Model.TeamMembers invite = Work.UserInviteLicenseRepository.GetById(inviteId);
             invite.InviteeStatus = status;
             Work.UserInviteLicenseRepository.Update(invite);
         }

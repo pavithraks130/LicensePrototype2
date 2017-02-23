@@ -30,6 +30,6 @@ namespace License.Core.DBContext
         }
 
         public DbSet<Team> Team { get; set; }
-        public DbSet<UserInvite> UserInvite { get; set; }
+        public DbSet<TeamMembers> UserInvite { get; set; }
     }
 }

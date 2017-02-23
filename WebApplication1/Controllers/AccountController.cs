@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using License.Core.Manager;
 using License.Core.Model;
+using License.Logic.Common;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
@@ -182,6 +183,10 @@ namespace License.MetCalWeb.Controllers
 
             UserInviteLogic logic = new UserInviteLogic();
             logic.UpdateInviteStatus(inviteId, status);
+            ViewBag.Message = String.Empty;
+            License.Logic.Common.InviteStatus stat = (License.Logic.Common.InviteStatus)Enum.Parse(typeof(License.Logic.Common.InviteStatus), status);
+            if (stat == InviteStatus.Accepted)
+                ViewBag.Message = "You have accepted the invitation. Click below to Login with credentials which was shared through Mail";
             return View();
         }
     }

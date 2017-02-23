@@ -57,6 +57,9 @@ namespace License.Core.Model
 
         public int TeamId { get; set; }
 
+        [ForeignKey("TeamId")]
+        public Team Team { get; set; }
+
         [NotMapped]
         public string Name
         {

@@ -8,7 +8,7 @@ namespace License.MetCalWeb.Models
 {
     public class TeamModel
     {
-        public List<UserInvite> PendinigUsers { get; set; }
-        public List<UserInvite> AcceptedUsers { get; set; }
+        public List<TeamMembers> PendinigUsers { get; set; }
+        public List<TeamMembers> AcceptedUsers { get; set; }
     }
 }

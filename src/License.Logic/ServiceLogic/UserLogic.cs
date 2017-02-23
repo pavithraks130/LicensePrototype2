@@ -104,7 +104,12 @@ namespace License.Logic.ServiceLogic
 
         public User GetUserDataByAppuser(AppUser user)
         {
-            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+            User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+            IList<string> roles = UserManager.GetRoles(user.Id);
+            userObj.Roles = roles;
+            TeamLogic logic = new TeamLogic();
+            userObj.Organization = logic.GetTeamById(userObj.TeamId);
+            return userObj;
         }
     }
 }

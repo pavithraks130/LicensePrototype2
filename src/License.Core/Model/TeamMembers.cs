@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace License.Core.Model
 {
-    public class UserInvite
+    public class TeamMembers
     {
         [Key]
         public int Id { get; set; }
@@ -23,5 +23,6 @@ namespace License.Core.Model
         public AppUser AdminUser { get; set; }
         [ForeignKey("InviteeUserId")]
         public AppUser InviteeUser { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

@@ -13,7 +13,7 @@ using License.MetCalWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using License.MetCalWeb.Common;
-using UserInvite = License.Model.Model.UserInvite;
+using TeamMembers = License.Model.Model.TeamMembers;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -51,11 +51,12 @@ namespace License.MetCalWeb.Controllers
                 if (userLogic.RoleManager == null)
                     userLogic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 model.RegistratoinModel.OrganizationName = LicenseSessionState.Instance.User.Organization.Name;
+                model.Password = (string) System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
                 var result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
                 if (result.Succeeded)
                 {
                     AppUser user = userLogic.UserManager.FindByEmail(model.Email);
-                    UserInvite invite = new UserInvite();
+                    TeamMembers invite = new TeamMembers();
                     invite.AdminId = LicenseSessionState.Instance.User.UserId;
                     invite.InviteeUserId = user.Id;
                     invite.InvitationDate = DateTime.Now.Date;

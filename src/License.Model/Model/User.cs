@@ -18,5 +18,6 @@ namespace License.Model.Model
         public int TeamId { get; set; }
         public Team Organization { get; set; }
         public string Name { get; set; }
+        public IList<string> Roles { get; set; }
     }
 }
