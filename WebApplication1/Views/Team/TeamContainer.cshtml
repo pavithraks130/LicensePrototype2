@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "TeamContainer";
+}
+
+<h2></h2>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TeamList</title>
+</head>
+<body>
+    <h2>
+       Admin Name
+    </h2>
+    <table class="table">
+        <tr>
+            <th>
+              Team Members
+            </th>
+            <th>
+                Subscriptions
+            </th>
+        </tr>
+
+      
+        <tr>
+            <td>
+               @Html.ActionLink("Member List", "TeamMembers", "Team") 
+            </td>
+            <td>
+                @Html.ActionLink("Subscription Type", "Subscriptions", "Team")
+            </td>
+        </tr>
+
+    </table>
+</body>
+</html>

@@ -4,12 +4,22 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace License.MetCalWeb.Controllers
+namespace WebApplication1.Controllers
 {
     public class TeamController : Controller
     {
         // GET: Team
-        public ActionResult Index()
+        public ActionResult TeamContainer()
+        {
+            return View();
+        }
+
+        public ActionResult TeamMembers()
+        {
+            return View();
+        }
+
+        public ActionResult Subscriptions()
         {
             return View();
         }
