@@ -34,8 +34,15 @@ namespace License.Logic.ServiceLogic
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
                 inviteList.AcceptedInvites =
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
-                inviteList.AcceptedInvites.Add(new TeamMembers() { AdminId = adminId, InviteeEmail = user.Email,
-                    InviteeStatus = InviteStatus.Accepted.ToString(), InviteeUserId = adminId, TeamId = user.OrganizationId, IsAdmin = true });
+                inviteList.AcceptedInvites.Add(new TeamMembers()
+                {
+                    AdminId = adminId,
+                    InviteeEmail = user.Email,
+                    InviteeStatus = InviteStatus.Accepted.ToString(),
+                    InviteeUserId = adminId,
+                    TeamId = user.OrganizationId,
+                    IsAdmin = true
+                });
             }
             return inviteList;
         }
@@ -59,6 +66,13 @@ namespace License.Logic.ServiceLogic
             if (obj != null)
                 return obj.AdminId;
             return string.Empty;
+        }
+
+        public void SetAsAdmin(int id, string userId, bool status)
+        {
+            Core.Model.TeamMembers teamMembers = Work.UserInviteLicenseRepository.GetById(id);
+            teamMembers.IsAdmin = status;
+            Work.UserInviteLicenseRepository.Update(teamMembers);
         }
     }
 }
