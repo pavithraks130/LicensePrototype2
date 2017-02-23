@@ -30,7 +30,7 @@ namespace License.MetCalWeb.Controllers
         }
 
         // GET: Dashboard
-        public ActionResult Dashboard()
+        public ActionResult Index()
         {
             return View();
         }

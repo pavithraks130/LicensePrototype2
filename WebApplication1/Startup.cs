@@ -5,7 +5,9 @@ using Owin;
 using License.Core.DBContext;
 using License.Core.Manager;
 using License.Core.Model;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 
 
@@ -30,15 +32,20 @@ namespace License.MetCalWeb
 
         private void ConfigureOAuth(IAppBuilder app)
         {
-            OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                TokenEndpointPath = new PathString("/token"),
-                AllowInsecureHttp = true,
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
-                Provider = new OAuthAuthorizationServerProvider()
-            };
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                LoginPath = new PathString("/Account/Login")
+            });
+            //OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
+            //{
+            //    TokenEndpointPath = new PathString("/token"),
+            //    AllowInsecureHttp = true,
+            //    AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+            //    Provider = new OAuthAuthorizationServerProvider()
+            //};
 
-            app.UseOAuthAuthorizationServer(options);
+            //app.UseOAuthAuthorizationServer(options);
         }
     }
 }
