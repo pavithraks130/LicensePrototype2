@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using License.Logic.Common;
 using License.Model.Model;
 
 namespace License.Logic.ServiceLogic
 {
-    public class UserInviteLogic : BaseLogic
+    public class TeamMemberLogic : BaseLogic
     {
         public TeamMembers CreateInvite(TeamMembers invit)
         {
@@ -19,11 +20,12 @@ namespace License.Logic.ServiceLogic
         public UserInviteList GetUserInviteDetails(string adminId)
         {
             UserInviteList inviteList = new UserInviteList();
+            List<TeamMembers> teamMembers = new List<TeamMembers>();
             var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
             foreach (var data in listData)
-            {
-
-            }
+                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMembers, Model.Model.TeamMembers>(data));
+            inviteList.PendingInvites = teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
+            inviteList.AcceptedInvites = teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
             return inviteList;
         }
 

@@ -21,7 +21,14 @@ namespace License.Model.Model
 
     public class UserInviteList
     {
+        public User AdminUser { get; set; }
         public List<TeamMembers> PendingInvites { get; set; }
         public List<TeamMembers> AcceptedInvites { get; set; }
+
+        public UserInviteList()
+        {
+            PendingInvites = new List<TeamMembers>();
+            AcceptedInvites = new List<TeamMembers>();
+        }
     }
 }

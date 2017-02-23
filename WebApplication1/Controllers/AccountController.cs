@@ -181,7 +181,7 @@ namespace License.MetCalWeb.Controllers
             string adminId = details[1];
             string inviteId = details[2];
 
-            UserInviteLogic logic = new UserInviteLogic();
+            TeamMemberLogic logic = new TeamMemberLogic();
             logic.UpdateInviteStatus(inviteId, status);
             ViewBag.Message = String.Empty;
             License.Logic.Common.InviteStatus stat = (License.Logic.Common.InviteStatus)Enum.Parse(typeof(License.Logic.Common.InviteStatus), status);

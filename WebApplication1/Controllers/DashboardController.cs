@@ -20,12 +20,12 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     public class DashboardController : BaseController
     {
-        private UserInviteLogic logic = null;
+        private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
 
         public DashboardController()
         {
-            logic = new UserInviteLogic();
+            logic = new TeamMemberLogic();
             userLogic = new UserLogic();
         }
 

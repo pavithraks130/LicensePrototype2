@@ -8,9 +8,8 @@ using License.Model.Model;
 
 namespace License.Logic.ServiceLogic
 {
-    public class TeamLogic : BaseLogic
+    public class OrganizationLogic : BaseLogic
     {
-
 
         public List<Organization> GetTeams()
         {

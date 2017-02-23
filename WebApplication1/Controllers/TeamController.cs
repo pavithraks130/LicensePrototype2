@@ -7,6 +7,7 @@ using License.Core.Manager;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb;
 using License.MetCalWeb.Models;
+using License.Model.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -14,13 +15,13 @@ namespace WebApplication1.Controllers
 {
     public class TeamController : Controller
     {
-        private UserInviteLogic logic = null;
+        private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
 
 
         public TeamController()
         {
-            logic = new UserInviteLogic();
+            logic = new TeamMemberLogic();
             userLogic = new UserLogic();
         }
         // GET: Team
@@ -31,17 +32,14 @@ namespace WebApplication1.Controllers
 
         public ActionResult TeamMembers()
         {
-            License.Model.Model.UserInviteList inviteList = null;
+            License.Model.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
                 adminId = LicenseSessionState.Instance.User.UserId;
             else
                 adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
-
-            inviteList = logic.GetUserInviteDetails(adminId);
-            TeamModel model = new TeamModel();
-            model.PendinigUsers = inviteList.PendingInvites;
-            model.AcceptedUsers = inviteList.AcceptedInvites;
+            if (!String.IsNullOrEmpty(adminId))
+                inviteList = logic.GetUserInviteDetails(adminId);
             return View(inviteList);
         }
 
