@@ -1,41 +1,46 @@
-﻿
+﻿@model License.MetCalWeb.Models.LoginViewModel
+
 @{
     ViewBag.Title = "TeamContainer";
 }
 
-<h2></h2>
-
+@using Microsoft.AspNet.Identity
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>TeamList</title>
+    <title>
+
+
+
+    </title>
 </head>
 <body>
     <h2>
-       Admin Name
+        @Html.ActionLink(LicenseSessionState.Instance.User.Name + "....", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
     </h2>
     <table class="table">
-        <tr>
-            <th>
-              Team Members
+        <tr >
+            <th style="width:60%">
+                Team Members
             </th>
-            <th>
+            <th style="width:40%">
                 Subscriptions
             </th>
         </tr>
-
-      
+        @foreach (var item in  Model)
+        {
         <tr>
             <td>
-               @Html.ActionLink("Member List", "TeamMembers", "Team") 
+                @Html.Partial("_TeamMembers",item)
             </td>
-            <td>
-                @Html.ActionLink("Subscription Type", "Subscriptions", "Team")
-            </td>
-        </tr>
 
-    </table>
-</body>
+            <td>
+                @Html.Partial("_Subscriptions")
+                </td>
+            </tr>
+        }
+        </table>
+    </body>
 </html>

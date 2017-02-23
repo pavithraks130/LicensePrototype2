@@ -1,0 +1,13 @@
+﻿<table class="table" style="border:solid">
+    <tr>
+        <td>
+            Team subscriptions are purchased and managed by team administrators.
+            <b> @Html.ActionLink("Explore Fluke Connect subscriptions", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })</b>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.ActionLink(LicenseSessionState.Instance.User.Email, "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+        </td>
+    </tr>
+</table>

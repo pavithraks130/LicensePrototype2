@@ -1,4 +1,6 @@
-﻿using System;
+﻿using License.MetCalWeb.Models;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,17 +13,21 @@ namespace WebApplication1.Controllers
         // GET: Team
         public ActionResult TeamContainer()
         {
-            return View();
+            LoginViewModel loginViewModel = new LoginViewModel();
+            loginViewModel.Email = "aa@1.com";
+            loginViewModel.Password = "123ert";
+            loginViewModel.RememberMe = true;
+            return View(loginViewModel);
         }
 
-        public ActionResult TeamMembers()
-        {
-            return View();
-        }
+        //public ActionResult TeamMembers()
+        //{
+        //    return View();
+        //}
 
-        public ActionResult Subscriptions()
-        {
-            return View();
-        }
+        //public ActionResult Subscriptions()
+        //{
+        //    return View();
+        //}
     }
 }

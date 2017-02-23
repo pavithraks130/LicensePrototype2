@@ -1,0 +1,23 @@
+﻿@model IEnumerable<License.MetCalWeb.Models.LoginViewModel> 
+<!DOCTYPE html>
+<html>
+<body>
+    <table class="table" style="border:solid">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RememberMe)
+                </td>
+               
+            </tr>
+        }
+    </table>
+</body>
+</html>
