@@ -88,7 +88,7 @@ namespace License.MetCalWeb.Controllers
                     SignInAsync(user, model.RememberMe);
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     LicenseSessionState.Instance.IsAuthenticated = true;
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Dashboard");
                 }
                 else
                 {
