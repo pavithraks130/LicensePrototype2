@@ -29,7 +29,7 @@ namespace License.Core.DBContext
             return new ApplicationDbContext();
         }
 
-        public DbSet<Team> Team { get; set; }
+        public DbSet<Organization> Team { get; set; }
         public DbSet<TeamMembers> UserInvite { get; set; }
     }
 }

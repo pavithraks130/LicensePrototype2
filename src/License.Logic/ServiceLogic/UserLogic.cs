@@ -34,10 +34,10 @@ namespace License.Logic.ServiceLogic
             ur.UserName = u.Email;
             var teamName = u.OrganizationName;
             TeamLogic logic = new TeamLogic();
-            Model.Model.Team t = logic.GetTeamByName(teamName);
+            Model.Model.Organization t = logic.GetTeamByName(teamName);
             if (t == null)
-                t = logic.CreateTeam(new Model.Model.Team() { Name = u.OrganizationName });
-            ur.TeamId = t.Id;
+                t = logic.CreateTeam(new Model.Model.Organization() { Name = u.OrganizationName });
+            ur.OrganizationId = t.Id;
             AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
@@ -64,7 +64,7 @@ namespace License.Logic.ServiceLogic
             var u = UserManager.FindById(id);
             var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
             TeamLogic logic = new TeamLogic();
-            user.Organization = logic.GetTeamById(user.TeamId);
+            user.Organization = logic.GetTeamById(user.OrganizationId);
             return user;
         }
 
@@ -108,7 +108,7 @@ namespace License.Logic.ServiceLogic
             IList<string> roles = UserManager.GetRoles(user.Id);
             userObj.Roles = roles;
             TeamLogic logic = new TeamLogic();
-            userObj.Organization = logic.GetTeamById(userObj.TeamId);
+            userObj.Organization = logic.GetTeamById(userObj.OrganizationId);
             return userObj;
         }
     }

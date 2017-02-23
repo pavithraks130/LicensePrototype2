@@ -124,10 +124,14 @@
     <Compile Include="Migrations\201702231127168_TeamMembersandOrganizationchanges.Designer.cs">
       <DependentUpon>201702231127168_TeamMembersandOrganizationchanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702231320259_RenameTeamToOrganization.cs" />
+    <Compile Include="Migrations\201702231320259_RenameTeamToOrganization.Designer.cs">
+      <DependentUpon>201702231320259_RenameTeamToOrganization.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\Role.cs" />
-    <Compile Include="Model\Team.cs" />
+    <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\TeamMembers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.Config.cs" />
@@ -148,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702231127168_TeamMembersandOrganizationchanges.resx">
       <DependentUpon>201702231127168_TeamMembersandOrganizationchanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702231320259_RenameTeamToOrganization.resx">
+      <DependentUpon>201702231320259_RenameTeamToOrganization.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

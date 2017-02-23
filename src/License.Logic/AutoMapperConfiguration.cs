@@ -20,8 +20,8 @@ namespace License.Logic
                 .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Id));
             cfg.CreateMap<License.Model.Model.Role, License.Core.Model.Role>();
 
-            cfg.CreateMap<License.Core.Model.Team, License.Model.Model.Team>();
-            cfg.CreateMap<License.Model.Model.Team, License.Core.Model.Team>();
+            cfg.CreateMap<License.Core.Model.Organization, License.Model.Model.Organization>();
+            cfg.CreateMap<License.Model.Model.Organization, License.Core.Model.Organization>();
 
             cfg.CreateMap<License.Core.Model.AppUser, License.Model.Model.User>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));

@@ -24,9 +24,7 @@ namespace License.MetCalWeb
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
-
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
-
             ConfigureOAuth(app);
         }
 

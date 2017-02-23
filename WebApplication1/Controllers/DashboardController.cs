@@ -62,13 +62,13 @@ namespace License.MetCalWeb.Controllers
                     invite.InvitationDate = DateTime.Now.Date;
                     invite.InviteeEmail = model.Email;
                     invite.InviteeStatus = InviteStatus.Pending.ToString();
-                    invite.TeamId = user.TeamId;
+                    invite.TeamId = user.OrganizationId;
                     var data = logic.CreateInvite(invite);
                     if (data.Id > 0)
                     {
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString = user.TeamId + "," + invite.AdminId + "," + invite.Id;
+                        string encryptString = user.OrganizationId + "," + invite.AdminId + "," + invite.Id;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
                         string token = logic.UserManager.GenerateEmailConfirmationToken(user.Id);

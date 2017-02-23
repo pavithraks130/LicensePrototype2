@@ -22,7 +22,7 @@ namespace License.Logic.ServiceLogic
             var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
             foreach (var data in listData)
             {
-                
+
             }
             return inviteList;
         }
@@ -38,6 +38,14 @@ namespace License.Logic.ServiceLogic
             Core.Model.TeamMembers invite = Work.UserInviteLicenseRepository.GetById(inviteId);
             invite.InviteeStatus = status;
             Work.UserInviteLicenseRepository.Update(invite);
+        }
+
+        public string GetUserAdminDetails(string userId)
+        {
+            var obj = Work.UserInviteLicenseRepository.GetData(t => t.InviteeUserId == userId).FirstOrDefault();
+            if (obj != null)
+                return obj.AdminId;
+            return string.Empty;
         }
     }
 }

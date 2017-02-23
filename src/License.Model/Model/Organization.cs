@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace License.Model.Model
 {
-    public class Team
+    public class Organization
     {
 
         public int Id { get; set; }

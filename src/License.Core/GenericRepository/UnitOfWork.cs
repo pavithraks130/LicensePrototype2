@@ -11,11 +11,11 @@ namespace License.Core.GenericRepository
     public class UnitOfWork :IDisposable
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
-        private LicenseRepository<Team> _teamLicenseRepository = null;
+        private LicenseRepository<Organization> _teamLicenseRepository = null;
 
-        public LicenseRepository<Team> TeamLicenseRepository
+        public LicenseRepository<Organization> TeamLicenseRepository
         {
-            get { return _teamLicenseRepository ?? (_teamLicenseRepository = new LicenseRepository<Team>(_dbContext)); }
+            get { return _teamLicenseRepository ?? (_teamLicenseRepository = new LicenseRepository<Organization>(_dbContext)); }
         }
 
         private LicenseRepository<TeamMembers> _userInviteLicenseRepository;
