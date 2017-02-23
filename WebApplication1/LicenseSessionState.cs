@@ -22,6 +22,9 @@ namespace License.MetCalWeb
         }
 
         public User User { get; set; }
-       
+
+        public bool IsAuthenticated { get; set; }
+
+
     }
 }
