@@ -17,6 +17,15 @@ namespace License.Core.GenericRepository
         {
             get { return _teamLicenseRepository ?? (_teamLicenseRepository = new LicenseRepository<Team>(_dbContext)); }
         }
+
+        private LicenseRepository<UserInvite> _userInviteLicenseRepository;
+        public LicenseRepository<UserInvite> UserInviteLicenseRepository
+        {
+            get {
+                return _userInviteLicenseRepository ??
+                       (_userInviteLicenseRepository = new LicenseRepository<UserInvite>(_dbContext));
+            }
+        }
         public void Save()
         {
             _dbContext.SaveChanges();

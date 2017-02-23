@@ -24,7 +24,7 @@ namespace License.Logic.ServiceLogic
             return usersList;
         }
 
-        public IdentityResult CreateUser(Registration u)
+        public IdentityResult CreateUser(Registration u, string roleName = "Admin")
         {
             User ur = new User();
             ur.FirstName = u.FirstName;
@@ -43,7 +43,6 @@ namespace License.Logic.ServiceLogic
             try
             {
                 result = UserManager.Create(user, u.Password);
-                var roleName = "Admin";
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
@@ -71,8 +70,13 @@ namespace License.Logic.ServiceLogic
 
         public IdentityResult UpdateUser(string id, User user)
         {
-            var u = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(user);
-            return UserManager.Update(u);
+            var appuser = UserManager.FindById(id);
+            appuser.FirstName = user.FirstName;
+            appuser.LastName = user.LastName;
+            appuser.Email = user.Email;
+            appuser.PhoneNumber = user.PhoneNumber;
+            
+            return UserManager.Update(appuser);
         }
 
         public IdentityResult DeleteUser(string id)
@@ -98,7 +102,7 @@ namespace License.Logic.ServiceLogic
             AppUser user = UserManager.Find(userName, password);
             return user;
         }
-        
+
         public User GetUserDataByAppuser(AppUser user)
         {
             return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);

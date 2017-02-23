@@ -110,6 +110,7 @@
     <Compile Include="ServiceLogic\BaseLogic.cs" />
     <Compile Include="ServiceLogic\RoleLogic.cs" />
     <Compile Include="ServiceLogic\TeamLogic.cs" />
+    <Compile Include="ServiceLogic\UserInviteLogic.cs" />
     <Compile Include="ServiceLogic\UserLogic.cs" />
   </ItemGroup>
   <ItemGroup>

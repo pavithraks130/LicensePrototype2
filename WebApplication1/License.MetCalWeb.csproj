@@ -203,6 +203,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TabController.cs" />
+    <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -240,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Team\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\License.Core\License.Core.csproj">

@@ -99,6 +99,35 @@ namespace License.MetCalWeb.Models
     }
 
 
+    public class UserModel
+    {
+        public Registration RegistratoinModel = new Registration();
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get { return RegistratoinModel.Email; } set { RegistratoinModel.Email = value; } }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password
+        {
+            get { return RegistratoinModel.Password; }
+            set
+            {
+                RegistratoinModel.Password = value;
+            }
+        }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+    }
+
 
 
 }

@@ -19,6 +19,7 @@ namespace License.Core.DBContext
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             base.OnModelCreating(modelBuilder);
 
         }
@@ -29,5 +30,6 @@ namespace License.Core.DBContext
         }
 
         public DbSet<Team> Team { get; set; }
+        public DbSet<UserInvite> UserInvite { get; set; }
     }
 }
