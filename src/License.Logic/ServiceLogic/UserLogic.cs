@@ -24,7 +24,7 @@ namespace License.Logic.ServiceLogic
             return usersList;
         }
 
-        public IdentityResult CreateUser(Registration u)
+        public IdentityResult CreateUser(Registration u, string roleName = "Admin")
         {
             User ur = new User();
             ur.FirstName = u.FirstName;
@@ -33,17 +33,16 @@ namespace License.Logic.ServiceLogic
             ur.PhoneNumber = u.PhoneNumber;
             ur.UserName = u.Email;
             var teamName = u.OrganizationName;
-            TeamLogic logic = new TeamLogic();
-            Model.Model.Team t = logic.GetTeamByName(teamName);
+            OrganizationLogic logic = new OrganizationLogic();
+            Model.Model.Organization t = logic.GetTeamByName(teamName);
             if (t == null)
-                t = logic.CreateTeam(new Model.Model.Team() { Name = u.OrganizationName });
-            ur.TeamId = t.Id;
+                t = logic.CreateTeam(new Model.Model.Organization() { Name = u.OrganizationName });
+            ur.OrganizationId = t.Id;
             AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
             {
                 result = UserManager.Create(user, u.Password);
-                var roleName = "Admin";
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
@@ -64,15 +63,19 @@ namespace License.Logic.ServiceLogic
         {
             var u = UserManager.FindById(id);
             var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
-            TeamLogic logic = new TeamLogic();
-            user.Organization = logic.GetTeamById(user.TeamId);
+            OrganizationLogic logic = new OrganizationLogic();
+            user.Organization = logic.GetTeamById(user.OrganizationId);
             return user;
         }
 
         public IdentityResult UpdateUser(string id, User user)
         {
-            var u = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(user);
-            return UserManager.Update(u);
+            var appuser = UserManager.FindById(id);
+            appuser.FirstName = user.FirstName;
+            appuser.LastName = user.LastName;
+            appuser.Email = user.Email;
+            appuser.PhoneNumber = user.PhoneNumber;
+            return UserManager.Update(appuser);
         }
 
         public IdentityResult DeleteUser(string id)
@@ -98,10 +101,15 @@ namespace License.Logic.ServiceLogic
             AppUser user = UserManager.Find(userName, password);
             return user;
         }
-        
+
         public User GetUserDataByAppuser(AppUser user)
         {
-            return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+            User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+            IList<string> roles = UserManager.GetRoles(user.Id);
+            userObj.Roles = roles;
+            OrganizationLogic logic = new OrganizationLogic();
+            userObj.Organization = logic.GetTeamById(userObj.OrganizationId);
+            return userObj;
         }
     }
 }

@@ -8,51 +8,50 @@ using License.Model.Model;
 
 namespace License.Logic.ServiceLogic
 {
-    public class TeamLogic : BaseLogic
+    public class OrganizationLogic : BaseLogic
     {
 
-
-        public List<Team> GetTeams()
+        public List<Organization> GetTeams()
         {
-            List<Team> teams = new List<Team>();
+            List<Organization> teams = new List<Organization>();
             var teamlist = Work.TeamLicenseRepository.GetData();
-            foreach (License.Core.Model.Team t in teamlist)
+            foreach (License.Core.Model.Organization t in teamlist)
             {
-                teams.Add(AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(t));
+                teams.Add(AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(t));
             }
             return teams;
         }
 
-        public Team GetTeamById(object id)
+        public Organization GetTeamById(object id)
         {
             var obj = Work.TeamLicenseRepository.GetById(id);
-            return AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(obj);
+            return AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(obj);
         }
 
-        public Team GetTeamByName(object name)
+        public Organization GetTeamByName(object name)
         {
             var obj =
                 Work.TeamLicenseRepository.GetData().FirstOrDefault(t => t.Name.ToLower() == name.ToString().ToLower());
             if (obj == null)
                 return null;
-            return AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(obj);
+            return AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(obj);
         }
 
-        public Team CreateTeam(Team team)
+        public Organization CreateTeam(Organization team)
         {
-            var _team = AutoMapper.Mapper.Map<Team, License.Core.Model.Team>(team);
+            var _team = AutoMapper.Mapper.Map<Organization, License.Core.Model.Organization>(team);
             _team = Work.TeamLicenseRepository.Create(_team);
             Work.Save();
-            team = AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(_team);
+            team = AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(_team);
             return team;
         }
 
-        public Team UpdateTeam(Team team)
+        public Organization UpdateTeam(Organization team)
         {
-            var _team = AutoMapper.Mapper.Map<Team, License.Core.Model.Team>(team);
+            var _team = AutoMapper.Mapper.Map<Organization, License.Core.Model.Organization>(team);
             _team = Work.TeamLicenseRepository.Update(_team);
             Work.Save();
-            team = AutoMapper.Mapper.Map<License.Core.Model.Team, Team>(_team);
+            team = AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(_team);
             return team;
         }
 

@@ -10,7 +10,9 @@ using System.Web;
 using System.Web.Mvc;
 using License.Core.Manager;
 using License.Core.Model;
+using License.Logic.Common;
 using License.Logic.ServiceLogic;
+using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
 using License.Model.Model;
 using Microsoft.AspNet.Identity;
@@ -88,7 +90,7 @@ namespace License.MetCalWeb.Controllers
                     SignInAsync(user, model.RememberMe);
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     LicenseSessionState.Instance.IsAuthenticated = true;
-                    return RedirectToAction("Dashboard", "Dashboard");
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 else
                 {
@@ -168,6 +170,24 @@ namespace License.MetCalWeb.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
             return View("Login");
+        }
+
+        public ActionResult Confirm(string invite, string status, string token)
+        {
+            string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
+            string data = EncryptDecrypt.DecryptString(invite, passPhrase);
+            var details = data.Split(new char[] { ',' });
+            string teamId = details[0];
+            string adminId = details[1];
+            string inviteId = details[2];
+
+            TeamMemberLogic logic = new TeamMemberLogic();
+            logic.UpdateInviteStatus(inviteId, status);
+            ViewBag.Message = String.Empty;
+            License.Logic.Common.InviteStatus stat = (License.Logic.Common.InviteStatus)Enum.Parse(typeof(License.Logic.Common.InviteStatus), status);
+            if (stat == InviteStatus.Accepted)
+                ViewBag.Message = "You have accepted the invitation. Click below to Login with credentials which was shared through Mail";
+            return View();
         }
     }
 }
