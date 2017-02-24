@@ -17,6 +17,7 @@ namespace License.Logic.ServiceLogic
         {
             License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
             var obj = Work.UserInviteLicenseRepository.Create(userinvit);
+            Work.Save();
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
@@ -58,6 +59,7 @@ namespace License.Logic.ServiceLogic
             Core.Model.TeamMembers invite = Work.UserInviteLicenseRepository.GetById(inviteId);
             invite.InviteeStatus = status;
             Work.UserInviteLicenseRepository.Update(invite);
+            Work.Save();
         }
 
         public string GetUserAdminDetails(string userId)

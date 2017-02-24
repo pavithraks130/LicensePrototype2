@@ -2,43 +2,16 @@
 @{
     ViewBag.Title = "TeamContainer";
 }
-
-@using Microsoft.AspNet.Identity
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>
-
-
-
-    </title>
-</head>
-<body>
+<div class="row">
     <h2>
         @Html.ActionLink(LicenseSessionState.Instance.User.Name + "....", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
     </h2>
-    <table class="table">
-        <tr >
-            <th style="width:60%">
-                Team Members
-            </th>
-            <th style="width:40%">
-                Subscriptions
-            </th>
-        </tr>
-       
-        <tr>
-            <td>
-                @Html.Partial("TeamMembers")
-            </td>
-
-            <td>
-                @Html.Partial("Subscriptions")
-                </td>
-            </tr>
-       
-        </table>
-    </body>
-</html>
+    <div class="form-group">
+        <div class="col-md-8">
+            @{ Html.RenderAction("TeamMembers"); }
+        </div>
+        <div class="col-md-4">
+            @{ Html.RenderAction("Subscriptions"); }
+        </div>
+    </div>
+</div>
