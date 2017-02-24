@@ -1,5 +1,4 @@
-﻿@model License.MetCalWeb.Models.LoginViewModel
-
+﻿
 @{
     ViewBag.Title = "TeamContainer";
 }
@@ -29,18 +28,17 @@
                 Subscriptions
             </th>
         </tr>
-        @foreach (var item in  Model)
-        {
+       
         <tr>
             <td>
-                @Html.Partial("TeamMembers",item)
+                @Html.Partial("TeamMembers")
             </td>
 
             <td>
                 @Html.Partial("Subscriptions")
                 </td>
             </tr>
-        }
+       
         </table>
     </body>
 </html>
