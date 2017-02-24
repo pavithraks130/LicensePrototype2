@@ -112,6 +112,14 @@
     <Compile Include="Migrations\201702240618476_init.Designer.cs">
       <DependentUpon>201702240618476_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702240849053_init1.cs" />
+    <Compile Include="Migrations\201702240849053_init1.Designer.cs">
+      <DependentUpon>201702240849053_init1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702240922458_init2.cs" />
+    <Compile Include="Migrations\201702240922458_init2.Designer.cs">
+      <DependentUpon>201702240922458_init2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\Role.cs" />
@@ -127,6 +135,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201702240618476_init.resx">
       <DependentUpon>201702240618476_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702240849053_init1.resx">
+      <DependentUpon>201702240849053_init1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702240922458_init2.resx">
+      <DependentUpon>201702240922458_init2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

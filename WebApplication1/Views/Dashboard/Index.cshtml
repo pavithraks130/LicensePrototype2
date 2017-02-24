@@ -1,6 +1,56 @@
-﻿
+﻿@model IEnumerable<License.MetCalWeb.Models.Product>
+
 @{
     ViewBag.Title = "Dashboard";
 }
+<div>
+    <h1 class="login-header-new">Fluke Connect Store</h1>
+</div>
+@foreach (var item in Model)
+{
 
-<h4>Dashboard</h4>
+
+        <table class="table" style="border:ridge;white-space:inherit">
+            
+            <tr>
+                <td>
+                    <p >
+                        <img src="@item.ImagePath" />
+                    </p>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        <em>Produt Name:</em>
+                        @item.ProductName
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        <em>Produt Id:</em>
+                        @item.ProductID
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <em>Proce:</em>
+                    @item.UnitPrice <em>$</em>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <p class="button">
+                        <input name="Add" type="submit" value="Add To Cart" />
+                    </p>
+                </td>
+            </tr>
+
+        </table>
+   
+}
