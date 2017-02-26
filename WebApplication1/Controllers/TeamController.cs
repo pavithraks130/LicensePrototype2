@@ -93,16 +93,24 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Invite(UserInviteModel model)
         {
+            bool status = false;
+            IdentityResult result;
             if (ModelState.IsValid)
             {
                 if (userLogic.UserManager == null)
                     userLogic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
                 if (userLogic.RoleManager == null)
                     userLogic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
-                model.RegistratoinModel.OrganizationName = LicenseSessionState.Instance.User.Organization.Name;
-                model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
-                var result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
-                if (result.Succeeded)
+                if (!userLogic.GetUserByEmail(model.Email))
+                {
+                    model.RegistratoinModel.OrganizationName = LicenseSessionState.Instance.User.Organization.Name;
+                    model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
+                    result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
+                    status = result.Succeeded;
+                }
+                else
+                    status = true;
+                if (status)
                 {
                     AppUser user = userLogic.UserManager.FindByEmail(model.Email);
                     TeamMembers invite = new TeamMembers();
@@ -124,7 +132,7 @@ namespace WebApplication1.Controllers
 
                         string joinUrl = Url.Action("Confirm", "Account",
                             new { invite = dataencrypted, status = InviteStatus.Accepted.ToString() }, protocol: Request.Url.Scheme);
-                        string declineUrl =Url.Action("Confirm", "Account",
+                        string declineUrl = Url.Action("Confirm", "Account",
                             new { invite = dataencrypted, status = InviteStatus.Declined.ToString() }, protocol: Request.Url.Scheme);
 
                         body = body.Replace("{{JoinUrl}}", joinUrl);
