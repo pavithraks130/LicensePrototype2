@@ -17,7 +17,7 @@ namespace License.Logic.ServiceLogic
         {
             License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
             var obj = Work.UserInviteLicenseRepository.Create(userinvit);
-            Work.Save();
+            Work.UserInviteLicenseRepository.Save();
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
@@ -25,6 +25,7 @@ namespace License.Logic.ServiceLogic
         {
             AppUser user = UserManager.FindById(adminId);
             UserInviteList inviteList = new UserInviteList();
+            inviteList.AdminUser = AutoMapper.Mapper.Map<AppUser, User>(user);
             List<TeamMembers> teamMembers = new List<TeamMembers>();
             var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
             foreach (var data in listData)
@@ -54,12 +55,12 @@ namespace License.Logic.ServiceLogic
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
-        public void UpdateInviteStatus(string inviteId, string status)
+        public void UpdateInviteStatus(object inviteId, string status)
         {
             Core.Model.TeamMembers invite = Work.UserInviteLicenseRepository.GetById(inviteId);
             invite.InviteeStatus = status;
-            Work.UserInviteLicenseRepository.Update(invite);
-            Work.Save();
+            Core.Model.TeamMembers ember = Work.UserInviteLicenseRepository.Update(invite);
+            Work.UserInviteLicenseRepository.Save();
         }
 
         public string GetUserAdminDetails(string userId)

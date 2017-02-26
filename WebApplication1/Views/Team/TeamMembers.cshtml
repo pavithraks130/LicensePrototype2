@@ -21,67 +21,72 @@
         <tr>
             <td>
                 <div id="emptyTeamContainer" data-show-on-empty-team="true">
-                    <h2>No other users are on your team</h2>
-                    <h3>Invite others to start sharing data with your team</h3>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Invite Team Member</button>
+                    <h4>No other users are on your team</h4>
+                    <h5>Invite others to start sharing data with your team</h5>
+                    <button class="btn btn-primary btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Invite Team Member</button>
                 </div>
 
             </td>
         </tr>
     </table>
-    <div class="modal" id="myModal">
-        @{ Html.RenderPartial("Invite"); }
-    </div>
-            }
-            else
-            {
-                if (Model.PendinigUsers.Count > 0)
-                {
-                    <h4>Pending Users</h4>
-                    <table class="table" style="border: none">
-                        @foreach (TeamMembers t in Model.PendinigUsers)
-                        {
-                            <tr>
-                                <td class="col-md-8">
-                                    @if (t.InviteeUser != null)
-                                    {
-                                        <div>@t.InviteeUser.Name</div>
-                                        <div>@t.InviteeUser.Email</div>
-                                    }
-                                    else
-                                    {
-                                        <div>@t.InviteeEmail</div>
-                                    }
-                                </td>
-                                <td>
-                                    <div>@t.InvitationDate.Date.ToString("d")</div>
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                }
 
-                if (Model.AcceptedUsers.Count > 0)
+}
+else
+{
+   
+    <div class="form-group">
+        @if (Model.PendinigUsers.Count > 0)
+        {
+            <h4>Pending Users</h4>
+
+            <table class="table" style="border: none">
+                @foreach (TeamMembers t in Model.PendinigUsers)
                 {
-                    <h4>Accepted Users</h4>
-                    <table class="table" style="border: none">
-                        @foreach (TeamMembers t in Model.AcceptedUsers)
+                    <tr>
+                        <td class="col-md-8">
+                            @if (t.InviteeUser != null)
                         {
-                            <tr>
-                                <td>
-                                    @if (t.InviteeUser != null)
+                                <div>@t.InviteeUser.Name</div>
+                                <div>@t.InviteeUser.Email</div>
+                            }
+                            else
+                            {
+                                <div>@t.InviteeEmail</div>
+                            }
+                        </td>
+                        <td>
+                            <div>@t.InvitationDate.Date.ToString("d")</div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+
+        @if (Model.AcceptedUsers.Count > 0)
+        {
+            <h4>Accepted Users</h4>
+            <table class="table" style="border: none">
+                @foreach (TeamMembers t in Model.AcceptedUsers)
+                        {
+            <tr>
+                <td>
+                    @if (t.InviteeUser != null)
                                     {
-                                        <div>@t.InviteeUser.Name</div>
-                                        <div>@t.InviteeUser.Email</div>
+                    <div>@t.InviteeUser.Name</div>
+                    <div>@t.InviteeUser.Email</div>
                                     }
                                     else
                                     {
-                                        <div>@t.InviteeEmail</div>
+                    <div>@t.InviteeEmail</div>
                                     }
-                                </td>
-                               
-                            </tr>
+                </td>
+
+            </tr>
                         }
-                    </table>
-                }
-            }
+            </table>
+        }
+    </div>
+}
+<div class="modal" id="myModal" Width="">
+    @{ Html.RenderAction("Invite"); }
+</div>

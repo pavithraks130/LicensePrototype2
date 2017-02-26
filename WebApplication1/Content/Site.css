@@ -37,6 +37,10 @@ body {
     text-align: center;
 }
 
+.btn-custom {
+    font-size: 14px!important;
+    padding: 8px, 12px!important;
+}
 
 a {
     color: #333;
@@ -84,7 +88,7 @@ mark {
 }
 
 .image-position {
-    float:unset;
+    float: unset;
 }
 
 .clear-fix:after {
