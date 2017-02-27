@@ -8,7 +8,7 @@ using License.Core.Model;
 
 namespace License.Core.GenericRepository
 {
-    public class UnitOfWork :IDisposable
+    public class UnitOfWork : IDisposable
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
         private LicenseRepository<Organization> _teamLicenseRepository = null;
@@ -27,6 +27,18 @@ namespace License.Core.GenericRepository
             }
         }
 
+        private LicenseRepository<Product> _productLicenseRepository;
+        public LicenseRepository<Product> ProductLicenseRepository
+        {
+            get { return _productLicenseRepository ?? (_productLicenseRepository = new LicenseRepository<Product>(_dbContext)); }
+        }
+
+        private LicenseRepository<CartItem> _cartItemLicenseRepository;
+        public LicenseRepository<CartItem> CartItemLicenseRepository
+        {
+            get { return _cartItemLicenseRepository ?? (_cartItemLicenseRepository = new LicenseRepository<CartItem>(_dbContext)); }
+        }
+        
    
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)

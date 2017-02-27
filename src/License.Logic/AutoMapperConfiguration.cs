@@ -34,6 +34,14 @@ namespace License.Logic
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
+            cfg.CreateMap<Model.Model.Product, Core.Model.Product>();
+            cfg.CreateMap<Core.Model.Product, Model.Model.Product>();
+
+            cfg.CreateMap<Model.Model.CartItem, Core.Model.CartItem>()
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product));
+
+            cfg.CreateMap<Core.Model.CartItem, Model.Model.CartItem>();
+
         }
 
     }

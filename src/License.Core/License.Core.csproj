@@ -120,8 +120,22 @@
     <Compile Include="Migrations\201702240922458_init2.Designer.cs">
       <DependentUpon>201702240922458_init2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702270714537_initProduct.cs" />
+    <Compile Include="Migrations\201702270714537_initProduct.Designer.cs">
+      <DependentUpon>201702270714537_initProduct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702270727137_UserIdToCartItem.cs" />
+    <Compile Include="Migrations\201702270727137_UserIdToCartItem.Designer.cs">
+      <DependentUpon>201702270727137_UserIdToCartItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702270913407_ChangeIdTypeToCartItem.cs" />
+    <Compile Include="Migrations\201702270913407_ChangeIdTypeToCartItem.Designer.cs">
+      <DependentUpon>201702270913407_ChangeIdTypeToCartItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
+    <Compile Include="Model\CartItem.cs" />
+    <Compile Include="Model\Product.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\TeamMembers.cs" />
@@ -141,6 +155,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702240922458_init2.resx">
       <DependentUpon>201702240922458_init2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702270714537_initProduct.resx">
+      <DependentUpon>201702270714537_initProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702270727137_UserIdToCartItem.resx">
+      <DependentUpon>201702270727137_UserIdToCartItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702270913407_ChangeIdTypeToCartItem.resx">
+      <DependentUpon>201702270913407_ChangeIdTypeToCartItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
