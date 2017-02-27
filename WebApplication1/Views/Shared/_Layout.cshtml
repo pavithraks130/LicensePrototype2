@@ -25,7 +25,7 @@
             <div class="navbar-collapse collapse">
                 @Html.Partial("_LoginPartial")
                 <ul id="menu" class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Home", "Home", "Tab")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Dashboard")</li>
                     <li>@Html.ActionLink("Products", "Products", "Tab")</li>
                     @if (LicenseSessionState.Instance.IsAuthenticated)
                     {

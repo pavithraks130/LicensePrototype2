@@ -170,6 +170,48 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Catalog\Images\Thumbs\f-1730-4402_01a_s.png" />
+    <Content Include="Catalog\Images\Thumbs\f-1730-hanger_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-1730-tl0.1m_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-1730-tl2m_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3501-fc_02a_h-708x490.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3510-fc_01a_h-708x490.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3511-fc_01a_h-708x490_0.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3520-fc_01a_h-708x490.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3521-fc_01a_h-708x490.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3530-fc_01a_h-708x490.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3540fc_01a-708x490.png" />
+    <Content Include="Catalog\Images\Thumbs\f-3phvl-1730_31a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-80pk-8_01b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-80pk1_07a_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-ac173_01a_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-ac220_05b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-ac280_04b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-ac283_04b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-ac285_05b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-bp1730_01b_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-c1730_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-cxt1000_02a_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-cxt3500_708x490_0.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i1730-flex6000_01a_s.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i17xx-flex1500-3pk_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i17xx-flex1500-4pk_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i17xx-flex1500_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i17xx-flex3000-4pk_01a_s.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i17xx-flex6000-4pk_01a_s.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i40s-el-3pk_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-i40s-el_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-iflex3000-24_01a_s.png" />
+    <Content Include="Catalog\Images\Thumbs\f-iflex6000-36_01a_s.png" />
+    <Content Include="Catalog\Images\Thumbs\f-mp1_01a_c.png" />
+    <Content Include="Catalog\Images\Thumbs\f-tl221_01b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-tl222_01b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-tl224_01b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-tlk220_01a_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-tlk225_03c_h.png" />
+    <Content Include="Catalog\Images\Thumbs\f-tlk281_02b_h.png" />
+    <Content Include="Catalog\Images\Thumbs\fccm_product.png" />
+    <Content Include="Catalog\Images\Thumbs\fluke-icon-phone-e328f0d16a67b75a8047bca10380f1b3.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -186,6 +228,7 @@
     <Content Include="EmailTemplate\WelcometoFlukeCalibration.htm" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\Cart-Menu.png" />
     <Content Include="Resources\favicon.ico" />
     <Content Include="Resources\fcal-tagline-321x66.gif" />
     <Content Include="Resources\logo.png" />
@@ -193,6 +236,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
     <Content Include="EmailTemplate\EmailTemImages\themedata.thmx" />
+    <Content Include="Catalog\Images\Thumbs\fbevents.js.download" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -259,7 +303,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Catalog\Images\Thumbs\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\License.Core\License.Core.csproj">
