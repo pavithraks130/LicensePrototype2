@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -32,7 +33,7 @@ namespace License.Core.GenericRepository
                 return orderby(query).ToList();
             return query.ToList();
         }
-       
+
         //If Key is String
         public T GetById(object id)
         {
@@ -50,19 +51,26 @@ namespace License.Core.GenericRepository
         {
             if (_context.Entry(obj).State == EntityState.Detached)
                 _dbSet.Attach(obj);
-           return _dbSet.Remove(obj);
+            return _dbSet.Remove(obj);
         }
 
         public T Update(T obj)
         {
+            obj = _dbSet.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
-           return _dbSet.Attach(obj);
+            return obj;
         }
 
         public T Create(T obj)
         {
+            obj = _dbSet.Add(obj);
             _context.Entry(obj).State = EntityState.Added;
-           return  _dbSet.Add(obj);
+            return obj;
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
         }
     }
 }

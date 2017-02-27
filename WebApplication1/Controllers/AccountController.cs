@@ -172,7 +172,7 @@ namespace License.MetCalWeb.Controllers
             return View("Login");
         }
 
-        public ActionResult Confirm(string invite, string status, string token)
+        public ActionResult Confirm(string invite, string status)
         {
             string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
             string data = EncryptDecrypt.DecryptString(invite, passPhrase);
@@ -182,7 +182,7 @@ namespace License.MetCalWeb.Controllers
             string inviteId = details[2];
 
             TeamMemberLogic logic = new TeamMemberLogic();
-            logic.UpdateInviteStatus(inviteId, status);
+            logic.UpdateInviteStatus(Convert.ToInt32(inviteId), status);
             ViewBag.Message = String.Empty;
             License.Logic.Common.InviteStatus stat = (License.Logic.Common.InviteStatus)Enum.Parse(typeof(License.Logic.Common.InviteStatus), status);
             if (stat == InviteStatus.Accepted)

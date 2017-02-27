@@ -41,7 +41,7 @@ namespace License.Logic.ServiceLogic
         {
             var _team = AutoMapper.Mapper.Map<Organization, License.Core.Model.Organization>(team);
             _team = Work.TeamLicenseRepository.Create(_team);
-            Work.Save();
+            Work.TeamLicenseRepository.Save();
             team = AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(_team);
             return team;
         }
@@ -50,7 +50,7 @@ namespace License.Logic.ServiceLogic
         {
             var _team = AutoMapper.Mapper.Map<Organization, License.Core.Model.Organization>(team);
             _team = Work.TeamLicenseRepository.Update(_team);
-            Work.Save();
+            Work.TeamLicenseRepository.Save();
             team = AutoMapper.Mapper.Map<License.Core.Model.Organization, Organization>(_team);
             return team;
         }
@@ -58,7 +58,7 @@ namespace License.Logic.ServiceLogic
         public bool DeleteTeam(object id)
         {
             var status = Work.TeamLicenseRepository.Delete(id);
-            Work.Save();
+            Work.TeamLicenseRepository.Save();
             return status;
         }
     }

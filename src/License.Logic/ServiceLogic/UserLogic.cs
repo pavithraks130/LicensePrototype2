@@ -89,6 +89,10 @@ namespace License.Logic.ServiceLogic
             return UserManager.ResetPassword(userId, token, password);
         }
 
+        public bool GetUserByEmail(string email)
+        {
+            return UserManager.FindByEmail<AppUser, string>(email) != null;
+        }
 
         public User ForgotPassword(string email)
         {

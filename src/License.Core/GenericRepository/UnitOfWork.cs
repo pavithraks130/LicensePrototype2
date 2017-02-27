@@ -26,11 +26,8 @@ namespace License.Core.GenericRepository
                        (_userInviteLicenseRepository = new LicenseRepository<TeamMembers>(_dbContext));
             }
         }
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
+   
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

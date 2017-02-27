@@ -26,5 +26,7 @@ namespace License.MetCalWeb
         public bool IsAuthenticated { get; set; }
 
 
+        public  bool IsTeamAdmin { get; set; }
+
     }
 }

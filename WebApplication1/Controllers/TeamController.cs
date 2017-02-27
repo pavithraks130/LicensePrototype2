@@ -32,10 +32,16 @@ namespace WebApplication1.Controllers
         // GET: Team
         public ActionResult TeamContainer()
         {
-            return View();
+            TeamModel model = LoadTeamMember();
+            return View(model);
         }
 
         public ActionResult TeamMembers()
+        {
+            return View();
+        }
+
+        private TeamModel LoadTeamMember()
         {
             License.Model.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
@@ -48,7 +54,10 @@ namespace WebApplication1.Controllers
                 logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
 
             if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
+            {
                 adminId = LicenseSessionState.Instance.User.UserId;
+                LicenseSessionState.Instance.IsTeamAdmin = true;
+            }
             else
                 adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
             if (!String.IsNullOrEmpty(adminId))
@@ -59,8 +68,15 @@ namespace WebApplication1.Controllers
                 model.AcceptedUsers = inviteList.AcceptedInvites;
                 model.PendinigUsers = inviteList.PendingInvites;
             }
-            return View(model);
+            if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamAdmin)
+                return model;
+            var obj =
+                model.AcceptedUsers
+                    .FirstOrDefault(t => t.InviteeUserId == LicenseSessionState.Instance.User.UserId);
+            LicenseSessionState.Instance.IsTeamAdmin = obj?.IsAdmin ?? false;
+            return model;
         }
+
 
         public ActionResult Subscriptions()
         {
@@ -69,7 +85,7 @@ namespace WebApplication1.Controllers
 
         public ActionResult Invite()
         {
-         
+
             return View();
         }
 
@@ -77,16 +93,24 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Invite(UserInviteModel model)
         {
+            bool status = false;
+            IdentityResult result;
             if (ModelState.IsValid)
             {
                 if (userLogic.UserManager == null)
                     userLogic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
                 if (userLogic.RoleManager == null)
                     userLogic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
-                model.RegistratoinModel.OrganizationName = LicenseSessionState.Instance.User.Organization.Name;
-                model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
-                var result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
-                if (result.Succeeded)
+                if (!userLogic.GetUserByEmail(model.Email))
+                {
+                    model.RegistratoinModel.OrganizationName = LicenseSessionState.Instance.User.Organization.Name;
+                    model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
+                    result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
+                    status = result.Succeeded;
+                }
+                else
+                    status = true;
+                if (status)
                 {
                     AppUser user = userLogic.UserManager.FindByEmail(model.Email);
                     TeamMembers invite = new TeamMembers();
@@ -101,15 +125,15 @@ namespace WebApplication1.Controllers
                     {
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString = user.OrganizationId + "," + invite.AdminId + "," + invite.Id;
+                        string encryptString = user.OrganizationId + "," + invite.AdminId + "," + data.Id;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
                         string token = userLogic.UserManager.GenerateEmailConfirmationToken(user.Id);
 
                         string joinUrl = Url.Action("Confirm", "Account",
-                            new { invite = dataencrypted, status = InviteStatus.Accepted.ToString()});
+                            new { invite = dataencrypted, status = InviteStatus.Accepted.ToString() }, protocol: Request.Url.Scheme);
                         string declineUrl = Url.Action("Confirm", "Account",
-                            new { invite = dataencrypted, status = InviteStatus.Declined.ToString()});
+                            new { invite = dataencrypted, status = InviteStatus.Declined.ToString() }, protocol: Request.Url.Scheme);
 
                         body = body.Replace("{{JoinUrl}}", joinUrl);
                         body = body.Replace("{{DeclineUrl}}", declineUrl);
@@ -120,7 +144,7 @@ namespace WebApplication1.Controllers
                     }
                 }
             }
-            return View("TeamContainer");
+            return RedirectToAction("TeamContainer");
         }
     }
 }

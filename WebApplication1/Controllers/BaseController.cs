@@ -9,6 +9,12 @@ namespace License.MetCalWeb.Controllers
 {
     public class BaseController : Controller
     {
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            base.OnException(filterContext);
+            RedirectToAction("Login", "Account");
+        }
         public void GetErrorResult(IdentityResult result)
         {
             if (!result.Succeeded)
