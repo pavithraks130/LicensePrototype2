@@ -6,18 +6,20 @@
 <div>
     <h1 class="login-header-new">Fluke Connect Store</h1>
 </div>
-@foreach (var item in Model)
+@if (Model != null)
 {
+    foreach (var item in Model)
+    {
 
 
         <table class="table" style="border:ridge;white-space:inherit">
-            
+
             <tr>
                 <td>
-                    <p >
+                    <p>
                         <img src="@item.ImagePath" />
                     </p>
-                    
+
                 </td>
             </tr>
             <tr>
@@ -52,5 +54,5 @@
             </tr>
 
         </table>
-   
+    }
 }
