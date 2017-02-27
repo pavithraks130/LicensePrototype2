@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace License.Core.Model
+namespace License.Model.Model
 {
+
     public class CartItem
     {
-        [Key]
         public int Id { get; set; }
 
         public int Quantity { get; set; }
@@ -17,12 +16,9 @@ namespace License.Core.Model
         public System.DateTime DateCreated { get; set; }
 
         public int ProductId { get; set; }
-
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
 
         public string UserId { get; set; }
-        [ForeignKey("UserId")]
-        public virtual AppUser User { get; set; }
+
     }
 }

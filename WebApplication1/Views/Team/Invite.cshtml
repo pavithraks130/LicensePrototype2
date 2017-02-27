@@ -3,6 +3,18 @@
 @{
     Layout = null;
 }
+<script type="text/javascript">
+    function onSuccess(data) {
+        if(data.onSuccess == "false")
+        {
+            $('#error').val(data.message);
+            return;
+        }
+        else {
+            location.Href = @Url.Action("TeamContainer", "Team");
+        }
+    }
+</script>
 <div class="modal-dialog " style="position: static!important">
     <div class="modal-content">
         <div class="modal-header">
@@ -10,10 +22,17 @@
                 <span aria-hidden="true">&times;</span>
             </button><h4 class="modal-title">Modal title</h4>
         </div>
-        @using (Html.BeginForm("Invite", "Team", FormMethod.Post))
+
+        <div id="error">
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary()
+            }
+        </div>
+        @using (Ajax.BeginForm("Invite", "Team", new AjaxOptions { UpdateTargetId = "Error", InsertionMode = InsertionMode.Replace, OnSuccess = "onSuccess(data)" }))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary()
+          
             <div>
                 <div style="padding-top: 15px;padding-bottom: 10px">
                     <div class="col-md-4">

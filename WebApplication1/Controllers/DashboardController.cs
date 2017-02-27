@@ -1,19 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using License.Core.Manager;
-
-using License.Core.Model;
-using License.Logic.Common;
 using License.Logic.ServiceLogic;
-using License.MetCalWeb;
-using License.MetCalWeb.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using License.MetCalWeb.Common;
-using TeamMembers = License.Model.Model.TeamMembers;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -32,8 +20,8 @@ namespace License.MetCalWeb.Controllers
         // GET: Dashboard
         public ActionResult Index()
         {
-            var model = new List<Product>();
-            var product = new Product();
+            var model = new List<Models.Product>();
+            var product = new Models.Product();
             product.CategoryID = 10;
             product.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
             product.ProductID = 123;
@@ -41,7 +29,7 @@ namespace License.MetCalWeb.Controllers
             product.UnitPrice = 499;
             model.Add(product);
 
-            Product product1 = new Product();
+            var product1 = new Models.Product();
             product1.CategoryID = 20;
             product1.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
             product1.ProductID = 123;
@@ -49,7 +37,7 @@ namespace License.MetCalWeb.Controllers
             product1.UnitPrice = 600;
             model.Add(product1);
 
-            Product product3 = new Product();
+            var product3 = new Models.Product();
             product3.CategoryID = 30;
             product3.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
             product3.ProductID = 123;

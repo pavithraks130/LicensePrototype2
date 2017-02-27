@@ -97,6 +97,9 @@ namespace WebApplication1.Controllers
             IdentityResult result;
             if (ModelState.IsValid)
             {
+                //if(logic.VerifyUserInvited(model.Email, LicenseSessionState.Instance.User.UserId)!= null)
+                //    return Json(new { success = false, Message = "User has already been invited" });
+
                 if (userLogic.UserManager == null)
                     userLogic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
                 if (userLogic.RoleManager == null)
@@ -110,6 +113,7 @@ namespace WebApplication1.Controllers
                 }
                 else
                     status = true;
+
                 if (status)
                 {
                     AppUser user = userLogic.UserManager.FindByEmail(model.Email);
@@ -144,7 +148,7 @@ namespace WebApplication1.Controllers
                     }
                 }
             }
-            return RedirectToAction("TeamContainer");
+            return Json(new { success = true, message = "" });
         }
     }
 }
