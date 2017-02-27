@@ -4,55 +4,67 @@
     ViewBag.Title = "Dashboard";
 }
 <div>
-    <h1 class="login-header-new">Fluke Connect Store</h1>
+    <div class="col-md-8">
+        <h1 class="login-header-new">Fluke Connect Store</h1>
+    </div>
+    <div class="col-md-4">
+        <h1 class="login-header-new">Cart(item.count)</h1>
+    </div>
+
 </div>
+
 @if (Model != null)
 {
-    foreach (var item in Model)
-    {
+    <div class="col-md-8">
+        @foreach (var item in Model)
+        {
+            <table class="table-hover" style="border:ridge;align-content:center;padding:inherit;height:50px;width:50px">
 
+                <tr>
+                    <td>
+                        <p class="float-left">
+                            <img src="@item.ImagePath" />
+                        </p>
 
-        <table class="table" style="border:ridge;white-space:inherit">
-            
-            <tr>
-                <td>
-                    <p >
-                        <img src="@item.ImagePath" />
-                    </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            <em>Produt Name:</em>
+                            @item.ProductName
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            <em>Produt Id:</em>
+                            @item.ProductID
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <em>Proce:</em>
+                        @item.UnitPrice <em>$</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="danger">
+                        <p class="button">
+                            <b>
+                                <input name="Add" class="btn btn-success" type="submit" value="Add To Cart" />
+                            </b>
+                        </p>
+                    </td>
+                </tr>
 
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>
-                        <em>Produt Name:</em>
-                        @item.ProductName
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>
-                        <em>Produt Id:</em>
-                        @item.ProductID
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <em>Proce:</em>
-                    @item.UnitPrice <em>$</em>
-                </td>
-            </tr>
+            </table>
+        }
+    </div>
+    <div class="col-md-4">
 
-            <tr>
-                <td>
-                    <p class="button">
-                        <input name="Add" type="submit" value="Add To Cart"/>
-                    </p>
-                </td>
-            </tr>
-
-        </table>
-   
+        <h3>Cart Item List</h3>
+    </div>
 }
