@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using License.Logic.ServiceLogic;
+using License.MetCalWeb.Models;
+using License.Core.Model;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -47,6 +49,11 @@ namespace License.MetCalWeb.Controllers
 
             return View(model);
         }
-
+        [HttpPost]
+        public ActionResult PaymentGateway()
+        {
+            return View();
+            //return RedirectToAction("PaymentGateway", "Dashboard");
+        }
     }
 }

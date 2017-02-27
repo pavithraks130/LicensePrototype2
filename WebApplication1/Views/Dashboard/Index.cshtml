@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.Product>
-
 @{
     ViewBag.Title = "Dashboard";
 }
@@ -70,10 +69,10 @@
             </table>
         }
     </div>
-    <div class="col-md-4">
-
+    <div class="col-md-4 form-group" >
+       @using (Html.BeginForm("PaymentGateway", "Dashboard", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+       {
         <h3>Cart Item List</h3>
-
         <table class="table-hover" style="border:ridge">
             <tr>
                 <th>S.No</th>
@@ -81,7 +80,7 @@
                 <th>P.Name</th>
                 <th>P.Prize</th>
                 <th></th>
-               
+
             </tr>
             <tr></tr>
             <tr>
@@ -107,5 +106,6 @@
                 <td colspan="5"><button class="btn btn-primary btn-lg btn-custom btn-success float-right" data-toggle="modal" data-target="#myModal">Purchase</button></td>
             </tr>
         </table>
+       }
     </div>
 }

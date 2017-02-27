@@ -291,6 +291,7 @@
     <Content Include="Views\Account\Confirm.cshtml" />
     <Content Include="Views\Team\Invite.cshtml" />
     <Content Include="Views\Team\TeamMembers.cshtml" />
+    <Content Include="Views\Dashboard\PaymentGateway.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
