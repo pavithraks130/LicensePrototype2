@@ -17,9 +17,9 @@ namespace LicenseServer.Core.Manager
         public LicUserManager(IUserStore<Appuser> userStore)
             : base(userStore) { }
 
-        public static LicUserManager Create(IdentityFactoryOptions<LicUserManager> factory, IOwinContext context)
+        public static LicUserManager Create(AppDbContext context)
         {
-            var dbcontext = context.Get<AppDbContext>();
+            var dbcontext = context;
             var usermanager = new LicUserManager(new UserStore<Appuser>(dbcontext));
             var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("LicenseProtoType");
             usermanager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<Appuser>(provider.Create("EmailConfirmation"));

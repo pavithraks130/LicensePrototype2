@@ -20,7 +20,7 @@ namespace LicenseServer.Logic
         public UserLogic()
         {
             _context = AppDbContext.Create();
-            UserManager = new LicUserManager(new UserStore<Appuser>(_context));
+            UserManager = LicUserManager.Create(_context);
         }
 
         public ICollection<User> GetUsers()
@@ -123,11 +123,9 @@ namespace LicenseServer.Logic
 
         public async Task<bool> ResetPassword(string userId, string newPassword)
         {
-            Appuser cUser = UserManager.FindById(userId);
-            String hashedNewPassword = UserManager.PasswordHasher.HashPassword(newPassword);
-            UserStore<Appuser> store = new UserStore<Appuser>();
-            await store.SetPasswordHashAsync(cUser, hashedNewPassword);
-            return true;
+            var token = UserManager.GeneratePasswordResetToken<Appuser, string>(userId);
+            var result = UserManager.ResetPassword(userId, token, newPassword);
+            return result.Succeeded;
         }
 
         public bool ValidateUser(string userName, string password)
