@@ -55,8 +55,8 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult DoPayment()
         {
-            Thread.Sleep(1000);
             return View();
+
         }
     }
 }
