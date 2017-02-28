@@ -54,15 +54,18 @@ namespace License.MetCalWeb.Controllers
         public ActionResult PaymentGateway()
         {
             return View();
-            //return RedirectToAction("PaymentGateway", "Dashboard");
         }
 
+        public ActionResult CartDetails()
+        {
+            return View();
+        }
+        
         [HttpPost]
         public ActionResult DoPayment()
         {
-            Thread.Sleep(10000);
+            Thread.Sleep(1000);
             return View();
-            //return RedirectToAction("PaymentGateway", "Dashboard");
         }
     }
 }
