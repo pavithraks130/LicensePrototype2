@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb.Models;
 using License.Core.Model;
+using System.Threading;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -52,6 +53,14 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult PaymentGateway()
         {
+            return View();
+            //return RedirectToAction("PaymentGateway", "Dashboard");
+        }
+
+        [HttpPost]
+        public ActionResult DoPayment()
+        {
+            Thread.Sleep(10000);
             return View();
             //return RedirectToAction("PaymentGateway", "Dashboard");
         }

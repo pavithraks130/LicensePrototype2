@@ -232,6 +232,7 @@
     <Content Include="Resources\favicon.ico" />
     <Content Include="Resources\fcal-tagline-321x66.gif" />
     <Content Include="Resources\logo.png" />
+    <Content Include="Resources\success.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
@@ -292,6 +293,8 @@
     <Content Include="Views\Team\Invite.cshtml" />
     <Content Include="Views\Team\TeamMembers.cshtml" />
     <Content Include="Views\Dashboard\PaymentGateway.cshtml" />
+    <Content Include="Views\Dashboard\DoPayment.cshtml" />
+    <Content Include="Views\Dashboard\CartDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
