@@ -1,0 +1,33 @@
+﻿@model List<License.Model.Model.Product>
+@using License.MetCalWeb.Helper
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="row">
+    <h3>Products</h3>
+    @if (LicenseSessionState.Instance.IsSuperAdmin)
+    {
+        @Html.ActionLink("Create Product", "Create", "Product")
+    }
+    @using (Html.BeginForm())
+    {
+        foreach (var pro in Model)
+        {
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.Image(String.Concat("ProductImages/", pro.ImagePath), "image", "48px", "48px", "img-circle")
+                </div>
+                <div class="col-md-6">
+                    @Html.Display(pro.Name)
+                    <br />
+                    @Html.Display(pro.Description)
+                </div>
+                <div class="col-md-3">
+                    @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { id = pro.Id })
+                </div>
+            </div>
+        }
+    }
+</div>

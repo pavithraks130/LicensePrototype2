@@ -228,6 +228,8 @@
     <Content Include="EmailTemplate\WelcometoFlukeCalibration.htm" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="ProductImages\Product4.png" />
+    <Content Include="ProductImages\Product5.png" />
     <Content Include="Resources\Cart-Menu.png" />
     <Content Include="Resources\favicon.ico" />
     <Content Include="Resources\fcal-tagline-321x66.gif" />
@@ -252,15 +254,19 @@
     <Compile Include="Common\EncryptDecrypt.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TabController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\HtmlHelperExtension.cs" />
     <Compile Include="LicenseSessionState.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -282,7 +288,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Tab\Home.cshtml" />
     <Content Include="Views\Tab\About.cshtml" />
-    <Content Include="Views\Tab\Products.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -295,6 +300,8 @@
     <Content Include="Views\Dashboard\PaymentGateway.cshtml" />
     <Content Include="Views\Dashboard\DoPayment.cshtml" />
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

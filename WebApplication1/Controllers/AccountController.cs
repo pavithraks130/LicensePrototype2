@@ -89,6 +89,7 @@ namespace License.MetCalWeb.Controllers
                 {
                     SignInAsync(user, model.RememberMe);
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
+                    LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
                     LicenseSessionState.Instance.IsAuthenticated = true;
                     return RedirectToAction("Index", "Dashboard");
                 }

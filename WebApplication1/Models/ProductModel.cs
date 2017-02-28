@@ -4,21 +4,27 @@ namespace License.MetCalWeb.Models
 {
     public class Product
     {
-        public int ProductID { get; set; }
 
-        public string ProductName { get; set; }
+        public Model.Model.Product ModelProduct;
 
-        //[Required, StringLength(10000), Display(Name = "Product Description"), DataType(DataType.MultilineText)]
-        public string Description { get; set; }
+        public Product()
+        {
+            ModelProduct = new Model.Model.Product();
+        }
 
-        public string ImagePath { get; set; }
+        public int ProductID
+        {
+            get
+            {
+                return ModelProduct.Id;
+            }
+        }
 
-        [Display(Name = "Price")]
-        public double? UnitPrice { get; set; }
+        public string ProductName { get { return ModelProduct.Name; } set { ModelProduct.Name = value; } }
 
-        public int? CategoryID { get; set; }
+        public string Description { get { return ModelProduct.Description; } set { ModelProduct.Description = value; } }
 
-
+        public string ImagePath { get { return ModelProduct.ImagePath; } set { ModelProduct.ImagePath = value; } }
     }
     /// <summary>
     /// This class holds credit card details 
