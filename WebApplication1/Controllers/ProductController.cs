@@ -19,8 +19,9 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Index()
         {
-            var obj = logic.GetProducts();
-            return View(obj);
+            return RedirectToAction("Index", "DashBoard");
+            //var obj = logic.GetProducts();
+            //return View(obj);
         }
 
         public ActionResult Create()
