@@ -25,9 +25,5 @@ namespace License.MetCalWeb.Models
         public string Description { get { return ModelProduct.Description; } set { ModelProduct.Description = value; } }
 
         public string ImagePath { get { return ModelProduct.ImagePath; } set { ModelProduct.ImagePath = value; } }
-
-        [Display(Name = "Price")]
-        public double? UnitPrice { get { return ModelProduct.UnitPrice; } set { ModelProduct.UnitPrice = value; } }
-
     }
 }

@@ -1,0 +1,43 @@
+﻿@model License.MetCalWeb.Models.Product
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="row">
+    <h3>Create</h3>
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(m => m.ProductName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.ProductName)
+                    @Html.ValidationMessageFor(m => m.ProductName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Description)
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn-default" />
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <h4>Product Image</h4>
+            <p>Upload your Product image here.</p>
+            <p> * Product Image should be .jpg (or) .jpeg (or) .png extensions</p>
+            <p class="text-center">
+                <input type="file" name="productImage" />
+                <label class="imageError" style="display:none;">Uploaded profile image should be jpg or png extension</label>
+            </p>
+        </div>
+
+    }
+</div>

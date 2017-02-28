@@ -26,7 +26,7 @@
                 @Html.Partial("_LoginPartial")
                 <ul id="menu" class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Home", "Index", "Dashboard")</li>
-                    <li>@Html.ActionLink("Products", "Products", "Tab")</li>
+                    <li>@Html.ActionLink("Products","Index","Product")</li>
                     @if (LicenseSessionState.Instance.IsAuthenticated)
                     {
                         <li hidden="hidden">@Html.ActionLink("Team", "TeamContainer", "Team")</li>

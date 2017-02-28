@@ -21,10 +21,5 @@ namespace License.MetCalWeb.Controllers
 
         }
 
-        //GET: Tab
-        public ActionResult Products()
-        {
-            return View();
-        }
     }
 }
