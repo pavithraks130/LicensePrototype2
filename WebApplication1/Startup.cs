@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 
+using LicenseServer.Core.DbContext;
 
 [assembly: OwinStartup(typeof(License.MetCalWeb.Startup))]
 
@@ -24,7 +25,9 @@ namespace License.MetCalWeb
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
+
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
+            LicenseServer.Logic.Initializer.AutoMapperInitializer();
             ConfigureOAuth(app);
         }
 

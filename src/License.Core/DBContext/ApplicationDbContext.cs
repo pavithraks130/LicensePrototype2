@@ -28,11 +28,8 @@ namespace License.Core.DBContext
         {
             return new ApplicationDbContext();
         }
-
-        public DbSet<Organization> Team { get; set; }
+        
         public DbSet<TeamMembers> UserInvite { get; set; }
-        public DbSet<CartItem> CartItem { get; set; }
-        public DbSet<Product> Products { get; set; }
 
     }
 }

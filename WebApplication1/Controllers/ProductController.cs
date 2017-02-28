@@ -5,6 +5,7 @@ using System.Web;
 using License.Logic.ServiceLogic;
 using System.Web.Mvc;
 using License.MetCalWeb.Models;
+using LicenseServer.Logic;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -29,7 +30,7 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Product pro, HttpPostedFileBase productImage)
+        public ActionResult Create(ProductModel pro, HttpPostedFileBase productImage)
         {
             if (productImage != null)
             {

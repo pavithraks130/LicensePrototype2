@@ -50,6 +50,18 @@ namespace License.MetCalWeb.Controllers
                     logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
                 if (logic.RoleManager == null)
                     logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+
+                LicenseServer.Logic.UserLogic serUserLogic = new LicenseServer.Logic.UserLogic();
+                LicenseServer.DataModel.Registration reg = new LicenseServer.DataModel.Registration();
+                reg.Email = model.Email;
+                reg.FirstName = model.FName;
+                reg.LastName = model.LName;
+                reg.OrganizationName = model.Organization;
+                reg.Password = model.Password;
+                reg.PhoneNumber = model.PhoneNumber;
+
+                string servUserId = serUserLogic.CreateUser(reg);
+                model.RegistratoinModel.ServerUserId = servUserId;
                 IdentityResult result = logic.CreateUser(model.RegistratoinModel);
                 if (result.Succeeded)
                 {
@@ -87,6 +99,12 @@ namespace License.MetCalWeb.Controllers
                 AppUser user = logic.AutheticateUser(model.Email, model.Password);
                 if (user != null)
                 {
+                    //Code need to be removed added only for verfication
+
+                    LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
+                    var status = userLogic.ValidateUser(model.Email, model.Password);
+
+
                     SignInAsync(user, model.RememberMe);
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
@@ -118,7 +136,7 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetPassword(ResetPassword model, string userId, string code)
+        public async Task<ActionResult> ResetPassword(ResetPassword model, string userId, string code)
         {
             string email = string.Empty;
             if (ModelState.IsValid)
@@ -128,6 +146,12 @@ namespace License.MetCalWeb.Controllers
                 IdentityResult result = logic.ResetPassword(userId, code, model.Password);
                 if (result.Succeeded)
                 {
+                    var user = logic.GetUserById(userId);
+                    if (!String.IsNullOrEmpty(user.ServerUserId))
+                    {
+                        LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
+                       var status = await userLogic.ResetPassword(user.ServerUserId, model.Password);
+                    }
                     ViewBag.Display = "inline";
                     ViewBag.ResetMessage = "Success";
                 }
@@ -170,7 +194,7 @@ namespace License.MetCalWeb.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
-            return View("Login");
+            return RedirectToAction("LogIn");
         }
 
         public ActionResult Confirm(string invite, string status)
@@ -178,9 +202,9 @@ namespace License.MetCalWeb.Controllers
             string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
             string data = EncryptDecrypt.DecryptString(invite, passPhrase);
             var details = data.Split(new char[] { ',' });
-            string teamId = details[0];
-            string adminId = details[1];
-            string inviteId = details[2];
+
+            string adminId = details[0];
+            string inviteId = details[1];
 
             TeamMemberLogic logic = new TeamMemberLogic();
             logic.UpdateInviteStatus(Convert.ToInt32(inviteId), status);

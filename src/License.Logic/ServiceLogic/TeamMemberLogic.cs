@@ -41,8 +41,7 @@ namespace License.Logic.ServiceLogic
                     AdminId = adminId,
                     InviteeEmail = user.Email,
                     InviteeStatus = InviteStatus.Accepted.ToString(),
-                    InviteeUserId = adminId,
-                    TeamId = user.OrganizationId,
+                    InviteeUserId = adminId,                    
                     IsAdmin = true
                 });
             }

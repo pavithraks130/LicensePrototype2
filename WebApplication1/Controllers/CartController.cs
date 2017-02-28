@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using License.Logic.ServiceLogic;
+using LicenseServer.Logic;
+using LicenseServer.DataModel;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -26,8 +27,8 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult AddProductToCart(int id)
         {
-            Model.Model.CartItem item = new Model.Model.CartItem();
-            item.ProductId = id;
+            CartItem item = new CartItem();
+            item.SubscriptionTypeId = id;
             item.Quantity = 1;
             item.UserId = LicenseSessionState.Instance.User.UserId;
             bool status = logic.CreateCartItem(item);

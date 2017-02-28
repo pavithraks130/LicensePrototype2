@@ -1,4 +1,4 @@
-﻿@model List<License.Model.Model.Product>
+﻿@model List<LicenseServer.DataModel.Product>
 @using License.MetCalWeb.Helper
 @{
     ViewBag.Title = "Index";
@@ -13,21 +13,45 @@
     }
     @using (Html.BeginForm())
     {
-        foreach (var pro in Model)
-        {
-            <div class="form-group">
-                <div class="col-md-3">
-                    @Html.Image(String.Concat("ProductImages/", pro.ImagePath), "image", "48px", "48px", "img-circle")
-                </div>
-                <div class="col-md-6">
-                    @Html.Display(pro.Name)
-                    <br />
-                    @Html.Display(pro.Description)
-                </div>
-                <div class="col-md-3">
-                    @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { id = pro.Id })
-                </div>
-            </div>
-        }
+        <table class="table-hover" style="border:ridge;align-content:center">
+            @foreach (var pro in Model)
+            {
+                <tr>
+                    <td>
+                        <p class="float-left">
+                            @Html.Image(String.Concat("ProductImages/", pro.ImagePath), "image", "48px", "48px", "img-circle")
+                        </p>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            <em>Produt Name:</em>
+                            @Html.Display(pro.Name.ToString())
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            <em>Produt Description:</em>
+                            @Html.Display(pro.Description)
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="danger">
+                        <p class="button">
+                            <b>
+                                @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { id = pro.Id })
+                            </b>
+                        </p>
+                    </td>
+                </tr>
+
+            }
+        </table>
     }
 </div>

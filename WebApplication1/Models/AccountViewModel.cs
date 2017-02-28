@@ -60,6 +60,12 @@ namespace License.MetCalWeb.Models
         }
 
 
+        public string ServerUserId
+        {
+            get { return RegistratoinModel.ServerUserId; }
+            set { RegistratoinModel.ServerUserId = value; }
+        }
+
     }
 
     public class LoginViewModel
@@ -94,7 +100,7 @@ namespace License.MetCalWeb.Models
 
     public class ForgotPassword
     {
-        [Display(Name ="Email")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
@@ -107,7 +113,7 @@ namespace License.MetCalWeb.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get { return RegistratoinModel.Email; } set { RegistratoinModel.Email = value; } }
-        
+
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]

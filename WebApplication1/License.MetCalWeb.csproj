@@ -234,7 +234,7 @@
     <Content Include="Resources\favicon.ico" />
     <Content Include="Resources\fcal-tagline-321x66.gif" />
     <Content Include="Resources\logo.png" />
-    <Content Include="Resources\Success2.gif" />
+    <Content Include="Resources\success.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="packages.config" />
@@ -266,11 +266,11 @@
     <Compile Include="Helper\HtmlHelperExtension.cs" />
     <Compile Include="LicenseSessionState.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provider\AutorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +328,18 @@
     <ProjectReference Include="..\src\License.Model\License.Model.csproj">
       <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
       <Name>License.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\LicenseServer.Core\LicenseServer.Core.csproj">
+      <Project>{d3b38260-18db-4629-8d7b-a7123bc06297}</Project>
+      <Name>LicenseServer.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\LicenseServer.Logic\LicenseServer.Logic.csproj">
+      <Project>{18cb8256-ee2f-4c58-a630-6d4b216dfbd7}</Project>
+      <Name>LicenseServer.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\LicenseService.Model\LicenseServer.DataModel.csproj">
+      <Project>{e0418f45-1461-4539-a760-6a6e4a66d4b8}</Project>
+      <Name>LicenseServer.DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

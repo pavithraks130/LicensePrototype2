@@ -1,4 +1,4 @@
-﻿@model IEnumerable<License.MetCalWeb.Models.Product>
+﻿@model IEnumerable<License.MetCalWeb.Models.ProductModel>
 @{
     ViewBag.Title = "Dashboard";
 }
@@ -60,12 +60,7 @@
                     </p>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <em>price:</em>
-                    @item.UnitPrice <em>$</em>
-                </td>
-            </tr>
+           
             <tr>
                 <td class="danger">
                     <p class="button">

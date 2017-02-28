@@ -106,7 +106,6 @@ namespace WebApplication1.Controllers
                     userLogic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 if (!userLogic.GetUserByEmail(model.Email))
                 {
-                    model.RegistratoinModel.OrganizationName = LicenseSessionState.Instance.User.Organization.Name;
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
                     result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
                     status = result.Succeeded;
@@ -123,13 +122,12 @@ namespace WebApplication1.Controllers
                     invite.InvitationDate = DateTime.Now.Date;
                     invite.InviteeEmail = model.Email;
                     invite.InviteeStatus = InviteStatus.Pending.ToString();
-                    invite.TeamId = user.OrganizationId;
                     var data = logic.CreateInvite(invite);
                     if (data.Id > 0)
                     {
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString = user.OrganizationId + "," + invite.AdminId + "," + data.Id;
+                        string encryptString =  invite.AdminId + "," + data.Id;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
                         string token = userLogic.UserManager.GenerateEmailConfirmationToken(user.Id);

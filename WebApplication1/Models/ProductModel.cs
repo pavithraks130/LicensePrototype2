@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LicenseServer.DataModel;
 
 namespace License.MetCalWeb.Models
 {
-    public class Product
+    public class ProductModel
     {
 
-        public Model.Model.Product ModelProduct;
+        public Product ModelProduct;
 
-        public Product()
+        public ProductModel()
         {
-            ModelProduct = new Model.Model.Product();
+            ModelProduct = new Product();
         }
 
         public int ProductID

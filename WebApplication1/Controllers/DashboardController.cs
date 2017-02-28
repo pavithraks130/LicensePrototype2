@@ -23,18 +23,18 @@ namespace License.MetCalWeb.Controllers
         // GET: Dashboard
         public ActionResult Index()
         {
-            var model = new List<Models.Product>();
-            var product = new Models.Product();
+            var model = new List<Models.ProductModel>();
+            var product = new Models.ProductModel();
             product.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
             product.ProductName = "Calibrator";
             model.Add(product);
 
-            var product1 = new Models.Product();
+            var product1 = new Models.ProductModel();
             product1.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
             product1.ProductName = "f-1730-hanger";
             model.Add(product1);
 
-            var product3 = new Models.Product();
+            var product3 = new Models.ProductModel();
             product3.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
             product3.ProductName = "f-3501-fc";
             model.Add(product3);

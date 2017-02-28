@@ -21,6 +21,7 @@ namespace License.Core.Model
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
         [DataType(DataType.EmailAddress, ErrorMessage = "Please enter Valid Email Address")]
         [Required(ErrorMessage = "The Email Address is Requuired")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
@@ -29,6 +30,7 @@ namespace License.Core.Model
             get { return base.Email; }
             set { base.Email = value; }
         }
+
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         public override string PhoneNumber
         {
@@ -41,6 +43,7 @@ namespace License.Core.Model
                 base.PhoneNumber = value;
             }
         }
+
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email Address is Required")]
         public override string UserName
@@ -55,11 +58,6 @@ namespace License.Core.Model
             }
         }
 
-        public int OrganizationId { get; set; }
-
-        [ForeignKey("OrganizationId")]
-        public Organization Team { get; set; }
-
         [NotMapped]
         public string Name
         {
@@ -70,6 +68,8 @@ namespace License.Core.Model
                 return FirstName.Trim() + " " + LastName.Trim();
             }
         }
+
+        public string ServerUserId { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager, string authenticationType)
         {

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using LicenseServer.DataModel;
 
 namespace License.MetCalWeb.Models
 {
     public class CartItemModel
     {
-        public Model.Model.CartItem ModelCartItem;
+        public CartItem ModelCartItem;
         public CartItemModel()
         {
-            ModelCartItem = new Model.Model.CartItem();
+            ModelCartItem = new CartItem();
 
         }
 
@@ -19,10 +20,10 @@ namespace License.MetCalWeb.Models
             get { return ModelCartItem.Id; }
         }
 
-        public int ProductId
+        public int SubscriptionTypeId
         {
-            get { return ModelCartItem.ProductId; }
-            set { ModelCartItem.ProductId = value; }
+            get { return ModelCartItem.SubscriptionTypeId; }
+            set { ModelCartItem.SubscriptionTypeId = value; }
         }
 
         public DateTime DateCreated

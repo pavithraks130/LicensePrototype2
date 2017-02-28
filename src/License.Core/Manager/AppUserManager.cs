@@ -20,12 +20,7 @@ namespace License.Core.Manager
         public static AppUserManager Create(IdentityFactoryOptions<AppUserManager> factory, IOwinContext context)
         {
             var dbcontext = context.Get<ApplicationDbContext>();
-            var usermanager = new AppUserManager(new UserStore<AppUser>(dbcontext));
-            //// allow alphanumeric characters in username
-            //usermanager.UserValidator = new UserValidator<AppUser>(usermanager)
-            //{
-            //    AllowOnlyAlphanumericUserNames = false
-            //};
+            var usermanager = new AppUserManager(new UserStore<AppUser>(dbcontext));           
             var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("LicenseProtoType");
             usermanager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<AppUser>(provider.Create("EmailConfirmation"));
             usermanager.EmailService = new EmailService();
