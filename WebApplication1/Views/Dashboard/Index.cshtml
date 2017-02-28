@@ -1,19 +1,28 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.Product>
-
 @{
     ViewBag.Title = "Dashboard";
 }
 <div>
-    <div class="col-md-8">
+    <div class="col-md-9">
         <h1 class="login-header-new">Fluke Connect Store</h1>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-1">
         <table>
             <tr>
                 <td>
-                    <img src="~/Resources/Cart-Menu.png" />
+                    <div class="navbar-header">
+                        <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartDetails", "Dashboard")">
+                            <img src="~/Resources/Cart-Menu.png" />
+                        </a>
+                    </div>
+                    @*<img src="~/Resources/Cart-Menu.png" />*@
                 </td>
-                <td><h1 class="login-header-new">Cart(1)</h1></td>
+                <td>
+                    <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartDetails", "Dashboard")">
+                       <h2>Cart(1)</h2> 
+                    </a>
+                    @*<h1 class="login-header-new">Cart(1)</h1>*@
+                </td>
             </tr>
         </table>
     </div>
@@ -25,82 +34,52 @@
     <div class="col-md-8">
         @foreach (var item in Model)
         {
-            <table class="table-hover" style="border:ridge;align-content:center">
+        <table class="table-hover" style="border:ridge;align-content:center">
 
-                <tr>
-                    <td>
-                        <p class="float-left">
-                            <img src="@item.ImagePath" />
-                        </p>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <em>Produt Name:</em>
-                            @item.ProductName
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <em>Produt Id:</em>
-                            @item.ProductID
-                        </p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="danger">
-                        <p class="button">
-                            <b>
-                                <input name="Add" class="btn btn-success" type="submit" value="Add To Cart" />
-                            </b>
-                        </p>
-                    </td>
-                </tr>
-
-            </table>
-        }
-    </div>
-    <div class="col-md-4">
-
-        <h3>Cart Item List</h3>
-
-        <table class="table-hover" style="border:ridge">
             <tr>
-                <th>S.No</th>
-                <th>P.ID</th>
-                <th>P.Name</th>
-                <th>P.Prize</th>
-                <th></th>
-               
-            </tr>
-            <tr></tr>
-            <tr>
-                <td>01</td>
-                <td>10</td>
-                <td>calibrator</td>
-                <td>499$</td>
-                <td><button class="btn btn-primary btn-lg btn-custom btn-warning" data-toggle="modal" data-target="#myModal">Remove</button></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td colspan="2">
-                    Total(Including all Tax)
-                </td>
-                <td colspan="2">
-                    <p>
-                        502$
+                <td>
+                    <p class="float-left">
+                        <img src="@item.ImagePath" />
                     </p>
 
                 </td>
             </tr>
-            <tr class="table table-hover">
-                <td colspan="5"><button class="btn btn-primary btn-lg btn-custom btn-success float-right" data-toggle="modal" data-target="#myModal">Purchase</button></td>
+            <tr>
+                <td>
+                    <p>
+                        <em>Produt Name:</em>
+                        @item.ProductName
+                    </p>
+                </td>
             </tr>
+            <tr>
+                <td>
+                    <p>
+                        <em>Produt Id:</em>
+                        @item.ProductID
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <em>price:</em>
+                    @item.UnitPrice <em>$</em>
+                </td>
+            </tr>
+            <tr>
+                <td class="danger">
+                    <p class="button">
+                        <b>
+                            <input name="Add" class="btn btn-success" type="submit" value="Add To Cart" />
+                        </b>
+                    </p>
+                </td>
+            </tr>
+
         </table>
+        }
     </div>
+    @*<div class="col-md-4 form-group" >
+            @{ Html.RenderPartial("CartDetails"); }
+        </div>*@
 }

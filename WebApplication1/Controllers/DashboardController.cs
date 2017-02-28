@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using License.Logic.ServiceLogic;
+using License.MetCalWeb.Models;
+using License.Core.Model;
+using System.Threading;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -38,6 +41,22 @@ namespace License.MetCalWeb.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        public ActionResult PaymentGateway()
+        {
+            return View();
+        }
 
+        public ActionResult CartDetails()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult DoPayment()
+        {
+            Thread.Sleep(1000);
+            return View();
+        }
     }
 }
