@@ -1,6 +1,6 @@
 ﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
 
-@using (Html.BeginForm("", "", new { UserId = ViewBag["UserId"] }, FormMethod.Post))
+@using (Html.BeginForm("", "", new { UserId = ViewData["UserId"] }, FormMethod.Post))
 {
     @Html.ValidationSummary()
     @Html.AntiForgeryToken()

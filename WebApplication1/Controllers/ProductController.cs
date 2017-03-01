@@ -24,8 +24,7 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult ProductCatalog()
         {
-
-            var obj = productLogic.GetProducts();
+            var obj = subscriptionTypeLogic.GetSubscriptionType();
             return View(obj);
         }
 
@@ -58,18 +57,16 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public ActionResult AddProductToCart(CartItemModel cartItemModel)
+       
+        public ActionResult AddProductToCart(int? Id)
         {
             CartItem item = new CartItem();
-            item.SubscriptionTypeId = 10;
+            item.SubscriptionTypeId = Convert.ToInt32(Id);
             item.Quantity = 2;
             item.DateCreated = DateTime.Now;
-            item.UserId = LicenseSessionState.Instance.User.UserId;
-            cartItemModel.ModelCartItem = item;
-            bool status = cartLogic.CreateCartItem(cartItemModel.ModelCartItem);
+            item.UserId = LicenseSessionState.Instance.User.ServerUserId;
+            bool status = cartLogic.CreateCartItem(item);
             return RedirectToAction("CartItem", "cart");
-            // return View();
         }
     }
 }

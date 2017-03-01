@@ -160,7 +160,7 @@ namespace WebApplication1.Controllers
         
         public ActionResult MapLicense(string userId)
         {
-            ViewBag["UserId"] = userId;
+            ViewData["UserId"] = userId;
             List<LicenseMapModel> licenseMapModelList = new List<LicenseMapModel>();
             UserLicenseLogic logic = new UserLicenseLogic();
             var data = logic.GetUserLicense(userId);

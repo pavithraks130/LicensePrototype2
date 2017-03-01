@@ -7,7 +7,6 @@
 @model TeamModel
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
 
 <style>
     tr {
@@ -80,10 +79,12 @@ else
                                 <div>@t.InviteeEmail</div>
                             }
                         </td>
-                        <td>
-                            @Html.ActionLink("AddLicense" ,"MapLicense","Team" ,new { userId = @t.InviteeUserId })
-                        </td>
-
+                        @if (LicenseSessionState.Instance.IsTeamAdmin)
+                        {
+                            <td>
+                                @Html.ActionLink("AddLicense", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
+                            </td>
+                        }
                     </tr>
                 }
             </table>

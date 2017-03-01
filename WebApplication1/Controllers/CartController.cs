@@ -20,19 +20,56 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult CartItem()
         {
-            var obj = logic.GetCartItems(LicenseSessionState.Instance.User.UserId);
+            var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
             return View(obj);
         }
 
-        [HttpPost]
-        public ActionResult AddProductToCart(int id)
+        public ActionResult Purchase(int id)
         {
-            CartItem item = new CartItem();
-            item.SubscriptionTypeId = id;
-            item.Quantity = 1;
-            item.UserId = LicenseSessionState.Instance.User.UserId;
-            bool status = logic.CreateCartItem(item);
-            return RedirectToAction("Index", "cart");
+            CartItem item = logic.GetCartItemById(id);
+            UserSubscription subscription = new UserSubscription();
+            subscription.SubscriptionDate = DateTime.Now.Date;
+            subscription.SubscriptionTypeId = item.SubscriptionTypeId;
+            subscription.Quantity = item.Quantity;
+            subscription.UserId = LicenseSessionState.Instance.User.ServerUserId;
+            SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
+            var type = typeLogic.GetById(item.SubscriptionTypeId);
+            subscription.ActiveDurataion = type.ActiveDays;
+            UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
+            UserSubscription subs = subscriptionLogic.CreateUserSubscription(subscription);
+            UpdateSubscriptionOnpremise(subs, type.Name);
+            item.IsPurchased = true;
+            logic.UpdateCartItem(item);
+            return RedirectToAction("CartItem");
+        }
+
+
+        private void UpdateSubscriptionOnpremise(UserSubscription subs,string subscriptionName)
+        {
+            License.Model.Model.UserSubscription subscription = new Model.Model.UserSubscription();
+            subscription.ServerUserId = LicenseSessionState.Instance.User.ServerUserId;
+            subscription.UserId = LicenseSessionState.Instance.User.UserId;
+            subscription.SubscriptionDate = subs.SubscriptionDate;
+            subscription.SubscriptionId = subs.SubscriptionTypeId;
+            subscription.SubscriptionName = subscriptionName;
+            License.Logic.ServiceLogic.UserSubscriptionLogic logic = new Logic.ServiceLogic.UserSubscriptionLogic();
+            int subscriptionId = logic.CreateSubscription(subscription);
+            License.Logic.ServiceLogic.LicenseLogic licLogic = new Logic.ServiceLogic.LicenseLogic();
+            if (subscriptionId > 0)
+            {
+
+                foreach (var str in subs.LicenseKeys)
+                {
+                    License.Model.Model.LicenseData data = new Model.Model.LicenseData();
+                    data.AdminUserId = LicenseSessionState.Instance.User.UserId;
+                    data.LicenseKey = str;
+                    data.SubscriptionId = subscriptionId;
+                    licLogic.CreateLicenseData(data);
+                }
+                if (subs.LicenseKeys.Count > 0)
+                    licLogic.Save();
+            }
+
         }
     }
 }

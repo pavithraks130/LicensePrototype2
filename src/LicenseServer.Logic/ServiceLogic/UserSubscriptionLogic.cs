@@ -43,14 +43,14 @@ namespace LicenseServer.Logic
             SubscriptionTypeLogic logic = new SubscriptionTypeLogic();
             SubscriptionType type = logic.GetById(subs.SubscriptionTypeId);
             List<SubscriptionDetails> details = detailLogic.GetSubscriptionDetails(subs.SubscriptionTypeId);
-            int qty = subs.Qty;
+            int qty = subs.Quantity;
             List<string> chuksum = new List<string>();
 
             foreach (var data in details)
             {
                 var pro = produLogic.GetProductById(data.ProductId);
                 var count = data.Quantity;
-                string keyData = pro.ProductCode + "/" + (data.Quantity * subs.Qty).ToString() + "/" + DateTime.Now.AddDays(type.ActiveDays).Date.ToString() + "/" + type.Id;
+                string keyData = pro.ProductCode + "^" + (data.Quantity * subs.Quantity).ToString() + "^" + DateTime.Now.AddDays(type.ActiveDays).Date.ToString() + "^" + type.Id;
                 var key = LicenseKey.LicenseKeyGen.CryptoEngine.Encrypt(keyData, true);
                 string key1 = string.Empty;
                 do

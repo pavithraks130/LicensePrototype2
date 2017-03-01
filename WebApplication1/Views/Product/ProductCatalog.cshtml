@@ -1,5 +1,4 @@
 ﻿@model List<LicenseServer.DataModel.SubscriptionType>
-@using License.MetCalWeb.Helper
 @{
     ViewBag.Title = "Product Catalog";
 }
@@ -11,62 +10,37 @@
         @Html.ActionLink("Create Product", "Create", "Product")
     }
 
-    @using (Html.BeginForm("AddProductToCart", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm())
     {
-        <table class="table-hover" style="border:ridge;align-content:center">
-            @foreach (var pro in Model)
-            {
-                <tr>
-                    <td>
-                        <p class="float-left ">
-                            @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), "image", "300px", "650px", "img-responsive")
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <em>Product Id:</em>
-                            <b>@pro.Id</b>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <em>Produt Name:</em>
-                            <b> @pro.Name</b>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <em>Produt Description:</em>
-                            <b>@pro.Description</b>
-                        </p>
-                    </td>
-                </tr>
+        <div class="form-group">
+            <div class="col-md-8">
+                <table class="table" style="border: none">
+                    <tr>
+                        <td>
+                            <span style="font-weight:bold">Subscription Name</span>
+                        </td>
+                        <td>
+                            <span style="font-weight:bold">Dutration</span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    @foreach (var pro in Model)
+                {
+                        <tr>
+                            <td>
+                                @pro.Name
+                            </td>
+                            <td>
+                                @pro.ActiveDays
+                            </td>
+                            <td>
+                                @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)
+                            </td>
+                        </tr>
 
-                <tr>
-                    <td>
-                        <p>
-                            <em>Manufactured Date:</em>
-                            <b> @pro.CreatedDate</b>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="danger">
-                        <p class="button">
-                            <b>
-                                <input name="Add" class="btn btn-success" type="submit" value="Add To Cart" />
-                            </b>
-                        </p>
-                    </td>
-                </tr>
-
-            }
-        </table>
+                }
+                </table>
+            </div>
+        </div>
     }
 </div>

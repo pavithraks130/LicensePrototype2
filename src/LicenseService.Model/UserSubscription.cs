@@ -14,7 +14,7 @@ namespace LicenseServer.DataModel
 
         public int SubscriptionTypeId { get; set; }
 
-        public int Qty { get; set; }
+        public int Quantity { get; set; }
 
         public DateTime SubscriptionDate { get; set; }
 

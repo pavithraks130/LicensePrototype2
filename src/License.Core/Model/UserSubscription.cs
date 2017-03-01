@@ -17,7 +17,7 @@ namespace License.Core.Model
 
         public string ServerUserId { get; set; }
 
-        public string SubscriptionId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public string SubscriptionName { get; set; }
 

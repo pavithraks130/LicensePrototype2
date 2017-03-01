@@ -116,6 +116,10 @@
     <Compile Include="Migrations\201703010907183_changesto UserLicModels.Designer.cs">
       <DependentUpon>201703010907183_changesto UserLicModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703011701556_ChangesToDataTypee.cs" />
+    <Compile Include="Migrations\201703011701556_ChangesToDataTypee.Designer.cs">
+      <DependentUpon>201703011701556_ChangesToDataTypee.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -135,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703010907183_changesto UserLicModels.resx">
       <DependentUpon>201703010907183_changesto UserLicModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703011701556_ChangesToDataTypee.resx">
+      <DependentUpon>201703011701556_ChangesToDataTypee.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
