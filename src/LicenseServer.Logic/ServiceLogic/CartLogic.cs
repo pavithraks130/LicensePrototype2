@@ -28,7 +28,8 @@ namespace LicenseServer.Logic
 
         public bool UpdateCartItem(CartItem item)
         {
-            Core.Model.CartItem cartItem = AutoMapper.Mapper.Map<CartItem, Core.Model.CartItem>(item);
+            Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById(item.Id);
+            cartItem.IsPurchased = item.IsPurchased;
             cartItem = Work.CartItemLicenseRepository.Update(cartItem);
             Work.CartItemLicenseRepository.Save();
             return cartItem.Id > 0;
