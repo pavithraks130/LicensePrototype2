@@ -13,7 +13,6 @@ namespace License.Logic.ServiceLogic
         {
             var obj = AutoMapper.Mapper.Map<UserLicense, Core.Model.UserLicense>(lic);
             obj = Work.UserLicenseRepository.Create(obj);
-            Work.UserLicenseRepository.Save();
             return obj.Id > 0;
         }
 
@@ -49,6 +48,11 @@ namespace License.Logic.ServiceLogic
             foreach (var data in datas)
                 licenses.Add(AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(data));
             return licenses;
+        }
+
+        public void save()
+        {
+            Work.UserLicenseRepository.Save();
         }
     }
 }

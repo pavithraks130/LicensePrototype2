@@ -20,6 +20,6 @@ namespace License.Core.Model
         [ForeignKey("UserId")]
         public AppUser User { get; set; }
         [ForeignKey("LicenseId")]
-        public LicenseData License { get; set; }
+        public virtual LicenseData License { get; set; }
     }
 }

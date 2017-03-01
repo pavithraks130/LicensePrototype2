@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
         private UserSubscriptionLogic subscriptionLogic = null;
-
+        List<LicenseMapModel> licenseMapModelList;
         public TeamController()
         {
             logic = new TeamMemberLogic();
@@ -82,13 +82,13 @@ namespace WebApplication1.Controllers
         public ActionResult Subscriptions()
         {
             IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
-            if (LicenseSessionState.Instance.SubscriptionList == null)
-            {
-                subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
-                LicenseSessionState.Instance.SubscriptionList = subscriptionList;
-            }
-            else
-                subscriptionList = LicenseSessionState.Instance.SubscriptionList;
+            //if (LicenseSessionState.Instance.SubscriptionList == null || LicenseSessionState.Instance.SubscriptionList.Count() ==  0)
+            //{
+            subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
+            LicenseSessionState.Instance.SubscriptionList = subscriptionList;
+            //}
+            //else
+            //    subscriptionList = LicenseSessionState.Instance.SubscriptionList;
             return View(subscriptionList);
         }
 
@@ -157,11 +157,11 @@ namespace WebApplication1.Controllers
             }
             return Json(new { success = true, message = "" });
         }
-        
+
         public ActionResult MapLicense(string userId)
         {
-            ViewData["UserId"] = userId;
-            List<LicenseMapModel> licenseMapModelList = new List<LicenseMapModel>();
+            TempData["UserId"] = userId;
+            licenseMapModelList = new List<LicenseMapModel>();
             UserLicenseLogic logic = new UserLicenseLogic();
             var data = logic.GetUserLicense(userId);
             UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
@@ -174,7 +174,7 @@ namespace WebApplication1.Controllers
                 model.UserSubscriptionId = obj.Id;
                 if (data.Count > 0)
                 {
-                    var ul = data.FirstOrDefault(u => u.License.Id == obj.Id);
+                    var ul = data.FirstOrDefault(u => u.License.SubscriptionId == obj.Id);
                     model.IsSelected = ul != null;
                     model.InitialSelected = model.IsSelected;
                     if (ul != null)
@@ -182,17 +182,21 @@ namespace WebApplication1.Controllers
                 }
                 licenseMapModelList.Add(model);
             }
+
+            LicenseSessionState.Instance.LicenseMapModelList = licenseMapModelList;
             return View(licenseMapModelList);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MapLicense(List<LicenseMapModel> models, string userId)
+        public ActionResult MapLicense(params string[] SelectedSubscription)
         {
+            string userId = Convert.ToString(TempData["UserId"]);
             UserLicenseLogic logic = new UserLicenseLogic();
-            var listData = models.Where(m => m.IsSelected == true);
-            foreach (var data in listData)
+            var models = LicenseSessionState.Instance.LicenseMapModelList;
+            foreach (var data in models)
             {
+                data.IsSelected = SelectedSubscription.Contains(data.UserSubscriptionId.ToString());
                 if (data.IsSelected != data.InitialSelected)
                 {
                     if (data.IsSelected)
@@ -212,7 +216,10 @@ namespace WebApplication1.Controllers
 
                 }
             }
-            return RedirectToAction("Container", "Team");
+
+            if (SelectedSubscription.Count() > 0)
+                logic.save();
+            return RedirectToAction("TeamContainer", "Team");
         }
     }
 }
