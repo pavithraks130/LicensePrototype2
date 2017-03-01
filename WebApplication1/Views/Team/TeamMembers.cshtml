@@ -33,7 +33,7 @@
 }
 else
 {
-   
+
     <div class="form-group">
         @if (Model.PendinigUsers.Count > 0)
         {
@@ -67,22 +67,25 @@ else
             <h4>Accepted Users</h4>
             <table class="table" style="border: none">
                 @foreach (TeamMembers t in Model.AcceptedUsers)
-                        {
-            <tr>
-                <td>
-                    @if (t.InviteeUser != null)
-                                    {
-                    <div>@t.InviteeUser.Name</div>
-                    <div>@t.InviteeUser.Email</div>
-                                    }
-                                    else
-                                    {
-                    <div>@t.InviteeEmail</div>
-                                    }
-                </td>
+                {
+                    <tr>
+                        <td>
+                            @if (t.InviteeUser != null)
+                            {
+                                <div>@t.InviteeUser.Name</div>
+                                <div>@t.InviteeUser.Email</div>
+                            }
+                            else
+                            {
+                                <div>@t.InviteeEmail</div>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("AddLicense" ,"MapLicense","Team" ,new { userId = @t.InviteeUserId })
+                        </td>
 
-            </tr>
-                        }
+                    </tr>
+                }
             </table>
         }
     </div>
@@ -90,3 +93,4 @@ else
 <div class="modal" id="myModal">
     @{ Html.RenderAction("Invite"); }
 </div>
+

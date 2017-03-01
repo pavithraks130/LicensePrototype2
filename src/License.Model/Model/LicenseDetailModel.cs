@@ -10,12 +10,9 @@ namespace License.Model.Model
     {
         public int LicenseId { get; set; }
         public string LicenseKey { get; set; }
-
         public int TotalLicenseCount { get; set; }
-
         public int UsedLicenseCount { get; set; }
-
-        public int AvailableLicenseCount { get; set; }
+        public int AvailableLicenseCount { get { return TotalLicenseCount - UsedLicenseCount; } }
 
         public DateTime ExpireDate { get; set; }
 

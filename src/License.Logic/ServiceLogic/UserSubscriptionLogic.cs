@@ -37,6 +37,7 @@ namespace License.Logic.ServiceLogic
             model.ExpireDate = Convert.ToDateTime(splitData[2]);
             UserLicenseLogic userLicenseLogic = new UserLicenseLogic();
             model.UsedLicenseCount = userLicenseLogic.UserLicenseCount(lic.Id);
+            model.AvailableLicenseCount = model.TotalLicenseCount - model.UsedLicenseCount;
             return model;
         }
 

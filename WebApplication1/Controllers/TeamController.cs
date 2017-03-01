@@ -22,12 +22,13 @@ namespace WebApplication1.Controllers
     {
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
-
+        private UserSubscriptionLogic subscriptionLogic = null;
 
         public TeamController()
         {
             logic = new TeamMemberLogic();
             userLogic = new UserLogic();
+            subscriptionLogic = new UserSubscriptionLogic();
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -80,7 +81,15 @@ namespace WebApplication1.Controllers
 
         public ActionResult Subscriptions()
         {
-            return View();
+            IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
+            if (LicenseSessionState.Instance.SubscriptionList == null)
+            {
+                subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
+                LicenseSessionState.Instance.SubscriptionList = subscriptionList;
+            }
+            else
+                subscriptionList = LicenseSessionState.Instance.SubscriptionList;
+            return View(subscriptionList);
         }
 
         public ActionResult Invite()
@@ -127,7 +136,7 @@ namespace WebApplication1.Controllers
                     {
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString =  invite.AdminId + "," + data.Id;
+                        string encryptString = invite.AdminId + "," + data.Id;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
                         string token = userLogic.UserManager.GenerateEmailConfirmationToken(user.Id);
@@ -147,6 +156,63 @@ namespace WebApplication1.Controllers
                 }
             }
             return Json(new { success = true, message = "" });
+        }
+        
+        public ActionResult MapLicense(string userId)
+        {
+            ViewBag["UserId"] = userId;
+            List<LicenseMapModel> licenseMapModelList = new List<LicenseMapModel>();
+            UserLicenseLogic logic = new UserLicenseLogic();
+            var data = logic.GetUserLicense(userId);
+            UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
+            var subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
+            foreach (var obj in subscriptionList)
+            {
+                LicenseMapModel model = new LicenseMapModel();
+                model.SubscriptionName = obj.SubscriptionName;
+                model.IsDisabled = (obj.LicenseDetails.AvailableLicenseCount == 0);
+                model.UserSubscriptionId = obj.Id;
+                if (data.Count > 0)
+                {
+                    var ul = data.FirstOrDefault(u => u.License.Id == obj.Id);
+                    model.IsSelected = ul != null;
+                    model.InitialSelected = model.IsSelected;
+                    if (ul != null)
+                        model.ExistingUserLicenseId = ul.Id;
+                }
+                licenseMapModelList.Add(model);
+            }
+            return View(licenseMapModelList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MapLicense(List<LicenseMapModel> models, string userId)
+        {
+            UserLicenseLogic logic = new UserLicenseLogic();
+            var listData = models.Where(m => m.IsSelected == true);
+            foreach (var data in listData)
+            {
+                if (data.IsSelected != data.InitialSelected)
+                {
+                    if (data.IsSelected)
+                    {
+                        License.Model.Model.UserLicense lic = new License.Model.Model.UserLicense();
+                        lic.UserId = userId;
+                        var obj = LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId);
+                        lic.LicenseId = obj.LicenseDetails.LicenseId;
+                        LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId).LicenseDetails.UsedLicenseCount += 1;
+                        logic.CreateUserLicense(lic);
+                    }
+                    else
+                    {
+                        LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId).LicenseDetails.UsedLicenseCount -= 1;
+                        logic.RemoveById(data.ExistingUserLicenseId);
+                    }
+
+                }
+            }
+            return RedirectToAction("Container", "Team");
         }
     }
 }

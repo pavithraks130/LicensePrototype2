@@ -28,6 +28,8 @@ namespace License.MetCalWeb
         public bool IsSuperAdmin { get; set; }
 
         public  bool IsTeamAdmin { get; set; }
+        
+        public IEnumerable<Model.Model.UserSubscription> SubscriptionList { get; set; }
 
     }
 }

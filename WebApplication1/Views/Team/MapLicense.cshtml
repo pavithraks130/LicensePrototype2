@@ -1,0 +1,22 @@
+﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
+
+@using (Html.BeginForm("", "", new { UserId = ViewBag["UserId"] }, FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    @Html.AntiForgeryToken()
+    for (int i = 0; i< Model.Count;i++)
+    {
+        <div class="form-group">
+            <span>
+                @Html.Hidden(Model[i].ExistingUserLicenseId.ToString())
+                <div class="col-md-5">
+                   
+                    @Html.RadioButton(Model[i].SubscriptionName, Model[i].UserSubscriptionId,Model[i].IsSelected,new { @disabled = Model[i].IsDisabled })
+                </div>
+            </span>
+        </div>
+    }
+    <input type="submit" value="Submit" class="btn btn-default btn-custom"/>
+
+}
+

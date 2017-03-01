@@ -76,5 +76,6 @@ namespace License.Logic.ServiceLogic
             teamMembers.IsAdmin = status;
             Work.UserInviteLicenseRepository.Update(teamMembers);
         }
+      
     }
 }

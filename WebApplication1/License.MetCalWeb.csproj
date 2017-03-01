@@ -269,6 +269,7 @@
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\CartItemModel.cs" />
+    <Compile Include="Models\LicenseMapModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -305,6 +306,7 @@
     <Content Include="Views\Product\CartDetails.cshtml" />
     <Content Include="Views\Product\ProductCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
+    <Content Include="Views\Team\MapLicense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
