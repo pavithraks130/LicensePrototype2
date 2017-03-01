@@ -11,7 +11,7 @@
         @Html.ActionLink("Create Product", "Create", "Product")
     }
 
-    @using (Html.BeginForm("CartDetails", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("AddProductToCart", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         <table class="table-hover" style="border:ridge;align-content:center">
             @foreach (var pro in Model)
