@@ -62,16 +62,8 @@ namespace License.MetCalWeb.Controllers
         public ActionResult AddProductToCart(CartItemModel cartItemModel)
         {
             CartItem item = new CartItem();
-            SubscriptionType s1 = new SubscriptionType();
-            s1.Id = 20;
-            s1.Name = "Premium";
-            s1.ActiveDays = 200;
-            subscriptionTypeLogic.CreateSubscription(s1);
-
-            item.Id = 1;
             item.SubscriptionTypeId = 10;
             item.Quantity = 2;
-            item.SubType = s1;
             item.DateCreated = DateTime.Now;
             item.UserId = LicenseSessionState.Instance.User.UserId;
             cartItemModel.ModelCartItem = item;

@@ -38,6 +38,9 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.UserSubscription, LicenseServer.DataModel.UserSubscription>();
             cfg.CreateMap<LicenseServer.DataModel.UserSubscription, LicenseServer.Core.Model.UserSubscription>();
 
+            cfg.CreateMap<LicenseServer.Core.Model.CartItem, LicenseServer.DataModel.CartItem>();
+            cfg.CreateMap<LicenseServer.DataModel.CartItem, LicenseServer.Core.Model.CartItem>();
+
             License.Logic.AutoMapperConfiguration.InitializeConfiguration(cfg);
         }
 
