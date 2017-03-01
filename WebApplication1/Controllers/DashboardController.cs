@@ -41,22 +41,11 @@ namespace License.MetCalWeb.Controllers
 
             return View(model);
         }
-        [HttpPost]
-        public ActionResult PaymentGateway()
-        {
-            return View();
-        }
-
+       
         public ActionResult CartDetails()
         {
             return View();
         }
-        
-        [HttpPost]
-        public ActionResult DoPayment()
-        {
-            return View();
-
-        }
+       
     }
 }

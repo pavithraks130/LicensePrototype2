@@ -1,47 +1,4 @@
 ﻿@model LicenseServer.DataModel.CartItem
-
-@*@model License.MetCalWeb.Models.CardDetails
-
-    @{
-        Layout = null;
-    }
-
-    <!DOCTYPE html>
-
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>PaymentGateway</title>
-    </head>
-    <body>
-        <p>
-            Card Details
-        </p>
-        <table class="table-hover" style="border:ridge">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Number)
-                </th>
-                <td>@Html.TextBoxFor(m => m.Number, new { @class = "form-control" })</td>
-            </tr>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <td>
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><button class="btn-success" data-toggle="modal" data-target="#myModal">Pay</button></td>
-            </tr>
-
-        </table>
-    </body>
-    </html>*@
-@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />*@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -132,7 +89,7 @@
         </div>
 
         <div class="clear"></div>
-        @using (Html.BeginForm("DoPayment", "Dashboard", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("DoPayment", "Cart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <div >
                 <button class="btn-success btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Pay</button>

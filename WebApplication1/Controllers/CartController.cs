@@ -70,6 +70,38 @@ namespace License.MetCalWeb.Controllers
                     licLogic.Save();
             }
 
+        //[HttpPost]
+        //public ActionResult AddProductToCart(int id)
+        //{
+        //    CartItem item = new CartItem();
+        //    item.SubscriptionTypeId = id;
+        //    item.Quantity = 1;
+        //    item.UserId = LicenseSessionState.Instance.User.UserId;
+        //    bool status = logic.CreateCartItem(item);
+        //    return RedirectToAction("Index", "Cart");
+        //}
+
+        [HttpPost]
+        public ActionResult RemoveItemFromCart()
+        {
+            var x = cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId).Where(y =>y.Id==5).FirstOrDefault();
+            cartLogic.CreateCartItem(x);
+            return RedirectToAction("CartItem", "Cart");
         }
+
+        [HttpPost]
+        public ActionResult PaymentGateway()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult DoPayment()
+        {
+            return View();
+
+        }
+
     }
 }
