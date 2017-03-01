@@ -6,22 +6,27 @@ using License.Logic.ServiceLogic;
 using System.Web.Mvc;
 using License.MetCalWeb.Models;
 using LicenseServer.Logic;
+using LicenseServer.DataModel;
 
 namespace License.MetCalWeb.Controllers
 {
     public class ProductController : BaseController
     {
-        ProductLogic logic = null;
+        ProductLogic productLogic = null;
+        CartLogic cartLogic = null;
+        SubscriptionTypeLogic subscriptionTypeLogic = null;
         public ProductController()
         {
-            logic = new ProductLogic();
+            productLogic = new ProductLogic();
+            cartLogic = new CartLogic();
+            subscriptionTypeLogic = new SubscriptionTypeLogic();
         }
 
-        public ActionResult Index()
+        public ActionResult ProductCatalog()
         {
-            return RedirectToAction("Index", "DashBoard");
-            //var obj = logic.GetProducts();
-            //return View(obj);
+
+            var obj = productLogic.GetProducts();
+            return View(obj);
         }
 
         public ActionResult Create()
@@ -49,8 +54,30 @@ namespace License.MetCalWeb.Controllers
 
                 }
             }
-            logic.CreateProduct(pro.ModelProduct);
+            productLogic.CreateProduct(pro.ModelProduct);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult AddProductToCart(CartItemModel cartItemModel)
+        {
+            CartItem item = new CartItem();
+            SubscriptionType s1 = new SubscriptionType();
+            s1.Id = 20;
+            s1.Name = "Premium";
+            s1.ActiveDays = 200;
+            subscriptionTypeLogic.CreateSubscription(s1);
+
+            item.Id = 1;
+            item.SubscriptionTypeId = 10;
+            item.Quantity = 2;
+            item.SubType = s1;
+            item.DateCreated = DateTime.Now;
+            item.UserId = LicenseSessionState.Instance.User.UserId;
+            cartItemModel.ModelCartItem = item;
+            bool status = cartLogic.CreateCartItem(cartItemModel.ModelCartItem);
+            return RedirectToAction("CartItem", "cart");
+            // return View();
         }
     }
 }

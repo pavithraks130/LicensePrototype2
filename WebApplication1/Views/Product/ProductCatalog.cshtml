@@ -1,9 +1,8 @@
 ﻿@model List<LicenseServer.DataModel.Product>
 @using License.MetCalWeb.Helper
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Product Catalog";
 }
-
 
 <div class="row">
     <h3>Products</h3>
@@ -11,24 +10,32 @@
     {
         @Html.ActionLink("Create Product", "Create", "Product")
     }
-    @using (Html.BeginForm())
+
+    @using (Html.BeginForm("AddProductToCart", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         <table class="table-hover" style="border:ridge;align-content:center">
             @foreach (var pro in Model)
             {
                 <tr>
                     <td>
-                        <p class="float-left">
-                            @Html.Image(String.Concat("ProductImages/", pro.ImagePath), "image", "48px", "48px", "img-circle")
+                        <p class="float-left ">
+                            @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), "image", "300px", "650px", "img-responsive")
                         </p>
-
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            <em>Product Id:</em>
+                            <b>@pro.Id</b>
+                        </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <p>
                             <em>Produt Name:</em>
-                            @Html.Display(pro.Name.ToString())
+                            <b> @pro.Name</b>
                         </p>
                     </td>
                 </tr>
@@ -36,16 +43,24 @@
                     <td>
                         <p>
                             <em>Produt Description:</em>
-                            @Html.Display(pro.Description)
+                            <b>@pro.Description</b>
                         </p>
                     </td>
                 </tr>
 
                 <tr>
+                    <td>
+                        <p>
+                            <em>Manufactured Date:</em>
+                            <b> @pro.CreatedDate</b>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
                     <td class="danger">
                         <p class="button">
                             <b>
-                                @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { id = pro.Id })
+                                <input name="Add" class="btn btn-success" type="submit" value="Add To Cart" />
                             </b>
                         </p>
                     </td>

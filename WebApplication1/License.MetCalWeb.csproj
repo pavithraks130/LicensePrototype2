@@ -230,6 +230,7 @@
     <Content Include="Global.asax" />
     <Content Include="ProductImages\Product4.png" />
     <Content Include="ProductImages\Product5.png" />
+    <Content Include="ProductImages\Subscription Type1.PNG" />
     <Content Include="Resources\Cart-Menu.png" />
     <Content Include="Resources\favicon.ico" />
     <Content Include="Resources\fcal-tagline-321x66.gif" />
@@ -300,8 +301,10 @@
     <Content Include="Views\Dashboard\PaymentGateway.cshtml" />
     <Content Include="Views\Dashboard\DoPayment.cshtml" />
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
-    <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\CartDetails.cshtml" />
+    <Content Include="Views\Product\ProductCatalog.cshtml" />
+    <Content Include="Views\Cart\CartItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

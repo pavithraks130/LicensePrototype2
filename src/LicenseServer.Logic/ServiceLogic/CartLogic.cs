@@ -20,9 +20,9 @@ namespace LicenseServer.Logic
 
         public bool CreateCartItem(CartItem item)
         {
-            var cartitem = AutoMapper.Mapper.Map<CartItem, LicenseServer.Core.Model.CartItem>(item);
-            cartitem = Work.CartItemLicenseRepository.Create(cartitem);
-            return cartitem.Id > 0;
+            Core.Model.CartItem cartItem = AutoMapper.Mapper.Map<CartItem, Core.Model.CartItem>(item);
+            cartItem = Work.CartItemLicenseRepository.Create(cartItem);
+            return cartItem.Id > 0;
         }
 
         public bool DeleteCartItem(int id)

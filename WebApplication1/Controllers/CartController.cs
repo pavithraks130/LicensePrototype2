@@ -18,7 +18,7 @@ namespace License.MetCalWeb.Controllers
             logic = new CartLogic();
         }
 
-        public ActionResult Index()
+        public ActionResult CartItem()
         {
             var obj = logic.GetCartItems(LicenseSessionState.Instance.User.UserId);
             return View(obj);
