@@ -9,7 +9,7 @@ namespace LicenseServer.Logic
 {
     public class SubscriptionDetailLogic : BaseLogic
     {
-        public List<SubscriptionDetails> GetSubscriptionLicense(int subscriptionId)
+        public List<SubscriptionDetails> GetSubscriptionDetails(int subscriptionId)
         {
             List<SubscriptionDetails> details = new List<SubscriptionDetails>();
             var subscriptionList = Work.SubscriptionDetailResitory.GetData(s => s.SubscriptionTypeId == subscriptionId);

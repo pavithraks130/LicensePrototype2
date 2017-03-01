@@ -16,6 +16,8 @@ namespace LicenseServer.Core.Model
 
         public string Description { get; set; }
 
+        public string ProductCode { get; set; }
+
         public string ImagePath { get; set; }
 
         public string CreatedDate { get; set; }

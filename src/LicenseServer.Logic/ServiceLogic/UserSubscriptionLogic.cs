@@ -21,14 +21,53 @@ namespace LicenseServer.Logic
             return subscriptions;
         }
 
-        public bool CreateUserSubscription(UserSubscription subscription)
+        public UserSubscription CreateUserSubscription(UserSubscription subscription)
         {
+            UserSubscription sub = null;
             Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<DataModel.UserSubscription, Core.Model.UserSubscription>(subscription);
             var obj = Work.UserSubscriptionRepository.Create(subs);
             Work.UserSubscriptionRepository.Save();
-            return obj != null;
+            if (obj != null)
+            {
+                sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
+                sub.LicenseKeys = new List<string>();
+                GenerateLicenseKey(sub);
+            }
+            return sub;
         }
 
+        public void GenerateLicenseKey(UserSubscription subs)
+        {
+            SubscriptionDetailLogic detailLogic = new SubscriptionDetailLogic();
+            ProductLogic produLogic = new ProductLogic();
+            SubscriptionTypeLogic logic = new SubscriptionTypeLogic();
+            SubscriptionType type = logic.GetById(subs.SubscriptionTypeId);
+            List<SubscriptionDetails> details = detailLogic.GetSubscriptionDetails(subs.SubscriptionTypeId);
+            int qty = subs.Qty;
+            List<string> chuksum = new List<string>();
 
+            foreach (var data in details)
+            {
+                var pro = produLogic.GetProductById(data.ProductId);
+                var count = data.Quantity;
+                string keyData = pro.ProductCode + "/" + (data.Quantity * subs.Qty).ToString() + "/" + DateTime.Now.AddDays(type.ActiveDays).Date.ToString() + "/" + type.Id;
+                var key = LicenseKey.LicenseKeyGen.CryptoEngine.Encrypt(keyData, true);
+                string key1 = string.Empty;
+                do
+                {
+                    var keygeneration = new LicenseKey.GenerateKey();
+                    keygeneration.LicenseTemplate = "xxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx";
+                    keygeneration.UseBase10 = false;
+                    keygeneration.UseBytes = false;
+                    keygeneration.CreateKey();
+                    key1 = keygeneration.GetLicenseKey();
+                } while (chuksum.Contains(key1));
+                var licKey = key + "-" + key1;
+                subs.LicenseKeys.Add(licKey);
+            }
+
+        }
     }
+
+
 }

@@ -20,9 +20,6 @@ namespace License.Logic
                 .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Id));
             cfg.CreateMap<License.Model.Model.Role, License.Core.Model.Role>();
 
-            //cfg.CreateMap<License.Core.Model.Organization, License.Model.Model.Organization>();
-            //cfg.CreateMap<License.Model.Model.Organization, License.Core.Model.Organization>();
-
             cfg.CreateMap<License.Core.Model.AppUser, License.Model.Model.User>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
             cfg.CreateMap<License.Model.Model.User, License.Core.Model.AppUser>();
@@ -34,14 +31,14 @@ namespace License.Logic
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
-            //cfg.CreateMap<Model.Model.Product, Core.Model.Product>();
-            //cfg.CreateMap<Core.Model.Product, Model.Model.Product>();
+            cfg.CreateMap<License.Core.Model.UserSubscription, License.Model.Model.UserSubscription>();
+            cfg.CreateMap<License.Model.Model.UserSubscription, License.Core.Model.UserSubscription>();
 
-            //cfg.CreateMap<Model.Model.CartItem, Core.Model.CartItem>()
-            //    .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product));
+            cfg.CreateMap<License.Core.Model.LicenseData, License.Model.Model.LicenseData>();
+            cfg.CreateMap<License.Model.Model.LicenseData, License.Core.Model.LicenseData>();
 
-            //cfg.CreateMap<Core.Model.CartItem, Model.Model.CartItem>();
-
+            cfg.CreateMap<License.Core.Model.UserLicense, License.Model.Model.UserLicense>();
+            cfg.CreateMap<License.Model.Model.UserLicense, License.Core.Model.UserLicense>();
         }
 
     }

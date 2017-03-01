@@ -14,8 +14,11 @@ namespace LicenseServer.DataModel
 
         public int SubscriptionTypeId { get; set; }
 
+        public int Qty { get; set; }
+
         public DateTime SubscriptionDate { get; set; }
 
         public int ActiveDurataion { get; set; }
+        public List<string> LicenseKeys { get; set; }
     }
 }

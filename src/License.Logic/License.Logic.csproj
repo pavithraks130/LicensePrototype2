@@ -109,9 +109,12 @@
     <Compile Include="Common\common.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLogic\BaseLogic.cs" />
+    <Compile Include="ServiceLogic\LicenseLogic.cs" />
     <Compile Include="ServiceLogic\RoleLogic.cs" />
     <Compile Include="ServiceLogic\TeamMemberLogic.cs" />
+    <Compile Include="ServiceLogic\UserLicenseLogic.cs" />
     <Compile Include="ServiceLogic\UserLogic.cs" />
+    <Compile Include="ServiceLogic\UserSubscriptionLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -125,6 +128,10 @@
     <ProjectReference Include="..\License.Model\License.Model.csproj">
       <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
       <Name>License.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
+      <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
+      <Name>LicenseKey</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

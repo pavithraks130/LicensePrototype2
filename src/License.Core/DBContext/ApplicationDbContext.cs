@@ -31,5 +31,10 @@ namespace License.Core.DBContext
         
         public DbSet<TeamMembers> UserInvite { get; set; }
 
+        public DbSet<UserSubscription> UserSubscription { get; set; }
+
+        public DbSet<LicenseData> LicenseData { get; set; }
+
+        public DbSet<UserLicense> UserLicense { get; set; }
     }
 }

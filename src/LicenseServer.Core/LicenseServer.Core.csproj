@@ -98,6 +98,10 @@
     <Compile Include="Migrations\201702281934118_TablePKChanges.Designer.cs">
       <DependentUpon>201702281934118_TablePKChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703010908256_changestoProductModel.cs" />
+    <Compile Include="Migrations\201703010908256_changestoProductModel.Designer.cs">
+      <DependentUpon>201703010908256_changestoProductModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702281934118_TablePKChanges.resx">
       <DependentUpon>201702281934118_TablePKChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703010908256_changestoProductModel.resx">
+      <DependentUpon>201703010908256_changestoProductModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

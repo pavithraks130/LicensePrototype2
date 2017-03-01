@@ -28,5 +28,11 @@ namespace LicenseServer.Logic
             Work.SubscriptionRepository.Save();
             return coreSubType.Id > 0;
         }
+
+        public SubscriptionType GetById(int id)
+        {
+            var data = Work.SubscriptionRepository.GetById(id);
+            return AutoMapper.Mapper.Map<Core.Model.SubscriptionType, SubscriptionType>(data);
+        }
     }
 }
