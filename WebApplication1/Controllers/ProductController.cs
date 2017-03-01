@@ -17,11 +17,11 @@ namespace License.MetCalWeb.Controllers
             logic = new ProductLogic();
         }
 
-        public ActionResult Index()
+        public ActionResult ProductCatalog()
         {
-            return RedirectToAction("Index", "DashBoard");
-            //var obj = logic.GetProducts();
-            //return View(obj);
+            
+            var obj = logic.GetProducts();
+            return View(obj);
         }
 
         public ActionResult Create()
@@ -51,6 +51,12 @@ namespace License.MetCalWeb.Controllers
             }
             logic.CreateProduct(pro.ModelProduct);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult CartDetails(LicenseServer.Core.Model.Product product)
+        {
+            return View();
         }
     }
 }

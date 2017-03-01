@@ -30,13 +30,13 @@ namespace License.MetCalWeb.Controllers
             model.Add(product);
 
             var product1 = new Models.ProductModel();
-            product1.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
-            product1.ProductName = "f-1730-hanger";
+            product1.ImagePath = "../Catalog/Images/Thumbs/f-1730-4402_01a_s.png";
+            product1.ProductName = "f-1730-4402_01a_s";
             model.Add(product1);
 
             var product3 = new Models.ProductModel();
-            product3.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
-            product3.ProductName = "f-3501-fc";
+            product3.ImagePath = "../Catalog/Images/Thumbs/f-cxt1000_02a_h.png";
+            product3.ProductName = "f-cxt1000_02a_h";
             model.Add(product3);
 
             return View(model);
