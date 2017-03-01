@@ -298,13 +298,13 @@
     <Content Include="Views\Account\Confirm.cshtml" />
     <Content Include="Views\Team\Invite.cshtml" />
     <Content Include="Views\Team\TeamMembers.cshtml" />
-    <Content Include="Views\Dashboard\PaymentGateway.cshtml" />
-    <Content Include="Views\Dashboard\DoPayment.cshtml" />
+    <Content Include="Views\Cart\PaymentGateway.cshtml" />
+    <Content Include="Views\Cart\DoPayment.cshtml" />
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\CartDetails.cshtml" />
-    <Content Include="Views\Product\ProductCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
+    <Content Include="Views\Product\ProductCatalog.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

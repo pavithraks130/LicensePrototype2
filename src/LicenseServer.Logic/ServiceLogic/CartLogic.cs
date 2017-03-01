@@ -22,6 +22,7 @@ namespace LicenseServer.Logic
         {
             Core.Model.CartItem cartItem = AutoMapper.Mapper.Map<CartItem, Core.Model.CartItem>(item);
             cartItem = Work.CartItemLicenseRepository.Create(cartItem);
+            Work.ProductRepository.Save();
             return cartItem.Id > 0;
         }
 
