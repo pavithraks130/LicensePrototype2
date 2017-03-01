@@ -29,7 +29,9 @@
                                     @pro.Quantity
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Purchase", "Purchase", "Cart", new { Id = @pro.Id }, null)
+                                    @Html.ActionLink("Purchase", "PaymentGateway", "Cart", new { Id = @pro.Id }, null) 
+                                    
+                                    @Html.ActionLink("Remove Item", "RemoveItem", "Cart", new { Id = @pro.Id }, null)
                                 </td>
                             </tr>
                         }
@@ -45,60 +47,6 @@
         </div>
     }
 </div>
-@model List<LicenseServer.DataModel.CartItem>
-@{
-    Layout = null;
-}
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CartItem</title>
-</head>
-<body>
-    <div>
-        @using (Html.BeginForm("PaymentGateway", "Cart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            <h3>Cart Item List</h3>
-            <table class="table-hover" style="border:ridge">
-                <tr>
-                    <th>S.No</th>
-                    <th>P.ID</th>
-                    <th>P.Quantity</th>
-                    <th>P.Prize</th>
-                    <th></th>
-
-                </tr>
-                <tr></tr>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>01</td>
-                    <td>@item.Id</td>
-                    <td>@item.Quantity</td>
-                    <td>499$</td>
-                    <td><button class="btn btn-primary btn-lg btn-custom btn-warning" data-toggle="modal" data-target="#myModal">Remove</button></td>
-                </tr>
-                }
-                <tr>
-                    <td></td>
-                    <td colspan="2">
-                        Total(Including all Tax)
-                    </td>
-                    <td colspan="2">
-                        <p>
-                            502$
-                        </p>
-
-                    </td>
-                </tr>
-                <tr class="table table-hover">
-                    <td colspan="5"><button class="btn btn-primary btn-lg btn-custom btn-success float-right" data-toggle="modal" data-target="#myModal">Purchase</button></td>
-                </tr>
-            </table>
-        }
-    </div>
-</body>
-</html>
+   

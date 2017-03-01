@@ -24,7 +24,7 @@ namespace License.MetCalWeb.Controllers
             return View(obj);
         }
 
-        public ActionResult Purchase(int id)
+        public void Purchase(int id)
         {
             CartItem item = logic.GetCartItemById(id);
             UserSubscription subscription = new UserSubscription();
@@ -40,11 +40,10 @@ namespace License.MetCalWeb.Controllers
             UpdateSubscriptionOnpremise(subs, type.Name);
             item.IsPurchased = true;
             logic.UpdateCartItem(item);
-            return RedirectToAction("CartItem");
         }
 
 
-        private void UpdateSubscriptionOnpremise(UserSubscription subs,string subscriptionName)
+        private void UpdateSubscriptionOnpremise(UserSubscription subs, string subscriptionName)
         {
             License.Model.Model.UserSubscription subscription = new Model.Model.UserSubscription();
             subscription.ServerUserId = LicenseSessionState.Instance.User.ServerUserId;
@@ -69,29 +68,17 @@ namespace License.MetCalWeb.Controllers
                 if (subs.LicenseKeys.Count > 0)
                     licLogic.Save();
             }
-
-        //[HttpPost]
-        //public ActionResult AddProductToCart(int id)
-        //{
-        //    CartItem item = new CartItem();
-        //    item.SubscriptionTypeId = id;
-        //    item.Quantity = 1;
-        //    item.UserId = LicenseSessionState.Instance.User.UserId;
-        //    bool status = logic.CreateCartItem(item);
-        //    return RedirectToAction("Index", "Cart");
-        //}
-
-        [HttpPost]
-        public ActionResult RemoveItemFromCart()
+        }
+        public ActionResult RemoveItem(int id)
         {
-            var x = cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId).Where(y =>y.Id==5).FirstOrDefault();
-            cartLogic.CreateCartItem(x);
+            logic.DeleteCartItem(id);
             return RedirectToAction("CartItem", "Cart");
         }
 
-        [HttpPost]
-        public ActionResult PaymentGateway()
+
+        public ActionResult PaymentGateway(int id)
         {
+            TempData["cartId"] = id;
             return View();
         }
 
@@ -99,8 +86,9 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult DoPayment()
         {
+            int id = Convert.ToInt32(TempData["cartId"]);
+            Purchase(id);
             return View();
-
         }
 
     }
