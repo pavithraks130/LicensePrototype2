@@ -18,6 +18,7 @@ namespace License.Model.Model
         public User AdminUser { get; set; }
         public User InviteeUser { get; set; }
         public bool IsAdmin { get; set; }
+
     }
 
     public class UserInviteList

@@ -61,7 +61,7 @@ namespace LicenseServer.Core.Infrastructure
         public T Update(T obj)
         {
             obj = _dbset.Attach(obj);
-            _context.Entry(obj).State = EntityState.Modified;
+            _context.Entry(obj).State = EntityState.Modified;            
             return obj;
         }
 

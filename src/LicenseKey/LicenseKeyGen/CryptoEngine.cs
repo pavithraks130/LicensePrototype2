@@ -45,7 +45,7 @@ namespace LicenseKey.LicenseKeyGen
             var rawString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
             byte[] ba = Encoding.UTF8.GetBytes(rawString);
             var hexString = BitConverter.ToString(ba);
-            // hexString = hexString.Replace("-", "");
+             hexString = hexString.Replace("-", "");
             return hexString;
 
         }

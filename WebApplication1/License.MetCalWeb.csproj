@@ -245,7 +245,9 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\LogIn.cshtml" />
   </ItemGroup>
@@ -269,6 +271,7 @@
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\CartItemModel.cs" />
+    <Compile Include="Models\LicenseMapModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -303,8 +306,9 @@
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\CartDetails.cshtml" />
-    <Content Include="Views\Cart\CartItem.cshtml" />
     <Content Include="Views\Product\ProductCatalog.cshtml" />
+    <Content Include="Views\Cart\CartItem.cshtml" />
+    <Content Include="Views\Team\MapLicense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

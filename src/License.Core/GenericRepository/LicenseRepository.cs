@@ -26,9 +26,9 @@ namespace License.Core.GenericRepository
         {
             IQueryable<T> query = _dbSet;
             if (filter != null)
-                query.Where(filter);
+                query = query.Where(filter);
             foreach (string str in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                query.Include(str);
+                query = query.Include(str);
             if (orderby != null)
                 return orderby(query).ToList();
             return query.ToList();

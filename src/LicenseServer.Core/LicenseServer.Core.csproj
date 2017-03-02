@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201703010908256_changestoProductModel.Designer.cs">
       <DependentUpon>201703010908256_changestoProductModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703011817309_IsPurchasedToCartItemTable.cs" />
+    <Compile Include="Migrations\201703011817309_IsPurchasedToCartItemTable.Designer.cs">
+      <DependentUpon>201703011817309_IsPurchasedToCartItemTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201703020419214_DBConfig2.cs" />
     <Compile Include="Migrations\201703020419214_DBConfig2.Designer.cs">
       <DependentUpon>201703020419214_DBConfig2.cs</DependentUpon>
@@ -130,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703010908256_changestoProductModel.resx">
       <DependentUpon>201703010908256_changestoProductModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703011817309_IsPurchasedToCartItemTable.resx">
+      <DependentUpon>201703011817309_IsPurchasedToCartItemTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703020419214_DBConfig2.resx">
       <DependentUpon>201703020419214_DBConfig2.cs</DependentUpon>

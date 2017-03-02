@@ -19,5 +19,7 @@ namespace LicenseServer.DataModel
 
         public string UserId { get; set; }
 
+        public bool IsPurchased { get; set; }
+
     }
 }

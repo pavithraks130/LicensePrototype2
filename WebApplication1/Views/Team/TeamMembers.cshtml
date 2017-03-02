@@ -7,7 +7,6 @@
 @model TeamModel
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
 
 <style>
     tr {
@@ -33,7 +32,7 @@
 }
 else
 {
-   
+
     <div class="form-group">
         @if (Model.PendinigUsers.Count > 0)
         {
@@ -67,22 +66,27 @@ else
             <h4>Accepted Users</h4>
             <table class="table" style="border: none">
                 @foreach (TeamMembers t in Model.AcceptedUsers)
+                {
+                    <tr>
+                        <td>
+                            @if (t.InviteeUser != null)
+                            {
+                                <div>@t.InviteeUser.Name</div>
+                                <div>@t.InviteeUser.Email</div>
+                            }
+                            else
+                            {
+                                <div>@t.InviteeEmail</div>
+                            }
+                        </td>
+                        @if (LicenseSessionState.Instance.IsTeamAdmin)
                         {
-            <tr>
-                <td>
-                    @if (t.InviteeUser != null)
-                                    {
-                    <div>@t.InviteeUser.Name</div>
-                    <div>@t.InviteeUser.Email</div>
-                                    }
-                                    else
-                                    {
-                    <div>@t.InviteeEmail</div>
-                                    }
-                </td>
-
-            </tr>
+                            <td>
+                                @Html.ActionLink("AddLicense", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
+                            </td>
                         }
+                    </tr>
+                }
             </table>
         }
     </div>
@@ -90,3 +94,4 @@ else
 <div class="modal" id="myModal">
     @{ Html.RenderAction("Invite"); }
 </div>
+

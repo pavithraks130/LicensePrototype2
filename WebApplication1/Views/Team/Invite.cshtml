@@ -5,13 +5,13 @@
 }
 <script type="text/javascript">
     function onSuccess(data) {
-        if(data.onSuccess == "false")
+        if(data.success == "false")
         {
             $('#error').val(data.message);
             return;
         }
         else {
-            location.Href = @Url.Action("TeamContainer", "Team");
+            location.Href = "@Url.Action("TeamContainer", "Team")";
         }
     }
 </script>

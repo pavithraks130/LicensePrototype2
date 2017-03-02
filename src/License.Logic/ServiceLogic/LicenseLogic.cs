@@ -18,12 +18,16 @@ namespace License.Logic.ServiceLogic
             return dataList;
         }
 
-        public bool CreateLicenseData(LicenseData data)
+        public void CreateLicenseData(LicenseData data)
         {
             var obj = AutoMapper.Mapper.Map<LicenseData, License.Core.Model.LicenseData>(data);
             obj = Work.LicenseDataRepository.Create(obj);
-            Work.LicenseDataRepository.Save();
-            return obj.Id > 0;
         }
+
+        public void Save()
+        {
+            Work.LicenseDataRepository.Save();
+        }
+
     }
 }

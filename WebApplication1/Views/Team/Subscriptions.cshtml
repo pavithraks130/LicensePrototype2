@@ -1,14 +1,32 @@
-﻿@{
+﻿@model IEnumerable<License.Model.Model.UserSubscription>
+@{
     Layout = null;
 }
 <h4>Subscription</h4>
 <table class="table" style="border:ridge">
-    <tr>
-        <td>
-            Team subscriptions are purchased and managed by team administrators.
-            <b> @Html.ActionLink("Explore Fluke Connect subscriptions", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })</b>
-    </tr>
-
+    @if (!LicenseSessionState.Instance.IsTeamAdmin || Model.Count() == 0)
+    {
+        <tr>
+            <td>
+                Team subscriptions are purchased and managed by team administrators.
+                <b> @Html.ActionLink("Explore Fluke Connect subscriptions", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })</b>
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var obj in Model)
+        {
+            <tr>
+                <td>
+                    <h5>@obj.SubscriptionName</h5>
+                    <spean>Avialable License: @obj.LicenseDetails.AvailableLicenseCount</spean>
+                    <br />
+                    <span>@obj.LicenseDetails.ProductCode</span>
+                </td>
+            </tr>
+        }
+    }
     <tr>
         <td>
             @Html.ActionLink(LicenseSessionState.Instance.User.Email, "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })

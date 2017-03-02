@@ -25,5 +25,7 @@ namespace LicenseServer.Core.Model
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual Appuser User { get; set; }
+
+        public bool IsPurchased { get; set; }
     }
 }
