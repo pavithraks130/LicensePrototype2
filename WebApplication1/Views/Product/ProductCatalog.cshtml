@@ -2,29 +2,28 @@
 @using License.MetCalWeb.Helper
 @using LicenseServer.Logic
 @{ CartLogic cartLogic = new CartLogic();
-    int itemCount = cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId).Count();}
+
+    int itemCount = LicenseSessionState.Instance.User == null ? 0 : cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId).Count();}
 @{
     ViewBag.Title = "Product Catalog";
 }
-
 <div class="row">
-   
+
     <div class="col-md-9">
         <h3 class="login-header-new">Fluke Calibration Store</h3>
     </div>
     @*<div class="col-md-1">
-        
-    </div>
-    @if (LicenseSessionState.Instance.IsSuperAdmin)
-    {
-        @Html.ActionLink("Create Product", "Create", "Product")
-    }*@
 
+        </div>
+        @if (LicenseSessionState.Instance.IsSuperAdmin)
+        {
+            @Html.ActionLink("Create Product", "Create", "Product")
+        }*@
     @using (Html.BeginForm())
     {
         <div class="form-group">
             <div class="col-md-10">
-                <table class="table" style="border: none">
+                <table class="table-hover" style="border: none">
                     <tr>
                         <td></td>
                         <td>
@@ -42,7 +41,7 @@
                 {
                         <tr>
                             <td>
-                                @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), pro.Name, "35", "45", "img-responsive")
+                                @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), pro.Name, "35", "100", "img-responsive")
                             </td>
                             <td>
                                 @pro.Name
@@ -54,7 +53,7 @@
                                 @pro.Price.ToString()
                             </td>
                             <td>
-                                @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)
+                                <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)</button>
                             </td>
                         </tr>
 

@@ -20,6 +20,10 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult CartItem()
         {
+            if (LicenseSessionState.Instance.User == null)
+            {
+                return RedirectToAction("LogIn","Account");
+            }
             var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
             ViewData["TotalAmount"] = logic.TotalAmount;
             return View(obj);
