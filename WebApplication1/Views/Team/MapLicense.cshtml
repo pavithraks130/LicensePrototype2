@@ -34,7 +34,7 @@
                 {
                     <li class="roleList">
                         @Html.Hidden(Model[i].ExistingUserLicenseId.ToString())
-                        <label class="control-label"><input type="checkbox" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
+                        <label class="control-label"><input type="radio" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
                     </li>
                 }
                 <label style="display:none;color:red;" id="lblError">License  not selected</label>
