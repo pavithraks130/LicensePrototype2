@@ -2,9 +2,31 @@
 @{
     ViewBag.Title = "Product Catalog";
 }
-
+<div>
+    <div class="col-md-9">
+        <h1 class="login-header-new">Fluke Connect Store</h1>
+    </div>
+    <div class="col-md-1">
+        <table>
+            <tr>
+                <td>
+                    <div class="navbar-header">
+                        <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartDetails", "Dashboard")">
+                            <img src="~/Resources/Cart-Menu.png" />
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartDetails", "Dashboard")">
+                        <h2>Cart(1)</h2>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
 <div class="row">
-    <h3>Products</h3>
+    
     @if (LicenseSessionState.Instance.IsSuperAdmin)
     {
         @Html.ActionLink("Create Product", "Create", "Product")
