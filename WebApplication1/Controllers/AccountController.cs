@@ -109,7 +109,7 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
                     LicenseSessionState.Instance.IsAuthenticated = true;
-                    return RedirectToAction("ProductCatalog", "Product");
+                    return RedirectToAction("Home", "Tab");
                 }
                 else
                 {

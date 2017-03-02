@@ -20,12 +20,10 @@
                             <td>
                                 <span style="font-weight:bold">Price</span>
                             </td>
-                            <td>
-                                
-                            </td>
+                            <td></td>
                         </tr>
                         @foreach (var pro in Model)
-                    {
+                        {
                             <tr>
                                 <td>
                                     @pro.SubType.Name
@@ -37,12 +35,23 @@
                                     @pro.TotalPrice
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Purchase", "PaymentGateway", "Cart", new { Id = @pro.Id }, null) 
-                                    
                                     @Html.ActionLink("Remove Item", "RemoveItem", "Cart", new { Id = @pro.Id }, null)
                                 </td>
                             </tr>
                         }
+                        <tr></tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                Total
+                            </td>
+                            <td>
+                                @ViewData["TotalAmount"]
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
                     </table>
                 }
                 else
@@ -52,9 +61,13 @@
                     </div>
                 }
             </div>
+            <br />
+            <div class="col-md-8">
+                @Html.ActionLink("Purchase", "PaymentGateway", "Cart")
+            </div>
         </div>
+
     }
 </div>
 
 
-   

@@ -66,7 +66,7 @@ namespace LicenseServer.Core.Migrations
                 var subdetails2 = new LicenseServer.Core.Model.SubscriptionDetail()
                 {
                     Product = pro2,
-                    SubscriptyType=sub1,
+                    SubscriptyType=sub2,
                     Quantity = 10
                 };
                 context.SubscriptionDetail.Add(subdetails2);

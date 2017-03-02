@@ -10,6 +10,7 @@ using LicenseServer.DataModel;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize(Roles ="Admin,SuperAdmin")]
     public class ProductController : BaseController
     {
         ProductLogic productLogic = null;

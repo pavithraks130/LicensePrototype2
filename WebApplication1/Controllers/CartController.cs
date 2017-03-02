@@ -21,12 +21,13 @@ namespace License.MetCalWeb.Controllers
         public ActionResult CartItem()
         {
             var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
+            ViewData["TotalAmount"] = logic.TotalAmount;
             return View(obj);
         }
 
-        public void Purchase(int id)
+        public void Purchase(CartItem item)
         {
-            CartItem item = logic.GetCartItemById(id);
+            //CartItem item = logic.GetCartItemById(id);
             UserSubscription subscription = new UserSubscription();
             subscription.SubscriptionDate = DateTime.Now.Date;
             subscription.SubscriptionTypeId = item.SubscriptionTypeId;
@@ -76,9 +77,8 @@ namespace License.MetCalWeb.Controllers
         }
 
 
-        public ActionResult PaymentGateway(int id)
+        public ActionResult PaymentGateway()
         {
-            TempData["cartId"] = id;
             return View();
         }
 
@@ -86,8 +86,12 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult DoPayment()
         {
-            int id = Convert.ToInt32(TempData["cartId"]);
-            Purchase(id);
+            //int id = Convert.ToInt32(TempData["cartId"]);
+            var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
+            foreach (var item in obj)
+            {
+                Purchase(item);
+            }
             return View();
         }
 

@@ -82,13 +82,8 @@ namespace WebApplication1.Controllers
         public ActionResult Subscriptions()
         {
             IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
-            //if (LicenseSessionState.Instance.SubscriptionList == null || LicenseSessionState.Instance.SubscriptionList.Count() ==  0)
-            //{
             subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
             LicenseSessionState.Instance.SubscriptionList = subscriptionList;
-            //}
-            //else
-            //    subscriptionList = LicenseSessionState.Instance.SubscriptionList;
             return View(subscriptionList);
         }
 
@@ -155,7 +150,7 @@ namespace WebApplication1.Controllers
                     }
                 }
             }
-            return Json(new { success = true, message = "" });
+            return RedirectToAction("TeamContainer");
         }
 
         public ActionResult MapLicense(string userId)
