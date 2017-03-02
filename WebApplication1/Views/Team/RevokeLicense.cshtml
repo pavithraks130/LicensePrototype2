@@ -1,10 +1,13 @@
 ﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
+@{
+    ViewBag.Title = "RevokeLicense";
+}
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {
             var isPostEnabled = true;
             i = 0;
-            $('input[type=radio]:checked').each(function () {
+            $('input[type=checkbox]:checked').each(function () {
                 i++;
             });
             if (i == 0) {
@@ -19,55 +22,43 @@
         });
     });
 </script>
-<style>
-    input[type="radio"] {
-        width: 20px !important;
-        margin: 0px !important;
-    }
-
-    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
-        border-top: none !important;
-    }
-</style>
 <div class="row">
-    <h2>
-        License Mapping To User
-    </h2>
-    <br />
-    @using (Html.BeginForm())
+    <h2>RevokeLicense</h2>
+
+    <div class="form-group">
+        <div class="col-md-8">
+            <span>
+                Team Member Name :  @ViewData["TeamMember"] 
+            </span>
+        </div>
+    </div>
+    @if (Model.Count == 0)
     {
-        @Html.ValidationSummary()
-        @Html.AntiForgeryToken()
         <div class="form-group">
             <div class="col-md-8">
-                <span>
-                    Team Member Name :  @ViewData["TeamMember"]
-                </span>
+                <span>No License are mapped.  </span>
             </div>
         </div>
-        if (Model.Count == 0)
+    }
+    else
+    {
+        using (Html.BeginForm())
         {
+            @Html.AntiForgeryToken()
             <div class="form-group">
-                <div class="col-md-8">
-                    <span>No Subscriptions exist  </span>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="form-group">
+                <span>Below are the List of License for which team member is  subscribed.</span>
                 <div class="col-md-8">
                     <table class="table" style="border: none">
                         @for (int i = 0; i < Model.Count; i++)
                         {
                             <tr style="">
                                 <td>
-                                    <label class="control-label"><input type="radio" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
+                                    <label class="control-label"><input type="checkbox" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
                                 </td>
                             </tr>
                         }
                     </table>
-                    <label style="display:none;color:red;" id="lblError">License  not selected</label>
+                    <label style="display:none;color:red;" id="lblError">License  not selected to revoke</label>
                 </div>
             </div>
             <div class="form-group">
