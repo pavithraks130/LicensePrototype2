@@ -10,16 +10,16 @@
     {
         @Html.ActionLink("Create Product", "Create", "Product")
     }
-
-    @using (Html.BeginForm("AddProductToCart", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        <table class="table-hover" style="border:ridge;align-content:center">
-            @foreach (var pro in Model)
+    <table class="table-hover" style="border:ridge;align-content:center">
+        @for (int index = 0; index < Model.Count; index++)
+        {
+            using (Html.BeginForm("AddProductToCart", "Product",new { id= Model[index].Id}, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
+                @*@Html.EditorForModel()*@
                 <tr>
                     <td>
                         <p class="float-left ">
-                            @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), "image", "300px", "650px", "img-responsive")
+                            @Html.Image(String.Concat("../ProductImages/", Model[index].ImagePath), "image", "270px", "550px", "img-responsive")
                         </p>
                     </td>
                 </tr>
@@ -27,7 +27,7 @@
                     <td>
                         <p>
                             <em>Product Id:</em>
-                            <b>@pro.Id</b>
+                            <b>@Model[index].Id</b>
                         </p>
                     </td>
                 </tr>
@@ -35,7 +35,7 @@
                     <td>
                         <p>
                             <em>Produt Name:</em>
-                            <b> @pro.Name</b>
+                            <b> @Model[index].Name</b>
                         </p>
                     </td>
                 </tr>
@@ -43,7 +43,7 @@
                     <td>
                         <p>
                             <em>Produt Description:</em>
-                            <b>@pro.Description</b>
+                            <b>@Model[index].Description</b>
                         </p>
                     </td>
                 </tr>
@@ -52,10 +52,11 @@
                     <td>
                         <p>
                             <em>Manufactured Date:</em>
-                            <b> @pro.CreatedDate</b>
+                            <b> @Model[index].CreatedDate</b>
                         </p>
                     </td>
                 </tr>
+
                 <tr>
                     <td class="danger">
                         <p class="button">
@@ -67,6 +68,7 @@
                 </tr>
 
             }
-        </table>
-    }
+        }
+    </table>
+
 </div>

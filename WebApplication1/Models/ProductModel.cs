@@ -26,6 +26,8 @@ namespace License.MetCalWeb.Models
         public string Description { get { return ModelProduct.Description; } set { ModelProduct.Description = value; } }
 
         public string ImagePath { get { return ModelProduct.ImagePath; } set { ModelProduct.ImagePath = value; } }
+
+        public string Price { get { return ModelProduct.Price; } set { ModelProduct.Price = value; } }
     }
     /// <summary>
     /// This class holds credit card details 

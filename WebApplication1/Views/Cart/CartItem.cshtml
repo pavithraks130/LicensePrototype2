@@ -26,10 +26,12 @@
 
                 </tr>
                 <tr></tr>
+                @{int index = 1;}
                 @foreach (var item in Model)
                 {
                 <tr>
-                    <td>01</td>
+                    @{var ind= index++;}
+                    <td>@ind</td>
                     <td>@item.Id</td>
                     <td>@item.Quantity</td>
                     <td>499$</td>
@@ -43,7 +45,7 @@
                     </td>
                     <td colspan="2">
                         <p>
-                            502$
+                            5002$
                         </p>
 
                     </td>

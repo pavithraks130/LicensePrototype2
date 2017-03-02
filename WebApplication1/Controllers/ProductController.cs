@@ -59,17 +59,19 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddProductToCart(Product product)
+        public ActionResult AddProductToCart(int id)
         {
+            Product product = productLogic.GetProducts().Where(p=>p.Id==id).FirstOrDefault();
             CartItem item = new CartItem();
+            CartItemModel cartItemModel = new CartItemModel();
             item.SubscriptionTypeId = 1;
             item.Quantity = 2;
             item.DateCreated = DateTime.Now;
             item.UserId = LicenseSessionState.Instance.User.ServerUserId;
-            //cartItemModel.ModelCartItem = item;
-            //bool status = cartLogic.CreateCartItem(cartItemModel.ModelCartItem);
+             cartItemModel.ModelCartItem = item;
+            bool status = cartLogic.CreateCartItem(cartItemModel.ModelCartItem);
 
-            bool status = cartLogic.CreateCartItem(item);
+            // bool status = cartLogic.CreateCartItem(item);
             return RedirectToAction("CartItem", "Cart");
             // return View();
         }
