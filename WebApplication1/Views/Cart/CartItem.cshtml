@@ -1,8 +1,8 @@
 ﻿@model List<LicenseServer.DataModel.CartItem>
-
+<link href="~/Content/Site.css" rel="stylesheet" />
 <div class="row">
-    <h3>Cart</h3>
 
+    <h3>Cart</h3>
     @using (Html.BeginForm())
     {
         <div class="form-group">
@@ -13,9 +13,6 @@
                         <tr>
                             <td>
                                 <span style="font-weight:bold">Subscription Name</span>
-                            </td>
-                            <td>
-                                <span style="font-weight:bold">Quantity</span>
                             </td>
                             <td>
                                 <span style="font-weight:bold">Price</span>
@@ -29,35 +26,29 @@
                                     @pro.SubType.Name
                                 </td>
                                 <td>
-                                    @pro.Quantity
-                                </td>
-                                <td>
                                     @pro.TotalPrice
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Remove Item", "RemoveItem", "Cart", new { Id = @pro.Id }, null)
+                                    <button id="delete-item" class="alert-warning" type="button" onclick="location.href='@Url.Action("RemoveItem", "Cart", new { Id = @pro.Id}, null)'">
+                                        <img src="~/Resources/Delete Icon.png" />
+                                    </button>
                                 </td>
+                                <td></td>
+
                             </tr>
                         }
                         <tr></tr>
                         <tr>
                             <td></td>
                             <td>
-                                <span style="font-weight:bold">Total</span>
+                                <h2>Total</h2>
                             </td>
                             <td>
-                                @ViewData["TotalAmount"]
+                                <h2>
+                                    @ViewData["TotalAmount"]
+                                </h2>
                             </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                            </td>
-                            <td colspan="2">
-                                <button class="alert-success">@Html.ActionLink("Purchase", "PaymentGateway", "Cart")</button>
-                            </td>
+                            <td></td>
                         </tr>
                     </table>
                 }
@@ -68,10 +59,11 @@
                     </div>
                 }
             </div>
-           
+            <br />
+            <div class="col-md-8">
+                <button class="alert-success"> @Html.ActionLink("Purchase", "PaymentGateway", "Cart")</button>
+            </div>
         </div>
 
     }
 </div>
-
-

@@ -38,8 +38,8 @@ body {
 }
 
 .btn-custom {
-    font-size: 14px!important;
-    padding: 8px, 12px!important;
+    font-size: 14px !important;
+    padding: 8px, 12px !important;
 }
 
 a {
@@ -797,4 +797,15 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+
+
+
+
+   #delete-item {
+        background: url('../Resources/Delete Icon.png') no-repeat top left;
+        display: block;
+        width: 150px;
+        height: 150px;
+        text-indent: -9999px; /* hides the link text */
+    }
 }

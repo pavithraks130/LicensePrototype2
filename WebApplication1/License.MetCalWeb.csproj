@@ -241,6 +241,7 @@
     <Content Include="ProductImages\p7.PNG" />
     <Content Include="ProductImages\p8.PNG" />
     <Content Include="Resources\Cart-Menu.png" />
+    <Content Include="Resources\Delete Icon.png" />
     <Content Include="Resources\favicon.ico" />
     <Content Include="Resources\fcal-tagline-321x66.gif" />
     <Content Include="Resources\logo.png" />
