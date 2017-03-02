@@ -13,5 +13,6 @@ namespace LicenseServer.DataModel
         public string Name { get; set; }
 
         public int ActiveDays { get; set; }
+        public double Price { get; set; }
     }
 }

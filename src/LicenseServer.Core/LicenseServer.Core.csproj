@@ -110,6 +110,10 @@
     <Compile Include="Migrations\201703020419214_DBConfig2.Designer.cs">
       <DependentUpon>201703020419214_DBConfig2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703020455017_PriceColumnToSubscriptionType.cs" />
+    <Compile Include="Migrations\201703020455017_PriceColumnToSubscriptionType.Designer.cs">
+      <DependentUpon>201703020455017_PriceColumnToSubscriptionType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -140,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703020419214_DBConfig2.resx">
       <DependentUpon>201703020419214_DBConfig2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703020455017_PriceColumnToSubscriptionType.resx">
+      <DependentUpon>201703020455017_PriceColumnToSubscriptionType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,18 +14,87 @@ namespace LicenseServer.Core.Migrations
 
         protected override void Seed(LicenseServer.Core.DbContext.AppDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            var dbIntialize = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings.Get("IsDbIntialize"));
+            if (dbIntialize)
+            {
+                var pro1 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "Product B",
+                    Description = "Product B",
+                    ImagePath = "P2.png",
+                    ProductCode = "ProO2"
+                };
+                context.Product.Add(pro1);
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+
+                var sub1 = new LicenseServer.Core.Model.SubscriptionType()
+                {
+                    Name = "10Pack",
+                    ActiveDays = 365,
+                    Price = 500
+                };
+                context.SubscriptionType.Add(sub1);
+
+                var subdetails = new LicenseServer.Core.Model.SubscriptionDetail()
+                {
+                    Product = pro1,
+                    SubscriptyType=sub1,
+                    Quantity = 10
+                };
+                context.SubscriptionDetail.Add(subdetails);
+
+                var pro2 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "Product C",
+                    Description = "Product C",
+                    ImagePath = "P3.png",
+                    ProductCode = "ProO3"
+                };
+                context.Product.Add(pro2);
+
+
+                var sub2 = new LicenseServer.Core.Model.SubscriptionType()
+                {
+                    Name = "15Pack",
+                    ActiveDays = 365,
+                    Price = 1000
+                };
+                context.SubscriptionType.Add(sub2);
+
+                var subdetails2 = new LicenseServer.Core.Model.SubscriptionDetail()
+                {
+                    Product = pro2,
+                    SubscriptyType = sub2,
+                    Quantity = 15
+                };
+                context.SubscriptionDetail.Add(subdetails2);
+                var pro4 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "Product D",
+                    Description = "Product D",
+                    ImagePath = "P4.png",
+                    ProductCode = "ProO4"
+                };
+                context.Product.Add(pro4);
+
+
+                var sub4 = new LicenseServer.Core.Model.SubscriptionType()
+                {
+                    Name = "1Pack",
+                    ActiveDays = 365,
+                    Price = 50
+                };
+                context.SubscriptionType.Add(sub4);
+
+                var subdetails4 = new LicenseServer.Core.Model.SubscriptionDetail()
+                {
+                    Product = pro4,
+                    SubscriptyType = sub4,
+                    Quantity = 1
+                };
+                context.SubscriptionDetail.Add(subdetails4);
+                context.SaveChanges();
+            }
         }
     }
 }
