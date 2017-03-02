@@ -1,8 +1,35 @@
 ﻿@model List<LicenseServer.DataModel.SubscriptionType>
-@using License.MetCalWeb.Helper
+   @using LicenseServer.Logic
+@{ CartLogic cartLogic = new CartLogic();
+   int itemCount= cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId).Count();}
 @{
     ViewBag.Title = "Product Catalog";
 }
+<div>
+    <div class="col-md-9">
+        <h1 class="login-header-new">Fluke Calibration Store</h1>
+    </div>
+    <div class="col-md-1">
+        <table class="table-hover success">
+            <tr>
+                <td>
+                    <div class="navbar-header">
+                        <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
+                            <img src="~/Resources/Cart-Menu.png" />
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
+                        <h4>Cart(@itemCount)</h4>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row">
+    
 
 <div class="row">
     <h3>Product Subscriptions</h3>
