@@ -283,6 +283,7 @@
     <Content Include="Views\Product\ProductCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
     <Content Include="Views\Team\MapLicense.cshtml" />
+    <Content Include="Views\Team\RevokeLicense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

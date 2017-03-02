@@ -82,7 +82,11 @@ else
                         @if (LicenseSessionState.Instance.IsTeamAdmin)
                         {
                             <td>
-                                @Html.ActionLink("AddLicense", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
+                                <button class="alert-success">
+                                    @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
+                                </button>
+                                <br />
+                                <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { userId = @t.InviteeUserId }, null)</button>
                             </td>
                         }
                     </tr>
