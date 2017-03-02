@@ -2,7 +2,7 @@
 <link href="~/Content/Site.css" rel="stylesheet" />
 <div class="row">
 
-    <h3>Cart</h3>
+    <h2>Cart</h2>
     @using (Html.BeginForm())
     {
         <div class="form-group">
@@ -39,18 +39,18 @@
                         }
                         <tr></tr>
                         <tr>
-                            <td></td>
+                            <td><h2>Total</h2></td>
                             <td>
-                                <h2>Total</h2>
-                            </td>
-                            <td>
-                                <h2>
-                                    @ViewData["TotalAmount"]
+                                <h2>  @ViewData["TotalAmount"]
                                 </h2>
                             </td>
                             <td></td>
                         </tr>
+                       
                     </table>
+                    <div class="float-right">
+                        <button class="alert-success"> @Html.ActionLink("Purchase", "PaymentGateway", "Cart")</button>
+                    </div>
                 }
                 else
                 {
@@ -60,9 +60,7 @@
                 }
             </div>
             <br />
-            <div class="col-md-8">
-                <button class="alert-success"> @Html.ActionLink("Purchase", "PaymentGateway", "Cart")</button>
-            </div>
+
         </div>
 
     }
