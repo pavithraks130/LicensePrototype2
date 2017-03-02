@@ -114,6 +114,14 @@
     <Compile Include="Migrations\201703020455017_PriceColumnToSubscriptionType.Designer.cs">
       <DependentUpon>201703020455017_PriceColumnToSubscriptionType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703020605150_SubscriptionTypeTableChange.cs" />
+    <Compile Include="Migrations\201703020605150_SubscriptionTypeTableChange.Designer.cs">
+      <DependentUpon>201703020605150_SubscriptionTypeTableChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703020644545_PriceColumnToCartItem.cs" />
+    <Compile Include="Migrations\201703020644545_PriceColumnToCartItem.Designer.cs">
+      <DependentUpon>201703020644545_PriceColumnToCartItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -147,6 +155,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703020455017_PriceColumnToSubscriptionType.resx">
       <DependentUpon>201703020455017_PriceColumnToSubscriptionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703020605150_SubscriptionTypeTableChange.resx">
+      <DependentUpon>201703020605150_SubscriptionTypeTableChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703020644545_PriceColumnToCartItem.resx">
+      <DependentUpon>201703020644545_PriceColumnToCartItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

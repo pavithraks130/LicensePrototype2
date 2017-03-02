@@ -65,6 +65,7 @@ namespace License.MetCalWeb.Controllers
             item.Quantity = 2;
             item.DateCreated = DateTime.Now;
             item.UserId = LicenseSessionState.Instance.User.ServerUserId;
+            item.Price = subscriptionTypeLogic.GetById(item.SubscriptionTypeId).Price;
             bool status = cartLogic.CreateCartItem(item);
             return RedirectToAction("CartItem", "cart");
         }

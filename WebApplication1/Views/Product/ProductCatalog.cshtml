@@ -1,10 +1,11 @@
 ﻿@model List<LicenseServer.DataModel.SubscriptionType>
+@using License.MetCalWeb.Helper
 @{
     ViewBag.Title = "Product Catalog";
 }
 
 <div class="row">
-    <h3>Products</h3>
+    <h3>Product Subscriptions</h3>
     @if (LicenseSessionState.Instance.IsSuperAdmin)
     {
         @Html.ActionLink("Create Product", "Create", "Product")
@@ -13,14 +14,18 @@
     @using (Html.BeginForm())
     {
         <div class="form-group">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <table class="table" style="border: none">
                     <tr>
+                        <td></td>
                         <td>
                             <span style="font-weight:bold">Subscription Name</span>
                         </td>
                         <td>
                             <span style="font-weight:bold">Dutration</span>
+                        </td>
+                        <td>
+                            <span style="font-weight:bold">Price</span>
                         </td>
                         <td></td>
                     </tr>
@@ -28,17 +33,23 @@
                 {
                         <tr>
                             <td>
+                                @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), pro.Name, "35", "45", "img-responsive")
+                            </td>
+                            <td>
                                 @pro.Name
                             </td>
                             <td>
                                 @pro.ActiveDays
                             </td>
                             <td>
+                                @pro.Price.ToString()
+                            </td>
+                            <td>
                                 @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)
                             </td>
                         </tr>
 
-                }
+                    }
                 </table>
             </div>
         </div>
