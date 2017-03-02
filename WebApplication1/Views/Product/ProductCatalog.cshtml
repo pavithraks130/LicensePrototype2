@@ -42,7 +42,7 @@
                 {
                         <tr>
                             <td>
-                                @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), pro.Name, "35", "45", "img-responsive")
+                                @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), pro.Name, "35", "100", "img-responsive")
                             </td>
                             <td>
                                 @pro.Name
@@ -54,7 +54,7 @@
                                 @pro.Price.ToString()
                             </td>
                             <td>
-                                @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)
+                                <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)</button>
                             </td>
                         </tr>
 
