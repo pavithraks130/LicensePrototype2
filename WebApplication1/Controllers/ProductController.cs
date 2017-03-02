@@ -66,7 +66,7 @@ namespace License.MetCalWeb.Controllers
             item.DateCreated = DateTime.Now;
             item.UserId = LicenseSessionState.Instance.User.ServerUserId;
             bool status = cartLogic.CreateCartItem(item);
-            return RedirectToAction("CartItem", "cart");
+            return  RedirectToAction("ProductCatalog", "Product");
         }
     }
 }
