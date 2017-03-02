@@ -3,6 +3,7 @@
     ViewBag.Title = "Register";
 }
 <h2>@ViewBag.Title.</h2>
+<div>
 
 @if (!Convert.ToBoolean(ViewData["SucessMessageDisplay"]))
 {
@@ -74,3 +75,5 @@ else
     <label>Registered Successfully. Click @Html.ActionLink("here","LogIn","Account") to login</label>
 
 }
+
+</div>

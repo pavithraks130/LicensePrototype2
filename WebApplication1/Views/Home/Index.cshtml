@@ -2,6 +2,53 @@
 @{
     ViewBag.Title = " FLUKE Calibration";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <h2> FLUKE Calibration</h2>
+<style type="text/css" style="display: none !important;">
+    #SlideshowImages {
+        margin: 50px auto;
+        position: relative;
+        width: 200px;
+        height: 200px;
+        padding: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+        #SlideshowImages > div {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+        }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function()
+    {
+        $("#slideshow > div:gt(0)").hide();
+        setInterval(function()
+        {
+            $('#SlideshowImages > div:first').fadeOut(1000).next().fadeIn(1000).end().appendTo('#SlideshowImages');
+        }, 2500);
+    });
+</script>  
+<div class="float-left" id="SlideshowImages">
+    <img  />
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-96270-video-212x100.jpg" height="300" width="600"> </div>
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-generic-enews-212x100.jpg" height="300" width="600"> </div>
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003965-6270A-fcal-home-image-970x374.jpg" height="300" width="600"> </div>
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6007651a-en-2271a-fcal-home-slideshow-image-970x374.jpg" height="300" width="600"> </div>
+</div>  
+<img  />
+<img  />
+<img  />
+<div class="float-right" id="SlideshowImages">
+    <img />
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s1.PNG" height="300" width="300"> </div>
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s3.PNG" height="300" width="300"> </div>
+    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s2.PNG" height="300" width="300"> </div>
+</div> 
+
 
