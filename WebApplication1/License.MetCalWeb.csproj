@@ -210,6 +210,11 @@
     <Content Include="ProductImages\p6.PNG" />
     <Content Include="ProductImages\p7.PNG" />
     <Content Include="ProductImages\p8.PNG" />
+    <Content Include="Resources\Background\Background.PNG" />
+    <Content Include="Resources\Background\Background2.PNG" />
+    <Content Include="Resources\Background\Background3.PNG" />
+    <Content Include="Resources\Background\Background4.PNG" />
+    <Content Include="Resources\Background\Background5.PNG" />
     <Content Include="Resources\Cart-Menu.png" />
     <Content Include="Resources\Delete Icon.png" />
     <Content Include="Resources\favicon.ico" />
@@ -288,6 +293,7 @@
     <Content Include="Views\Cart\CartItem.cshtml" />
     <Content Include="Views\Team\MapLicense.cshtml" />
     <Content Include="Views\Team\RevokeLicense.cshtml" />
+    <Content Include="Views\Tab\Home.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

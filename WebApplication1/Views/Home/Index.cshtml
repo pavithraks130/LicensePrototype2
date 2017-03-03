@@ -1,54 +1,92 @@
 ﻿
 @{
-    ViewBag.Title = " FLUKE Calibration";
+    ViewBag.Title = "Home";
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<h2> FLUKE Calibration</h2>
-<style type="text/css" style="display: none !important;">
-    #SlideshowImages {
-        margin: 50px auto;
-        position: relative;
-        width: 200px;
-        height: 200px;
-        padding: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    }
+<html>
+<body background="~/Resources/Background/Background2.PNG">
+    <div>
+     
+        @*<td align="left" valign="top">*@
+            <!--Marquee Section-->
+            <div>
 
-        #SlideshowImages > div {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
+                <table border="0" cellspacing="0" cellpadding="0" class="Breadcrumbh_Bar">
+                    <tbody>
+                        <tr>
+                            @*<td width="8"><span style="width:8px; float:left; display:inline; height:23px; background:url(../Resources/favicon.ico) -0px -5px;"></span></td>*@
+                            <td class="Light_Blue_BG">
+                                <div class="Content_Bar" style="width:950px;">
+                                    <marquee behavior="scroll" direction="left" id="marquee" onkeydown="this.setAttribute('scrollamount', 0, 0);" onmouseover="this.setAttribute('scrollamount', 0, 0);" onmouseout="this.setAttribute('scrollamount', 6, 0);" scrollamount="6">
+                                        <strong>Fluke Calibration is a leader in precision calibration instruments, equipment, service and software for electrical, RF, temperature, pressure and flow measurements.</strong>
+                                    </marquee>
+                                </div>
+                            </td>
+                            <td width="22" align="center" valign="middle" class="Light_Blue_BG">
+                                <input type="button" value="Pause" id="marqueeControlButton" onclick="controlMarquee();" style="display:none">
+                                <img id="image3" alt="stop" src="../Resources/favicon.ico" width="19" height="19" onclick="controlMarquee();">
+                                <img id="image4" alt="start" width="19" height="19" src="../Resources/favicon.ico" onclick="controlMarquee();" style="display:none;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!--Marquee Section-->
+        </td>
+
+    </div>
+    <div><h1> FLUKE Calibration</h1></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <style type="text/css" style="display: none !important;">
+        #SlideshowImages {
+            margin: 50px auto;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
         }
-</style>
-<script type="text/javascript">
 
-    $(document).ready(function()
-    {
+            #SlideshowImages > div {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+    </style>
+    <script type="text/javascript">
+
+    $(document).ready(function () {
         $("#slideshow > div:gt(0)").hide();
-        setInterval(function()
-        {
+        setInterval(function () {
             $('#SlideshowImages > div:first').fadeOut(1000).next().fadeIn(1000).end().appendTo('#SlideshowImages');
-        }, 2500);
+        }, 3000);
     });
-</script>
-<div class="float-left" id="SlideshowImages">
-    <img />
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-96270-video-212x100.jpg" height="300" width="600"> </div>
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-generic-enews-212x100.jpg" height="300" width="600"> </div>
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003965-6270A-fcal-home-image-970x374.jpg" height="300" width="600"> </div>
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6007651a-en-2271a-fcal-home-slideshow-image-970x374.jpg" height="300" width="600"> </div>
-</div>
-<img />
-<img />
-<img />
-<div class="float-right" id="SlideshowImages1">
-    <img />
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s1.PNG" height="300" width="300"> </div>
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s3.PNG" height="300" width="300"> </div>
-    <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s2.PNG" height="300" width="300"> </div>
-</div>
+    </script>
+    <div class="float-left" id="SlideshowImages">
+        <img />
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-96270-video-212x100.jpg" height="300" width="600"> </div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-generic-enews-212x100.jpg" height="300" width="600"> </div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003965-6270A-fcal-home-image-970x374.jpg" height="300" width="600"> </div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6007651a-en-2271a-fcal-home-slideshow-image-970x374.jpg" height="300" width="600"> </div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/6003440-96270-video-212x100.jpg" height="300" width="600"> </div>
+        <div><img src="~/Catalog/Images/Thumbs/Slide Images/f-3540fc_01a-708x490.png" height="300" width="600" /></div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/f-c1730_01a_c.png" height="300" width="600" /></div>
+        <div><img src="~/Catalog/Images/Thumbs/Slide Images/f-cxt1000_02a_h.png" height="300" width="600" /></div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/f-tl221_01b_h.png" height="300" width="600" /></div>
+    </div>
+
+    <div class="float-right col-md-13" id="SlideshowImages1">
+        <img />
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s1.PNG" height="300" width="300"> </div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s3.PNG" height="300" width="300"> </div>
+        <div> <img src="~/Catalog/Images/Thumbs/Slide Images/s2.PNG" height="300" width="300"> </div>
+    </div>
+</body>
+</html>
+
 
 
