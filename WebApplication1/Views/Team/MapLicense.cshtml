@@ -5,7 +5,7 @@
         $('.btn-save').click(function () {
             var isPostEnabled = true;
             i = 0;
-            $('input[type=radio]:checked').each(function () {
+            $('input[type=checkbox]:checked').each(function () {
                 i++;
             });
             if (i == 0) {
@@ -63,7 +63,7 @@
                         {
                             <tr style="">
                                 <td>
-                                    <label class="control-label"><input type="radio" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
+                                    <label class="control-label"><input type="checkbox" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
                                 </td>
                             </tr>
                         }
