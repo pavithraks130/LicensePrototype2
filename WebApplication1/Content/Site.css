@@ -31,6 +31,26 @@ body {
 }
     */
 
+/* Home layout slideshow image properties layout
+----------------------------------------------------------*/
+#SlideshowImages {
+    margin: 50px auto;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+    #SlideshowImages > div {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+    }
+
+
 .navbar-fixed-bottom-custom {
     height: 40px;
     vertical-align: middle;
@@ -801,7 +821,7 @@ tr.pager td {
 
 
 
-   #delete-item {
+    #delete-item {
         background: url('../Resources/Delete Icon.png') no-repeat top left;
         display: block;
         width: 150px;
