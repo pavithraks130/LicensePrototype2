@@ -110,7 +110,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLogic\BaseLogic.cs" />
     <Compile Include="ServiceLogic\LicenseLogic.cs" />
+    <Compile Include="ServiceLogic\ProductLogic.cs" />
+    <Compile Include="ServiceLogic\ProductSubscriptionMappingLogic.cs" />
     <Compile Include="ServiceLogic\RoleLogic.cs" />
+    <Compile Include="ServiceLogic\SusbscriptionLogic.cs" />
     <Compile Include="ServiceLogic\TeamMemberLogic.cs" />
     <Compile Include="ServiceLogic\UserLicenseLogic.cs" />
     <Compile Include="ServiceLogic\UserLogic.cs" />

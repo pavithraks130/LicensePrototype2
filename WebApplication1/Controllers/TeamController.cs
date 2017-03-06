@@ -10,10 +10,10 @@ using License.Logic.ServiceLogic;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using TeamMembers = License.Model.Model.TeamMembers;
+using TeamMembers = License.Model.TeamMembers;
 
 namespace WebApplication1.Controllers
 {
@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
 
         private TeamModel LoadTeamMember()
         {
-            License.Model.Model.UserInviteList inviteList = new UserInviteList();
+            License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
 
@@ -80,7 +80,7 @@ namespace WebApplication1.Controllers
 
         public ActionResult Subscriptions()
         {
-            IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
+            IEnumerable<License.Model.UserSubscription> subscriptionList;
             subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
             LicenseSessionState.Instance.SubscriptionList = subscriptionList;
             return View(subscriptionList);
@@ -166,12 +166,11 @@ namespace WebApplication1.Controllers
             foreach (var obj in subscriptionList)
             {
                 LicenseMapModel model = new LicenseMapModel();
-                model.SubscriptionName = obj.SubscriptionName;
                 model.IsDisabled = (obj.LicenseDetails.AvailableLicenseCount == 0);
                 model.UserSubscriptionId = obj.Id;
                 if (data.Count > 0)
                 {
-                    var ul = data.FirstOrDefault(u => u.License.SubscriptionId == obj.Id);
+                    var ul = data.FirstOrDefault(u => u.License.UserSubscriptionId == obj.Id);
                     model.IsSelected = ul != null;
                     model.InitialSelected = model.IsSelected;
                     if (ul != null)
@@ -211,11 +210,10 @@ namespace WebApplication1.Controllers
                     if (obj1 != null)
                     {
                         LicenseMapModel model = new LicenseMapModel();
-                        model.SubscriptionName = obj.SubscriptionName;
                         model.IsDisabled = (obj.LicenseDetails.AvailableLicenseCount == 0);
                         model.UserSubscriptionId = obj.Id;
                         model.IsSelected = false;
-                        var ul = data.FirstOrDefault(u => u.License.SubscriptionId == obj.Id);
+                        var ul = data.FirstOrDefault(u => u.License.UserSubscriptionId == obj.Id);
                         if (ul != null)
                             model.ExistingUserLicenseId = ul.Id;
                         licenseMapModelList.Add(model);
@@ -246,7 +244,7 @@ namespace WebApplication1.Controllers
                 {
                     if (data.IsSelected)
                     {
-                        License.Model.Model.UserLicense lic = new License.Model.Model.UserLicense();
+                        License.Model.UserLicense lic = new License.Model.UserLicense();
                         lic.UserId = userId;
                         var obj = LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId);
                         lic.LicenseId = obj.LicenseDetails.LicenseId;

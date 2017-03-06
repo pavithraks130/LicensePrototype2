@@ -287,7 +287,6 @@
     <Content Include="Views\Cart\PaymentGateway.cshtml" />
     <Content Include="Views\Cart\DoPayment.cshtml" />
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
-    <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\CartDetails.cshtml" />
     <Content Include="Views\Product\ProductCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />

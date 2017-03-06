@@ -8,19 +8,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace License.Core.Model
 {
-    public class UserLicense
+    public class Subscription
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        public string UserId { get; set; }
-
-        public int LicenseId { get; set; }
-
-        [ForeignKey("UserId")]
-        public AppUser User { get; set; }
-
-        [ForeignKey("LicenseId")]
-        public virtual LicenseData License { get; set; }
+        public string SubscriptionName { get; set; }
     }
 }

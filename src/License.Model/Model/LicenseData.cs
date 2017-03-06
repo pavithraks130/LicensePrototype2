@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model.Model
+namespace License.Model
 {
     public class LicenseData
     {
@@ -14,8 +14,12 @@ namespace License.Model.Model
 
         public string LicenseKey { get; set; }
 
-        public int SubscriptionId { get; set; }
+        public int UserSubscriptionId { get; set; }
+
+        public int ProductId { get; set; }
         
         public UserSubscription Subscription { get; set; }
+
+        public Product Product { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.Model.Model;
+using License.Model;
 
 namespace License.Logic.ServiceLogic
 {

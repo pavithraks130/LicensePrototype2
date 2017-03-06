@@ -29,12 +29,13 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.Product, LicenseServer.DataModel.Product>();
             cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>();
 
-            cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>();
+            cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>()
+                .ForMember(dest => dest.SubDetails, opt => opt.MapFrom(src => src.SubDetails));
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionType, LicenseServer.Core.Model.SubscriptionType>();
 
             cfg.CreateMap<LicenseServer.Core.Model.SubscriptionDetail, LicenseServer.DataModel.SubscriptionDetails>();
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionDetails, LicenseServer.Core.Model.SubscriptionDetail>();
-            
+
             cfg.CreateMap<LicenseServer.Core.Model.UserSubscription, LicenseServer.DataModel.UserSubscription>();
             cfg.CreateMap<LicenseServer.DataModel.UserSubscription, LicenseServer.Core.Model.UserSubscription>();
 

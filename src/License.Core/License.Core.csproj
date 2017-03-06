@@ -120,10 +120,20 @@
     <Compile Include="Migrations\201703011701556_ChangesToDataTypee.Designer.cs">
       <DependentUpon>201703011701556_ChangesToDataTypee.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703050517490_ChangesToSubscription1.cs" />
+    <Compile Include="Migrations\201703050517490_ChangesToSubscription1.Designer.cs">
+      <DependentUpon>201703050517490_ChangesToSubscription1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703060459375_ChangesToSubscriptionTbl.cs" />
+    <Compile Include="Migrations\201703060459375_ChangesToSubscriptionTbl.Designer.cs">
+      <DependentUpon>201703060459375_ChangesToSubscriptionTbl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
+    <Compile Include="Model\Product.cs" />
     <Compile Include="Model\Role.cs" />
+    <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\TeamMembers.cs" />
     <Compile Include="Model\UserLicense.cs" />
     <Compile Include="Model\UserSubscription.cs" />
@@ -142,6 +152,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703011701556_ChangesToDataTypee.resx">
       <DependentUpon>201703011701556_ChangesToDataTypee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703050517490_ChangesToSubscription1.resx">
+      <DependentUpon>201703050517490_ChangesToSubscription1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703060459375_ChangesToSubscriptionTbl.resx">
+      <DependentUpon>201703060459375_ChangesToSubscriptionTbl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
