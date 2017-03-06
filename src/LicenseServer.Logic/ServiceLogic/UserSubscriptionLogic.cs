@@ -24,27 +24,39 @@ namespace LicenseServer.Logic
             SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
             UserSubscription sub = null;
             SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
+
             Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<DataModel.UserSubscription, Core.Model.UserSubscription>(subscription);
             var obj = Work.UserSubscriptionRepository.Create(subs);
             Work.UserSubscriptionRepository.Save();
+
             if (obj != null)
             {
                 proDtls.SubscriptionTypeId = obj.SubscriptionTypeId;
                 proDtls.SubscriptionDate = obj.SubscriptionDate;
+                proDtls.OrderdQuantity = obj.Quantity;
                 sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
                 proDtls.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
                 proDtls.SubscriptionType = typeLogic.GetById(obj.SubscriptionTypeId);
-                proDtls.Products = detailsLogic.GetSubscriptionDetails(proDtls.SubscriptionTypeId).Select(p => p.Product).ToList();
+                var details = detailsLogic.GetSubscriptionDetails(proDtls.SubscriptionTypeId);
+                foreach (var dt in details)
+                {
+                    ProductDetails dtls = new ProductDetails();
+                    dtls.Product = dt.Product;
+                    dtls.QtyPerSubscription = dt.Quantity;
+                    proDtls.Products.Add(dtls);
+                }
             }
             return proDtls;
         }
 
         public UserSubscriptionList CreateUserSubscription(List<UserSubscription> subsList, string userId)
         {
-            UserSubscriptionList userSubscriptionList = new UserSubscriptionList();
-            userSubscriptionList.UserId = userId;
             UserLogic logic = new UserLogic();
             User userObj = logic.GetUserById(userId);
+
+            UserSubscriptionList userSubscriptionList = new UserSubscriptionList();
+
+            userSubscriptionList.UserId = userId;
             int teamId = userObj.OrganizationId;
             foreach (var subObj in subsList)
             {

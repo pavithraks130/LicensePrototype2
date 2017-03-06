@@ -16,30 +16,28 @@ namespace License.Logic.ServiceLogic
             foreach (var obj in subsList)
             {
                 var subObj = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
-                var licenseList = logic.GetLicenseList(subObj.Id);
-                foreach (var lic in licenseList)
-                    subObj.LicenseDetails = GetLicenseDetailModel(lic);
+                subObj.LicenseList = logic.GetLicenseList(subObj.Id);
                 subscriptionList.Add(subObj);
             }
             return subscriptionList;
         }
 
-        public LicenseDetailModel GetLicenseDetailModel(LicenseData lic)
-        {
-            LicenseDetailModel model = new LicenseDetailModel();
-            model.LicenseId = lic.Id;
-            model.LicenseKey = lic.LicenseKey;
-            var key = model.LicenseKey.Split(new char[] { '-' })[0];
-            var data = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(key, true);
-            var splitData = data.Split(new char[] { '^' });
-            model.ProductCode = splitData[0];
-            model.TotalLicenseCount = Convert.ToInt32(splitData[1]);
-            model.ExpireDate = Convert.ToDateTime(splitData[2]);
-            UserLicenseLogic userLicenseLogic = new UserLicenseLogic();
-            model.UsedLicenseCount = userLicenseLogic.UserLicenseCount(lic.Id);
-           
-            return model;
-        }
+        //public LicenseDetailModel GetLicenseDetailModel(LicenseData lic)
+        //{
+        //    LicenseDetailModel model = new LicenseDetailModel();
+        //    model.LicenseId = lic.Id;
+        //    model.LicenseKey = lic.LicenseKey;
+        //    var key = model.LicenseKey.Split(new char[] { '-' })[0];
+        //    var data = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(key, true);
+        //    var splitData = data.Split(new char[] { '^' });
+        //    model.ProductCode = splitData[0];
+        //    model.TotalLicenseCount = Convert.ToInt32(splitData[1]);
+        //    model.ExpireDate = Convert.ToDateTime(splitData[2]);
+        //    UserLicenseLogic userLicenseLogic = new UserLicenseLogic();
+        //    model.UsedLicenseCount = userLicenseLogic.UserLicenseCount(lic.Id);
+
+        //    return model;
+        //}
 
         public int CreateSubscription(UserSubscription subs)
         {

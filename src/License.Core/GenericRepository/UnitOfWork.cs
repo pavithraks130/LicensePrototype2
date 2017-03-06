@@ -12,23 +12,23 @@ namespace License.Core.GenericRepository
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
 
-        private LicenseRepository<Product> _productLicenseRepository;
-        public LicenseRepository<Product> ProductLicenseRepository
-        {
-            get { return _productLicenseRepository ?? (_productLicenseRepository = new LicenseRepository<Product>(_dbContext)); }
-        }
+        //private LicenseRepository<Product> _productLicenseRepository;
+        //public LicenseRepository<Product> ProductLicenseRepository
+        //{
+        //    get { return _productLicenseRepository ?? (_productLicenseRepository = new LicenseRepository<Product>(_dbContext)); }
+        //}
         
-        private LicenseRepository<Subscription> _subscriptionRepository;
-        public LicenseRepository<Subscription> SubscriptionRepository
-        {
-            get { return _subscriptionRepository ?? (_subscriptionRepository = new LicenseRepository<Subscription>(_dbContext)); }
-        }
+        //private LicenseRepository<Subscription> _subscriptionRepository;
+        //public LicenseRepository<Subscription> SubscriptionRepository
+        //{
+        //    get { return _subscriptionRepository ?? (_subscriptionRepository = new LicenseRepository<Subscription>(_dbContext)); }
+        //}
 
-        private LicenseRepository<ProductSubscriptionMapping> _productSubscriptionMapping;
-        public LicenseRepository<ProductSubscriptionMapping> ProductSubscriptionMapping
-        {
-            get { return _productSubscriptionMapping ?? ( _productSubscriptionMapping = new LicenseRepository<Model.ProductSubscriptionMapping>(_dbContext)); }
-        }
+        //private LicenseRepository<ProductSubscriptionMapping> _productSubscriptionMapping;
+        //public LicenseRepository<ProductSubscriptionMapping> ProductSubscriptionMapping
+        //{
+        //    get { return _productSubscriptionMapping ?? ( _productSubscriptionMapping = new LicenseRepository<Model.ProductSubscriptionMapping>(_dbContext)); }
+        //}
 
         private LicenseRepository<TeamMembers> _userInviteLicenseRepository;
         public LicenseRepository<TeamMembers> UserInviteLicenseRepository

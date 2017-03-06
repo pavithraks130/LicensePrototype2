@@ -13,8 +13,6 @@ namespace License.Model
         public string SubscriptionName { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
-
-        public virtual ICollection<LicenseData> LicenseData { get; set; }
-
+        
     }
 }

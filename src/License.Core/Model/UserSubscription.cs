@@ -22,7 +22,9 @@ namespace License.Core.Model
         [ForeignKey("UserId")]
         public AppUser User { get; set; }
 
-        [ForeignKey("SubscriptionId")]
-        public Subscription Subscription { get; set; }
+        public int Quantity { get; set; }
+
+        //[ForeignKey("SubscriptionId")]
+        //public Subscription Subscription { get; set; }
     }
 }

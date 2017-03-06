@@ -20,6 +20,8 @@ namespace License.Model
 
         public Subscription Subscription { get; set; }
 
-        public LicenseDetailModel LicenseDetails { get; set; }
+        public List<LicenseData> LicenseList { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

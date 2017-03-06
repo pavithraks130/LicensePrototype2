@@ -31,11 +31,11 @@ namespace License.Core.DBContext
         
         public DbSet<TeamMembers> UserInvite { get; set; }
 
-        public DbSet<Product> Product { get; set; }
+        //public DbSet<Product> Product { get; set; }
 
-        public DbSet<Subscription> Subscription { get; set; }
+        //public DbSet<Subscription> Subscription { get; set; }
 
-        public DbSet<ProductSubscriptionMapping> ProductSubscriptionMapping { get; set; }
+        //public DbSet<ProductSubscriptionMapping> ProductSubscriptionMapping { get; set; }
         
         public DbSet<UserSubscription> UserSubscription { get; set; }
 

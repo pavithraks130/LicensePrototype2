@@ -128,12 +128,18 @@
     <Compile Include="Migrations\201703060459375_ChangesToSubscriptionTbl.Designer.cs">
       <DependentUpon>201703060459375_ChangesToSubscriptionTbl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703060927430_RemovedSunscriptionTables.cs" />
+    <Compile Include="Migrations\201703060927430_RemovedSunscriptionTables.Designer.cs">
+      <DependentUpon>201703060927430_RemovedSunscriptionTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703061434397_ChangestoTheDB.cs" />
+    <Compile Include="Migrations\201703061434397_ChangestoTheDB.Designer.cs">
+      <DependentUpon>201703061434397_ChangestoTheDB.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
-    <Compile Include="Model\Product.cs" />
     <Compile Include="Model\Role.cs" />
-    <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\TeamMembers.cs" />
     <Compile Include="Model\UserLicense.cs" />
     <Compile Include="Model\UserSubscription.cs" />
@@ -158,6 +164,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703060459375_ChangesToSubscriptionTbl.resx">
       <DependentUpon>201703060459375_ChangesToSubscriptionTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703060927430_RemovedSunscriptionTables.resx">
+      <DependentUpon>201703060927430_RemovedSunscriptionTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703061434397_ChangestoTheDB.resx">
+      <DependentUpon>201703061434397_ChangestoTheDB.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

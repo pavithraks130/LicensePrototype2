@@ -22,7 +22,7 @@ namespace License.Core.Model
         [ForeignKey("UserSubscriptionId")]
         public UserSubscription Subscription { get; set; }
 
-        [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        //[ForeignKey("ProductId")]
+        //public Product Product { get; set; }
     }
 }

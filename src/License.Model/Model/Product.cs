@@ -12,6 +12,8 @@ namespace License.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public string ProductCode { get; set; }
+        public int QtyPerSubscription { get; set; }
+
     }
 
     public class ProductSubscriptionMapping

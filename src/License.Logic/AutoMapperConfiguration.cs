@@ -32,14 +32,14 @@ namespace License.Logic
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
-            cfg.CreateMap<Model.Product, Core.Model.Product>();
-            cfg.CreateMap<Core.Model.Product, Model.Product>();
+            //cfg.CreateMap<Model.Product, Core.Model.Product>();
+            //cfg.CreateMap<Core.Model.Product, Model.Product>();
 
-            cfg.CreateMap<Model.ProductSubscriptionMapping, Core.Model.ProductSubscriptionMapping>();
-            cfg.CreateMap<Core.Model.ProductSubscriptionMapping, Model.ProductSubscriptionMapping>();
+            //cfg.CreateMap<Model.ProductSubscriptionMapping, Core.Model.ProductSubscriptionMapping>();
+            //cfg.CreateMap<Core.Model.ProductSubscriptionMapping, Model.ProductSubscriptionMapping>();
 
-            cfg.CreateMap<Model.Subscription, Core.Model.Subscription>();
-            cfg.CreateMap<Core.Model.Subscription, Model.Subscription>();
+            //cfg.CreateMap<Model.Subscription, Core.Model.Subscription>();
+            //cfg.CreateMap<Core.Model.Subscription, Model.Subscription>();
 
             cfg.CreateMap<License.Core.Model.UserSubscription, License.Model.UserSubscription>();
             cfg.CreateMap<License.Model.UserSubscription, License.Core.Model.UserSubscription>();

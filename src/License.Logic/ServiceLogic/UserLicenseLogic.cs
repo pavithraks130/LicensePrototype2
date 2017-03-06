@@ -30,7 +30,7 @@ namespace License.Logic.ServiceLogic
             return Work.UserLicenseRepository.Delete(id);
         }
 
-        public int UserLicenseCount(int licenseId)
+        public int GetUserLicenseCount(int licenseId)
         {
             return Work.UserLicenseRepository.GetData(l => l.LicenseId == licenseId).Count();
         }
@@ -39,6 +39,12 @@ namespace License.Logic.ServiceLogic
         {
             var obj = Work.UserLicenseRepository.GetById(id);
             return AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(obj);
+        }
+
+        public int GetUserLicenseCount(int userSubscriptionId, int productId)
+        {
+            var licenseIdList = Work.LicenseDataRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId && l.ProductId == productId).Select(l => l.Id).ToList();
+            return Work.UserLicenseRepository.GetData(ul => licenseIdList.Contains(ul.Id)).Count();
         }
 
         public List<UserLicense> GetUserLicense(string userId)
