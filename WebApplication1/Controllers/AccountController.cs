@@ -24,11 +24,14 @@ namespace License.MetCalWeb.Controllers
     {
         private UserLogic logic = new UserLogic();
 
+        private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
         {
             get
             {
-                return HttpContext.GetOwinContext().Authentication;
+                if(_authManager == null)
+                    _authManager= HttpContext.GetOwinContext().Authentication;
+                return _authManager;
             }
         }
 
@@ -93,7 +96,9 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
+                {
                     logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                }
                 if (logic.RoleManager == null)
                     logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 AppUser user = logic.AutheticateUser(model.Email, model.Password);

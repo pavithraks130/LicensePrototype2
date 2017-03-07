@@ -30,7 +30,7 @@ namespace License.MetCalWeb
         public bool IsTeamAdmin { get; set; }
 
         public List<MetCalWeb.Models.LicenseMapModel> LicenseMapModelList { get; set; }
-        public IEnumerable<Model.UserSubscription> SubscriptionList { get; set; }
+        public IEnumerable<License.MetCalWeb.Models.SubscriptionProductModel> SubscriptionList { get; set; }
 
     }
 }

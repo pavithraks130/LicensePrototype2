@@ -18,6 +18,12 @@ namespace License.Logic.ServiceLogic
             return dataList;
         }
 
+        public LicenseData GetUnassignedLicense(int userSubscriptionId, int productId)
+        {
+            var obj = Work.LicenseDataRepository.GetData(f => f.UserSubscriptionId == userSubscriptionId && f.ProductId == productId && f.IsMapped == false).FirstOrDefault();
+            return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
+        }
+
         public void CreateLicenseData(LicenseData data)
         {
             var obj = AutoMapper.Mapper.Map<LicenseData, License.Core.Model.LicenseData>(data);

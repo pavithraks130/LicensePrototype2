@@ -98,7 +98,7 @@ namespace WebApplication1.Controllers
 
                 subscriptionProList.Add(model);
             }
-            
+            LicenseSessionState.Instance.SubscriptionList = subscriptionProList;
             return View(subscriptionProList);
         }
 
@@ -181,18 +181,7 @@ namespace WebApplication1.Controllers
             var subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
             foreach (var obj in subscriptionList)
             {
-                //LicenseMapModel model = new LicenseMapModel();
-                //model.IsDisabled = (obj.LicenseDetails.AvailableLicenseCount == 0);
-                //model.UserSubscriptionId = obj.Id;
-                //if (data.Count > 0)
-                //{
-                //    var ul = data.FirstOrDefault(u => u.License.UserSubscriptionId == obj.Id);
-                //    model.IsSelected = ul != null;
-                //    model.InitialSelected = model.IsSelected;
-                //    if (ul != null)
-                //        model.ExistingUserLicenseId = ul.Id;
-                //}
-                //licenseMapModelList.Add(model);
+               
             }
 
             LicenseSessionState.Instance.LicenseMapModelList = licenseMapModelList;
@@ -262,7 +251,7 @@ namespace WebApplication1.Controllers
                     {
                         License.Model.UserLicense lic = new License.Model.UserLicense();
                         lic.UserId = userId;
-                        var obj = LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId);
+                        //var obj = LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId);
                         //lic.LicenseId = obj.LicenseDetails.LicenseId;
                        // LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId).LicenseDetails.UsedLicenseCount += 1;
                         logic.CreateUserLicense(lic);

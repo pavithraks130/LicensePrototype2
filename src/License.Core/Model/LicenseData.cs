@@ -19,10 +19,9 @@ namespace License.Core.Model
 
         public int UserSubscriptionId { get; set; }
 
+        public bool IsMapped { get; set; }
+
         [ForeignKey("UserSubscriptionId")]
         public UserSubscription Subscription { get; set; }
-
-        //[ForeignKey("ProductId")]
-        //public Product Product { get; set; }
     }
 }
