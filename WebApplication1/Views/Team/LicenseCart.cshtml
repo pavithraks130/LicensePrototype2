@@ -1,0 +1,266 @@
+﻿
+@model List<License.MetCalWeb.Models.LicenseMapModel>
+<!doctype html>
+<html lang="en">
+<head>
+    <link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        var subscriptionCollection_15Pack = @Html.Raw(Json.Encode(ViewBag.SubscriptionCollection[0].LicenseDetails.AvailableLicenseCount));
+        var subscriptionCollection = @Html.Raw(Json.Encode(ViewBag.SubscriptionCollection));
+        alert("subscriptionCollection_15Pack====>" +subscriptionCollection_15Pack);
+      
+        //alert("licence count" +subscriptionCollection_15Pack );
+        function handleCardDrop(event, ui) {
+
+            var slotNumber = $(this).data('number') + "-pack";
+            var cardNumber = ui.draggable.data('number');
+            //alert(cardNumber + "==" + slotNumber);
+            // If the card was dropped to the correct slot,
+            // change the card colour, position it directly
+            // on top of the slot, and prevent it being dragged
+            // again
+
+            if (slotNumber != cardNumber) {
+                ui.draggable.addClass('correct');
+                ui.draggable.draggable('disable');
+                $(this).droppable('disable');
+                ui.draggable.position({ of: $(this), my: 'left top', at: 'left top' });
+                ui.draggable.draggable('option', 'revert', false);
+                correctCards++;
+            }
+
+            // If all the cards have been placed correctly then display a message
+            // and reset the cards for another go
+
+            if (correctCards == 10) {
+                $('#successMessage').show();
+                $('#successMessage').animate({
+                    left: '380px',
+                    top: '200px',
+                    width: '400px',
+                    height: '100px',
+                    opacity: 1
+                });
+            }
+
+        }
+        var correctCards = 0;
+        $(init);
+
+        function init() {
+
+            // Hide the success message
+            $('#successMessage').hide();
+            $('#successMessage').css({
+                left: '580px',
+                top: '250px',
+                width: 0,
+                height: 0
+            });
+
+            // Reset the game
+            correctCards = 0;
+            $('#admin_license_type').html('');
+            $('#selected_user_license').html('');
+
+             //Create the pile of shuffled cards
+            //var numbers=[];
+            //for(var i=0;i<subscriptionCollection_15Pack ; i++)
+            //{
+            //    numbers.push("15-pack");
+
+            //}
+
+            var numbers1=[];
+            var arraylength = 0;
+
+            for(var j=0 ; j < subscriptioncollection.length;j++)
+            {
+                var subscriptioncollection_type_count = viewbag.subscriptioncollection[j].licensedetails.availablelicensecount;
+                arraylength += subscriptioncollection_type_count;
+                var subscriptioncollection_type =viewbag.subscriptioncollection[j].subscriptionname;
+                alert("subscriptiontype :" + subscriptioncollection_type);
+                for(var index = 0;index <subscriptioncollection_type_count;index++)
+                {
+                    numbers1.push("subscriptioncollection_type");
+                    alert("subscriptioncollection====>" + numbers1[index]);
+                }
+            }
+            //alert(numbers[i]);
+            //var numbers = ['1-pack', '2-pack', '3-pack', '4-pack', '5-pack', '6-pack', '7-pack', '8-pack', '9-pack', '10-pack', '11-pack'];
+            //numbers.sort(function () { return Math.random() - .5 });
+
+            for (var i = 0; i < subscriptionCollection_15Pack; i++) {
+                $('<div>' + numbers1[i] + '</div>').data('number', numbers1[i]).attr('id', 'card' + i).appendTo('#admin_license_type').draggable({
+                    containment: '#content',
+                    stack: '#admin_license_type div',
+                    cursor: 'move',
+                    revert: true
+                });
+            }
+
+            // Create the card slots
+            var words = ['one-pack', 'two-pack', 'three-pack', 'four-pack', 'five-pack', 'six-pack', 'seven-pack', 'eight-pack', 'nine-pack', 'ten-pack'];
+            for (var i = 1; i <= 10; i++) {
+                $('<div>' + words[i - 1] + '</div>').data('number', i).appendTo('#selected_user_license').droppable({
+                    accept: '#admin_license_type div',
+                    hoverClass: 'hovered',
+                    drop: handleCardDrop
+                });
+            }
+
+        }
+
+    </script>
+
+</head>
+<body>
+    @*<div style="border:1px  solid #333;">*@
+    <table class=" col-md-50" style="border:1px  solid #333;">
+        <tr>
+            <th class="col-md-20"><h2>Selected User:</h2><h4>Sruthi@fluke.com</h4></th>
+            <th class="col-md-30"><h2>Admin:</h2><h4>Charan.Shetty@fluke.com</h4></th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div id="content">
+                    <h3>15 pack License</h3>
+                    <div id="admin_license_type"> </div>
+
+                    <div id="selected_user_license"> </div>
+
+                    <div id="successMessage">
+                        <h2>You did it!</h2>
+                        <button onclick="init()">Play Again</button>
+                    </div>
+                </div>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<!DOCTYPE HTML>
+    <html>
+    <head>
+        <style>
+            #div1, #div2 {
+                float: left;
+                width: 450px;
+                height: 75px;
+                margin: 10px;
+                padding: 0px;
+                border: 3px solid black;
+                background-color: burlywood;
+            }
+
+            #div2 {
+                float: right;
+                width: 200px;
+                height: 150px;
+                margin: 10px;
+                padding: 0px;
+                border: 3px solid black;
+                background-color: cadetblue;
+            }
+        </style>
+        <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+        </script>
+    </head>
+    <body>
+        <h2>Drag and Drop</h2>
+        <p>Drag the item back and forth between the two  elements.</p>
+        @foreach (var obj in Model)
+        {
+        <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+            @for (int i = 0; i < obj.LicenseDetails.AvailableLicenseCount; i++)
+            {
+            <img src="~/ProductImages/CartItem/B5.PNG" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31" />
+            }
+        </div>
+            break;
+        }
+        <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+    </body>
+    </html>*@

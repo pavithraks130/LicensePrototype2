@@ -88,7 +88,9 @@
                         {
                                     <td class="col-md-4">
                                         <button class="alert-success">
-                                            @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
+                                            @*@Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)*@
+                                            @Html.ActionLink("Add License", "LicenseCart", "Team", new { userId = @t.InviteeUserId }, null)
+
                                         </button>
                                         <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { userId = @t.InviteeUserId }, null)</button>
                                     </td>

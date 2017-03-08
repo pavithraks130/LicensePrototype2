@@ -91,6 +91,7 @@ namespace WebApplication1.Controllers
 
             return View();
         }
+      
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -191,7 +192,14 @@ namespace WebApplication1.Controllers
             UpdateLicense(SelectedSubscription);
             return RedirectToAction("TeamContainer", "Team");
         }
-
+        public ActionResult LicenseCart()
+        {
+            IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
+           subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
+            LicenseSessionState.Instance.SubscriptionList = subscriptionList;
+            ViewBag.SubscriptionCollection = subscriptionList;
+            return View();
+        }
 
         public ActionResult RevokeLicense(string userId)
         {
