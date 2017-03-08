@@ -24,13 +24,38 @@ namespace License.MetCalWeb.Controllers
     {
         private UserLogic logic = new UserLogic();
 
+        private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
         {
             get
             {
-                return HttpContext.GetOwinContext().Authentication;
+                if (_authManager == null)
+                    _authManager = HttpContext.GetOwinContext().Authentication;
+                return _authManager;
             }
         }
+        private AppUserManager _userManager = null;
+        public AppUserManager UserManager
+        {
+            get
+            {
+                if(_userManager == null)
+                    _userManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                return _userManager;
+            }
+        }
+
+        private AppRoleManager _roleManager = null;
+        public AppRoleManager RoleManager
+        {
+            get
+            {
+                if (_roleManager == null)
+                    _roleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                return _roleManager;
+            }
+        }
+
 
         public ActionResult Register()
         {
@@ -47,9 +72,9 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
-                    logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                    logic.UserManager = UserManager;
                 if (logic.RoleManager == null)
-                    logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                    logic.RoleManager = RoleManager;
 
                 LicenseServer.Logic.UserLogic serUserLogic = new LicenseServer.Logic.UserLogic();
                 LicenseServer.DataModel.Registration reg = new LicenseServer.DataModel.Registration();
@@ -93,9 +118,9 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
-                    logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                    logic.UserManager = UserManager;
                 if (logic.RoleManager == null)
-                    logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                    logic.RoleManager = RoleManager;
                 AppUser user = logic.AutheticateUser(model.Email, model.Password);
                 if (user != null)
                 {
@@ -142,7 +167,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
-                    logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                    logic.UserManager = UserManager;
                 IdentityResult result = logic.ResetPassword(userId, code, model.Password);
                 if (result.Succeeded)
                 {
@@ -174,7 +199,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 if (logic.UserManager == null)
-                    logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                    logic.UserManager = UserManager;
                 var user = logic.ForgotPassword(model.Email);
                 if (user == null)
                 {
