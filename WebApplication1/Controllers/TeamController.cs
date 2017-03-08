@@ -194,6 +194,11 @@ namespace WebApplication1.Controllers
         }
         public ActionResult LicenseCart(string userId)
         {
+
+            TempData["UserId"] = userId;
+            userLogic.UserManager = Request.GetOwinContext().Get<AppUserManager>();
+            userLogic.RoleManager = Request.GetOwinContext().Get<AppRoleManager>();
+            ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
             IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
            subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
             LicenseSessionState.Instance.SubscriptionList = subscriptionList;

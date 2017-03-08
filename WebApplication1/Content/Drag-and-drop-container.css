@@ -44,7 +44,7 @@ h1, h2, h3, h4 {
  
 #selected_user_license {
   /*margin: -225px 10px 10px 10px;*/
-   margin: -225px 10px 10px 10px;
+   margin: -625px 10px 10px 10px;
   background: #ddf;
 }
  
@@ -76,7 +76,7 @@ h1, h2, h3, h4 {
 
 #admin_license_type {
   width: 600px;
-  height: 380px;
+  height: 600px;
   padding: 20px;
   border: 2px solid #333;
   -moz-border-radius: 10px;
@@ -89,7 +89,7 @@ h1, h2, h3, h4 {
  
 /* Individual cards and slots */
  
-#selected_user_license div, #admin_license_type div {
+ #admin_license_type div {
   float: left;
   width: 58px;
   height: 78px;
@@ -100,7 +100,22 @@ h1, h2, h3, h4 {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  margin: 0 0 0 10px;
+  margin: 0px 0 0 10px;
+  background: #fff;
+}
+
+#selected_user_license div{
+  float: left;
+  width: 58px;
+  height: 78px;
+  padding: 0px;
+  padding-top: 40px;
+  padding-bottom:0px;
+  border: 2px solid #333;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  margin: -60px 0 20px 10px;
   background: #fff;
 }
  
