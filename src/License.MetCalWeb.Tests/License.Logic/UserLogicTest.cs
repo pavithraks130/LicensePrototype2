@@ -15,15 +15,40 @@ namespace License.MetCalWeb.Tests.License.Logic
     public class UserLogicTest
     {
         UserLogic logic = new UserLogic();
+        Moq.Mock<AppUserManager> manager;
+        Moq.Mock<AppRoleManager> rolemanager;
+        public UserLogicTest()
+        {
+            InitializerClass.Initialize();
+            var dbContext = ApplicationDbContext.Create();
+            UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
+            RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);
+            manager = new Moq.Mock<AppUserManager>(userStore);
+            rolemanager = new Moq.Mock<AppRoleManager>(roleStore);
+            logic.UserManager = manager.Object;
+            logic.RoleManager = rolemanager.Object;
+        }
+
         [TestMethod]
         public void GetUser()
         {
-            InitializerClass.Initialize();
-            UserStore<AppUser> userStore = new UserStore<AppUser>(ApplicationDbContext.Create());
-            var manager = new Moq.Mock<AppUserManager>(userStore);
-            logic.UserManager = manager.Object;
-            var users =  logic.GetUsers();
+            var users = logic.GetUsers();
             Assert.IsNotNull(users);
+        }
+
+        [TestMethod]
+        public void CrearUser()
+        {
+            Model.Model.Registration reg = new Model.Model.Registration();
+            reg.FirstName = "veeresh";
+            reg.LastName = "S";
+            reg.OrganizationName = "sidssol";
+            reg.Email = "veereshrdrpp@gmail.com";
+            reg.Password = "Test@1234";
+            reg.PhoneNumber = "1234567890";
+            var result = logic.CreateUser(reg);
+            Assert.AreEqual("true", result.Succeeded);
+
         }
     }
 }

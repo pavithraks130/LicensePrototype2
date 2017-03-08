@@ -124,7 +124,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\AccouontControllerTest.cs" />
     <Compile Include="InitializerClass.cs" />
     <Compile Include="License.Logic\UserLogicTest.cs" />
     <Compile Include="LicenseServer.Logic\OrganizationLogicTest.cs" />
@@ -166,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controller\" />
     <Folder Include="License.Model\" />
     <Folder Include="LicenseServer.Model\" />
   </ItemGroup>
