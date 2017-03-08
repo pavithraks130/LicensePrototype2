@@ -188,6 +188,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Drag-and-drop-container.css" />
     <Content Include="Content\Site.css" />
     <Content Include="EmailTemplate\EmailTemImages\colorschememapping.xml" />
     <Content Include="EmailTemplate\EmailTemImages\filelist.xml" />
@@ -205,6 +206,15 @@
     <Content Include="ProductImages\B3.PNG" />
     <Content Include="ProductImages\B4.PNG" />
     <Content Include="ProductImages\B5.PNG" />
+    <Content Include="ProductImages\CartItem\B5.PNG" />
+    <Content Include="ProductImages\CartItem\P1.PNG" />
+    <Content Include="ProductImages\CartItem\P2.PNG" />
+    <Content Include="ProductImages\CartItem\p3.PNG" />
+    <Content Include="ProductImages\CartItem\P4.PNG" />
+    <Content Include="ProductImages\CartItem\p5.PNG" />
+    <Content Include="ProductImages\CartItem\p6.PNG" />
+    <Content Include="ProductImages\CartItem\p7.PNG" />
+    <Content Include="ProductImages\CartItem\p8.PNG" />
     <Content Include="ProductImages\P1.PNG" />
     <Content Include="ProductImages\P2.PNG" />
     <Content Include="ProductImages\P4.PNG" />
@@ -230,6 +240,8 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.2.6.min.js" />
+    <Content Include="Scripts\jquery-ui-personalized-1.6rc4.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -296,6 +308,7 @@
     <Content Include="Views\Team\MapLicense.cshtml" />
     <Content Include="Views\Team\RevokeLicense.cshtml" />
     <Content Include="Views\Tab\Home.cshtml" />
+    <Content Include="Views\Team\LicenseCart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
