@@ -192,12 +192,12 @@ namespace WebApplication1.Controllers
             UpdateLicense(SelectedSubscription);
             return RedirectToAction("TeamContainer", "Team");
         }
-        public ActionResult LicenseCart()
+        public ActionResult LicenseCart(string userId)
         {
             IEnumerable<License.Model.Model.UserSubscription> subscriptionList;
            subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
             LicenseSessionState.Instance.SubscriptionList = subscriptionList;
-            ViewBag.SubscriptionCollection = subscriptionList;
+            ViewBag.SubscriptionCollection = Newtonsoft.Json.JsonConvert.SerializeObject(subscriptionList);
             return View();
         }
 
