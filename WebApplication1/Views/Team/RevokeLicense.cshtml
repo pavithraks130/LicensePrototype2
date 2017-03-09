@@ -50,14 +50,28 @@
                 <span>Below are the List of License for which team member is  subscribed.</span>
                 <div class="col-md-8">
                     <table class="table" style="border: none">
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            <tr style="">
-                                <td>
-                                    <label class="control-label"><input type="checkbox" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
-                                </td>
-                            </tr>
-                        }
+                       @for (int i = 0; i < Model.Count; i++)
+                       {
+                        <tr style="">
+                            <td>
+                                @Model[i].SubscriptionName
+                                <table class="table">
+                                    @for (int j = 0; j < Model[i].ProductList.Count; j++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <label class="control-label">
+                                                    <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].ProductList[j].IsSelected" class="checkbox-inline">
+                                                    @Model[i].ProductList[j].ProductName
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </td>
+                        </tr>
+                       }
                     </table>
                     <label style="display:none;color:red;" id="lblError">License  not selected to revoke</label>
                 </div>
