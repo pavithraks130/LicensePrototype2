@@ -14,7 +14,7 @@ using License.Logic.Common;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 

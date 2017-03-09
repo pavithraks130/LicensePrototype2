@@ -15,15 +15,16 @@ namespace License.Core.Model
 
         public string UserId { get; set; }
 
-        public string ServerUserId { get; set; }
-
         public int SubscriptionId { get; set; }
-
-        public string SubscriptionName { get; set; }
 
         public DateTime SubscriptionDate { get; set; }
 
         [ForeignKey("UserId")]
         public AppUser User { get; set; }
+
+        public int Quantity { get; set; }
+
+        //[ForeignKey("SubscriptionId")]
+        //public Subscription Subscription { get; set; }
     }
 }

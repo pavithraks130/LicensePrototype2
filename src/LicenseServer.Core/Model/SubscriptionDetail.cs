@@ -23,6 +23,6 @@ namespace LicenseServer.Core.Model
         public SubscriptionType SubscriptyType { get; set; }
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

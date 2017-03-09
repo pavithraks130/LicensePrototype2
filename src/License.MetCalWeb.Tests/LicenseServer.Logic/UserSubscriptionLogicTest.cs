@@ -56,8 +56,8 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
                     subs.Quantity = 4;
                     subs.UserId = userId;
                     subs.SubscriptionDate = DateTime.Now;
-                    var data = logic.CreateUserSubscription(subs);
-                    Assert.IsTrue(data.id > 0);
+                    var data = logic.CreateUserSubscription(subs,usr.OrganizationId);
+                    Assert.IsTrue(data != null);
                 }
                 else
                 {

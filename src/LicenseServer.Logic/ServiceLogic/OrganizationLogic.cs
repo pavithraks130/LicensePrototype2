@@ -19,9 +19,9 @@ namespace LicenseServer.Logic
             return teams;
         }
 
-        public Organization GetTeamById(object id)
+        public Organization GetTeamById(int id)
         {
-            var obj = Work.OrganizationRepository.GetById(id);
+            var obj = Work.OrganizationRepository.GetById( id);
             return AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(obj);
         }
 

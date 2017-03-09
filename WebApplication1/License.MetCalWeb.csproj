@@ -271,6 +271,7 @@
     <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\LicenseMapModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\SubscriptionProductModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -301,7 +302,6 @@
     <Content Include="Views\Cart\PaymentGateway.cshtml" />
     <Content Include="Views\Cart\DoPayment.cshtml" />
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
-    <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\CartDetails.cshtml" />
     <Content Include="Views\Product\ProductCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />

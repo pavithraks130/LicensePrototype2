@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using License.Core.Model;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 
 namespace License.Logic.ServiceLogic
@@ -18,7 +18,7 @@ namespace License.Logic.ServiceLogic
             var users = UserManager.Users.ToList();
             foreach (var u in users)
             {
-                User temp = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
+                User temp = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.User>(u);
                 usersList.Add(temp);
             }
             return usersList;
@@ -36,7 +36,7 @@ namespace License.Logic.ServiceLogic
             //if (t == null)
             //    t = logic.CreateTeam(new Model.Model.Organization() { Name = u.OrganizationName });
             //ur.OrganizationId = t.Id;
-            AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
+            AppUser user = AutoMapper.Mapper.Map<License.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
             {
@@ -45,7 +45,7 @@ namespace License.Logic.ServiceLogic
                 {
                     RoleLogic rolelogic = new RoleLogic();
                     rolelogic.RoleManager = RoleManager;
-                    result = rolelogic.CreateRole(new Model.Model.Role() { Name = roleName });
+                    result = rolelogic.CreateRole(new Model.Role() { Name = roleName });
                 }
                 var roleId = RoleManager.FindByName(roleName).Id;
                 UserManager.AddToRole(user.Id, roleName);
@@ -60,7 +60,7 @@ namespace License.Logic.ServiceLogic
         public User GetUserById(string id)
         {
             var u = UserManager.FindById(id);
-            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
+            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.User>(u);
             return user;
         }
 

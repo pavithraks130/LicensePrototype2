@@ -12,14 +12,16 @@ namespace License.Core.Model
     {
         [Key]
         public int Id { get; set; }
-
-        public string AdminUserId { get; set; }
-
+        
         public string LicenseKey { get; set; }
 
-        public int SubscriptionId { get; set; }
+        public int ProductId { get; set; }
 
-        [ForeignKey("SubscriptionId")]
+        public int UserSubscriptionId { get; set; }
+
+        public bool IsMapped { get; set; }
+
+        [ForeignKey("UserSubscriptionId")]
         public UserSubscription Subscription { get; set; }
     }
 }

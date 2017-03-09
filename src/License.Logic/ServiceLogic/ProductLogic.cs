@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.Model.Model;
+using License.Model;
 
 namespace License.Logic.ServiceLogic
 {
@@ -14,14 +14,14 @@ namespace License.Logic.ServiceLogic
             var obj = new List<Product>();
             IEnumerable<Core.Model.Product> products = Work.ProductLicenseRepository.GetData();
             foreach (var pro in products)
-                obj.Add(AutoMapper.Mapper.Map<Core.Model.Product, Model.Model.Product>(pro));
+                obj.Add(AutoMapper.Mapper.Map<Core.Model.Product, Model.Product>(pro));
             return obj;
         }
 
         public Product GetProductById(int id)
         {
             Core.Model.Product pro = Work.ProductLicenseRepository.GetById(id);
-            return AutoMapper.Mapper.Map<Core.Model.Product, Model.Model.Product>(pro);
+            return AutoMapper.Mapper.Map<Core.Model.Product, Model.Product>(pro);
         }
 
 
@@ -31,6 +31,16 @@ namespace License.Logic.ServiceLogic
             obj = Work.ProductLicenseRepository.Create(obj);
             Work.ProductLicenseRepository.Save();
             return obj.Id > 0;
+        }
+
+        public void CreateProduct(List<Product> prod)
+        {
+            foreach (var pro in prod)
+            {
+                var obj = Work.ProductLicenseRepository.GetById(pro.Id);
+                if (obj == null)
+                    CreateProduct(pro);
+            }
         }
     }
 }
