@@ -18,7 +18,7 @@ namespace LicenseServer.Logic
             return details;
         }
 
-        public bool CreateSubscriptionDetails(List<SubscriptionDetails> list, int subscriptionId)
+        public bool CreateSubscriptionDetails(List<SubscriptionDetails> list)
         {
             foreach(var obj in list)
             {
