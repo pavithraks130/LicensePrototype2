@@ -38,6 +38,19 @@ namespace License.Logic.ServiceLogic
         //    return model;
         //}
 
+        public List<UserSubscription> GetSubscriptionByIDList(List<int> idList)
+        {
+            List<UserSubscription> subscriptionList = new List<UserSubscription>();
+            LicenseLogic logic = new LicenseLogic();
+            var subsList = Work.UserSubscriptionRepository.GetData(us => idList.Contains(us.Id));
+            foreach (var obj in subsList)
+            {
+                var subObj = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
+                subscriptionList.Add(subObj);
+            }
+            return subscriptionList;
+        }
+
         public int CreateSubscription(UserSubscription subs)
         {
             var obj = AutoMapper.Mapper.Map<UserSubscription, License.Core.Model.UserSubscription>(subs);

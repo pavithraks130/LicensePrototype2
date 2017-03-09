@@ -184,10 +184,12 @@ namespace WebApplication1.Controllers
             licenseMapModelList = new List<LicenseMapModel>();
             UserLicenseLogic logic = new UserLicenseLogic();
             var data = logic.GetUserLicense(userId);
+
             UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
             var userSubscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
             var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId);
             var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
+
             foreach (var subs in subscriptionList)
             {
                 LicenseMapModel mapModel = new LicenseMapModel();
@@ -204,6 +206,17 @@ namespace WebApplication1.Controllers
                 }
                 licenseMapModelList.Add(mapModel);
             }
+            foreach (var obj in data)
+            {
+                var subObj = licenseMapModelList.FirstOrDefault(f => f.UserSubscriptionId == obj.License.UserSubscriptionId);
+                if (subObj != null)
+                {
+                    var pro = subObj.ProductList.FirstOrDefault(f => f.ProductId == obj.License.ProductId);
+                    if (pro != null)
+                        pro.IsSelected = true;
+                    pro.InitialState = true;
+                }
+            }
             LicenseSessionState.Instance.LicenseMapModelList = licenseMapModelList;
         }
 
@@ -211,7 +224,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MapLicense(params string[] SelectedSubscription)
         {
-            UpdateLicense(SelectedSubscription);
+            UpdateRevokeLicense(SelectedSubscription);
             return RedirectToAction("TeamContainer", "Team");
         }
         public ActionResult LicenseCart(string userId)
@@ -231,23 +244,29 @@ namespace WebApplication1.Controllers
             var data = logic.GetUserLicense(userId);
             if (data.Count > 0)
             {
-                var subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
-                foreach (var obj in subscriptionList)
+                var subIdList = data.Select(ul => ul.License.UserSubscriptionId);
+
+                UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
+                var userSubscriptionList = subscriptionLogic.GetSubscriptionByIDList(subIdList.ToList());
+                var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId);
+                var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
+                foreach (var subs in subscriptionList)
                 {
-                    //var obj1 = data.FirstOrDefault(f => f.LicenseId == obj.LicenseDetails.LicenseId);
-                    //if (obj1 != null)
-                    //{
-                    //    LicenseMapModel model = new LicenseMapModel();
-                    //    model.IsDisabled = (obj.LicenseDetails.AvailableLicenseCount == 0);
-                    //    model.UserSubscriptionId = obj.Id;
-                    //    model.IsSelected = false;
-                    //    var ul = data.FirstOrDefault(u => u.License.UserSubscriptionId == obj.Id);
-                    //    if (ul != null)
-                    //        model.ExistingUserLicenseId = ul.Id;
-                    //    licenseMapModelList.Add(model);
-                    //}
+                    var proList = data.Where(ul => ul.License.UserSubscriptionId == subs.SubscriptionId).ToList().Select(u => u.License.ProductId).ToList();
+                    LicenseMapModel mapModel = new LicenseMapModel();
+                    mapModel.SubscriptionName = subs.SubscriptionName;
+                    mapModel.UserSubscriptionId = userSubscriptionList.FirstOrDefault(us => us.SubscriptionId == subs.SubscriptionId).Id;
+
+                    foreach (var pro in subs.ProductDtls.Where(p => proList.Contains(p.ProductId)))
+                    {
+                        SubscriptionProduct prod = new SubscriptionProduct();
+                        prod.ProductId = pro.ProductId;
+                        prod.ProductName = pro.ProductName;
+                        prod.IsDisabled = pro.AvailableCount == 0;
+                        mapModel.ProductList.Add(prod);
+                    }
+                    licenseMapModelList.Add(mapModel);
                 }
-                LicenseSessionState.Instance.LicenseMapModelList = licenseMapModelList;
             }
             return View(licenseMapModelList);
         }
@@ -256,48 +275,33 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RevokeLicense(params string[] SelectedSubscription)
         {
-            RevokeLicenseData(SelectedSubscription);
+            UpdateRevokeLicense(SelectedSubscription, "Revoke");
             return RedirectToAction("TeamContainer", "Team");
         }
 
-        public void UpdateLicense(string[] SelectedSubscription)
+        public void UpdateRevokeLicense(string[] SelectedSubscription, string action = "Add")
         {
             string userId = Convert.ToString(TempData["UserId"]);
             UserLicenseLogic logic = new UserLicenseLogic();
-            var models = LicenseSessionState.Instance.LicenseMapModelList;
-            foreach (var data in models)
+            License.Logic.ServiceLogic.LicenseLogic licenseLogic = new LicenseLogic();
+            List<License.Model.UserLicense> userLicesList = new List<License.Model.UserLicense>();
+            foreach (var data in SelectedSubscription)
             {
-                data.IsSelected = SelectedSubscription.Contains(data.UserSubscriptionId.ToString());
-                if (data.IsSelected != data.InitialSelected)
-                {
-                    if (data.IsSelected)
-                    {
-                        License.Model.UserLicense lic = new License.Model.UserLicense();
-                        lic.UserId = userId;
-                        logic.CreateUserLicense(lic);
-                    }
-                }
+                var splitValue = data.Split(new char[] { '-' });
+                var prodId = splitValue[0].Split(new char[] { ':' })[1];
+                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
+                License.Model.UserLicense lic = new License.Model.UserLicense();
+                lic.UserId = userId;
+                License.Model.LicenseData licData = new License.Model.LicenseData();
+                licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
+                licData.ProductId = Convert.ToInt32(prodId);
+                lic.License = licData;
+                userLicesList.Add(lic);
             }
-            if (SelectedSubscription.Count() > 0)
-                logic.save();
-        }
-
-        public void RevokeLicenseData(string[] SelectedSubscription)
-        {
-            string userId = Convert.ToString(TempData["UserId"]);
-            UserLicenseLogic logic = new UserLicenseLogic();
-            var models = LicenseSessionState.Instance.LicenseMapModelList;
-            foreach (var data in models)
-            {
-                data.IsSelected = SelectedSubscription.Contains(data.UserSubscriptionId.ToString());
-                if (data.IsSelected)
-                {
-                    //LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(f => f.Id == data.UserSubscriptionId).LicenseDetails.UsedLicenseCount -= 1;
-                    //logic.RemoveById(data.ExistingUserLicenseId);
-                }
-            }
-            if (SelectedSubscription.Count() > 0)
-                logic.save();
+            if (action == "Add")
+                logic.CreateUserLicense(userLicesList);
+            else
+                logic.RevokeUserLicense(userLicesList);
         }
     }
 }

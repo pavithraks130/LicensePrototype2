@@ -38,6 +38,8 @@ namespace License.MetCalWeb.Models
         public bool IsSelected { get; set; }
 
         public bool IsDisabled { get; set; }
+
+        public bool InitialState { get; set; }
     }
     #endregion
 }

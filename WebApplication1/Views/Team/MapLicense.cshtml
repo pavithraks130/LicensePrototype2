@@ -70,7 +70,7 @@
                                             <tr>
                                                 <td>
                                                     <label class="control-label">
-                                                        <input type="checkbox" name="SelectedSubscription" value="@Model[i].ProductList[j].ProductId+'-'+ @Model[i].UserSubscriptionId" checked="@Model[i].ProductList[j].IsSelected" class="checkbox-inline">
+                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].ProductList[j].IsSelected" class="checkbox-inline">
                                                         @Model[i].ProductList[j].ProductName
                                                     </label>
                                                 </td>
