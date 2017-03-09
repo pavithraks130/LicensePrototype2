@@ -301,7 +301,7 @@ namespace WebApplication1.Controllers
             if (action == "Add")
                 logic.CreateUserLicense(userLicesList);
             else
-                logic.RevokeUserLicense(userLicesList);
+                logic.RevokeUserLicense(userLicesList, userId);
         }
     }
 }

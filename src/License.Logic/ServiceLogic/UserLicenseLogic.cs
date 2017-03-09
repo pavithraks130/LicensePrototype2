@@ -22,8 +22,8 @@ namespace License.Logic.ServiceLogic
             int i = 0;
             foreach (var lic in licList)
             {
-                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).Select(l=>l.Id);
-                if (Work.UserLicenseRepository.GetData(ul => data.Contains(ul.LicenseId)  && ul.UserId == lic.UserId) == null)
+                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).Select(l => l.Id);
+                if (Work.UserLicenseRepository.GetData(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId) == null)
                 {
                     i++;
                     UserLicense ul = new UserLicense();
@@ -46,21 +46,15 @@ namespace License.Logic.ServiceLogic
             return obj1 != null;
         }
 
-        public bool RevokeUserLicense(List<UserLicense> licList)
+        public bool RevokeUserLicense(List<UserLicense> licList, string userId)
         {
             int i = 0;
             LicenseLogic licLogic = new LicenseLogic();
+            var licdata = GetUserLicense(userId);
             foreach (var lic in licList)
             {
-                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).Select(l => l.Id);
-                if (Work.UserLicenseRepository.GetData(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId) == null)
-                {
-                    i++;
-                    UserLicense ul = new UserLicense();
-                    ul.UserId = lic.UserId;
-                    //ul.LicenseId = GetUserLicense(lic.UserId).FirstOrDefault()
-                    RemoveUserLicense(ul);
-                }
+                var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.License.ProductId && l.License.UserSubscriptionId == lic.License.UserSubscriptionId);
+                RemoveUserLicense(obj);
             }
             if (i > 0)
                 Work.UserLicenseRepository.Save();
