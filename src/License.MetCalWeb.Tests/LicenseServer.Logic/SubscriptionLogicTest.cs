@@ -29,7 +29,7 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
         [TestMethod]
         public void CreateSubscription()
         {
-            var result = logic.CreateSubscription(new SubscriptionType() { Name = "Sub121", ActiveDays = 340, ImagePath = "", Price = 1200 });
+            var result = logic.CreateSubscription(new SubscriptionType() { Name = "Sub1", ActiveDays = 340, ImagePath = "P1.png", Price = 1200 });
             Assert.AreEqual(true, result);
         }
 

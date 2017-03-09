@@ -95,9 +95,10 @@ namespace LicenseServer.Logic
             return UserManager.ResetPassword(userId, token, password);
         }
 
-        public bool GetUserByEmail(string email)
+        public User GetUserByEmail(string email)
         {
-            return UserManager.FindByEmail<Core.Model.Appuser, string>(email) != null;
+            var usr =  UserManager.FindByEmail<Core.Model.Appuser, string>(email);
+            return AutoMapper.Mapper.Map<User>(usr);
         }
 
         public User ForgotPassword(string email)

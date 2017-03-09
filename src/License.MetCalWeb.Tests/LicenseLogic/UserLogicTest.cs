@@ -9,17 +9,20 @@ using License.Core.Manager;
 using Microsoft.AspNet.Identity.EntityFramework;
 using License.Core.Model;
 using License.Core.DBContext;
-namespace License.MetCalWeb.Tests.License.Logic
+namespace License.MetCalWeb.Tests.LicenseLogic
 {
     [TestClass]
     public class UserLogicTest
     {
-        UserLogic logic = new UserLogic();
+        UserLogic logic = null;
+        
         Moq.Mock<AppUserManager> manager;
         Moq.Mock<AppRoleManager> rolemanager;
+
         public UserLogicTest()
         {
             InitializerClass.Initialize();
+            logic = new UserLogic();
             var dbContext = ApplicationDbContext.Create();
             UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
             RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);

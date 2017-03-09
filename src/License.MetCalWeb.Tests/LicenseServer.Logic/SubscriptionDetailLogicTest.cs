@@ -13,9 +13,13 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
     public class SubscriptionDetailLogicTest
     {
         SubscriptionDetailLogic detailLogic;
+        SubscriptionTypeLogic logic;
+        ProductLogic proLogic = null;
         public SubscriptionDetailLogicTest()
         {
             detailLogic = new SubscriptionDetailLogic();
+            logic = new SubscriptionTypeLogic();
+            proLogic = new ProductLogic();
             InitializerClass.Initialize();
         }
 
@@ -31,16 +35,25 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
         [TestMethod]
         public void CreateSubscriptionDetail()
         {
-            int proId = 1;
-            int subscriptioinTypeId = 1;
-            SubscriptionDetails detail = new SubscriptionDetails();
-            detail.ProductId = proId;
-            detail.SubscriptionTypeId = subscriptioinTypeId;
-            detail.Quantity = 4;
-            List<SubscriptionDetails> details = new List<SubscriptionDetails>();
-            details.Add(detail);
-            var status = detailLogic.CreateSubscriptionDetails(details);
-            Assert.IsTrue(status);
+            var proList = proLogic.GetProducts();
+            var sub = logic.GetSubscriptionType();
+            if (proList.Count > 0 && sub.Count > 0)
+            {
+                var proId = proList.FirstOrDefault(p => p.ProductCode == "PRO-01").Id;
+                var subscriptioinTypeId = sub.FirstOrDefault(s => s.Name == "Sub1").Id;
+                SubscriptionDetails detail = new SubscriptionDetails();
+                detail.ProductId = proId;
+                detail.SubscriptionTypeId = subscriptioinTypeId;
+                detail.Quantity = 4;
+                List<SubscriptionDetails> details = new List<SubscriptionDetails>();
+                details.Add(detail);
+                var status = detailLogic.CreateSubscriptionDetails(details);
+                Assert.IsTrue(status);
+            }
+            else
+            {
+                Assert.Fail("No Subscription and Product Details created");
+            }
         }
     }
 }

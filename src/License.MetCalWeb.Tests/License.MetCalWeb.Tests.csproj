@@ -125,7 +125,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InitializerClass.cs" />
-    <Compile Include="License.Logic\UserLogicTest.cs" />
+    <Compile Include="LicenseLogic\UserLogicTest.cs" />
+    <Compile Include="LicenseServer.Logic\CartLogicTest.cs" />
     <Compile Include="LicenseServer.Logic\OrganizationLogicTest.cs" />
     <Compile Include="LicenseServer.Logic\ProductLogicTest.cs" />
     <Compile Include="LicenseServer.Logic\SubscriptionDetailLogicTest.cs" />
@@ -135,7 +136,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
