@@ -222,6 +222,7 @@
     <Content Include="ProductImages\p6.PNG" />
     <Content Include="ProductImages\p7.PNG" />
     <Content Include="ProductImages\p8.PNG" />
+    <Content Include="Resources\admin.png" />
     <Content Include="Resources\Background\Background.PNG" />
     <Content Include="Resources\Background\Background2.PNG" />
     <Content Include="Resources\Background\Background3.PNG" />
