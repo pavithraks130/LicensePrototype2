@@ -4,99 +4,102 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
 <link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
 <script type="text/javascript">
-
-    function handleCardDrop(event, ui)
+        
+    function handleCardDrop(event, ui) 
     {
 
-        var admin_license_pool = $(this).data('number');
-        var selected_user_cart = ui.draggable.data('number');
+            var admin_license_pool = $(this).data('number');
+            var selected_user_cart = ui.draggable.data('number');
 
-        // If the card was dropped to the correct slot,
-        // change the card colour, position it directly
-        // on top of the slot, and prevent it being dragged
-        // again
+            // If the card was dropped to the correct slot,
+            // change the card colour, position it directly
+            // on top of the slot, and prevent it being dragged
+            // again
 
-        if (admin_license_pool == selected_user_cart) {
-            ui.draggable.addClass('correct');
-            ui.draggable.draggable('disable');
-            $(this).droppable('disable');
-            ui.draggable.position({ of: $(this), my: 'left top', at: 'left top' });
-            ui.draggable.draggable('option', 'revert', false);
-            correctCards++;
-        }
-
-    }
-    var correctCards = 0;
-    $(init);
-
-    function init()
-    {
-
-        // Hide the success message
-        $('#successMessage').hide();
-        $('#successMessage').css({
-            left: '580px',
-            top: '250px',
-            width: 0,
-            height: 0
-        });
-
-        // Reset the game
-        correctCards = 0;
-        $('#admin_license_type').html('');
-        $('#selected_user_license').html('');
-
-        var subscriptionCollection = @Html.Raw(ViewBag.SubscriptionCollection);
-        var numbers=[];
-        var  words =[];
-        var arraylength = 0;
-        var currentIndex = -1;
-        //var available_license_count=0;
-
-        for(var j=0 ; j < subscriptionCollection.length;j++)
-        {
-            var subscriptioncollection_type_count = subscriptionCollection[j].LicenseDetails.AvailableLicenseCount;
-            arraylength += subscriptioncollection_type_count;
-            var subscriptioncollection_type =subscriptionCollection[j].SubscriptionName;
-
-            words.push(subscriptioncollection_type);
-
-            for(var index = 0;index <subscriptioncollection_type_count;index++)
-            {
-
-                currentIndex += 1;
-                numbers.push(subscriptioncollection_type);
-                var Obj = $('<div>' + numbers[currentIndex] + '</div>').data('number', numbers[currentIndex]).attr('id', 'card' + numbers[currentIndex]).draggable({
-                    containment: '#content',
-                    stack: '#admin_license_type div',
-                    cursor: 'move',
-                    revert: true
-                });
-                $(Obj).appendTo('#admin_license_type');
+            if (admin_license_pool == selected_user_cart) {
+                ui.draggable.addClass('correct');
+                ui.draggable.draggable('disable');
+                $(this).droppable('disable');
+                ui.draggable.position({ of: $(this), my: 'left top', at: 'left top' });
+                ui.draggable.draggable('option', 'revert', false);
+                correctCards++;
             }
-            $('<div><hr /></div>').appendTo("#admin_license_type");
+
         }
+        var correctCards = 0;
+        $(init);
 
-        //for (var i = 0; i < numbers.length; i++) {
-        //    $('<div>' + numbers[i] + '</div>').data('number', numbers[i]).attr('id', 'card' + i).appendTo('#admin_license_type').draggable({
-        //        containment: '#content',
-        //        stack: '#admin_license_type div',
-        //        cursor: 'move',
-        //        revert: true
-        //    });
-        //}
+        function init()
+        {
 
-        // Create the card slots
-        //var words = ['one-pack', 'two-pack', 'three-pack', 'four-pack', 'five-pack', 'six-pack', 'seven-pack', 'eight-pack', 'nine-pack', 'ten-pack'];
-        for (var i = 0; i < words.length; i++) {
-            $('<div>' + words[i] + '</div>').data('number', words[i]).appendTo('#selected_user_license').droppable({
-                accept: '#admin_license_type div',
-                hoverClass: 'hovered',
-                drop: handleCardDrop
+            // Hide the success message
+            $('#successMessage').hide();
+            $('#successMessage').css({
+                left: '580px',
+                top: '250px',
+                width: 0,
+                height: 0
             });
-        }
 
-    }
+            // Reset the game
+            correctCards = 0;
+            $('#admin_license_type').html('');
+            $('#selected_user_license').html('');
+
+            var subscriptionCollection = @Html.Raw(ViewBag.SubscriptionCollection);
+            var numbers=[];
+            var  words =[];
+            var arraylength = 0;
+            var currentIndex = -1;
+            //var available_license_count=0;
+
+            for(var j=0 ; j < subscriptionCollection.length;j++)
+            {
+                var subscriptioncollection_type_count = subscriptionCollection[j].LicenseDetails.AvailableLicenseCount;
+                arraylength += subscriptioncollection_type_count;
+                var subscriptioncollection_type =subscriptionCollection[j].SubscriptionName;
+                
+                words.push(subscriptioncollection_type);
+                for(var index = 0;index <subscriptioncollection_type_count;index++)
+                {
+                    if(index == 0 && currentIndex !=0)
+                    {
+                        $('<hr />');
+                        //to avoid override with existing item
+                        //currentIndex = currentIndex+1;
+                    }
+                    currentIndex += 1;
+                    numbers.push(subscriptioncollection_type);
+                    $('<div>' + numbers[currentIndex] + '</div>').data('number', numbers[currentIndex]).attr('id', 'card' + numbers[currentIndex]).appendTo('#admin_license_type').draggable({
+                        containment: '#content',
+                        stack: '#admin_license_type div',
+                        cursor: 'move',
+                        revert: true
+                    });
+                   
+                }
+            }
+
+            //for (var i = 0; i < numbers.length; i++) {
+            //    $('<div>' + numbers[i] + '</div>').data('number', numbers[i]).attr('id', 'card' + i).appendTo('#admin_license_type').draggable({
+            //        containment: '#content',
+            //        stack: '#admin_license_type div',
+            //        cursor: 'move',
+            //        revert: true
+            //    });
+            //}
+
+            // Create the card slots
+            //var words = ['one-pack', 'two-pack', 'three-pack', 'four-pack', 'five-pack', 'six-pack', 'seven-pack', 'eight-pack', 'nine-pack', 'ten-pack'];
+            for (var i = 0; i < words.length; i++) {
+                $('<div>' + words[i] + '</div>').data('number', words[i]).appendTo('#selected_user_license').droppable({
+                    accept: '#admin_license_type div',
+                    hoverClass: 'hovered',
+                    drop: handleCardDrop
+                });
+            }
+
+        }
 
 </script>
 <table class="col-md-50" style="border:1px  solid #333;">
@@ -109,12 +112,38 @@
     </tr>
     <tr>
         <td colspan="2">
-            <div id="content">
+            <div id="content" >
                 <div class="float-left" id="selected_user_license"> </div>
                 <div class="float-right" id="admin_license_type"> </div>
             </div>
     </tr>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
