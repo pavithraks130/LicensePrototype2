@@ -127,7 +127,11 @@
     <Compile Include="InitializerClass.cs" />
     <Compile Include="License.Logic\UserLogicTest.cs" />
     <Compile Include="LicenseServer.Logic\OrganizationLogicTest.cs" />
+    <Compile Include="LicenseServer.Logic\ProductLogicTest.cs" />
+    <Compile Include="LicenseServer.Logic\SubscriptionDetailLogicTest.cs" />
     <Compile Include="LicenseServer.Logic\SubscriptionLogicTest.cs" />
+    <Compile Include="LicenseServer.Logic\UserLogicTest.cs" />
+    <Compile Include="LicenseServer.Logic\UserSubscriptionLogicTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

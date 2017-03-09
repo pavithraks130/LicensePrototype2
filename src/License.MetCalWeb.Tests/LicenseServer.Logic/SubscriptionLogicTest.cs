@@ -5,18 +5,40 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LicenseServer.Logic;
+using LicenseServer.DataModel;
 namespace License.MetCalWeb.Tests.LicenseServer.Logic
 {
     [TestClass]
     public class SubscriptionLogicTest
     {
-        SubscriptionTypeLogic logic = new SubscriptionTypeLogic();
+        SubscriptionTypeLogic logic = null;
+
+        public SubscriptionLogicTest()
+        {
+            logic = new SubscriptionTypeLogic();
+            InitializerClass.Initialize();
+        }
+
         [TestMethod]
         public void GetSubscriptions()
         {
-            InitializerClass.Initialize();
             var typeList = logic.GetSubscriptionType();
             Assert.IsNotNull(typeList);
+        }
+
+        [TestMethod]
+        public void CreateSubscription()
+        {
+            var result = logic.CreateSubscription(new SubscriptionType() { Name = "Sub121", ActiveDays = 340, ImagePath = "", Price = 1200 });
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void GetSubscriptionById()
+        {
+            int subscriptionId = 1;
+            var obj = logic.GetById(subscriptionId);
+            Assert.IsNotNull(obj);
         }
     }
 }
