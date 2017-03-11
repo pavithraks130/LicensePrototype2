@@ -56,6 +56,7 @@ namespace License.Logic.ServiceLogic
             {
                 var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.License.ProductId && l.License.UserSubscriptionId == lic.License.UserSubscriptionId);
                 RemoveUserLicense(obj);
+                i++;
             }
             if (i > 0)
                 Work.UserLicenseRepository.Save();
