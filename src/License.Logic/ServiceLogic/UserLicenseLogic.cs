@@ -81,7 +81,7 @@ namespace License.Logic.ServiceLogic
         public int GetUserLicenseCount(int userSubscriptionId, int productId)
         {
             var licenseIdList = Work.LicenseDataRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId && l.ProductId == productId).Select(l => l.Id).ToList();
-            return Work.UserLicenseRepository.GetData(ul => licenseIdList.Contains(ul.Id)).Count();
+            return Work.UserLicenseRepository.GetData(ul => licenseIdList.Contains(ul.LicenseId)).Count();
         }
 
         public List<UserLicense> GetUserLicense(string userId)

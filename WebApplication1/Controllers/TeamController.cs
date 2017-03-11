@@ -252,7 +252,7 @@ namespace WebApplication1.Controllers
                 var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
                 foreach (var subs in subscriptionList)
                 {
-                    var proList = data.Where(ul => ul.License.UserSubscriptionId == subs.SubscriptionId).ToList().Select(u => u.License.ProductId).ToList();
+                    var proList = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.SubscriptionId).ToList().Select(u => u.License.ProductId).ToList();
                     LicenseMapModel mapModel = new LicenseMapModel();
                     mapModel.SubscriptionName = subs.SubscriptionName;
                     mapModel.UserSubscriptionId = userSubscriptionList.FirstOrDefault(us => us.SubscriptionId == subs.SubscriptionId).Id;
