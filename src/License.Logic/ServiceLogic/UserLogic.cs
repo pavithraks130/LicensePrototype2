@@ -33,26 +33,38 @@ namespace License.Logic.ServiceLogic
             ur.PhoneNumber = u.PhoneNumber;
             ur.UserName = u.Email;
             ur.ServerUserId = u.ServerUserId;
-            //if (t == null)
-            //    t = logic.CreateTeam(new Model.Model.Organization() { Name = u.OrganizationName });
-            //ur.OrganizationId = t.Id;
+            ur.ManagerId = u.ManagerId;
+
             AppUser user = AutoMapper.Mapper.Map<License.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
             {
-                result = UserManager.Create(user, u.Password);
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
                     rolelogic.RoleManager = RoleManager;
                     result = rolelogic.CreateRole(new Model.Role() { Name = roleName });
                 }
-                var roleId = RoleManager.FindByName(roleName).Id;
-                UserManager.AddToRole(user.Id, roleName);
+                string userId = String.Empty;
+                var usr = UserManager.FindByEmail(u.Email);
+
+                if (usr == null)
+                {
+                    result = UserManager.Create(user, u.Password);
+                    userId = user.Id;
+                }
+                else
+                    userId = usr.Id;
+
+                if (!UserManager.IsInRole(userId, roleName))
+                    result = UserManager.AddToRole(userId, roleName);
+                else
+                    result = new IdentityResult(new string[] { });
             }
             catch (Exception ex)
             {
-                throw ex;
+                 //throw ex;
+                result = new IdentityResult(new string[] { ex.Message });
             }
             return result;
         }

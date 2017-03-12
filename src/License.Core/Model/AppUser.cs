@@ -58,6 +58,11 @@ namespace License.Core.Model
             }
         }
 
+        public string ManagerId { get; set; }
+
+        [ForeignKey("ManagerId")]
+        public virtual AppUser Manger { get; set; }
+
         [NotMapped]
         public string Name
         {

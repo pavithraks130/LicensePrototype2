@@ -29,6 +29,8 @@ namespace License.MetCalWeb.Controllers
             logic = new TeamMemberLogic();
             userLogic = new UserLogic();
             subscriptionLogic = new UserSubscriptionLogic();
+
+          
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -47,13 +49,13 @@ namespace License.MetCalWeb.Controllers
             License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
-
             if (logic.UserManager == null)
                 logic.UserManager = UserManager;
 
             if (logic.RoleManager == null)
                 logic.RoleManager = RoleManager;
 
+           
             if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
@@ -115,19 +117,17 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Invite(UserInviteModel model)
         {
             bool status = false;
+            if (userLogic.UserManager == null)
+                userLogic.UserManager = UserManager;
+            if (userLogic.RoleManager == null)
+                userLogic.RoleManager = RoleManager;
             IdentityResult result;
             if (ModelState.IsValid)
             {
-                //if(logic.VerifyUserInvited(model.Email, LicenseSessionState.Instance.User.UserId)!= null)
-                //    return Json(new { success = false, Message = "User has already been invited" });
-
-                if (userLogic.UserManager == null)
-                    userLogic.UserManager = UserManager;
-                if (userLogic.RoleManager == null)
-                    userLogic.RoleManager = RoleManager;
                 if (!userLogic.GetUserByEmail(model.Email))
                 {
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
+                    model.RegistratoinModel.ManagerId = LicenseSessionState.Instance.User.UserId;
                     result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
                     status = result.Succeeded;
                 }
@@ -179,8 +179,10 @@ namespace License.MetCalWeb.Controllers
         public void GetLicenseListBySubscription(string userId)
         {
             TempData["UserId"] = userId;
-            userLogic.UserManager = Request.GetOwinContext().Get<AppUserManager>();
-            userLogic.RoleManager = Request.GetOwinContext().Get<AppRoleManager>();
+            if (userLogic.UserManager == null)
+                userLogic.UserManager = UserManager;
+            if (userLogic.RoleManager == null)
+                userLogic.RoleManager = RoleManager;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
             licenseMapModelList = new List<LicenseMapModel>();
             UserLicenseLogic logic = new UserLicenseLogic();
