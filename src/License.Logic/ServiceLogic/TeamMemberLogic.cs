@@ -41,7 +41,7 @@ namespace License.Logic.ServiceLogic
                     AdminId = adminId,
                     InviteeEmail = user.Email,
                     InviteeStatus = InviteStatus.Accepted.ToString(),
-                    InviteeUserId = adminId,                    
+                    InviteeUserId = adminId,
                     IsAdmin = true
                 });
             }
@@ -75,7 +75,15 @@ namespace License.Logic.ServiceLogic
             Core.Model.TeamMembers teamMembers = Work.UserInviteLicenseRepository.GetById(id);
             teamMembers.IsAdmin = status;
             Work.UserInviteLicenseRepository.Update(teamMembers);
+            Work.UserInviteLicenseRepository.Save();
         }
-      
+
+        public bool DeleteTeamMember(int id)
+        {
+            var status = Work.UserInviteLicenseRepository.Delete(id);
+            Work.UserInviteLicenseRepository.Save();
+            return status;
+        }
+
     }
 }

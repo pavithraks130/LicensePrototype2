@@ -10,7 +10,7 @@
                 Team Admin : @Html.ActionLink(Model.AdminUser.Name, "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
             </h2>
         }
-        @if (LicenseSessionState.Instance.IsTeamAdmin && Model.AcceptedUsers.Count > 0)
+        @if (Convert.ToBoolean(TempData["IsTeamAdmin"])  && Model.AcceptedUsers.Count > 0)
         {
             <div class="float-right">
                 <button class="btn btn-primary btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Invite Team Member</button>

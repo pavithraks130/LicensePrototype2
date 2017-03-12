@@ -15,10 +15,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using TeamMembers = License.Model.TeamMembers;
 
-namespace WebApplication1.Controllers
+namespace License.MetCalWeb.Controllers
 {
     [Authorize]
-    public class TeamController : Controller
+    public class TeamController : BaseController
     {
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
@@ -49,15 +49,16 @@ namespace WebApplication1.Controllers
             TeamModel model = null;
 
             if (logic.UserManager == null)
-                logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                logic.UserManager = UserManager;
 
             if (logic.RoleManager == null)
-                logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                logic.RoleManager = RoleManager;
 
             if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
-                LicenseSessionState.Instance.IsTeamAdmin = true;
+                LicenseSessionState.Instance.IsAdmin = true;
+                TempData["IsTeamAdmin"] = true;
             }
             else
                 adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
@@ -69,12 +70,12 @@ namespace WebApplication1.Controllers
                 model.AcceptedUsers = inviteList.AcceptedInvites;
                 model.PendinigUsers = inviteList.PendingInvites;
             }
-            if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamAdmin)
+            if (model.AcceptedUsers.Count <= 0 ||  Convert.ToBoolean(TempData["IsTeamAdmin"]))
                 return model;
             var obj =
                 model.AcceptedUsers
                     .FirstOrDefault(t => t.InviteeUserId == LicenseSessionState.Instance.User.UserId);
-            LicenseSessionState.Instance.IsTeamAdmin = obj?.IsAdmin ?? false;
+             TempData["IsTeamAdmin"] = obj?.IsAdmin ?? false;
             return model;
         }
 
@@ -121,9 +122,9 @@ namespace WebApplication1.Controllers
                 //    return Json(new { success = false, Message = "User has already been invited" });
 
                 if (userLogic.UserManager == null)
-                    userLogic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                    userLogic.UserManager = UserManager;
                 if (userLogic.RoleManager == null)
-                    userLogic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                    userLogic.RoleManager = RoleManager;
                 if (!userLogic.GetUserByEmail(model.Email))
                 {
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
@@ -236,8 +237,8 @@ namespace WebApplication1.Controllers
         public ActionResult RevokeLicense(string userId)
         {
             TempData["UserId"] = userId;
-            userLogic.UserManager = Request.GetOwinContext().Get<AppUserManager>();
-            userLogic.RoleManager = Request.GetOwinContext().Get<AppRoleManager>();
+            userLogic.UserManager = UserManager;
+            userLogic.RoleManager = RoleManager;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
             licenseMapModelList = new List<LicenseMapModel>();
             UserLicenseLogic logic = new UserLicenseLogic();
@@ -302,6 +303,24 @@ namespace WebApplication1.Controllers
                 logic.CreateUserLicense(userLicesList);
             else
                 logic.RevokeUserLicense(userLicesList, userId);
+        }
+
+        public ActionResult UserConfiguration(int id,string userId, string actionType)
+        {
+            TeamMemberLogic logic = new TeamMemberLogic();
+            switch (actionType)
+            {
+                case "Admin":
+                    logic.SetAsAdmin(id, userId, true);
+                    break;
+                case "RemoveAdmin":
+                    logic.SetAsAdmin(id, userId, false);
+                    break;
+                case "Remove":
+                    logic.DeleteTeamMember(id);
+                    break;
+            }
+            return RedirectToAction("TeamContainer");
         }
     }
 }

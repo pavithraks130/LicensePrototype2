@@ -4,7 +4,7 @@
 }
 <h4>Subscription</h4>
 <table class="table" style="border:ridge">
-    @if (!LicenseSessionState.Instance.IsTeamAdmin || Model.Count() == 0)
+    @if (!Convert.ToBoolean(TempData["IsTeamAdmin"]) || Model.Count() == 0)
     {
         <tr>
             <td>

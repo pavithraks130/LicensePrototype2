@@ -189,6 +189,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Drag-and-drop-container.css" />
+    <Content Include="Content\MenuDropdown.css" />
     <Content Include="Content\Site.css" />
     <Content Include="EmailTemplate\EmailTemImages\colorschememapping.xml" />
     <Content Include="EmailTemplate\EmailTemImages\filelist.xml" />
@@ -201,6 +202,9 @@
     <Content Include="EmailTemplate\WelcometoFlukeCalibration.htm" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\download.png" />
+    <Content Include="Images\images.png" />
+    <Content Include="Images\Users-icon.png" />
     <Content Include="ProductImages\B1.PNG" />
     <Content Include="ProductImages\B2.PNG" />
     <Content Include="ProductImages\B3.PNG" />
