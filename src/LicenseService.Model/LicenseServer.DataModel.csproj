@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CartItem.cs" />
-    <Compile Include="LicenseFeatures.cs" />
+    <Compile Include="Features.cs" />
     <Compile Include="Organization.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
