@@ -21,5 +21,8 @@ namespace LicenseServer.Core.Model
         public string ImagePath { get; set; }
 
         public string CreatedDate { get; set; }
+
+        public ICollection<LicenseFeatures> AssociatedFeatures { get; set; }
+
     }
 }

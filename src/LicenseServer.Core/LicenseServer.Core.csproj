@@ -122,10 +122,15 @@
     <Compile Include="Migrations\201703020644545_PriceColumnToCartItem.Designer.cs">
       <DependentUpon>201703020644545_PriceColumnToCartItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703130910301_FeatureList.cs" />
+    <Compile Include="Migrations\201703130910301_FeatureList.Designer.cs">
+      <DependentUpon>201703130910301_FeatureList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
     <Compile Include="Model\CartItem.cs" />
+    <Compile Include="Model\LicenseFeatures.cs" />
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\SubscriptionDetail.cs" />
@@ -161,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703020644545_PriceColumnToCartItem.resx">
       <DependentUpon>201703020644545_PriceColumnToCartItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703130910301_FeatureList.resx">
+      <DependentUpon>201703130910301_FeatureList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
