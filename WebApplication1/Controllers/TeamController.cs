@@ -15,20 +15,22 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using TeamMembers = License.Model.TeamMembers;
 
-namespace WebApplication1.Controllers
+namespace License.MetCalWeb.Controllers
 {
     [Authorize]
-    public class TeamController : Controller
+    public class TeamController : BaseController
     {
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
         private UserSubscriptionLogic subscriptionLogic = null;
-        List<LicenseMapModel> licenseMapModelList;
+
         public TeamController()
         {
             logic = new TeamMemberLogic();
             userLogic = new UserLogic();
             subscriptionLogic = new UserSubscriptionLogic();
+
+
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -47,17 +49,18 @@ namespace WebApplication1.Controllers
             License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
-
             if (logic.UserManager == null)
-                logic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+                logic.UserManager = UserManager;
 
             if (logic.RoleManager == null)
-                logic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+                logic.RoleManager = RoleManager;
 
+            TempData["IsTeamAdmin"] = false;
             if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
-                LicenseSessionState.Instance.IsTeamAdmin = true;
+                LicenseSessionState.Instance.IsAdmin = true;
+                TempData["IsTeamAdmin"] = true;
             }
             else
                 adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
@@ -69,37 +72,32 @@ namespace WebApplication1.Controllers
                 model.AcceptedUsers = inviteList.AcceptedInvites;
                 model.PendinigUsers = inviteList.PendingInvites;
             }
-            if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamAdmin)
+            if (model.AcceptedUsers.Count <= 0 || Convert.ToBoolean(TempData["IsTeamAdmin"]))
                 return model;
             var obj =
                 model.AcceptedUsers
                     .FirstOrDefault(t => t.InviteeUserId == LicenseSessionState.Instance.User.UserId);
-            LicenseSessionState.Instance.IsTeamAdmin = obj?.IsAdmin ?? false;
+            TempData["IsTeamAdmin"] = obj?.IsAdmin ?? false;
             return model;
         }
 
         public ActionResult Subscriptions()
         {
-            IList<License.MetCalWeb.Models.SubscriptionProductModel> subscriptionProList = new List<License.MetCalWeb.Models.SubscriptionProductModel>();
-            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
-            var dataList = proSubLogic.GetSubscriptionFromFile();
-            var subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
-            foreach (var userSub in subscriptionList)
+            if (!Convert.ToBoolean(TempData["IsTeamAdmin"]))
+                return View();
+
+            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
+            string adminUserId = string.Empty;
+            if (LicenseSessionState.Instance.IsAdmin)
+                adminUserId = LicenseSessionState.Instance.User.UserId;
+            else
             {
-                var subType = dataList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
-                License.MetCalWeb.Models.SubscriptionProductModel model = new SubscriptionProductModel();
-                model.SubscriptionId = subType.Id;
-                model.SubscriptionName = subType.SubscriptionName;
-                foreach (var pro in subType.Product)
-                {
-                    UserLicenseLogic userLicLogic = new UserLicenseLogic();
-                    int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                    model.ProductDtls.Add(new ProductDetails() { ProductId = pro.Id, ProductName = pro.Name, ProductCode = pro.ProductCode, TotalCount = (pro.QtyPerSubscription * userSub.Quantity), UsedLicenseCount = usedLicCount });
-                }
-                subscriptionProList.Add(model);
+                License.Logic.ServiceLogic.TeamMemberLogic teamMemlogic = new TeamMemberLogic();
+                adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
             }
-            LicenseSessionState.Instance.SubscriptionList = subscriptionProList;
-            return View(subscriptionProList);
+
+            LicenseSessionState.Instance.SubscriptionList = SubscriLogic.GetSubscription(adminUserId).AsEnumerable();
+            return View(LicenseSessionState.Instance.SubscriptionList);
         }
 
         public ActionResult Invite()
@@ -108,25 +106,22 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Invite(UserInviteModel model)
         {
             bool status = false;
+            if (userLogic.UserManager == null)
+                userLogic.UserManager = UserManager;
+            if (userLogic.RoleManager == null)
+                userLogic.RoleManager = RoleManager;
             IdentityResult result;
             if (ModelState.IsValid)
             {
-                //if(logic.VerifyUserInvited(model.Email, LicenseSessionState.Instance.User.UserId)!= null)
-                //    return Json(new { success = false, Message = "User has already been invited" });
-
-                if (userLogic.UserManager == null)
-                    userLogic.UserManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
-                if (userLogic.RoleManager == null)
-                    userLogic.RoleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
                 if (!userLogic.GetUserByEmail(model.Email))
                 {
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
+                    model.RegistratoinModel.ManagerId = LicenseSessionState.Instance.User.UserId;
                     result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
                     status = result.Succeeded;
                 }
@@ -171,53 +166,31 @@ namespace WebApplication1.Controllers
 
         public ActionResult MapLicense(string userId)
         {
-            GetLicenseListBySubscription(userId);
-            return View(LicenseSessionState.Instance.LicenseMapModelList);
+            var listdata = GetLicenseListBySubscription(userId);
+            return View(listdata);
         }
 
-        public void GetLicenseListBySubscription(string userId)
+        public List<LicenseMapModel> GetLicenseListBySubscription(string userId)
         {
             TempData["UserId"] = userId;
-            userLogic.UserManager = Request.GetOwinContext().Get<AppUserManager>();
-            userLogic.RoleManager = Request.GetOwinContext().Get<AppRoleManager>();
+            if (userLogic.UserManager == null)
+                userLogic.UserManager = UserManager;
+            if (userLogic.RoleManager == null)
+                userLogic.RoleManager = RoleManager;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
-            licenseMapModelList = new List<LicenseMapModel>();
-            UserLicenseLogic logic = new UserLicenseLogic();
-            var data = logic.GetUserLicense(userId);
 
-            UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
-            var userSubscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
-            var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId);
-            var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
-
-            foreach (var subs in subscriptionList)
+            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
+            string adminUserId = string.Empty;
+            if (LicenseSessionState.Instance.IsAdmin)
+                adminUserId = LicenseSessionState.Instance.User.UserId;
+            else
             {
-                LicenseMapModel mapModel = new LicenseMapModel();
-                mapModel.SubscriptionName = subs.SubscriptionName;
-                mapModel.UserSubscriptionId = userSubscriptionList.FirstOrDefault(us => us.SubscriptionId == subs.SubscriptionId).Id;
+                License.Logic.ServiceLogic.TeamMemberLogic teamMemlogic = new TeamMemberLogic();
+                adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+            }
 
-                foreach (var pro in subs.ProductDtls)
-                {
-                    SubscriptionProduct prod = new SubscriptionProduct();
-                    prod.ProductId = pro.ProductId;
-                    prod.ProductName = pro.ProductName;
-                    prod.IsDisabled = pro.AvailableCount == 0;
-                    mapModel.ProductList.Add(prod);
-                }
-                licenseMapModelList.Add(mapModel);
-            }
-            foreach (var obj in data)
-            {
-                var subObj = licenseMapModelList.FirstOrDefault(f => f.UserSubscriptionId == obj.License.UserSubscriptionId);
-                if (subObj != null)
-                {
-                    var pro = subObj.ProductList.FirstOrDefault(f => f.ProductId == obj.License.ProductId);
-                    if (pro != null)
-                        pro.IsSelected = true;
-                    pro.InitialState = true;
-                }
-            }
-            LicenseSessionState.Instance.LicenseMapModelList = licenseMapModelList;
+            var licenseMapModelList = SubscriLogic.GetSubForLicenseMap(userId, adminUserId);
+            return licenseMapModelList;
         }
 
         [HttpPost]
@@ -229,45 +202,17 @@ namespace WebApplication1.Controllers
         }
         public ActionResult LicenseCart(string userId)
         {
-            GetLicenseListBySubscription(userId);
-            return View(LicenseSessionState.Instance.LicenseMapModelList);
+            var listdata = GetLicenseListBySubscription(userId);
+            return View(listdata);
         }
 
         public ActionResult RevokeLicense(string userId)
         {
             TempData["UserId"] = userId;
-            userLogic.UserManager = Request.GetOwinContext().Get<AppUserManager>();
-            userLogic.RoleManager = Request.GetOwinContext().Get<AppRoleManager>();
+            userLogic.UserManager = UserManager;
+            userLogic.RoleManager = RoleManager;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
-            licenseMapModelList = new List<LicenseMapModel>();
-            UserLicenseLogic logic = new UserLicenseLogic();
-            var data = logic.GetUserLicense(userId);
-            if (data.Count > 0)
-            {
-                var subIdList = data.Select(ul => ul.License.UserSubscriptionId);
-
-                UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
-                var userSubscriptionList = subscriptionLogic.GetSubscriptionByIDList(subIdList.ToList());
-                var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId);
-                var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
-                foreach (var subs in subscriptionList)
-                {
-                    var proList = data.Where(ul => ul.License.UserSubscriptionId == subs.SubscriptionId).ToList().Select(u => u.License.ProductId).ToList();
-                    LicenseMapModel mapModel = new LicenseMapModel();
-                    mapModel.SubscriptionName = subs.SubscriptionName;
-                    mapModel.UserSubscriptionId = userSubscriptionList.FirstOrDefault(us => us.SubscriptionId == subs.SubscriptionId).Id;
-
-                    foreach (var pro in subs.ProductDtls.Where(p => proList.Contains(p.ProductId)))
-                    {
-                        SubscriptionProduct prod = new SubscriptionProduct();
-                        prod.ProductId = pro.ProductId;
-                        prod.ProductName = pro.ProductName;
-                        prod.IsDisabled = pro.AvailableCount == 0;
-                        mapModel.ProductList.Add(prod);
-                    }
-                    licenseMapModelList.Add(mapModel);
-                }
-            }
+            List<LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
             return View(licenseMapModelList);
         }
 
@@ -299,9 +244,27 @@ namespace WebApplication1.Controllers
                 userLicesList.Add(lic);
             }
             if (action == "Add")
-                logic.CreateUserLicense(userLicesList);
+                logic.CreateUserLicense(userLicesList, userId);
             else
                 logic.RevokeUserLicense(userLicesList, userId);
+        }
+
+        public ActionResult UserConfiguration(int id, string userId, string actionType)
+        {
+            TeamMemberLogic logic = new TeamMemberLogic();
+            switch (actionType)
+            {
+                case "Admin":
+                    logic.SetAsAdmin(id, userId, true);
+                    break;
+                case "RemoveAdmin":
+                    logic.SetAsAdmin(id, userId, false);
+                    break;
+                case "Remove":
+                    logic.DeleteTeamMember(id);
+                    break;
+            }
+            return RedirectToAction("TeamContainer");
         }
     }
 }

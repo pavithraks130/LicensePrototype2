@@ -6,7 +6,7 @@ using License.Core.DBContext;
 using License.Core.Manager;
 using License.Core.Model;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 
@@ -36,7 +36,14 @@ namespace License.MetCalWeb
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login")
+                LoginPath = new PathString("/Account/Login"),
+                Provider = new CookieAuthenticationProvider
+                {
+                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<AppUserManager, AppUser>(
+      validateInterval: TimeSpan.FromMinutes(30),
+      regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager, DefaultAuthenticationTypes.ApplicationCookie))
+                },
+                ExpireTimeSpan = TimeSpan.FromMinutes(30)
             });
             //OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
             //{

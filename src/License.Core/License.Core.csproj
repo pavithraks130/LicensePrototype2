@@ -140,6 +140,10 @@
     <Compile Include="Migrations\201703090858160_ChangesToDb.Designer.cs">
       <DependentUpon>201703090858160_ChangesToDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703121521564_ManagerIdMappingtoUser.cs" />
+    <Compile Include="Migrations\201703121521564_ManagerIdMappingtoUser.Designer.cs">
+      <DependentUpon>201703121521564_ManagerIdMappingtoUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -177,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703090858160_ChangesToDb.resx">
       <DependentUpon>201703090858160_ChangesToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703121521564_ManagerIdMappingtoUser.resx">
+      <DependentUpon>201703121521564_ManagerIdMappingtoUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

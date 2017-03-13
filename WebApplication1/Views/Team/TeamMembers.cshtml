@@ -1,5 +1,6 @@
-﻿ 
+﻿
 @using License.MetCalWeb.Models
+@using License.MetCalWeb.Helper;
 @using License.Model
 @{
     Layout = null;
@@ -7,10 +8,50 @@
 @model TeamModel
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
+<link href="Content/MenuDropdown.css" rel="shortcut icon" type="image/x-icon" />
 <style>
     tr {
         border: none !important;
+    }
+
+    .dropbtn {
+        background-color: #FFFFFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #FFFFFF;
     }
 </style>
 <div class="row">
@@ -71,9 +112,9 @@
                 <div class="col-md-12">
                     <table class="table" style="border: none">
                         @foreach (TeamMembers t in Model.AcceptedUsers)
-                    {
+                        {
                             <tr>
-                                <td class="col-md-8">
+                                <td class="col-md-6">
                                     @if (t.InviteeUser != null)
                                     {
                                         <div>@t.InviteeUser.Name</div>
@@ -84,17 +125,49 @@
                                         <div>@t.InviteeEmail</div>
                                     }
                                 </td>
-                                @if (LicenseSessionState.Instance.IsTeamAdmin)
-                        {
-                                    <td class="col-md-4">
+                                <td class="col-md-2">
+                                    @if (t.IsAdmin)
+                                    {
+                                        @Html.Image("/Images/Users-icon.png", "Admin", "33", "33", null)
+                                    }
+                                </td>
+                                <td class="col-md-4">
+                                    @if (Convert.ToBoolean(TempData["IsTeamAdmin"]))
+                                    {
+
                                         <button class="alert-success">
                                             @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
                                             @*@Html.ActionLink("Add License", "LicenseCart", "Team", new { userId = @t.InviteeUserId }, null)*@
 
                                         </button>
                                         <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { userId = @t.InviteeUserId }, null)</button>
-                                    </td>
-                                }
+
+                                    }
+                                </td>
+                                <td class="col-md-2">
+                                    @if (LicenseSessionState.Instance.IsAdmin && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
+                                    {
+
+                                        <div class="dropdown">
+                                            <button class="dropbtn">
+                                                <span>
+                                                    @Html.Image("/Images/down-arrow.png", "Admin", "33", "33", null)
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-content">
+                                                @if (!t.IsAdmin)
+                                                {
+                                                    @Html.ActionLink("Set As Admin", "UserConfiguration", "Team", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Admin" }, null)
+                                                }
+                                                else
+                                                {
+                                                    @Html.ActionLink("Remove Admin Access", "UserConfiguration", "Team", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "RemoveAdmin" }, null)
+                                                }
+                                                @Html.ActionLink("Remove From Team", "UserConfiguration", "Team", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Remove" }, null)
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
                             </tr>
                         }
                     </table>

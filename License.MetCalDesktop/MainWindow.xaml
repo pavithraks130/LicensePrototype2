@@ -1,0 +1,10 @@
+﻿   <NavigationWindow x:Class="License.MetCalDesktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:License.MetCalDesktop"
+         xmlns:temp="clr-namespace:License.MetCalDesktop.Views"
+        mc:Ignorable="d" ShowsNavigationUI="False" 
+        Title="MET/CAL Runtime" Height="350" Width="525" Background="Black" Source="Views/LoginUser.xaml">
+    </NavigationWindow>

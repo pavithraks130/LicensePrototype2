@@ -22,6 +22,6 @@ namespace License.Core.Model
         public bool IsMapped { get; set; }
 
         [ForeignKey("UserSubscriptionId")]
-        public UserSubscription Subscription { get; set; }
+        public virtual UserSubscription Subscription { get; set; }
     }
 }

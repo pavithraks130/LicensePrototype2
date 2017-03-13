@@ -16,15 +16,16 @@ namespace License.Logic.ServiceLogic
             return obj.Id > 0;
         }
 
-        public bool CreateUserLicense(List<UserLicense> licList)
+        public bool CreateUserLicense(List<UserLicense> licList, string userId)
         {
             LicenseLogic licLogic = new LicenseLogic();
             int i = 0;
+            var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == userId).ToList();
             foreach (var lic in licList)
             {
                 var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).Select(l => l.Id);
-                var obj = Work.UserLicenseRepository.GetData(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId);
-                if (obj.Count() == 0)
+                var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId);
+                if (obj == null)
                 {
                     i++;
                     UserLicense ul = new UserLicense();
@@ -32,7 +33,14 @@ namespace License.Logic.ServiceLogic
                     ul.LicenseId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
                     CreateUserLicense(ul);
                 }
+                userLicList.Remove(obj);
             }
+            if(userLicList.Count > 0)
+                foreach (var ul in userLicList)
+                {
+                    i++;
+                    Work.UserLicenseRepository.Delete(ul);
+                }
             if (i > 0)
                 Work.UserLicenseRepository.Save();
             return true;
@@ -56,6 +64,7 @@ namespace License.Logic.ServiceLogic
             {
                 var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.License.ProductId && l.License.UserSubscriptionId == lic.License.UserSubscriptionId);
                 RemoveUserLicense(obj);
+                i++;
             }
             if (i > 0)
                 Work.UserLicenseRepository.Save();
@@ -81,7 +90,7 @@ namespace License.Logic.ServiceLogic
         public int GetUserLicenseCount(int userSubscriptionId, int productId)
         {
             var licenseIdList = Work.LicenseDataRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId && l.ProductId == productId).Select(l => l.Id).ToList();
-            return Work.UserLicenseRepository.GetData(ul => licenseIdList.Contains(ul.Id)).Count();
+            return Work.UserLicenseRepository.GetData(ul => licenseIdList.Contains(ul.LicenseId)).Count();
         }
 
         public List<UserLicense> GetUserLicense(string userId)

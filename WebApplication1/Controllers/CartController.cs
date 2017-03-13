@@ -83,7 +83,7 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.User.ServerUserId != subs.UserId)
             {
                 License.Logic.ServiceLogic.UserLogic userLogic = new License.Logic.ServiceLogic.UserLogic();
-                userLogic.UserManager = Request.GetOwinContext().GetUserManager<License.Core.Manager.AppUserManager>();
+                userLogic.UserManager = UserManager;
             }
             else
                 userId = LicenseSessionState.Instance.User.UserId;

@@ -27,10 +27,11 @@ namespace License.MetCalWeb
 
         public bool IsSuperAdmin { get; set; }
 
-        public bool IsTeamAdmin { get; set; }
-
-        public List<MetCalWeb.Models.LicenseMapModel> LicenseMapModelList { get; set; }
+        public bool IsAdmin { get; set; }
+        
         public IEnumerable<License.MetCalWeb.Models.SubscriptionProductModel> SubscriptionList { get; set; }
+
+        public List<License.MetCalWeb.Models.LicenseMapModel>  ProductLicense { get; set; }
 
     }
 }

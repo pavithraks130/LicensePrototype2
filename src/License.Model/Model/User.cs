@@ -16,6 +16,9 @@ namespace License.Model
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }
+
+        public string ManagerId { get; set; }
+
         public IList<string> Roles { get; set; }
 
         public string ServerUserId { get; set; }

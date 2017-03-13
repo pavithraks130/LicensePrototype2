@@ -34,29 +34,7 @@ namespace License.MetCalWeb.Controllers
                 return _authManager;
             }
         }
-        private AppUserManager _userManager = null;
-        public AppUserManager UserManager
-        {
-            get
-            {
-                if(_userManager == null)
-                    _userManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
-                return _userManager;
-            }
-        }
-
-        private AppRoleManager _roleManager = null;
-        public AppRoleManager RoleManager
-        {
-            get
-            {
-                if (_roleManager == null)
-                    _roleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
-                return _roleManager;
-            }
-        }
-
-
+      
         public ActionResult Register()
         {
             ViewData["SucessMessageDisplay"] = false;
@@ -134,6 +112,7 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
                     LicenseSessionState.Instance.IsAuthenticated = true;
+                    SubscriLogic.GetUserLicenseForUser();
                     return RedirectToAction("Home", "Tab");
                 }
                 else

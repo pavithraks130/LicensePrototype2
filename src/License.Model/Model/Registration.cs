@@ -15,6 +15,6 @@ namespace License.Model
         public string OrganizationName { get; set; }
         public string Password { get; set; }
         public string ServerUserId { get; set; }
-
+        public string ManagerId { get; set; }
     }
 }
