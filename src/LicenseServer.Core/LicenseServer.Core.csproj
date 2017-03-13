@@ -90,37 +90,9 @@
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="Manager\LicRoleManager.cs" />
     <Compile Include="Manager\LicUserManager.cs" />
-    <Compile Include="Migrations\201702281926265_init.cs" />
-    <Compile Include="Migrations\201702281926265_init.Designer.cs">
-      <DependentUpon>201702281926265_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702281934118_TablePKChanges.cs" />
-    <Compile Include="Migrations\201702281934118_TablePKChanges.Designer.cs">
-      <DependentUpon>201702281934118_TablePKChanges.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703010908256_changestoProductModel.cs" />
-    <Compile Include="Migrations\201703010908256_changestoProductModel.Designer.cs">
-      <DependentUpon>201703010908256_changestoProductModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703011817309_IsPurchasedToCartItemTable.cs" />
-    <Compile Include="Migrations\201703011817309_IsPurchasedToCartItemTable.Designer.cs">
-      <DependentUpon>201703011817309_IsPurchasedToCartItemTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703020419214_DBConfig2.cs" />
-    <Compile Include="Migrations\201703020419214_DBConfig2.Designer.cs">
-      <DependentUpon>201703020419214_DBConfig2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703020455017_PriceColumnToSubscriptionType.cs" />
-    <Compile Include="Migrations\201703020455017_PriceColumnToSubscriptionType.Designer.cs">
-      <DependentUpon>201703020455017_PriceColumnToSubscriptionType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703020605150_SubscriptionTypeTableChange.cs" />
-    <Compile Include="Migrations\201703020605150_SubscriptionTypeTableChange.Designer.cs">
-      <DependentUpon>201703020605150_SubscriptionTypeTableChange.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703020644545_PriceColumnToCartItem.cs" />
-    <Compile Include="Migrations\201703020644545_PriceColumnToCartItem.Designer.cs">
-      <DependentUpon>201703020644545_PriceColumnToCartItem.cs</DependentUpon>
+    <Compile Include="Migrations\201703100605103_ServerInit.cs" />
+    <Compile Include="Migrations\201703100605103_ServerInit.Designer.cs">
+      <DependentUpon>201703100605103_ServerInit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
@@ -138,29 +110,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702281926265_init.resx">
-      <DependentUpon>201702281926265_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702281934118_TablePKChanges.resx">
-      <DependentUpon>201702281934118_TablePKChanges.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703010908256_changestoProductModel.resx">
-      <DependentUpon>201703010908256_changestoProductModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703011817309_IsPurchasedToCartItemTable.resx">
-      <DependentUpon>201703011817309_IsPurchasedToCartItemTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703020419214_DBConfig2.resx">
-      <DependentUpon>201703020419214_DBConfig2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703020455017_PriceColumnToSubscriptionType.resx">
-      <DependentUpon>201703020455017_PriceColumnToSubscriptionType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703020605150_SubscriptionTypeTableChange.resx">
-      <DependentUpon>201703020605150_SubscriptionTypeTableChange.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703020644545_PriceColumnToCartItem.resx">
-      <DependentUpon>201703020644545_PriceColumnToCartItem.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201703100605103_ServerInit.resx">
+      <DependentUpon>201703100605103_ServerInit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
