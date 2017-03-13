@@ -24,6 +24,7 @@ namespace LicenseServer.Core.DbContext
         public DbSet<SubscriptionDetail> SubscriptionDetail { get; set; }
 
         public DbSet<UserSubscription> UserSubScriptioin { get; set; }
+        public DbSet<LicenseFeatures> LicenseFeatures { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

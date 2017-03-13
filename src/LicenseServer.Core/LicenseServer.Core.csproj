@@ -74,6 +74,7 @@
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -126,6 +127,10 @@
     <Compile Include="Migrations\201703130910301_FeatureList.Designer.cs">
       <DependentUpon>201703130910301_FeatureList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703131104366_AddingFeature.cs" />
+    <Compile Include="Migrations\201703131104366_AddingFeature.Designer.cs">
+      <DependentUpon>201703131104366_AddingFeature.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -169,6 +174,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703130910301_FeatureList.resx">
       <DependentUpon>201703130910301_FeatureList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703131104366_AddingFeature.resx">
+      <DependentUpon>201703131104366_AddingFeature.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

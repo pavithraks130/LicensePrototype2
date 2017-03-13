@@ -14,6 +14,7 @@ namespace LicenseServer.DataModel
         public string ProductCode { get; set; }
         public string ImagePath { get; set; }
         public string CreatedDate { get; set; }
-                
+        public ICollection<LicenseFeatures> AssociatedFeatures { get; set; }
+
     }
 }

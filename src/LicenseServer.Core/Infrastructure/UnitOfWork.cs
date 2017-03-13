@@ -66,6 +66,17 @@ namespace LicenseServer.Core.Infrastructure
                 return _cartItemRepository ?? (_cartItemRepository = new GenericRepository<CartItem>(_context));
             }
         }
+        private GenericRepository<LicenseFeatures> _licenseFeaturesRepository;
+        public GenericRepository<LicenseFeatures> LicenseFeaturesRepository
+        {
+            get
+            {
+                return _licenseFeaturesRepository ??(_licenseFeaturesRepository=new GenericRepository<LicenseFeatures>(_context));
+            }
+
+        }
+
+      
 
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
