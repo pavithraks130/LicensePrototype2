@@ -20,7 +20,7 @@
         });
     });
 </script>
-<style>
+@*<style>
     input[type="radio"] {
         width: 20px !important;
         margin: 0px !important;
@@ -29,7 +29,7 @@
     .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
         border-top: none !important;
     }
-</style>
+</style>*@
 <div class="row">
     <h2>
         License Mapping To User
@@ -63,7 +63,21 @@
                         {
                             <tr style="">
                                 <td>
-                                    <label class="control-label"><input type="checkbox" name="SelectedSubscription" value="@Model[i].UserSubscriptionId" checked="@Model[i].IsSelected" class="checkbox-inline">@Model[i].SubscriptionName - @Model[i].UserSubscriptionId</label>
+                                    @Model[i].SubscriptionName
+                                    <table class="table">
+                                        @for (int j = 0; j < Model[i].ProductList.Count; j++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label">
+                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].ProductList[j].IsSelected" class="checkbox-inline">
+                                                        @Model[i].ProductList[j].ProductName
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </table>
                                 </td>
                             </tr>
                         }

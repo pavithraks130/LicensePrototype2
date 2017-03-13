@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using License.Core.Model;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 
 namespace License.Logic.ServiceLogic
@@ -18,7 +18,7 @@ namespace License.Logic.ServiceLogic
             var users = UserManager.Users.ToList();
             foreach (var u in users)
             {
-                User temp = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
+                User temp = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.User>(u);
                 usersList.Add(temp);
             }
             return usersList;
@@ -33,26 +33,38 @@ namespace License.Logic.ServiceLogic
             ur.PhoneNumber = u.PhoneNumber;
             ur.UserName = u.Email;
             ur.ServerUserId = u.ServerUserId;
-            //if (t == null)
-            //    t = logic.CreateTeam(new Model.Model.Organization() { Name = u.OrganizationName });
-            //ur.OrganizationId = t.Id;
-            AppUser user = AutoMapper.Mapper.Map<License.Model.Model.User, License.Core.Model.AppUser>(ur);
+            ur.ManagerId = u.ManagerId;
+
+            AppUser user = AutoMapper.Mapper.Map<License.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
             {
-                result = UserManager.Create(user, u.Password);
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
                     rolelogic.RoleManager = RoleManager;
-                    result = rolelogic.CreateRole(new Model.Model.Role() { Name = roleName });
+                    result = rolelogic.CreateRole(new Model.Role() { Name = roleName });
                 }
-                var roleId = RoleManager.FindByName(roleName).Id;
-                UserManager.AddToRole(user.Id, roleName);
+                string userId = String.Empty;
+                var usr = UserManager.FindByEmail(u.Email);
+
+                if (usr == null)
+                {
+                    result = UserManager.Create(user, u.Password);
+                    userId = user.Id;
+                }
+                else
+                    userId = usr.Id;
+
+                if (!UserManager.IsInRole(userId, roleName))
+                    result = UserManager.AddToRole(userId, roleName);
+                else
+                    result = new IdentityResult(new string[] { });
             }
             catch (Exception ex)
             {
-                throw ex;
+                 //throw ex;
+                result = new IdentityResult(new string[] { ex.Message });
             }
             return result;
         }
@@ -60,7 +72,7 @@ namespace License.Logic.ServiceLogic
         public User GetUserById(string id)
         {
             var u = UserManager.FindById(id);
-            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.Model.User>(u);
+            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.User>(u);
             return user;
         }
 

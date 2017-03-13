@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model.Model
+namespace License.Model
 {
     public class User
     {
@@ -16,6 +16,9 @@ namespace License.Model.Model
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }
+
+        public string ManagerId { get; set; }
+
         public IList<string> Roles { get; set; }
 
         public string ServerUserId { get; set; }

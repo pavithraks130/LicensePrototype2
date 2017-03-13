@@ -14,7 +14,7 @@ using License.Logic.Common;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -34,29 +34,7 @@ namespace License.MetCalWeb.Controllers
                 return _authManager;
             }
         }
-        private AppUserManager _userManager = null;
-        public AppUserManager UserManager
-        {
-            get
-            {
-                if(_userManager == null)
-                    _userManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
-                return _userManager;
-            }
-        }
-
-        private AppRoleManager _roleManager = null;
-        public AppRoleManager RoleManager
-        {
-            get
-            {
-                if (_roleManager == null)
-                    _roleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
-                return _roleManager;
-            }
-        }
-
-
+      
         public ActionResult Register()
         {
             ViewData["SucessMessageDisplay"] = false;

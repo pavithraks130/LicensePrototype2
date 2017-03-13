@@ -35,7 +35,7 @@ namespace LicenseServer.Logic
 
         public bool UpdateCartItem(CartItem item)
         {
-            Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById(item.Id);
+            Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById( item.Id);
             cartItem.IsPurchased = item.IsPurchased;
             cartItem = Work.CartItemLicenseRepository.Update(cartItem);
             Work.CartItemLicenseRepository.Save();

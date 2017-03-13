@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using License.Core.Manager;
 using License.Core.Model;
-using License.Model.Model;
+using License.Model;
 
 namespace License.MetCalWeb
 {
@@ -27,10 +27,10 @@ namespace License.MetCalWeb
 
         public bool IsSuperAdmin { get; set; }
 
-        public bool IsTeamAdmin { get; set; }
+        public bool IsAdmin { get; set; }
 
         public List<MetCalWeb.Models.LicenseMapModel> LicenseMapModelList { get; set; }
-        public IEnumerable<Model.Model.UserSubscription> SubscriptionList { get; set; }
+        public IEnumerable<License.MetCalWeb.Models.SubscriptionProductModel> SubscriptionList { get; set; }
 
     }
 }

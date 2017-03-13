@@ -16,5 +16,7 @@ namespace LicenseServer.Core.Model
         public int ActiveDays { get; set; }
 
         public double Price { get; set; }
+
+        public virtual IEnumerable<SubscriptionDetail> SubDetails { get; set; }
     }
 }

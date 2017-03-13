@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using License.Logic.ServiceLogic;
 using System.Web.Mvc;
 using License.MetCalWeb.Models;
 using LicenseServer.Logic;
@@ -13,12 +12,10 @@ namespace License.MetCalWeb.Controllers
     [Authorize(Roles ="Admin,SuperAdmin")]
     public class ProductController : BaseController
     {
-        ProductLogic productLogic = null;
         CartLogic cartLogic = null;
         SubscriptionTypeLogic subscriptionTypeLogic = null;
         public ProductController()
         {
-            productLogic = new ProductLogic();
             cartLogic = new CartLogic();
             subscriptionTypeLogic = new SubscriptionTypeLogic();
         }
@@ -29,36 +26,6 @@ namespace License.MetCalWeb.Controllers
             return View(obj);
         }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(ProductModel pro, HttpPostedFileBase productImage)
-        {
-            if (productImage != null)
-            {
-                var imageType = productImage.FileName.Substring(productImage.FileName.ToString().LastIndexOf('.'));
-                if (imageType.ToString().ToLower() != ".png" && imageType.ToString().ToLower() != ".jpg" && imageType.ToString().ToLower() != ".jpeg")
-                {
-                    ModelState.AddModelError("", "Uploaded profile image should be jpg or png extension.");
-                    return View(pro);
-                }
-                var imageName = pro.ProductName + imageType;
-                if (productImage != null)
-                {
-                    pro.ImagePath = imageName;
-                    productImage.SaveAs(Server.MapPath("~/ProductImages/") + imageName);
-
-                }
-            }
-            productLogic.CreateProduct(pro.ModelProduct);
-            return RedirectToAction("Index");
-        }
-
-       
         public ActionResult AddProductToCart(int? Id)
         {
             CartItem item = new CartItem();

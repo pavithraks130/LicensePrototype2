@@ -13,7 +13,7 @@ namespace LicenseServer.Logic
         {
             List<SubscriptionType> subscriptionTypes = new List<SubscriptionType>();
             var listSubscription = Work.SubscriptionRepository.GetData();
-            foreach(var obj in listSubscription)
+            foreach (var obj in listSubscription)
             {
                 subscriptionTypes.Add(AutoMapper.Mapper.Map<Core.Model.SubscriptionType, DataModel.SubscriptionType>(obj));
             }

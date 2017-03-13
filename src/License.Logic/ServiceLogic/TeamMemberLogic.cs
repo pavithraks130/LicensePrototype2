@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using License.Core.Model;
 using License.Logic.Common;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
-using TeamMembers = License.Model.Model.TeamMembers;
+using TeamMembers = License.Model.TeamMembers;
 
 namespace License.Logic.ServiceLogic
 {
@@ -15,7 +15,7 @@ namespace License.Logic.ServiceLogic
     {
         public TeamMembers CreateInvite(TeamMembers invit)
         {
-            License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
+            License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
             var obj = Work.UserInviteLicenseRepository.Create(userinvit);
             Work.UserInviteLicenseRepository.Save();
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
@@ -29,7 +29,7 @@ namespace License.Logic.ServiceLogic
             List<TeamMembers> teamMembers = new List<TeamMembers>();
             var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
             foreach (var data in listData)
-                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMembers, Model.Model.TeamMembers>(data));
+                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMembers, Model.TeamMembers>(data));
             if (teamMembers.Count > 0)
             {
                 inviteList.PendingInvites =
@@ -41,7 +41,7 @@ namespace License.Logic.ServiceLogic
                     AdminId = adminId,
                     InviteeEmail = user.Email,
                     InviteeStatus = InviteStatus.Accepted.ToString(),
-                    InviteeUserId = adminId,                    
+                    InviteeUserId = adminId,
                     IsAdmin = true
                 });
             }
@@ -75,7 +75,15 @@ namespace License.Logic.ServiceLogic
             Core.Model.TeamMembers teamMembers = Work.UserInviteLicenseRepository.GetById(id);
             teamMembers.IsAdmin = status;
             Work.UserInviteLicenseRepository.Update(teamMembers);
+            Work.UserInviteLicenseRepository.Save();
         }
-      
+
+        public bool DeleteTeamMember(int id)
+        {
+            var status = Work.UserInviteLicenseRepository.Delete(id);
+            Work.UserInviteLicenseRepository.Save();
+            return status;
+        }
+
     }
 }

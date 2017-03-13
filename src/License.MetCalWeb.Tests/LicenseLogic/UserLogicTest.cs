@@ -42,7 +42,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void CrearUser()
         {
-            Model.Model.Registration reg = new Model.Model.Registration();
+            Model.Registration reg = new Model.Registration();
             reg.FirstName = "veeresh";
             reg.LastName = "S";
             reg.OrganizationName = "sidssol";

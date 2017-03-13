@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 
 namespace License.MetCalWeb.Models
