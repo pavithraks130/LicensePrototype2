@@ -34,7 +34,7 @@ namespace License.MetCalWeb.Controllers
                 return _authManager;
             }
         }
-      
+
         public ActionResult Register()
         {
             ViewData["SucessMessageDisplay"] = false;
@@ -62,6 +62,14 @@ namespace License.MetCalWeb.Controllers
                 reg.OrganizationName = model.Organization;
                 reg.Password = model.Password;
                 reg.PhoneNumber = model.PhoneNumber;
+
+                LicenseServer.Logic.UserTokenLogic tokenLogic = new LicenseServer.Logic.UserTokenLogic();
+                var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = model.Email, Token = model.Token });
+                if (!status)
+                {
+                    ModelState.AddModelError("", "Invalid Token Specified please verify the token");
+                    return View();
+                }
 
                 string servUserId = serUserLogic.CreateUser(reg);
                 model.RegistratoinModel.ServerUserId = servUserId;
@@ -154,7 +162,7 @@ namespace License.MetCalWeb.Controllers
                     if (!String.IsNullOrEmpty(user.ServerUserId))
                     {
                         LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
-                       var status = await userLogic.ResetPassword(user.ServerUserId, model.Password);
+                        var status = await userLogic.ResetPassword(user.ServerUserId, model.Password);
                     }
                     ViewBag.Display = "inline";
                     ViewBag.ResetMessage = "Success";

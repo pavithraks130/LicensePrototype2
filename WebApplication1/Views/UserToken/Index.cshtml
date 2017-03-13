@@ -1,0 +1,91 @@
+﻿@{
+    Layout = null;
+}
+@model List<LicenseServer.DataModel.UserToken>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link href="Content/MenuDropdown.css" rel="shortcut icon" type="image/x-icon" />
+<style>
+    tr {
+        border: none !important;
+    }
+
+    .dropbtn {
+        background-color: #FFFFFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #FFFFFF;
+    }
+</style>
+<div class="row">
+    @if (Model == null || Model.Count == 0)
+    {
+        <table class="table" style="border: none;">
+            <tr>
+                <td>
+                    <div id="emptyTeamContainer" data-show-on-empty-team="true">
+                        <h4>No Data Exist</h4>
+                        <button class="btn btn-primary btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Create User Token</button>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <div class="form-group">
+            <div class="col-md-12">
+                <table class="table" style="border: none">
+                    @foreach (var t in Model)
+                    {
+                        <tr>
+                            <td class="col-md-8">
+                                @t.Email
+                            </td>
+                            <td class="col-md-4">
+                                <div>@t.Token</div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    }
+    <div class="modal" id="myModal">
+        @{ Html.RenderAction("CreateToken"); }
+    </div>
+</div>

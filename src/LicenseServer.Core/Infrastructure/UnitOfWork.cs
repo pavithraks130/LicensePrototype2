@@ -67,6 +67,15 @@ namespace LicenseServer.Core.Infrastructure
             }
         }
 
+        private GenericRepository<UserToken> _userTokenRepository;
+        public GenericRepository<UserToken> UserTokenRepository
+        {
+            get
+            {
+                return _userTokenRepository ?? (_userTokenRepository = new GenericRepository<UserToken>(_context));
+            }
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

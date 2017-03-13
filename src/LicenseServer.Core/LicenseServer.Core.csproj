@@ -131,6 +131,7 @@
     <Compile Include="Model\SubscriptionDetail.cs" />
     <Compile Include="Model\SubscriptionType.cs" />
     <Compile Include="Model\UserSubscription.cs" />
+    <Compile Include="Model\UserToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -101,6 +101,7 @@
     <Compile Include="ServiceLogic\SubscriptionTypeLogic.cs" />
     <Compile Include="ServiceLogic\UserLogic.cs" />
     <Compile Include="ServiceLogic\UserSubscriptionLogic.cs" />
+    <Compile Include="ServiceLogic\UserTokenLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

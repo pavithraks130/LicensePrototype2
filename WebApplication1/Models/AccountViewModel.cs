@@ -66,6 +66,8 @@ namespace License.MetCalWeb.Models
             set { RegistratoinModel.ServerUserId = value; }
         }
 
+        public string Token { get; set; }
+
     }
 
     public class LoginViewModel
