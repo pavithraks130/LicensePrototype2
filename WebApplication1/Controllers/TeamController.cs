@@ -30,7 +30,7 @@ namespace License.MetCalWeb.Controllers
             userLogic = new UserLogic();
             subscriptionLogic = new UserSubscriptionLogic();
 
-          
+
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -55,7 +55,7 @@ namespace License.MetCalWeb.Controllers
             if (logic.RoleManager == null)
                 logic.RoleManager = RoleManager;
 
-           
+
             if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
@@ -72,21 +72,34 @@ namespace License.MetCalWeb.Controllers
                 model.AcceptedUsers = inviteList.AcceptedInvites;
                 model.PendinigUsers = inviteList.PendingInvites;
             }
-            if (model.AcceptedUsers.Count <= 0 ||  Convert.ToBoolean(TempData["IsTeamAdmin"]))
+            if (model.AcceptedUsers.Count <= 0 || Convert.ToBoolean(TempData["IsTeamAdmin"]))
                 return model;
             var obj =
                 model.AcceptedUsers
                     .FirstOrDefault(t => t.InviteeUserId == LicenseSessionState.Instance.User.UserId);
-             TempData["IsTeamAdmin"] = obj?.IsAdmin ?? false;
+            TempData["IsTeamAdmin"] = obj?.IsAdmin ?? false;
             return model;
         }
 
         public ActionResult Subscriptions()
         {
             IList<License.MetCalWeb.Models.SubscriptionProductModel> subscriptionProList = new List<License.MetCalWeb.Models.SubscriptionProductModel>();
+            if(!Convert.ToBoolean(TempData["IsTeamAdmin"]))
+                return View(subscriptionProList);
+
             ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
-            var dataList = proSubLogic.GetSubscriptionFromFile();
-            var subscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
+            var dataList = proSubLogic.GetSubscriptionFromFile();            
+            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
+            string adminUserId = string.Empty;
+            if (LicenseSessionState.Instance.IsAdmin)
+                adminUserId = LicenseSessionState.Instance.User.UserId;
+            else 
+            {
+                License.Logic.ServiceLogic.TeamMemberLogic teamMemlogic = new TeamMemberLogic();
+                adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+            }
+
+            var subscriptionList = subscriptionLogic.GetSubscription(adminUserId);
             foreach (var userSub in subscriptionList)
             {
                 var subType = dataList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
@@ -188,9 +201,19 @@ namespace License.MetCalWeb.Controllers
             UserLicenseLogic logic = new UserLicenseLogic();
             var data = logic.GetUserLicense(userId);
 
+            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
+            string adminUserId = string.Empty;
+            if (LicenseSessionState.Instance.IsAdmin)
+                adminUserId = LicenseSessionState.Instance.User.UserId;
+            else
+            {
+                License.Logic.ServiceLogic.TeamMemberLogic teamMemlogic = new TeamMemberLogic();
+                adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+            }
+
             UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
-            var userSubscriptionList = subscriptionLogic.GetSubscription(LicenseSessionState.Instance.User.UserId);
-            var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId);
+            var userSubscriptionList = subscriptionLogic.GetSubscription(adminUserId);
+            var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId).ToList();
             var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
 
             foreach (var subs in subscriptionList)
@@ -302,12 +325,12 @@ namespace License.MetCalWeb.Controllers
                 userLicesList.Add(lic);
             }
             if (action == "Add")
-                logic.CreateUserLicense(userLicesList);
+                logic.CreateUserLicense(userLicesList, userId);
             else
                 logic.RevokeUserLicense(userLicesList, userId);
         }
 
-        public ActionResult UserConfiguration(int id,string userId, string actionType)
+        public ActionResult UserConfiguration(int id, string userId, string actionType)
         {
             TeamMemberLogic logic = new TeamMemberLogic();
             switch (actionType)
