@@ -32,6 +32,13 @@ namespace LicenseServer.DataModel
     {
         public Product Product { get; set; }
         public int QtyPerSubscription { get; set; }
+
+        public List<Feature> Features { get; set; }
+
+        public ProductDetails()
+        {
+            Features = new List<Feature>();
+        }
     }
 
     public class UserSubscriptionList

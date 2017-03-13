@@ -101,6 +101,15 @@ namespace License.MetCalWeb.Controllers
                     prod.Description = pro.Product.Description;
                     prod.ProductCode = pro.Product.ProductCode;
                     prod.QtyPerSubscription = pro.QtyPerSubscription;
+                    prod.Features = new List<Model.Feature>();
+                    foreach(var f in pro.Product.AssociatedFeatures)
+                    {
+                        var feture = new License.Model.Feature();
+                        feture.Id = f.Id;
+                        feture.Name = f.Name;
+                        feture.Description = f.Description;
+                        prod.Features.Add(feture);
+                    }
                     productList.Add(prod);
                 }
 

@@ -43,6 +43,7 @@ namespace LicenseServer.Logic
                     ProductDetails dtls = new ProductDetails();
                     dtls.Product = dt.Product;
                     dtls.QtyPerSubscription = dt.Quantity;
+                    dtls.Features.AddRange(dt.Product.AssociatedFeatures);
                     proDtls.Products.Add(dtls);
                 }
             }

@@ -26,8 +26,10 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.Appuser, LicenseServer.DataModel.User>();
             cfg.CreateMap<LicenseServer.DataModel.User, LicenseServer.Core.Model.Appuser>();
 
-            cfg.CreateMap<LicenseServer.Core.Model.Product, LicenseServer.DataModel.Product>();
-            cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>();
+            cfg.CreateMap<LicenseServer.Core.Model.Product, LicenseServer.DataModel.Product>()
+                .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
+            cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>()
+                .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
 
             cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>()
                 .ForMember(dest => dest.SubDetails, opt => opt.MapFrom(src => src.SubDetails));
@@ -41,6 +43,9 @@ namespace LicenseServer.Logic
 
             cfg.CreateMap<LicenseServer.Core.Model.CartItem, LicenseServer.DataModel.CartItem>();
             cfg.CreateMap<LicenseServer.DataModel.CartItem, LicenseServer.Core.Model.CartItem>();
+
+            cfg.CreateMap<LicenseServer.DataModel.Feature, LicenseServer.Core.Model.Feature>();
+            cfg.CreateMap<LicenseServer.Core.Model.Feature, LicenseServer.DataModel.Feature>();
 
             cfg.CreateMap<LicenseServer.Core.Model.UserToken, DataModel.UserToken>();
             cfg.CreateMap<DataModel.UserToken, Core.Model.UserToken>();
