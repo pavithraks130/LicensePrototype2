@@ -22,7 +22,7 @@ namespace LicenseServer.Core.Model
 
         public string CreatedDate { get; set; }
 
-        public ICollection<LicenseFeatures> AssociatedFeatures { get; set; }
+        public ICollection<Features> AssociatedFeatures { get; set; }
 
     }
 }

@@ -7,13 +7,13 @@ namespace LicenseServer.Core.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddingFeature : IMigrationMetadata
+    public sealed partial class Init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddingFeature));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201703131104366_AddingFeature"; }
+            get { return "201703131643157_Init"; }
         }
         
         string IMigrationMetadata.Source

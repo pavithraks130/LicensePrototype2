@@ -41,7 +41,7 @@ namespace LicenseServer.Logic
 
             cfg.CreateMap<LicenseServer.Core.Model.CartItem, LicenseServer.DataModel.CartItem>();
             cfg.CreateMap<LicenseServer.DataModel.CartItem, LicenseServer.Core.Model.CartItem>();
-            cfg.CreateMap<LicenseServer.DataModel.LicenseFeatures, LicenseServer.Core.Model.LicenseFeatures>();
+            cfg.CreateMap<LicenseServer.DataModel.Features, LicenseServer.Core.Model.Features>();
 
             License.Logic.AutoMapperConfiguration.InitializeConfiguration(cfg);
         }

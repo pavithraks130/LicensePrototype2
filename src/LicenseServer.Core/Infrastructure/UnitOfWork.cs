@@ -66,12 +66,12 @@ namespace LicenseServer.Core.Infrastructure
                 return _cartItemRepository ?? (_cartItemRepository = new GenericRepository<CartItem>(_context));
             }
         }
-        private GenericRepository<LicenseFeatures> _licenseFeaturesRepository;
-        public GenericRepository<LicenseFeatures> LicenseFeaturesRepository
+        private GenericRepository<Features> _featuresRepository;
+        public GenericRepository<Features> FeaturesRepository
         {
             get
             {
-                return _licenseFeaturesRepository ??(_licenseFeaturesRepository=new GenericRepository<LicenseFeatures>(_context));
+                return _featuresRepository ??(_featuresRepository=new GenericRepository<Features>(_context));
             }
 
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.Core.Model
 {
-    public class LicenseFeatures
+    public class Features
     {
 
         [Key]

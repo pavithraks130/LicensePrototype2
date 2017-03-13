@@ -93,7 +93,7 @@
     <Compile Include="ServiceLogic\BaseLogic.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="ServiceLogic\CartLogic.cs" />
-    <Compile Include="ServiceLogic\LicenseFeatureLogic.cs" />
+    <Compile Include="ServiceLogic\FeaturesLogic.cs" />
     <Compile Include="ServiceLogic\OrganizationLogic.cs" />
     <Compile Include="ServiceLogic\ProductLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

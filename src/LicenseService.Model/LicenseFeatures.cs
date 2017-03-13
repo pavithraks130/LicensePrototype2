@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.DataModel
 {
-    public class LicenseFeatures
+    public class Features
     {
 
         public int FeatureId { get; set; }

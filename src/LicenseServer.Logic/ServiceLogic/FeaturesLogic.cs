@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.Logic.ServiceLogic
 {
-  public class LicenseFeatureLogic:BaseLogic
+  public class FeaturesLogic:BaseLogic
     {
     }
 }
