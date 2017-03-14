@@ -63,13 +63,13 @@ namespace License.MetCalWeb.Controllers
                 reg.Password = model.Password;
                 reg.PhoneNumber = model.PhoneNumber;
 
-                //LicenseServer.Logic.UserTokenLogic tokenLogic = new LicenseServer.Logic.UserTokenLogic();
-                //var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = model.Email, Token = model.Token });
-                //if (!status)
-                //{
-                //    ModelState.AddModelError("", "Invalid Token Specified please verify the token");
-                //    return View();
-                //}
+                LicenseServer.Logic.UserTokenLogic tokenLogic = new LicenseServer.Logic.UserTokenLogic();
+                var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = model.Email, Token = model.Token });
+                if (!status)
+                {
+                    ModelState.AddModelError("", "Invalid Token Specified please verify the token");
+                    return View();
+                }
 
                 string servUserId = serUserLogic.CreateUser(reg);
                 model.RegistratoinModel.ServerUserId = servUserId;
@@ -107,28 +107,60 @@ namespace License.MetCalWeb.Controllers
                     logic.UserManager = UserManager;
                 if (logic.RoleManager == null)
                     logic.RoleManager = RoleManager;
+                MetCalWeb.Models.UserModel userObj = new Models.UserModel();
+
+                // Authentication is supparated for the On Premises user and SuperAdmin User. Super Admin will  be authenticate with LicenseServer Db 
+                // and on premises user will be authenticated with on premise DB
                 AppUser user = logic.AutheticateUser(model.Email, model.Password);
                 if (user != null)
                 {
                     //Code need to be removed added only for verfication
-
-                    LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
-                    var status = userLogic.ValidateUser(model.Email, model.Password);
                     SignInAsync(user, model.RememberMe);
-                    LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
-                    LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                        LicenseSessionState.Instance.IsAdmin = true;
-                    else
-                        LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-                    LicenseSessionState.Instance.IsAuthenticated = true;
-                    SubscriLogic.GetUserLicenseForUser();
-                    return RedirectToAction("Home", "Tab");
+                    var obj = logic.GetUserDataByAppuser(user);
+                    userObj.Email = obj.Email;
+                    userObj.FirstName = obj.FirstName;
+                    userObj.LastName = obj.LastName;
+                    userObj.ManagerId = obj.ManagerId;
+                    userObj.Name = obj.Name;
+                    userObj.PhoneNumber = obj.PhoneNumber;
+                    userObj.Roles = obj.Roles;
+                    userObj.ServerUserId = obj.ServerUserId;
+                    userObj.UserId = obj.UserId;
+                    userObj.UserName = obj.UserName;
                 }
                 else
                 {
-                    ModelState.AddModelError("", "invalid Credentials");
+                    LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
+                    var status = userLogic.ValidateUser(model.Email, model.Password);
+                    if (status)
+                    {
+                        var obj = userLogic.GetUserByEmail(model.Email);
+                        userObj.Email = obj.Email;
+                        userObj.FirstName = obj.FirstName;
+                        userObj.LastName = obj.LastName;
+                        userObj.ManagerId = String.Empty;
+                        userObj.Name = obj.Name;
+                        userObj.PhoneNumber = obj.PhoneNumber;
+                        userObj.Roles = obj.Roles;
+                        userObj.ServerUserId = String.Empty;
+                        userObj.UserId = obj.UserId;
+                        userObj.UserName = obj.UserName;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "invalid Credentials");
+                        return View();
+                    }
                 }
+                LicenseSessionState.Instance.User = userObj;
+                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    LicenseSessionState.Instance.IsAdmin = true;
+                else
+                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+                LicenseSessionState.Instance.IsAuthenticated = true;
+                SubscriLogic.GetUserLicenseForUser();
+                return RedirectToAction("Home", "Tab");
             }
             return View();
         }
