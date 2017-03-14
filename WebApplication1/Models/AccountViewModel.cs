@@ -88,6 +88,14 @@ namespace License.MetCalWeb.Models
 
     public class ResetPassword
     {
+        [Required]
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
+
         [Display(Name = "New Password")]
         public string Password { get; set; }
 
