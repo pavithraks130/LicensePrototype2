@@ -1,14 +1,63 @@
-﻿
+﻿@model  LicenseSessionState
 @{
     ViewBag.Title = "Home";
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<div class="navbar-collapse collapse">
+    <ul id="menu" class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Feature-1", "Index", "Home")</li>
+        <li>@Html.ActionLink("Feature-2", "About", "Tab")</li>
+    </ul>
+</div>
+<div>
+    <table class="table-hover">
+        
+        @foreach (var product in LicenseSessionState.Instance.ProductLicense)
+        {
+            <tr>
+                <th>
+                    <h3> <strong>Subscribed  License Type:@product.SubscriptionName</strong></h3>
+                    <br />
+                    <hr />
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <h5>
+                        <strong> Avalable Fetures</strong>
+                    </h5>
+                    <hr />
+                </th>
+                <th>
+                    <h6>
+                        <strong> Info</strong>
+                    </h6>
+                    <hr />
+                </th>
+               
+            </tr>
 
-    <div class="navbar-collapse collapse">
-        <ul id="menu" class="nav navbar-nav navbar-right">
-            <li>@Html.ActionLink("Feature-1", "Index", "Home")</li>
-            <li>@Html.ActionLink("Feature-2", "About", "Tab")</li>
-        </ul>
-    </div>
-<h2> FLUKE Calibration</h2>
+            foreach (var featureList in product.ProductList)
+            {
+                foreach (var feature in featureList.Features)
+                {
+                <tr>
+                    <td>
+                        <strong>@feature.Name</strong>
+                        <br />
+                        <br />
+                    </td>
+                    <td>
+                        <strong>@feature.Description</strong>
+                        <br />
+                        <br />
+                    </td>
+                    
+                </tr>
+                }
+            }
+        }
+
+    </table>
+</div>
