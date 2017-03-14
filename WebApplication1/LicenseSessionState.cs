@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using License.Core.Manager;
-using License.Core.Model;
-using License.Model;
+﻿using System.Collections.Generic;
+
 
 namespace License.MetCalWeb
 {
@@ -21,7 +16,7 @@ namespace License.MetCalWeb
             }
         }
 
-        public User User { get; set; }
+        public Models.UserModel User { get; set; }
 
         public bool IsAuthenticated { get; set; }
 
@@ -29,9 +24,9 @@ namespace License.MetCalWeb
 
         public bool IsAdmin { get; set; }
         
-        public IEnumerable<License.MetCalWeb.Models.SubscriptionProductModel> SubscriptionList { get; set; }
+        public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
 
-        public List<License.MetCalWeb.Models.LicenseMapModel>  ProductLicense { get; set; }
+        public List<Models.LicenseMapModel>  ProductLicense { get; set; }
 
     }
 }

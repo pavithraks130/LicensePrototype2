@@ -98,7 +98,10 @@ namespace LicenseServer.Logic
         public User GetUserByEmail(string email)
         {
             var usr =  UserManager.FindByEmail<Core.Model.Appuser, string>(email);
-            return AutoMapper.Mapper.Map<User>(usr);
+            User user = AutoMapper.Mapper.Map<User>(usr);
+            IList<string> roles = UserManager.GetRoles(user.UserId);
+            user.Roles = roles;
+            return user;
         }
 
         public User ForgotPassword(string email)
