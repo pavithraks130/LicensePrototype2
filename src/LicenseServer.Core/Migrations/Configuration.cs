@@ -1,12 +1,16 @@
 namespace LicenseServer.Core.Migrations
 {
-    using Model;
     using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
-
+    using System.Collections;
+    using System.Collections.Generic;
+    using Microsoft.AspNet.Identity;
+    using LicenseServer.Core.DbContext;
+    using LicenseServer.Core.Manager;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using LicenseServer.Core.Model;
     internal sealed class Configuration : DbMigrationsConfiguration<LicenseServer.Core.DbContext.AppDbContext>
     {
         public Configuration()
@@ -19,34 +23,62 @@ namespace LicenseServer.Core.Migrations
             var dbIntialize = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings.Get("IsDbIntialize"));
             if (dbIntialize)
             {
-                
-                var licenseFeature = new LicenseServer.Core.Model.Feature()
+                LicUserManager usermanager = LicUserManager.Create(context);
+                LicRoleManager roleManager = LicRoleManager.Create(context);
+
+                Organization org = new Organization();
+                org.Name = "Fluke";
+                org = context.Organization.Add(org);
+                context.SaveChanges();
+                Appuser user = new Appuser();
+                string roleName = "BackendAdmin";
+
+                user.FirstName = "admin";
+                user.Email = "flukeidc@gmail.com";
+                user.UserName = user.Email;
+                user.OrganizationId = org.Id;
+                var result = usermanager.Create(user, "Test@1234");
+
+                if (roleManager.FindByName(roleName) == null)
+                    roleManager.Create(new AppRole() { Name = roleName });
+
+                user = usermanager.FindByEmail(user.Email);
+                usermanager.AddToRole(user.UserId, roleName);
+
+                var featureList1 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "Premium_Feature",
+                    Name = "Feature List1",
                     Description = "Contains Premium Feature List",
                 };
-                context.LicenseFeatures.Add(licenseFeature);
+                context.Feature.Add(featureList1);
 
-                var fivePackLicenseFeature = new LicenseServer.Core.Model.Feature()
+                var featureList2 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "FivePackLicenseFeature",
-                    Description = "Contains M1,M2 ,P1 and P2 products",
+                    Name = "Feature List2",
+                    Description = "Contains M1,M2,M3 and M4",
                 };
-                context.LicenseFeatures.Add(fivePackLicenseFeature);
+                context.Feature.Add(featureList1);
 
-                var tenPackLicenseFeature = new LicenseServer.Core.Model.Feature()
+                var featureList3 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "TenPackLicenseFeature",
-                    Description = "Contains M1,M2 ,P1 ,P2,P3,P4 and P5 products",
+                    Name = "Feature List3",
+                    Description = "Contains M1,M2,M3,M4 and M5",
                 };
-                context.LicenseFeatures.Add(tenPackLicenseFeature);
+                context.Feature.Add(featureList3);
 
-                var fifteenPacklicenseFeature = new LicenseServer.Core.Model.Feature()
+                var featureList4 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "FifteenPacklicenseFeature",
-                    Description = "Contains M1,M2 ,M3 ,P1,P2,P3,P4,P5,P6 and P7 product",
+                    Name = "Feature List4",
+                    Description = "Contains M1,M2 ,M3 M4,M5 and M6 product",
                 };
-                context.LicenseFeatures.Add(fifteenPacklicenseFeature);
+                context.Feature.Add(featureList4);
+
+                var featureList5 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "Feature List5",
+                    Description = "Contains M1,M2 ,M3 M4,M5,M6,M7 and M8 product",
+                };
+                context.Feature.Add(featureList4);
 
                 var pro1 = new LicenseServer.Core.Model.Product()
                 {
@@ -54,7 +86,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "Product A",
                     ImagePath = "P1.png",
                     ProductCode = "ProO1",
-                    AssociatedFeatures = new List<Feature> { licenseFeature, fivePackLicenseFeature, tenPackLicenseFeature, fifteenPacklicenseFeature }
+                    AssociatedFeatures = new List<Feature> { featureList1, featureList2 }
                 };
                 context.Product.Add(pro1);
 
@@ -82,7 +114,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "Product B",
                     ImagePath = "P2.png",
                     ProductCode = "ProO2",
-                    AssociatedFeatures = new List<Feature> { licenseFeature, fivePackLicenseFeature, tenPackLicenseFeature, fifteenPacklicenseFeature }
+                    AssociatedFeatures = new List<Feature> { featureList1, featureList2, featureList3 }
 
                 };
                 context.Product.Add(pro2);
@@ -111,7 +143,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "Product C",
                     ImagePath = "P3.png",
                     ProductCode = "ProO3",
-                    AssociatedFeatures = new List<Feature> {tenPackLicenseFeature, fifteenPacklicenseFeature }
+                    AssociatedFeatures = new List<Feature> { featureList1, featureList2, featureList3, featureList4 }
                 };
                 context.Product.Add(pro3);
 
@@ -139,7 +171,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "Product D",
                     ImagePath = "P4.png",
                     ProductCode = "ProO4",
-                    AssociatedFeatures = new List<Feature> {fifteenPacklicenseFeature }
+                    AssociatedFeatures = new List<Feature> { featureList1, featureList2, featureList3, featureList4, featureList5 }
                 };
                 context.Product.Add(pro4);
 
@@ -163,6 +195,7 @@ namespace LicenseServer.Core.Migrations
 
                 context.SaveChanges();
             }
+
         }
     }
 }

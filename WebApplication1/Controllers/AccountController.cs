@@ -63,13 +63,13 @@ namespace License.MetCalWeb.Controllers
                 reg.Password = model.Password;
                 reg.PhoneNumber = model.PhoneNumber;
 
-                LicenseServer.Logic.UserTokenLogic tokenLogic = new LicenseServer.Logic.UserTokenLogic();
-                var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = model.Email, Token = model.Token });
-                if (!status)
-                {
-                    ModelState.AddModelError("", "Invalid Token Specified please verify the token");
-                    return View();
-                }
+                //LicenseServer.Logic.UserTokenLogic tokenLogic = new LicenseServer.Logic.UserTokenLogic();
+                //var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = model.Email, Token = model.Token });
+                //if (!status)
+                //{
+                //    ModelState.AddModelError("", "Invalid Token Specified please verify the token");
+                //    return View();
+                //}
 
                 string servUserId = serUserLogic.CreateUser(reg);
                 model.RegistratoinModel.ServerUserId = servUserId;
@@ -114,11 +114,13 @@ namespace License.MetCalWeb.Controllers
 
                     LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
                     var status = userLogic.ValidateUser(model.Email, model.Password);
-
-
                     SignInAsync(user, model.RememberMe);
                     LicenseSessionState.Instance.User = logic.GetUserDataByAppuser(user);
                     LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                    if (LicenseSessionState.Instance.IsSuperAdmin)
+                        LicenseSessionState.Instance.IsAdmin = true;
+                    else
+                        LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
                     LicenseSessionState.Instance.IsAuthenticated = true;
                     SubscriLogic.GetUserLicenseForUser();
                     return RedirectToAction("Home", "Tab");

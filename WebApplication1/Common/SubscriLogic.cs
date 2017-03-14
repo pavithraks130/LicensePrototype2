@@ -87,7 +87,14 @@ namespace License.MetCalWeb.Common
                         }
                         else
                         {
-
+                            foreach(var fet in pro.Features)
+                            {
+                                var feature = new Feature();
+                                feature.Id = fet.Id;
+                                feature.Name = fet.Name;
+                                feature.Description = fet.Description;
+                                prod.Features.Add(feature);
+                            }
                         }
                         mapModel.ProductList.Add(prod);
                     }

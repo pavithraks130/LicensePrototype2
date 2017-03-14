@@ -56,10 +56,9 @@ namespace License.MetCalWeb.Controllers
                 logic.RoleManager = RoleManager;
 
             TempData["IsTeamAdmin"] = false;
-            if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
+            if (LicenseSessionState.Instance.IsAdmin)
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
-                LicenseSessionState.Instance.IsAdmin = true;
                 TempData["IsTeamAdmin"] = true;
             }
             else

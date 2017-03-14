@@ -40,6 +40,20 @@ namespace License.MetCalWeb.Models
         public bool IsDisabled { get; set; }
 
         public bool InitialState { get; set; }
+
+        public List<Feature> Features { get; set; }
+
+        public SubscriptionProduct()
+        {
+            Features = new List<Feature>();
+        }
+    }
+
+    public class Feature
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
     #endregion
 }

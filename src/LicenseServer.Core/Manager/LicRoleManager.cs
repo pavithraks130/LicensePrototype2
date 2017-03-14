@@ -23,5 +23,11 @@ namespace LicenseServer.Core.Manager
             LicRoleManager roleMgr = new LicRoleManager(new RoleStore<AppRole>(dbcontext));
             return roleMgr;
         }
+
+        public static LicRoleManager Create(AppDbContext dbcontext)
+        {
+            LicRoleManager roleMgr = new LicRoleManager(new RoleStore<AppRole>(dbcontext));
+            return roleMgr;
+        }
     }
 }
