@@ -10,6 +10,12 @@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Resources/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <style>
+        .custom-body{
+            margin-top: 20px !important;
+            margin-bottom: 25px !important;
+        }
+    </style>
 </head>
 <body >
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -54,7 +60,7 @@
 
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content custom-body">
         @RenderBody()
     </div>
     <footer class="navbar-fixed-bottom navbar-fixed-bottom-custom">
