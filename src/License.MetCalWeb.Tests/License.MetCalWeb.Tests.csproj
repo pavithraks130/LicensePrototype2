@@ -143,10 +143,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WebApplication1\License.MetCalWeb.csproj">
-      <Project>{987570ca-0b5d-49c2-a5a0-dc5d91bf84ef}</Project>
-      <Name>License.MetCalWeb</Name>
-    </ProjectReference>
     <ProjectReference Include="..\License.Core\License.Core.csproj">
       <Project>{f491dfb2-2c8b-4d4e-b797-36109917dd78}</Project>
       <Name>License.Core</Name>

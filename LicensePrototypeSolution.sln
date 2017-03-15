@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.Logic", "src\Licens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.MetCalWeb.Tests", "src\License.MetCalWeb.Tests\License.MetCalWeb.Tests.csproj", "{1ED08BE7-861A-4878-8F96-62C7648BDC9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.MetCalWeb", "WebApplication1\License.MetCalWeb.csproj", "{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseServer.Core", "src\LicenseServer.Core\LicenseServer.Core.csproj", "{D3B38260-18DB-4629-8D7B-A7123BC06297}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseServer.Logic", "src\LicenseServer.Logic\LicenseServer.Logic.csproj", "{18CB8256-EE2F-4C58-A630-6D4B216DFBD7}"
@@ -24,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseKey", "src\LicenseKey\LicenseKey.csproj", "{1DC3F930-86BE-4404-8366-49BF479244E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.MetCalDesktop", "License.MetCalDesktop\License.MetCalDesktop.csproj", "{00FB0707-DC8F-4E6C-A240-D5E0A45334B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.MetCalWeb", "License.MetCalWeb\License.MetCalWeb.csproj", "{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,18 +95,6 @@ Global
 		{1ED08BE7-861A-4878-8F96-62C7648BDC9B}.Release|x64.Build.0 = Release|x64
 		{1ED08BE7-861A-4878-8F96-62C7648BDC9B}.Release|x86.ActiveCfg = Release|x86
 		{1ED08BE7-861A-4878-8F96-62C7648BDC9B}.Release|x86.Build.0 = Release|x86
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x64.Build.0 = Debug|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x86.Build.0 = Debug|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x64.ActiveCfg = Release|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x64.Build.0 = Release|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x86.ActiveCfg = Release|Any CPU
-		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x86.Build.0 = Release|Any CPU
 		{D3B38260-18DB-4629-8D7B-A7123BC06297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3B38260-18DB-4629-8D7B-A7123BC06297}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3B38260-18DB-4629-8D7B-A7123BC06297}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -167,6 +155,18 @@ Global
 		{00FB0707-DC8F-4E6C-A240-D5E0A45334B2}.Release|x64.Build.0 = Release|Any CPU
 		{00FB0707-DC8F-4E6C-A240-D5E0A45334B2}.Release|x86.ActiveCfg = Release|Any CPU
 		{00FB0707-DC8F-4E6C-A240-D5E0A45334B2}.Release|x86.Build.0 = Release|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x64.Build.0 = Debug|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Debug|x86.Build.0 = Debug|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x64.ActiveCfg = Release|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x64.Build.0 = Release|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x86.ActiveCfg = Release|Any CPU
+		{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
