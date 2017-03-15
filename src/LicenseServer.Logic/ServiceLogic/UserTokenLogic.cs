@@ -22,11 +22,12 @@ namespace LicenseServer.Logic
             return tokenListObj;
         }
 
-        public void CreateUserToken(UserToken t)
+        public UserToken CreateUserToken(UserToken t)
         {
             var obj = Mapper.Map<Core.Model.UserToken>(t);
             Work.UserTokenRepository.Create(obj);
             Work.UserTokenRepository.Save();
+            return obj;
         }
 
         public bool VerifyUserToken(UserToken t)
