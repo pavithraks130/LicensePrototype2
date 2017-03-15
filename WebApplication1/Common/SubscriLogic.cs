@@ -93,6 +93,7 @@ namespace License.MetCalWeb.Common
                                 feature.Id = fet.Id;
                                 feature.Name = fet.Name;
                                 feature.Description = fet.Description;
+                                feature.Version = fet.Version;
                                 prod.Features.Add(feature);
                             }
                         }

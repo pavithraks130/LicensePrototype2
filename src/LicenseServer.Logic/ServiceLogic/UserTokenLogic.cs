@@ -14,7 +14,7 @@ namespace LicenseServer.Logic
         {
             List<UserToken> tokenListObj = new List<UserToken>();
             var tokenList = Work.UserTokenRepository.GetData();
-            foreach(var t in tokenList)
+            foreach (var t in tokenList)
             {
                 var obj = Mapper.Map<DataModel.UserToken>(t);
                 tokenListObj.Add(obj);
@@ -25,9 +25,11 @@ namespace LicenseServer.Logic
         public UserToken CreateUserToken(UserToken t)
         {
             var obj = Mapper.Map<Core.Model.UserToken>(t);
-            Work.UserTokenRepository.Create(obj);
+            var tokenObj = Work.UserTokenRepository.Create(obj);
             Work.UserTokenRepository.Save();
-            return obj;
+            if (tokenObj != null)
+                return Mapper.Map<LicenseServer.DataModel.UserToken>(tokenObj);
+            return null;
         }
 
         public bool VerifyUserToken(UserToken t)
