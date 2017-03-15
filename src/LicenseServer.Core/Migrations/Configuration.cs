@@ -49,6 +49,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Feature-I",
                     Description = "Contains basics features .",
+                    Version = "V1.0"
+                    
                 };
                 context.Feature.Add(featureList1);
 
@@ -56,6 +58,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Feature-II",
                     Description = "Contains M-1 and M-2 features.",
+                    Version = "V1.0"
                 };
                 context.Feature.Add(featureList1);
 
@@ -63,6 +66,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Feature-III",
                     Description = "Contains M-3 and M-4 features.",
+                    Version = "V1.0"
                 };
                 context.Feature.Add(featureList3);
 
@@ -70,15 +74,43 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Feature-IV",
                     Description = "Contains M-5 and M-6 features.",
+                    Version = "V1.0"
                 };
                 context.Feature.Add(featureList4);
 
                 var featureList5 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "Feature List5",
-                    Description = "Contains M-7 and M-8 features",
+                    Name = "Feature-I",
+                    Description = "Contains basics features .",
+                    Version = "V1.0"
+
                 };
-                context.Feature.Add(featureList4);
+                context.Feature.Add(featureList5);
+
+                var featureList6 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "Feature-II",
+                    Description = "Contains M-1 and M-2 features.",
+                    Version = "V1.0"
+                };
+                context.Feature.Add(featureList6);
+
+                var featureList7 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "Feature-III",
+                    Description = "Contains M-3 and M-4 features.",
+                    Version = "V1.0"
+                };
+                context.Feature.Add(featureList7);
+
+                var featureList8 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "Feature-IV",
+                    Description = "Contains M-5 and M-6 features.",
+                    Version = "V1.0"
+                };
+                context.Feature.Add(featureList8);
+
 
                 var pro1 = new LicenseServer.Core.Model.Product()
                 {
@@ -89,6 +121,16 @@ namespace LicenseServer.Core.Migrations
                     AssociatedFeatures = new List<Feature> { featureList1, featureList2 }
                 };
                 context.Product.Add(pro1);
+
+                var pro11 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "Product A1",
+                    Description = "Product A1",
+                    ImagePath = "P1.png",
+                    ProductCode = "Pro11",
+                    AssociatedFeatures = new List<Feature> { featureList5, featureList6 }
+                };
+                context.Product.Add(pro11);
 
 
                 var sub1 = new LicenseServer.Core.Model.SubscriptionType()
@@ -107,6 +149,14 @@ namespace LicenseServer.Core.Migrations
                     Quantity = 5
                 };
                 context.SubscriptionDetail.Add(subdetails);
+
+                var subdetails11 = new LicenseServer.Core.Model.SubscriptionDetail()
+                {
+                    Product = pro11,
+                    SubscriptyType = sub1,
+                    Quantity = 5
+                };
+                context.SubscriptionDetail.Add(subdetails11);
 
                 var pro2 = new LicenseServer.Core.Model.Product()
                 {

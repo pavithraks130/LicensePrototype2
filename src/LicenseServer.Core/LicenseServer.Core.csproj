@@ -95,6 +95,10 @@
     <Compile Include="Migrations\201703131710070_initialize.Designer.cs">
       <DependentUpon>201703131710070_initialize.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703150730514_VersionToFeature.cs" />
+    <Compile Include="Migrations\201703150730514_VersionToFeature.Designer.cs">
+      <DependentUpon>201703150730514_VersionToFeature.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -115,6 +119,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703131710070_initialize.resx">
       <DependentUpon>201703131710070_initialize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703150730514_VersionToFeature.resx">
+      <DependentUpon>201703150730514_VersionToFeature.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
