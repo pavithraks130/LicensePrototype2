@@ -25,10 +25,10 @@
             <div class="navbar-collapse collapse">
                 @Html.Partial("_LoginPartial")
                 <ul id="menu" class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                   
                     @if (LicenseSessionState.Instance.IsAuthenticated)
                     {
-                       
+                        <li>@Html.ActionLink("Home", "Home", "Tab")</li>
                         if (LicenseSessionState.Instance.User.Roles.Contains("Admin") || LicenseSessionState.Instance.IsSuperAdmin)
                         {
                             <li hidden="hidden">@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
@@ -44,6 +44,11 @@
                         }
 
                     }
+                    else
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    }
+
                 </ul>
             </div>
 
