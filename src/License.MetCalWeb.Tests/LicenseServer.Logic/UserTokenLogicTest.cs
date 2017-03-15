@@ -34,6 +34,6 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
             Assert.IsTrue(tokenObj.Id > 0);
         }
 
-
+       
     }
 }
