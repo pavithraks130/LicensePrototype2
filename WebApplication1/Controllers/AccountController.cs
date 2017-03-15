@@ -23,7 +23,7 @@ namespace License.MetCalWeb.Controllers
     public class AccountController : BaseController
     {
         private UserLogic logic = new UserLogic();
-
+        LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
         private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
         {
@@ -115,7 +115,7 @@ namespace License.MetCalWeb.Controllers
                 if (user != null)
                 {
                     //Code need to be removed added only for verfication
-                    SignInAsync(user, model.RememberMe);
+                   // SignInAsync(user, model.RememberMe);
                     var obj = logic.GetUserDataByAppuser(user);
                     userObj.Email = obj.Email;
                     userObj.FirstName = obj.FirstName;
@@ -130,7 +130,7 @@ namespace License.MetCalWeb.Controllers
                 }
                 else
                 {
-                    LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
+
                     var status = userLogic.ValidateUser(model.Email, model.Password);
                     if (status)
                     {
@@ -158,6 +158,7 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.IsAdmin = true;
                 else
                     LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+                SignInAsync(userObj, true);               
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 SubscriLogic.GetUserLicenseForUser();
                 return RedirectToAction("Home", "Tab");
@@ -165,10 +166,17 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
-        private void SignInAsync(AppUser user, bool isPersistent)
+        private void SignInAsync(UserModel user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = logic.UserManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+            System.Security.Claims.ClaimsIdentity identity = null;
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
+            else
+            {
+                AppUser appUser = logic.UserManager.FindById(user.UserId);
+                identity = logic.UserManager.CreateIdentity(appUser, DefaultAuthenticationTypes.ApplicationCookie);
+            }
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
