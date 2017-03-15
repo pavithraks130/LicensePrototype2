@@ -126,14 +126,14 @@
   <ItemGroup>
     <Compile Include="InitializerClass.cs" />
     <Compile Include="LicenseLogic\UserLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\CartLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\OrganizationLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\ProductLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\SubscriptionDetailLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\SubscriptionLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\UserLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\UserSubscriptionLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\UserTokenLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\CartLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\OrganizationLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\ProductLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\SubscriptionDetailLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\SubscriptionLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\UserLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\UserSubscriptionLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\UserTokenLogicTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

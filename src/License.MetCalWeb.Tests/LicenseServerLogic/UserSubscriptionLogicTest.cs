@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
 
-namespace License.MetCalWeb.Tests.LicenseServer.Logic
+namespace License.MetCalWeb.Tests.LicenseServerLogic
 {
     [TestClass]
     public class UserSubscriptionLogicTest
@@ -19,11 +19,12 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
 
         public UserSubscriptionLogicTest()
         {
+            InitializerClass.Initialize();
             logic = new UserSubscriptionLogic();
             userLogic = new UserLogic();
             subTypelogic = new SubscriptionTypeLogic();
-            usr = userLogic.GetUserByEmail("veereshrdrpp@gmail.ccom");
-            InitializerClass.Initialize();
+            usr = userLogic.GetUserByEmail("veereshrdrpp@gmail.com");
+
         }
 
         [TestMethod]
@@ -44,20 +45,25 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
         [TestMethod]
         public void CreateUserSubscription()
         {
+            CartLogic cartlogic = new CartLogic();
             if (usr != null)
             {
-                var sub = subTypelogic.GetSubscriptionType();
-                if (sub.Count > 0)
+                var itemList = cartlogic.GetCartItems(usr.UserId);
+                if (itemList.Count > 0)
                 {
-                    var subscriptioinTypeId = sub.FirstOrDefault(s => s.Name == "Sub1").Id;
-                    string userId = usr.UserId;
-                    UserSubscription subs = new UserSubscription();
-                    subs.SubscriptionTypeId = subscriptioinTypeId;
-                    subs.Quantity = 4;
-                    subs.UserId = userId;
-                    subs.SubscriptionDate = DateTime.Now;
-                    var data = logic.CreateUserSubscription(subs,usr.OrganizationId);
-                    Assert.IsTrue(data != null);
+                    int i = 0;
+                    foreach (var cartItem in itemList)
+                    {
+                        string userId = usr.UserId;
+                        UserSubscription subs = new UserSubscription();
+                        subs.SubscriptionTypeId = cartItem.SubscriptionTypeId;                      
+                        subs.Quantity = cartItem.Quantity;
+                        subs.UserId = userId;
+                        subs.SubscriptionDate = DateTime.Now;
+                        var data = logic.CreateUserSubscription(subs, usr.OrganizationId);
+                        i++;
+                    }
+                    Assert.IsTrue(i > 0);
                 }
                 else
                 {

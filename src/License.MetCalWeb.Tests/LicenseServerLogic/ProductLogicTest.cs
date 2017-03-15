@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
 
-namespace License.MetCalWeb.Tests.LicenseServer.Logic
+namespace License.MetCalWeb.Tests.LicenseServerLogic
 {
     [TestClass]
     public class ProductLogicTest

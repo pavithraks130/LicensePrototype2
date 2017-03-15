@@ -15,7 +15,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
     public class UserLogicTest
     {
         UserLogic logic = null;
-        
+
         Moq.Mock<AppUserManager> manager;
         Moq.Mock<AppRoleManager> rolemanager;
 
@@ -36,7 +36,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         public void GetUser()
         {
             var users = logic.GetUsers();
-            Assert.IsNotNull(users);
+            Assert.IsTrue(users.Count > 0);
         }
 
         [TestMethod]
@@ -49,8 +49,16 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             reg.Email = "veereshrdrpp@gmail.com";
             reg.Password = "Test@1234";
             reg.PhoneNumber = "1234567890";
-            var result = logic.CreateUser(reg);
-            Assert.AreEqual("true", result.Succeeded);
+            var licserUserLogic = new LicenseServer.Logic.UserLogic();
+            var obj = licserUserLogic.GetUserByEmail(reg.Email);
+            if (obj != null)
+            {
+                reg.ServerUserId = obj.UserId;
+                var result = logic.CreateUser(reg);
+                Assert.AreEqual("true", result.Succeeded);
+            }
+            else
+                Assert.Fail("Register user is not exist in License Server. WHich tracks the admin users");
 
         }
     }

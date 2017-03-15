@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
 
-namespace License.MetCalWeb.Tests.LicenseServer.Logic
+namespace License.MetCalWeb.Tests.LicenseServerLogic
 {
     [TestClass]
     public class SubscriptionDetailLogicTest
@@ -39,7 +39,7 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
             var sub = logic.GetSubscriptionType();
             if (proList.Count > 0 && sub.Count > 0)
             {
-                var proId = proList.FirstOrDefault(p => p.ProductCode == "PRO-01").Id;
+                var proId = proList.FirstOrDefault(p => p.ProductCode.ToUpper() == "PRO-01").Id;
                 var subscriptioinTypeId = sub.FirstOrDefault(s => s.Name == "Sub1").Id;
                 SubscriptionDetails detail = new SubscriptionDetails();
                 detail.ProductId = proId;
