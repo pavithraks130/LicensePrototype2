@@ -47,36 +47,36 @@ namespace LicenseServer.Core.Migrations
 
                 var featureList1 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "Feature List1",
-                    Description = "Contains Premium Feature List",
+                    Name = "Feature-I",
+                    Description = "Contains basics features .",
                 };
                 context.Feature.Add(featureList1);
 
                 var featureList2 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "Feature List2",
-                    Description = "Contains M1,M2,M3 and M4",
+                    Name = "Feature-II",
+                    Description = "Contains M-1 and M-2 features.",
                 };
                 context.Feature.Add(featureList1);
 
                 var featureList3 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "Feature List3",
-                    Description = "Contains M1,M2,M3,M4 and M5",
+                    Name = "Feature-III",
+                    Description = "Contains M-3 and M-4 features.",
                 };
                 context.Feature.Add(featureList3);
 
                 var featureList4 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "Feature List4",
-                    Description = "Contains M1,M2 ,M3 M4,M5 and M6 product",
+                    Name = "Feature-IV",
+                    Description = "Contains M-5 and M-6 features.",
                 };
                 context.Feature.Add(featureList4);
 
                 var featureList5 = new LicenseServer.Core.Model.Feature()
                 {
                     Name = "Feature List5",
-                    Description = "Contains M1,M2 ,M3 M4,M5,M6,M7 and M8 product",
+                    Description = "Contains M-7 and M-8 features",
                 };
                 context.Feature.Add(featureList4);
 
