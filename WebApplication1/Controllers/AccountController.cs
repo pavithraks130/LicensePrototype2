@@ -115,7 +115,6 @@ namespace License.MetCalWeb.Controllers
                 if (user != null)
                 {
                     //Code need to be removed added only for verfication
-                   // SignInAsync(user, model.RememberMe);
                     var obj = logic.GetUserDataByAppuser(user);
                     userObj.Email = obj.Email;
                     userObj.FirstName = obj.FirstName;
