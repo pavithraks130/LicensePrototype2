@@ -125,7 +125,9 @@ namespace License.Logic.Common
 
         public static bool IsFileExist(string fileName)
         {
-            return File.Exists(Path.Combine(folderPath, fileName));
+            if (Directory.Exists(folderPath))
+                return File.Exists(Path.Combine(folderPath, fileName));
+            return false;
         }
     }
 }

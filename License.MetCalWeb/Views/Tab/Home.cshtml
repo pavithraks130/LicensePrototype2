@@ -14,48 +14,59 @@
     }
 </style>
 <div class="row">
-    @foreach (var productLicense in LicenseSessionState.Instance.ProductLicense)
+    @if (LicenseSessionState.Instance.ProductLicense == null)
     {
         <div class="form-groupg">
             <div class="div-spacin">
-                <h3>Available Type:@productLicense.SubscriptionName</h3>
-                <br />
-                <div class="col-md-6">
-                    <p>
-                        <span class="span-font">
-                            Fetures
-                        </span>
-                    </p>
-                    <hr />
-                </div>
-                <div class="col-md-6">
-                    <p>
-                        <span class="span-font">
-                            Info
-                        </span>
-                    </p>
-                    <hr />
-                </div>
+                No License assigned
             </div>
-            @foreach (var product in productLicense.ProductList)
-            {
-                foreach (var feature in product.Features)
-                {
-                    <div class="form-group">
-                        <div class="col-md-6">
-                            <p>
-                                <span class="span-font"> @feature.Name</span>
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <p>
-                                <span class="span-font"> @feature.Description</span>
-                            </p>
-                        </div>
-                    </div>
-                }
-            }
-            <hr />
         </div>
+    }
+    else
+    {
+        foreach (var productLicense in LicenseSessionState.Instance.ProductLicense)
+        {
+            <div class="form-groupg">
+                <div class="div-spacin">
+                    <h3>Available Type:@productLicense.SubscriptionName</h3>
+                    <br />
+                    <div class="col-md-6">
+                        <p>
+                            <span class="span-font">
+                                Fetures
+                            </span>
+                        </p>
+                        <hr />
+                    </div>
+                    <div class="col-md-6">
+                        <p>
+                            <span class="span-font">
+                                Info
+                            </span>
+                        </p>
+                        <hr />
+                    </div>
+                </div>
+                @foreach (var product in productLicense.ProductList)
+                    {
+                        foreach (var feature in product.Features)
+                        {
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <p>
+                                    <span class="span-font"> @feature.Name</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <span class="span-font"> @feature.Description</span>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                }
+                <hr />
+            </div>
+        }
     }
 </div>

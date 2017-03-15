@@ -108,6 +108,7 @@ namespace License.MetCalWeb.Controllers
                         feture.Id = f.Id;
                         feture.Name = f.Name;
                         feture.Description = f.Description;
+                        feture.Version = f.Version;
                         prod.Features.Add(feture);
                     }
                     productList.Add(prod);

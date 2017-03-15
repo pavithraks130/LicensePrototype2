@@ -156,10 +156,13 @@ namespace License.MetCalWeb.Controllers
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                     LicenseSessionState.Instance.IsAdmin = true;
                 else
+                {
                     LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-                SignInAsync(userObj, true);               
+                    SubscriLogic.GetUserLicenseForUser();
+                }
+                SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
-                SubscriLogic.GetUserLicenseForUser();
+
                 return RedirectToAction("Home", "Tab");
             }
             return View();
