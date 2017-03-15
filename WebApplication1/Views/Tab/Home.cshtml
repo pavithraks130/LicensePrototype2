@@ -4,62 +4,58 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<div>
-
-    @foreach (var productLicense in LicenseSessionState.Instance.ProductLicense)
-    {
-
-        <div class="jumbotron">
-            <div class="row">
-                <div class="col-md-3">
-                    <h3> <strong>Subscribed  License Type:@productLicense.SubscriptionName</strong></h3>
-                    <br />
-                    <hr />
-                </div>
-                <div class="col-md-6 table-hover float-left">
-                    <img src="~/ProductImages/B1.PNG" height="200" width="660" />
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <h3>
-                    <strong> Available Fetures</strong>
-                </h3>
-                <hr />
-            </div>
-            <div class="col-md-4">
-                <h3>
-                    <strong> Info</strong>
-                </h3>
-                <hr />
-            </div>
-        </div>
-
-        foreach (var product in productLicense.ProductList)
-        {
-            foreach (var feature in product.Features)
-            {
-                <div class="row">
-                    <div class="col-md-4">
-                        <p>
-                            <h4><strong>@feature.Name</strong></h4>
-                            <br />
-                            <br />
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p>
-                            <h4> <strong>@feature.Description</strong></h4>
-                            <br />
-                            <br />
-                        </p>
-                    </div>
-                </div>
-            }
-        }
-        <hr style="outline-width:thick;color:black"/>
+<style>
+    .span-font {
+        font-size: 16px !important;
     }
 
+    .div-spacing {
+        padding-top: 20px !important;
+    }
+</style>
+<div class="row">
+    @foreach (var productLicense in LicenseSessionState.Instance.ProductLicense)
+    {
+        <div class="form-groupg">
+            <div class="div-spacin">
+                <h3>Available Type:@productLicense.SubscriptionName</h3>
+                <br />
+                <div class="col-md-6">
+                    <p>
+                        <span class="span-font">
+                            Fetures
+                        </span>
+                    </p>
+                    <hr />
+                </div>
+                <div class="col-md-6">
+                    <p>
+                        <span class="span-font">
+                            Info
+                        </span>
+                    </p>
+                    <hr />
+                </div>
+            </div>
+            @foreach (var product in productLicense.ProductList)
+            {
+                foreach (var feature in product.Features)
+                {
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <p>
+                                <span class="span-font"> @feature.Name</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <span class="span-font"> @feature.Description</span>
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+            <hr />
+        </div>
+    }
 </div>
