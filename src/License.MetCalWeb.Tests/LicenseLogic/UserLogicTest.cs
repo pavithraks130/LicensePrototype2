@@ -9,6 +9,7 @@ using License.Core.Manager;
 using Microsoft.AspNet.Identity.EntityFramework;
 using License.Core.Model;
 using License.Core.DBContext;
+
 namespace License.MetCalWeb.Tests.LicenseLogic
 {
     [TestClass]

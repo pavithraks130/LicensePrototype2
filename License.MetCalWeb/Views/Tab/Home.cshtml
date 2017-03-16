@@ -4,6 +4,52 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<script>
+<!--
+var x,y,n=0,ny=0,rotINT,rotYINT
+function rotateDIV()
+{
+x=document.getElementById("rotate2D")
+clearInterval(rotINT)
+rotINT=setInterval("startRotate()",10)
+}
+function rotateYDIV()
+{
+y=document.getElementById("rotate3D")
+clearInterval(rotYINT)
+rotYINT=setInterval("startYRotate()",10)
+}
+function startRotate()
+{
+n=n+1
+x.style.transform="rotate(" + n + "deg)"
+x.style.webkitTransform="rotate(" + n + "deg)"
+x.style.OTransform="rotate(" + n + "deg)"
+x.style.MozTransform="rotate(" + n + "deg)"
+if (n==180 || n==360)
+{
+clearInterval(rotINT)
+if (n==360){n=0}
+}
+}
+function startYRotate()
+{
+ny=ny+1
+y.style.transform="rotateY(" + ny + "deg)"
+y.style.webkitTransform="rotateY(" + ny + "deg)"
+y.style.OTransform="rotateY(" + ny + "deg)"
+y.style.MozTransform="rotateY(" + ny + "deg)"
+if (ny==180 || ny>=360)
+{
+clearInterval(rotYINT)
+if (ny>=360){ny=0}
+}
+}
+//-->
+</script>
+<link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
+
 <style>
     .span-font {
         font-size: 16px !important;
@@ -16,6 +62,8 @@
         font-weight: normal !important; 
     }
 </style>
+
+
 <div class="container">
 
     @using (Html.BeginForm())
@@ -31,11 +79,17 @@
             foreach (var productLicense in LicenseSessionState.Instance.ProductLicense)
             {
 
-                <div class="row div-spacing">
+                @*<div class="row div-spacing">
                     <div class="col-md-12">
                         <h3> Available Type: @productLicense.SubscriptionName</h3>
                     </div>
+                </div>*@
+
+                <div class="row div-spacing" style="height:80px;">
+                    @*<div onmouseover="rotateDIV()" id="rotate2D" style="transform: rotate(360deg);">2D rotate</div>*@
+                    <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(180deg);">@productLicense.SubscriptionName</div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-4">
                         <label>Feature</label>

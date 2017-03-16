@@ -212,3 +212,18 @@ hr {
     box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
     padding: 20px;
 }
+#rotate2D, #rotate3D {
+    width: 200px;
+    height: 200px;
+    color: white;
+    position: relative;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 80px;
+    float: left;
+    margin-right: 50px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    background: red;
+    margin: 10px;
+}
