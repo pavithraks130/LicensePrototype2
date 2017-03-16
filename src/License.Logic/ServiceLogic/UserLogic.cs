@@ -63,7 +63,7 @@ namespace License.Logic.ServiceLogic
             }
             catch (Exception ex)
             {
-                 //throw ex;
+                //throw ex;
                 result = new IdentityResult(new string[] { ex.Message });
             }
             return result;
@@ -108,7 +108,13 @@ namespace License.Logic.ServiceLogic
             return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
         }
 
-        public AppUser AutheticateUser(string userName, string password)
+        public bool ChangePassword(string userId, string oldPassword, string newPassword)
+        {
+            var result = UserManager.ChangePassword(userId, oldPassword, newPassword);
+            return result.Succeeded;
+        }
+
+        public AppUser AuthenticateUser(string userName, string password)
         {
             AppUser user = UserManager.Find(userName, password);
             return user;

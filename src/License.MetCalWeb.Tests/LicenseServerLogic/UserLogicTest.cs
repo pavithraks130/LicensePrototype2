@@ -61,7 +61,7 @@ namespace License.MetCalWeb.Tests.LicenseServerLogic
         [TestMethod]
         public void AuthenticateUser()
         {
-            var data = logic.AutheticateUser("veereshrdrpp@gmail.com", "Test@1234");
+            var data = logic.AuthenticateUser("veereshrdrpp@gmail.com", "Test@1234");
             Assert.IsNotNull(data);
         }
 
