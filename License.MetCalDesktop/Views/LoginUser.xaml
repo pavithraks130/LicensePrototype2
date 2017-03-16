@@ -58,8 +58,8 @@
         <Label Style="{StaticResource LabelDefaultStyle}" Grid.Row="1" Grid.Column="1" Name="lblUserName" Content="Email:" HorizontalAlignment="Right" ></Label>
         <Label Style="{StaticResource LabelDefaultStyle}" Grid.Row="2" Grid.Column="1" Name="lblPassword" Content="Password:" HorizontalAlignment="Right"></Label>
         <TextBox Margin="5" Grid.Row="1" Grid.Column="2" Name="txtUserName" Text="{Binding Path=Email,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,ValidatesOnDataErrors=True,  NotifyOnValidationError=True, ValidatesOnExceptions=True}" Height="30" ></TextBox>
-        <!--<PasswordBox Margin="5" Grid.Row="2" Grid.Column="2" Name="txtPassword" psw:PasswordHelper.Attach="True" PasswordChar="*" FontSize="16"  VerticalContentAlignment="Center" 
-                     psw:PasswordHelper.Password="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True,NotifyOnValidationError=True,ValidatesOnExceptions=True}" Height="30"></PasswordBox>-->
+        <PasswordBox Margin="5" Grid.Row="2" Grid.Column="2" Name="txtPassword" psw:PasswordHelper.Attach="True" PasswordChar="*" FontSize="16"  VerticalContentAlignment="Center" 
+                     psw:PasswordHelper.Password="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True,NotifyOnValidationError=True,ValidatesOnExceptions=True}" Height="30"></PasswordBox>
         <Button Style="{StaticResource DefaultButtonStyle}" Command="{Binding LoginCommand}"  Margin="5" Grid.Row="3" Grid.Column="2" Name="btnLogin" Content="Login" Height="30" IsEnabled="{Binding IsEnableLogin ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></Button>
         <Button x:Name="buttonNewUser" Content="New User? Sign Up!"  Style="{StaticResource DefaultButtonStyle}" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="1.333,1,0,0" Grid.Row="4" VerticalAlignment="Top" Width="172"/>
     </Grid>
