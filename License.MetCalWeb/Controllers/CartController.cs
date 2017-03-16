@@ -145,7 +145,6 @@ namespace License.MetCalWeb.Controllers
                 }
                 License.Logic.ServiceLogic.LicenseLogic licenseLogic = new Logic.ServiceLogic.LicenseLogic();
                 licenseLogic.CreateLicenseData(licenseDataList);
-                licenseLogic.Save();
             }
         }
 

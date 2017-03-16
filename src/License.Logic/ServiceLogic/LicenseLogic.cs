@@ -24,7 +24,7 @@ namespace License.Logic.ServiceLogic
             return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
         }
 
-        public void CreateLicenseData(LicenseData data)
+        private void CreateLicenseData(LicenseData data)
         {
             var obj = AutoMapper.Mapper.Map<LicenseData, License.Core.Model.LicenseData>(data);
             obj = Work.LicenseDataRepository.Create(obj);
@@ -34,12 +34,8 @@ namespace License.Logic.ServiceLogic
         {
             foreach (var data in dataList)
                 CreateLicenseData(data);
-        }
-
-        public void Save()
-        {
             Work.LicenseDataRepository.Save();
         }
-
+        
     }
 }

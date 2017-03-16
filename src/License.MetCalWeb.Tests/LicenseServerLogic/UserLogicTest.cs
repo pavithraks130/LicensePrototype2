@@ -36,10 +36,10 @@ namespace License.MetCalWeb.Tests.LicenseServerLogic
         [TestMethod]
         public void CreateUserByTokenVerify()
         {
-            UserToken token = new UserToken();
-            token.Email = "pavithra.shivarudrappa@fluke.com";
-            token.Token = "05E4E-177C4";
+
             UserTokenLogic tokenlogic = new UserTokenLogic();
+            var list = tokenlogic.GetUsertokenList();
+            UserToken token = list.FirstOrDefault(u => u.Email == "pavithra.shivarudrappa@fluke.com");
             bool status = tokenlogic.VerifyUserToken(token);
             if (status)
             {
