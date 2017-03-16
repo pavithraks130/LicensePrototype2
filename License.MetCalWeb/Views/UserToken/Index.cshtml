@@ -1,0 +1,57 @@
+﻿
+@model List<LicenseServer.DataModel.UserToken>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<div class="row">
+    @if (Model == null || Model.Count == 0)
+    {
+        <table class="table" style="border: none;">
+            <tr>
+                <td>
+                    <div id="emptyTeamContainer" data-show-on-empty-team="true">
+                        <h4>No Data Exist</h4>
+                        <button class="btn btn-primary btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Create User Token</button>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <div class="form-group">
+            <br />
+
+            <h4>UserToken</h4>
+
+            <br />
+            <br />
+            <div class="col-md-8">
+                <table class="table" style="border: none">
+                    <tr>
+                        <td><b>Email</b></td>
+                        <td><b>Rgistration Token</b></td>
+                    </tr>
+                    @foreach (var t in Model)
+                    {
+                    <tr>
+                        <td class="col-md-8">
+                            @t.Email
+                        </td>
+                        <td class="col-md-4">
+                            <div>@t.Token</div>
+                        </td>
+                    </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary btn-lg btn-custom float-right" data-toggle="modal" data-target="#myModal">Create User Token</button>
+            </div>
+        </div>
+    }
+
+</div>
+<div class="modal" id="myModal">
+    @{ Html.RenderAction("CreateToken"); }
+</div>

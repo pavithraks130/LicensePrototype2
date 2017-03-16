@@ -97,8 +97,11 @@ namespace LicenseServer.Logic
 
         public User GetUserByEmail(string email)
         {
-            var usr =  UserManager.FindByEmail<Core.Model.Appuser, string>(email);
-            return AutoMapper.Mapper.Map<User>(usr);
+            var usr = UserManager.FindByEmail<Core.Model.Appuser, string>(email);
+            User user = AutoMapper.Mapper.Map<User>(usr);
+            IList<string> roles = UserManager.GetRoles(user.UserId);
+            user.Roles = roles;
+            return user;
         }
 
         public User ForgotPassword(string email)
@@ -133,6 +136,13 @@ namespace LicenseServer.Logic
         {
             var user = UserManager.Find(userName, password);
             return user != null;
+        }
+
+        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId)
+        {
+            var obj = UserManager.FindById(userId);
+            //Appuser user = AutoMapper.Mapper.Map<Appuser>(obj);
+            return UserManager.CreateIdentity(obj, DefaultAuthenticationTypes.ApplicationCookie);
         }
     }
 }

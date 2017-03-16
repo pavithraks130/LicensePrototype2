@@ -1,0 +1,18 @@
+<Playlist Version="1.0">
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.ProductLogicTest.createProduct" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.SubscriptionLogicTest.CreateSubscription" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.SubscriptionDetailLogicTest.CreateSubscriptionDetail" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.SubscriptionLogicTest.GetSubscriptions" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.SubscriptionDetailLogicTest.GetSubscriptionDetail" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.UserTokenLogicTest.CreateUserToke" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.UserLogicTest.CreateUserByTokenVerify" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.UserLogicTest.AuthenticateUser" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.UserLogicTest.CreateLicenseServerUser" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.SubscriptionLogicTest.GetSubscriptionById" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.OrganizationLogicTest.GetTeams" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.CartLogicTest.AddCartItem" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.CartLogicTest.GetCartDetails" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.UserSubscriptionLogicTest.CreateUserSubscription" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.UserSubscriptionLogicTest.GetUserSubscription" />
+<Add Test="License.MetCalWeb.Tests.LicenseServerLogic.CartLogicTest.DeleteCartItem" />
+</Playlist>

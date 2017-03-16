@@ -30,7 +30,9 @@ namespace License.Logic.ServiceLogic
             }
             catch (Exception ex)
             {
-                throw ex;
+               // throw ex;
+                var result = new IdentityResult(new string[] { ex.Message });
+                return result;
             }
         }
 

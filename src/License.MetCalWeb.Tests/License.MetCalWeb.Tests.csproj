@@ -126,13 +126,14 @@
   <ItemGroup>
     <Compile Include="InitializerClass.cs" />
     <Compile Include="LicenseLogic\UserLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\CartLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\OrganizationLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\ProductLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\SubscriptionDetailLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\SubscriptionLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\UserLogicTest.cs" />
-    <Compile Include="LicenseServer.Logic\UserSubscriptionLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\CartLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\OrganizationLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\ProductLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\SubscriptionDetailLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\SubscriptionLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\UserLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\UserSubscriptionLogicTest.cs" />
+    <Compile Include="LicenseServerLogic\UserTokenLogicTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -142,10 +143,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WebApplication1\License.MetCalWeb.csproj">
-      <Project>{987570ca-0b5d-49c2-a5a0-dc5d91bf84ef}</Project>
-      <Name>License.MetCalWeb</Name>
-    </ProjectReference>
     <ProjectReference Include="..\License.Core\License.Core.csproj">
       <Project>{f491dfb2-2c8b-4d4e-b797-36109917dd78}</Project>
       <Name>License.Core</Name>
@@ -157,6 +154,10 @@
     <ProjectReference Include="..\License.Model\License.Model.csproj">
       <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
       <Name>License.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
+      <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
+      <Name>LicenseKey</Name>
     </ProjectReference>
     <ProjectReference Include="..\LicenseServer.Core\LicenseServer.Core.csproj">
       <Project>{d3b38260-18db-4629-8d7b-a7123bc06297}</Project>
