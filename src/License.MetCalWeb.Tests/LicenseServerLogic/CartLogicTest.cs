@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
 
-namespace License.MetCalWeb.Tests.LicenseServer.Logic
+namespace License.MetCalWeb.Tests.LicenseServerLogic
 {
     [TestClass]
     public class CartLogicTest
@@ -21,6 +21,7 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
             cartLogic = new CartLogic();
             logic = new UserLogic();
             subTypeLogic = new SubscriptionTypeLogic();
+            InitializerClass.Initialize();
             usr = logic.GetUserByEmail("veereshrdrpp@gmail.com");
         }
         [TestMethod]
@@ -36,8 +37,9 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
             var sub = subTypeLogic.GetSubscriptionType();
             if (sub.Count > 0)
             {
-                var subscriptioinTypeId = sub.FirstOrDefault(s => s.Name == "Sub1").Id;
-                var status = cartLogic.CreateCartItem(new CartItem() { Quantity = 2, SubscriptionTypeId = subscriptioinTypeId, UserId = usr.UserId, DateCreated = DateTime.Now.Date });
+                var obj = sub.FirstOrDefault(s => s.Name == "Sub1");
+                var subscriptioinTypeId = obj.Id;
+                var status = cartLogic.CreateCartItem(new CartItem() { Quantity = 2, SubscriptionTypeId = subscriptioinTypeId, UserId = usr.UserId, DateCreated = DateTime.Now.Date, Price = 2 * obj.Price });
                 Assert.IsTrue(status);
             }
             else

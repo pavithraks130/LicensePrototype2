@@ -7,7 +7,7 @@ using LicenseServer.Logic;
 using LicenseServer.DataModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace License.MetCalWeb.Tests.LicenseServer.Logic
+namespace License.MetCalWeb.Tests.LicenseServerLogic
 {
     [TestClass]
     public class UserTokenLogicTest
@@ -17,13 +17,14 @@ namespace License.MetCalWeb.Tests.LicenseServer.Logic
         public UserTokenLogicTest()
         {
             tokenLogic = new UserTokenLogic();
+            InitializerClass.Initialize();
         }
 
         [TestMethod]
         public void CreateUserToke()
         {
             UserToken token = new UserToken();
-            token.Email = "pavithraks2006@yahoo.com";
+            token.Email = "pavithra.shivarudrappa@fluke.com";
             LicenseKey.GenerateKey keyGen = new LicenseKey.GenerateKey();
             keyGen.LicenseTemplate = "xxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx";
             keyGen.UseBase10 = false;

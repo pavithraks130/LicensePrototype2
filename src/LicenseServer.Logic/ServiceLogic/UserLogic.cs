@@ -95,6 +95,11 @@ namespace LicenseServer.Logic
             return UserManager.ResetPassword(userId, token, password);
         }
 
+        public bool ChangePassword(string userId,string oldPassword, string newPassword)
+        {
+            var result = UserManager.ChangePassword(userId, oldPassword, newPassword);
+            return result.Succeeded;
+        }
         public User GetUserByEmail(string email)
         {
             var usr = UserManager.FindByEmail<Core.Model.Appuser, string>(email);
@@ -110,7 +115,7 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
         }
 
-        public Core.Model.Appuser AutheticateUser(string userName, string password)
+        public Core.Model.Appuser AuthenticateUser(string userName, string password)
         {
             Core.Model.Appuser user = UserManager.Find(userName, password);
             return user;

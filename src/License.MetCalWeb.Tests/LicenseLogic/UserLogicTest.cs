@@ -16,7 +16,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
     public class UserLogicTest
     {
         UserLogic logic = null;
-        
+
         Moq.Mock<AppUserManager> manager;
         Moq.Mock<AppRoleManager> rolemanager;
 
@@ -24,34 +24,50 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         {
             InitializerClass.Initialize();
             logic = new UserLogic();
-            var dbContext = ApplicationDbContext.Create();
-            UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
-            RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);
-            manager = new Moq.Mock<AppUserManager>(userStore);
-            rolemanager = new Moq.Mock<AppRoleManager>(roleStore);
-            logic.UserManager = manager.Object;
-            logic.RoleManager = rolemanager.Object;
+           
         }
 
         [TestMethod]
         public void GetUser()
         {
+            var dbContext = ApplicationDbContext.Create();
+            UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
+            RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);
+            manager = new Moq.Mock<AppUserManager>(userStore);
+            rolemanager = new Moq.Mock<AppRoleManager>(roleStore);
+            logic.UserManager = new AppUserManager(userStore);
+            logic.RoleManager = new AppRoleManager(roleStore);
             var users = logic.GetUsers();
-            Assert.IsNotNull(users);
+            Assert.IsTrue(users.Count > 0);
         }
 
-        [TestMethod]
+        [TestMethod]        
         public void CrearUser()
         {
+            var dbContext = ApplicationDbContext.Create();
+            UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
+            RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);
+            manager = new Moq.Mock<AppUserManager>(userStore);
+            rolemanager = new Moq.Mock<AppRoleManager>(roleStore);            
+            logic.UserManager = new AppUserManager(userStore);
+            logic.RoleManager = new AppRoleManager(roleStore);
             Model.Registration reg = new Model.Registration();
             reg.FirstName = "veeresh";
             reg.LastName = "S";
-            reg.OrganizationName = "sidssol";
-            reg.Email = "veereshrdrpp@gmail.com";
+            reg.OrganizationName = "fluke";
+            reg.Email = "pavithra.shivarudrappa@fluke.com";
             reg.Password = "Test@1234";
             reg.PhoneNumber = "1234567890";
-            var result = logic.CreateUser(reg);
-            Assert.AreEqual("true", result.Succeeded);
+            var licserUserLogic = new LicenseServer.Logic.UserLogic();
+            var obj = licserUserLogic.GetUserByEmail(reg.Email);
+            if (obj != null)
+            {
+                reg.ServerUserId = obj.UserId;
+                var result = logic.CreateUser(reg);
+                Assert.IsTrue(result.Succeeded);
+            }
+            else
+                Assert.Fail("Register user is not exist in License Server. WHich tracks the admin users");
 
         }
     }

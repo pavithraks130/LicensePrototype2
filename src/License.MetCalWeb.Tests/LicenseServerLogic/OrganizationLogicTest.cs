@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LicenseServer.Logic;
 
-namespace License.MetCalWeb.Tests.LicenseServer.Logic
+namespace License.MetCalWeb.Tests.LicenseServerLogic
 {
     [TestClass]
     public class OrganizationLogicTest
     {
         OrganizationLogic logic = new OrganizationLogic();
         [TestMethod]
-        public void GetItems()
+        public void GetTeams()
         {
             InitializerClass.Initialize();
             var orgList = logic.GetTeams();
-            if (orgList.Count > 0)
-            {
-                Assert.IsNotNull(orgList);
-            }
+            Assert.IsTrue(orgList.Count > 0);
         }
     }
 }
