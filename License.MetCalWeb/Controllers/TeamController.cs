@@ -117,7 +117,7 @@ namespace License.MetCalWeb.Controllers
             IdentityResult result;
             if (ModelState.IsValid)
             {
-                if (!userLogic.GetUserByEmail(model.Email))
+                if (userLogic.GetUserByEmail(model.Email) == null)
                 {
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
                     model.RegistratoinModel.ManagerId = LicenseSessionState.Instance.User.UserId;
