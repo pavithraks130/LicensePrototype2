@@ -2,15 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
-using License.Core.DBContext;
-using License.Core.Manager;
-using License.Core.Model;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OAuth;
-
-using LicenseServer.Core.DbContext;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 [assembly: OwinStartup(typeof(License.MetCalWeb.Startup))]
 
@@ -22,12 +17,12 @@ namespace License.MetCalWeb
         {
             // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
 
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
-            app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
-            app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
+            AreaRegistration.RegisterAllAreas();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
             LicenseServer.Logic.Initializer.AutoMapperInitializer();
+
             ConfigureOAuth(app);
         }
 
@@ -37,23 +32,9 @@ namespace License.MetCalWeb
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
-                Provider = new CookieAuthenticationProvider
-                {
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<AppUserManager, AppUser>(
-      validateInterval: TimeSpan.FromMinutes(30),
-      regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager, DefaultAuthenticationTypes.ApplicationCookie))
-                },
                 ExpireTimeSpan = TimeSpan.FromMinutes(30)
             });
-            //OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions()
-            //{
-            //    TokenEndpointPath = new PathString("/token"),
-            //    AllowInsecureHttp = true,
-            //    AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
-            //    Provider = new OAuthAuthorizationServerProvider()
-            //};
-
-            //app.UseOAuthAuthorizationServer(options);
+           
         }
     }
 }

@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Owin.Security;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using License.Core.Manager;
-using License.Core.Model;
 using License.Logic.Common;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
 using License.Model;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -34,7 +31,6 @@ namespace License.MetCalWeb.Controllers
                 return _authManager;
             }
         }
-
         public ActionResult Register()
         {
             ViewData["SucessMessageDisplay"] = false;
@@ -49,10 +45,6 @@ namespace License.MetCalWeb.Controllers
             ViewData["SucessMessageDisplay"] = false;
             if (ModelState.IsValid)
             {
-                if (logic.UserManager == null)
-                    logic.UserManager = UserManager;
-                if (logic.RoleManager == null)
-                    logic.RoleManager = RoleManager;
 
                 LicenseServer.Logic.UserLogic serUserLogic = new LicenseServer.Logic.UserLogic();
                 LicenseServer.DataModel.Registration reg = new LicenseServer.DataModel.Registration();
@@ -73,10 +65,10 @@ namespace License.MetCalWeb.Controllers
 
                 string servUserId = serUserLogic.CreateUser(reg);
                 model.RegistratoinModel.ServerUserId = servUserId;
-                IdentityResult result = logic.CreateUser(model.RegistratoinModel);
-                if (result.Succeeded)
+                var result = logic.CreateUser(model.RegistratoinModel);
+                if (result)
                 {
-                    AppUser user = logic.UserManager.FindByEmail(model.Email);
+                    User user = logic.GetUserByEmail(model.Email);
                     ViewData["SucessMessageDisplay"] = true;
                     FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
                     StreamReader reader = new StreamReader(stream);
@@ -84,10 +76,11 @@ namespace License.MetCalWeb.Controllers
                     reader.Close();
                     stream.Close();
                     stream.Dispose();
-                    await logic.UserManager.SendEmailAsync(user.Id, "Welcome to Fluke", str);
+                    EmailService service = new EmailService();
+                    service.SendEmail(model.Email, "Welcome to Fluke", str);
                 }
                 else
-                    GetErrorResult(result);
+                    ModelState.AddModelError("", logic.ErrorMessage);
             }
             return View();
         }
@@ -103,29 +96,23 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (logic.UserManager == null)
-                    logic.UserManager = UserManager;
-                if (logic.RoleManager == null)
-                    logic.RoleManager = RoleManager;
                 MetCalWeb.Models.UserModel userObj = new Models.UserModel();
 
                 // Authentication is supparated for the On Premises user and SuperAdmin User. Super Admin will  be authenticate with LicenseServer Db 
                 // and on premises user will be authenticated with on premise DB
-                AppUser user = logic.AuthenticateUser(model.Email, model.Password);
+                User user = logic.AuthenticateUser(model.Email, model.Password);
                 if (user != null)
                 {
-                    //Code need to be removed added only for verfication
-                    var obj = logic.GetUserDataByAppuser(user);
-                    userObj.Email = obj.Email;
-                    userObj.FirstName = obj.FirstName;
-                    userObj.LastName = obj.LastName;
-                    userObj.ManagerId = obj.ManagerId;
-                    userObj.Name = obj.Name;
-                    userObj.PhoneNumber = obj.PhoneNumber;
-                    userObj.Roles = obj.Roles;
-                    userObj.ServerUserId = obj.ServerUserId;
-                    userObj.UserId = obj.UserId;
-                    userObj.UserName = obj.UserName;
+                    userObj.Email = user.Email;
+                    userObj.FirstName = user.FirstName;
+                    userObj.LastName = user.LastName;
+                    userObj.ManagerId = user.ManagerId;
+                    userObj.Name = user.Name;
+                    userObj.PhoneNumber = user.PhoneNumber;
+                    userObj.Roles = user.Roles;
+                    userObj.ServerUserId = user.ServerUserId;
+                    userObj.UserId = user.UserId;
+                    userObj.UserName = user.UserName;
                 }
                 else
                 {
@@ -176,8 +163,7 @@ namespace License.MetCalWeb.Controllers
                 identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
             else
             {
-                AppUser appUser = logic.UserManager.FindById(user.UserId);
-                identity = logic.UserManager.CreateIdentity(appUser, DefaultAuthenticationTypes.ApplicationCookie);
+                identity = logic.CreateClaimsIdentity(user.UserId);
             }
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
@@ -197,10 +183,9 @@ namespace License.MetCalWeb.Controllers
             string email = string.Empty;
             if (ModelState.IsValid)
             {
-                if (logic.UserManager == null)
-                    logic.UserManager = UserManager;
-                IdentityResult result = logic.ResetPassword(userId, code, model.Password);
-                if (result.Succeeded)
+
+                var result = logic.ResetPassword(userId, code, model.Password);
+                if (result)
                 {
                     var user = logic.GetUserById(userId);
                     if (!String.IsNullOrEmpty(user.ServerUserId))
@@ -212,7 +197,7 @@ namespace License.MetCalWeb.Controllers
                     ViewBag.ResetMessage = "Success";
                 }
                 else
-                    GetErrorResult(result);
+                    ModelState.AddModelError("", logic.ErrorMessage);
             }
             return View();
         }
@@ -229,17 +214,17 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (logic.UserManager == null)
-                    logic.UserManager = UserManager;
                 var user = logic.ForgotPassword(model.Email);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Enter Valid Email ");
                     return View();
                 }
-                string token = logic.UserManager.GeneratePasswordResetToken(user.UserId);
+
+                string token = logic.CreateResetPasswordToken(user.UserId);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.UserId, code = token }, protocol: Request.Url.Scheme);
-                await logic.UserManager.SendEmailAsync(user.UserId, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+                EmailService service = new EmailService();
+                service.SendEmail(model.Email, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
             }
 
@@ -248,7 +233,7 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult LogOut()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
             return RedirectToAction("LogIn");
         }

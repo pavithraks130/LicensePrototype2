@@ -25,16 +25,11 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         public LicenseLogicTest()
         {
             InitializerClass.Initialize();
-            var dbContext = ApplicationDbContext.Create();
-            var userStore = new UserStore<Core.Model.AppUser>(dbContext);
-            var roleStore = new RoleStore<Core.Model.Role>(dbContext);
-            UserManager = new AppUserManager(userStore);
-            RoleManager = new AppRoleManager(roleStore);
+           
             licLogic = new Logic.ServiceLogic.LicenseLogic();
             userLogic = new UserLogic();
             useSubLogic = new UserSubscriptionLogic();
-            userLogic.UserManager = UserManager;
-            userLogic.RoleManager = RoleManager;
+           
             user = userLogic.GetUserByEmail("apsarj@gmail.com");
             sub = useSubLogic.GetSubscription(user.UserId).First();
 

@@ -24,15 +24,6 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         public UserSubscriptionLogicTest()
         {
             InitializerClass.Initialize();
-            var dbContext = ApplicationDbContext.Create();
-            var userStore = new UserStore<Core.Model.AppUser>(dbContext);
-            var roleStore = new RoleStore<Core.Model.Role>(dbContext);
-            UserManager = new AppUserManager(userStore);
-            RoleManager = new AppRoleManager(roleStore);
-            userLogic.UserManager = UserManager;
-            userLogic.RoleManager = RoleManager;
-            useSubLogic.UserManager = UserManager;
-            useSubLogic.RoleManager = RoleManager;
         }
 
         [TestMethod]

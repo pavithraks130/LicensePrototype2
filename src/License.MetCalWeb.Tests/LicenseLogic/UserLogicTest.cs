@@ -30,13 +30,6 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void GetUser()
         {
-            var dbContext = ApplicationDbContext.Create();
-            UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
-            RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);
-            manager = new Moq.Mock<AppUserManager>(userStore);
-            rolemanager = new Moq.Mock<AppRoleManager>(roleStore);
-            logic.UserManager = new AppUserManager(userStore);
-            logic.RoleManager =  new AppRoleManager(roleStore);
             var users = logic.GetUsers();
             Assert.IsTrue(users.Count > 0);
         }
@@ -44,13 +37,6 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]        
         public void CrearUser()
         {
-            var dbContext = ApplicationDbContext.Create();
-            UserStore<AppUser> userStore = new UserStore<AppUser>(dbContext);
-            RoleStore<Role> roleStore = new RoleStore<Role>(dbContext);
-            manager = new Moq.Mock<AppUserManager>(userStore);
-            rolemanager = new Moq.Mock<AppRoleManager>(roleStore);            
-            logic.UserManager = new AppUserManager(userStore);
-            logic.RoleManager = new AppRoleManager(roleStore);
             Model.Registration reg = new Model.Registration();
             reg.FirstName = "veeresh";
             reg.LastName = "S";
@@ -64,7 +50,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             {
                 reg.ServerUserId = obj.UserId;
                 var result = logic.CreateUser(reg);
-                Assert.IsTrue(result.Succeeded);
+                Assert.IsTrue(result);
             }
             else
                 Assert.Fail("Register user is not exist in License Server. WHich tracks the admin users");

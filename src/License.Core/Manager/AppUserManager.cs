@@ -27,5 +27,15 @@ namespace License.Core.Manager
             usermanager.ClaimsIdentityFactory = new ClaimsIdentityFactory<AppUser>();
             return usermanager;
         }
+
+        public static AppUserManager Create(ApplicationDbContext context)
+        {
+            var usermanager = new AppUserManager(new UserStore<AppUser>(context));
+            var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("LicenseProtoType");
+            usermanager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<AppUser>(provider.Create("EmailConfirmation"));
+            usermanager.EmailService = new EmailService();
+            usermanager.ClaimsIdentityFactory = new ClaimsIdentityFactory<AppUser>();
+            return usermanager;
+        }
     }
 }
