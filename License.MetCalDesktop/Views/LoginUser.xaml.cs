@@ -1,4 +1,5 @@
-﻿using System;
+﻿using License.MetCalDesktop.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,21 @@ namespace License.MetCalDesktop.Views
     {
         public LoginUser()
         {
-            InitializeComponent();
+            var viewModel = new LoginViewModel();
+            viewModel.NavigateNextPage += NavigateNextPage;
+            DataContext = viewModel;
+        }
+
+        private void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
+        {
+
+          //  this.NavigationService.Navigate(new Dashboard());
+
+        }
+
+        private void ButtonNewUser_OnClick(object sender, RoutedEventArgs e)
+        {
+           // this.NavigationService.Navigate(new RegisterUser());
         }
     }
 }
