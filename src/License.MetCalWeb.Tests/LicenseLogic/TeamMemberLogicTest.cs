@@ -30,7 +30,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void CreateInvite()
         {
-            User adminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            User adminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             Registration usr = new Registration();
             usr.Email = "pavithraks2006@yahoo.com";
             usr.Password = "Test@1234";
@@ -50,7 +50,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void UpdateInviteStatus()
         {
-            User adminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            User adminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             var obj = teamLogic.VerifyUserInvited("pavithraks2006@yahoo.com", adminUser.UserId);
             if (obj != null)
             {
@@ -66,7 +66,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void GetUserinvite()
         {
-            User adminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            User adminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             var dataList = teamLogic.GetUserInviteDetails(adminUser.UserId);
             Assert.IsTrue(dataList.AcceptedInvites.Count > 0 || dataList.PendingInvites.Count > 0);
         }
@@ -74,7 +74,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void SetAsAdmin()
         {
-            User adminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            User adminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             var obj = teamLogic.VerifyUserInvited("pavithraks2006@yahoo.com", adminUser.UserId);
             teamLogic.SetAsAdmin(obj.Id, obj.InviteeUserId, true);
         }

@@ -30,7 +30,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             userLogic = new UserLogic();
             useSubLogic = new UserSubscriptionLogic();
            
-            user = userLogic.GetUserByEmail("apsarj@gmail.com");
+            user = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             sub = useSubLogic.GetSubscription(user.UserId).First();
 
         }

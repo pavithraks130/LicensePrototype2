@@ -17,19 +17,18 @@ namespace License.MetCalWeb.Tests.LicenseLogic
     {
         UserSubscriptionLogic useSubLogic = null;
         UserLogic userLogic = null;
-        AppUserManager UserManager { get; set; }
-
-        AppRoleManager RoleManager { get; set; }
 
         public UserSubscriptionLogicTest()
         {
             InitializerClass.Initialize();
+            useSubLogic = new UserSubscriptionLogic();
+            userLogic = new UserLogic();
         }
 
         [TestMethod]
         public void GetSubscriptionList()
         {
-            User adminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            User adminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             var subList = useSubLogic.GetSubscription(adminUser.UserId);
             Assert.IsTrue(subList.Count > 0);
         }
@@ -37,7 +36,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         [TestMethod]
         public void CreateSubscription()
         {
-            User adminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            User adminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             UserSubscription sub = new UserSubscription();
             sub.Quantity = 2;
             sub.SubscriptionDate = DateTime.Now;

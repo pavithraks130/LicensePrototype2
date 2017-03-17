@@ -1,0 +1,16 @@
+<Playlist Version="1.0">
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserLogicTest.CrearUser" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.TeamMemberLogicTest.CreateInvite" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.TeamMemberLogicTest.UpdateInviteStatus" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.TeamMemberLogicTest.GetUserinvite" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.TeamMemberLogicTest.SetAsAdmin" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserLogicTest.GetUser" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserSubscriptionLogicTest.CreateSubscription" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserSubscriptionLogicTest.GetSubscriptionList" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.LicenseLogicTest.CreateLicenseData" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.LicenseLogicTest.GetLicenseBySubscription" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserLicenseLogicTest.GetUserLicenseDetails" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.LicenseLogicTest.GetUnassignedLicense" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserLicenseLogicTest.CreateUserLicense" />
+<Add Test="License.MetCalWeb.Tests.LicenseLogic.UserLicenseLogicTest.RevokeuserLicense" />
+</Playlist>

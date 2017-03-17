@@ -18,8 +18,6 @@ namespace License.MetCalWeb.Tests.LicenseServerLogic
         public SubscriptionDetailLogicTest()
         {
             detailLogic = new SubscriptionDetailLogic();
-            logic = new SubscriptionTypeLogic();
-            proLogic = new ProductLogic();
             InitializerClass.Initialize();
         }
 
@@ -35,6 +33,8 @@ namespace License.MetCalWeb.Tests.LicenseServerLogic
         [TestMethod]
         public void CreateSubscriptionDetail()
         {
+            logic = new SubscriptionTypeLogic();
+            proLogic = new ProductLogic();
             var proList = proLogic.GetProducts();
             var sub = logic.GetSubscriptionType();
             if (proList.Count > 0 && sub.Count > 0)

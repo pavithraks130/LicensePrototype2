@@ -23,7 +23,7 @@ namespace License.Logic.ServiceLogic
             var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == userId).ToList();
             foreach (var lic in licList)
             {
-                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).Select(l => l.Id);
+                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
                 var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId);
                 if (obj == null)
                 {

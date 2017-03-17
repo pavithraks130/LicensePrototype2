@@ -37,6 +37,12 @@ namespace License.Logic.ServiceLogic
                 CreateLicenseData(data);
             Work.LicenseDataRepository.Save();
         }
-        
+
+        public LicenseData GetLicenseById(int id)
+        {
+            var obj = Work.LicenseDataRepository.GetById(id);
+            return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
+        }
+
     }
 }

@@ -35,15 +35,11 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             InitializerClass.Initialize();
 
             userLicLogic = new UserLicenseLogic();
-
-
+            userLogic = new UserLogic();
             licLogic = new Logic.ServiceLogic.LicenseLogic();
-
             userLicLogic = new UserLicenseLogic();
-
             subLogic = new UserSubscriptionLogic();
-
-            AdminUser = userLogic.GetUserByEmail("apsarj@gmail.com");
+            AdminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             TeamMember = userLogic.GetUserByEmail("pavithraks2006@yahoo.com");
 
             Sub = subLogic.GetSubscription(AdminUser.UserId).First();
@@ -61,10 +57,12 @@ namespace License.MetCalWeb.Tests.LicenseLogic
                 UserLicense lic = new UserLicense();
                 lic.UserId = TeamMember.UserId;
                 lic.LicenseId = LicenseList[0].Id;
+                lic.License = licLogic.GetLicenseById(lic.LicenseId);
                 userLicList.Add(lic);
                 UserLicense lic1 = new UserLicense();
                 lic1.UserId = TeamMember.UserId;
                 lic1.LicenseId = LicenseList[1].Id;
+                lic1.License = licLogic.GetLicenseById(lic1.LicenseId);
                 userLicList.Add(lic1);
                 userLicLogic.CreateUserLicense(userLicList, TeamMember.UserId);
 
@@ -72,6 +70,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
                 UserLicense lic2 = new UserLicense();
                 lic2.UserId = AdminUser.UserId;
                 lic2.LicenseId = LicenseList[2].Id;
+                lic2.License = licLogic.GetLicenseById(lic2.LicenseId);
                 userLicList.Add(lic2);
                 userLicLogic.CreateUserLicense(userLicList, AdminUser.UserId);
             }

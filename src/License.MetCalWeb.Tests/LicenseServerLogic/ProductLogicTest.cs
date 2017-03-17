@@ -22,7 +22,7 @@ namespace License.MetCalWeb.Tests.LicenseServerLogic
         [TestMethod]
         public void createProduct()
         {
-            var status = logic.CreateProduct(new Product() { Name = "Pro1", ProductCode = "pRO-01", CreatedDate = DateTime.Now.Date.ToString(), Description = "Product one", ImagePath = "P1.png" });
+            var status = logic.CreateProduct(new Product() { Name = "Pro1", ProductCode = "PRO-01", CreatedDate = DateTime.Now.Date.ToString(), Description = "Product one", ImagePath = "P1.png" });
             Assert.IsTrue(status);
         }
     }
