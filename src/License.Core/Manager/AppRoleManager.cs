@@ -23,5 +23,11 @@ namespace License.Core.Manager
             AppRoleManager roleMgr =  new AppRoleManager(new RoleStore<Role>(dbcontext));
             return roleMgr;
         }
+
+        public static AppRoleManager Create(ApplicationDbContext context)
+        {
+            AppRoleManager roleMgr = new AppRoleManager(new RoleStore<Role>(context));
+            return roleMgr;
+        }
     }
 }

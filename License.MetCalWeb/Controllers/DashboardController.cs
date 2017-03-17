@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using License.Logic.ServiceLogic;
-using License.MetCalWeb.Models;
-using License.Core.Model;
-using System.Threading;
 
 namespace License.MetCalWeb.Controllers
 {

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using License.Core.Manager;
-using License.Core.Model;
 using License.Logic.Common;
 using License.Logic.ServiceLogic;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
 using License.Model;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+
 using TeamMembers = License.Model.TeamMembers;
 
 namespace License.MetCalWeb.Controllers
@@ -49,12 +46,6 @@ namespace License.MetCalWeb.Controllers
             License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
-            if (logic.UserManager == null)
-                logic.UserManager = UserManager;
-
-            if (logic.RoleManager == null)
-                logic.RoleManager = RoleManager;
-
             TempData["IsTeamAdmin"] = false;
             if (LicenseSessionState.Instance.IsAdmin)
             {
@@ -110,29 +101,24 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Invite(UserInviteModel model)
         {
             bool status = false;
-            if (userLogic.UserManager == null)
-                userLogic.UserManager = UserManager;
-            if (userLogic.RoleManager == null)
-                userLogic.RoleManager = RoleManager;
-            IdentityResult result;
             if (ModelState.IsValid)
             {
                 if (userLogic.GetUserByEmail(model.Email) == null)
                 {
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
                     model.RegistratoinModel.ManagerId = LicenseSessionState.Instance.User.UserId;
-                    result = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
-                    status = result.Succeeded;
+                    status = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
+
                 }
                 else
                     status = true;
 
                 if (status)
                 {
-                    AppUser user = userLogic.UserManager.FindByEmail(model.Email);
+                    User user = userLogic.GetUserByEmail(model.Email);
                     TeamMembers invite = new TeamMembers();
                     invite.AdminId = LicenseSessionState.Instance.User.UserId;
-                    invite.InviteeUserId = user.Id;
+                    invite.InviteeUserId = user.UserId;
                     invite.InvitationDate = DateTime.Now.Date;
                     invite.InviteeEmail = model.Email;
                     invite.InviteeStatus = InviteStatus.Pending.ToString();
@@ -144,7 +130,6 @@ namespace License.MetCalWeb.Controllers
                         string encryptString = invite.AdminId + "," + data.Id;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
-                        string token = userLogic.UserManager.GenerateEmailConfirmationToken(user.Id);
 
                         string joinUrl = Url.Action("Confirm", "Account",
                             new { invite = dataencrypted, status = InviteStatus.Accepted.ToString() }, protocol: Request.Url.Scheme);
@@ -155,9 +140,14 @@ namespace License.MetCalWeb.Controllers
                         body = body.Replace("{{DeclineUrl}}", declineUrl);
                         body = body.Replace("{{UserName}}", model.Email);
                         body = body.Replace("{{Password}}", model.Password);
-
-                        userLogic.UserManager.SendEmail(user.Id, "Invite to fluke Calibration", body);
+                        EmailService service = new EmailService();
+                        service.SendEmail(model.Email, "Invite to fluke Calibration", body);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("", logic.ErrorMessage);
+                    return View();
                 }
             }
             return RedirectToAction("TeamContainer");
@@ -169,13 +159,9 @@ namespace License.MetCalWeb.Controllers
             return View(listdata);
         }
 
-        public List<LicenseMapModel> GetLicenseListBySubscription(string userId)
+        public List<License.MetCalWeb.Models.LicenseMapModel> GetLicenseListBySubscription(string userId)
         {
             TempData["UserId"] = userId;
-            if (userLogic.UserManager == null)
-                userLogic.UserManager = UserManager;
-            if (userLogic.RoleManager == null)
-                userLogic.RoleManager = RoleManager;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
 
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
@@ -208,10 +194,8 @@ namespace License.MetCalWeb.Controllers
         public ActionResult RevokeLicense(string userId)
         {
             TempData["UserId"] = userId;
-            userLogic.UserManager = UserManager;
-            userLogic.RoleManager = RoleManager;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
-            List<LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
+            List<Models.LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
             return View(licenseMapModelList);
         }
 

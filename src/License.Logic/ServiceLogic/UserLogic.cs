@@ -21,7 +21,7 @@ namespace License.Logic.ServiceLogic
             return usersList;
         }
 
-        public IdentityResult CreateUser(Registration u, string roleName = "Admin")
+        public bool CreateUser(Registration u, string roleName = "Admin")
         {
             User ur = new User();
             ur.FirstName = u.FirstName;
@@ -39,7 +39,6 @@ namespace License.Logic.ServiceLogic
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
-                    rolelogic.RoleManager = RoleManager;
                     result = rolelogic.CreateRole(new Model.Role() { Name = roleName });
                 }
                 string userId = String.Empty;
@@ -63,7 +62,10 @@ namespace License.Logic.ServiceLogic
                 //throw ex;
                 result = new IdentityResult(new string[] { ex.Message });
             }
-            return result;
+            if (!result.Succeeded)
+                foreach (string str in result.Errors)
+                    ErrorMessage += str;
+            return result.Succeeded;
         }
 
         public User GetUserById(string id)
@@ -73,25 +75,42 @@ namespace License.Logic.ServiceLogic
             return user;
         }
 
-        public IdentityResult UpdateUser(string id, User user)
+        public bool UpdateUser(string id, User user)
         {
             var appuser = UserManager.FindById(id);
             appuser.FirstName = user.FirstName;
             appuser.LastName = user.LastName;
             appuser.Email = user.Email;
             appuser.PhoneNumber = user.PhoneNumber;
-            return UserManager.Update(appuser);
+            var result = UserManager.Update(appuser);
+            if (!result.Succeeded)
+                foreach (string str in result.Errors)
+                    ErrorMessage += str;
+            return result.Succeeded;
         }
 
-        public IdentityResult DeleteUser(string id)
+        public bool DeleteUser(string id)
         {
             var user = UserManager.FindById(id);
-            return UserManager.Delete(user);
+            var result = UserManager.Delete(user);
+            if (!result.Succeeded)
+                foreach (string str in result.Errors)
+                    ErrorMessage += str;
+            return result.Succeeded;
         }
 
-        public IdentityResult ResetPassword(string userId, string token, string password)
+        public string CreateResetPasswordToken(string userId)
         {
-            return UserManager.ResetPassword(userId, token, password);
+            return UserManager.GeneratePasswordResetToken(userId);
+        }
+
+        public bool ResetPassword(string userId, string token, string password)
+        {
+            var result = UserManager.ResetPassword(userId, token, password);
+            if (!result.Succeeded)
+                foreach (string str in result.Errors)
+                    ErrorMessage += str;
+            return result.Succeeded;
         }
 
         public Model.User GetUserByEmail(string email)
@@ -112,18 +131,21 @@ namespace License.Logic.ServiceLogic
             return result.Succeeded;
         }
 
-        public AppUser AuthenticateUser(string userName, string password)
+        public User AuthenticateUser(string userName, string password)
         {
             AppUser user = UserManager.Find(userName, password);
-            return user;
-        }
-
-        public User GetUserDataByAppuser(AppUser user)
-        {
             User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+            if (userObj == null) return null;
             IList<string> roles = UserManager.GetRoles(user.Id);
             userObj.Roles = roles;
             return userObj;
         }
+
+        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId)
+        {
+            var obj = UserManager.FindById(userId);
+            return UserManager.CreateIdentity(obj, DefaultAuthenticationTypes.ApplicationCookie);
+        }
+
     }
 }

@@ -5,8 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -83,7 +81,6 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.User.ServerUserId != subs.UserId)
             {
                 License.Logic.ServiceLogic.UserLogic userLogic = new License.Logic.ServiceLogic.UserLogic();
-                userLogic.UserManager = UserManager;
             }
             else
                 userId = LicenseSessionState.Instance.User.UserId;

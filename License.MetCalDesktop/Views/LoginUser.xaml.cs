@@ -30,14 +30,13 @@ namespace License.MetCalDesktop.Views
 
         private void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
         {
-
-          //  this.NavigationService.Navigate(new Dashboard());
-
+            if (screenName == "Dashboard")
+                this.NavigationService.Navigate(new Dashboard());
         }
 
         private void ButtonNewUser_OnClick(object sender, RoutedEventArgs e)
         {
-           // this.NavigationService.Navigate(new RegisterUser());
+            // this.NavigationService.Navigate(new RegisterUser());
         }
     }
 }

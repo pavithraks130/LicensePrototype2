@@ -160,9 +160,11 @@ namespace License.MetCalDesktop.ViewModel
                 var logic = new UserLogic();
                 IsEnableLogin = false;
                 var status = IsNetworkAvilable;
+                License.Model.User user = null;
                 if (status)
                 {
-                    var result = logic.AuthenticateUser(Email, Password);
+                    user = logic.AuthenticateUser(Email, Password);
+                    status = !String.IsNullOrEmpty(user.UserId);
                 }
                 else
                 {
@@ -171,8 +173,11 @@ namespace License.MetCalDesktop.ViewModel
                 }
                 if (status)
                 {
-                    AppState.IsUserLoggedIn = true;
-                    NavigateNextPage?.Invoke(null, null);
+                    License.Logic.ServiceLogic.ProductSubscriptionLogic prodLogic = new ProductSubscriptionLogic();
+
+                    AppState.Instance.IsUserLoggedIn = true;
+                    AppState.Instance.UserLicenseList = prodLogic.GetUserLicenseDetails(user.UserId, true);
+                    NavigateNextPage?.Invoke("Dashboard", null);
                     IsEnableLogin = true;
                 }
                 else

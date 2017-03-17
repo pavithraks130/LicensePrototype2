@@ -33,15 +33,8 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         public UserLicenseLogicTest()
         {
             InitializerClass.Initialize();
-            var dbContext = ApplicationDbContext.Create();
-            var userStore = new UserStore<Core.Model.AppUser>(dbContext);
-            var roleStore = new RoleStore<Core.Model.Role>(dbContext);
-            UserManager = new AppUserManager(userStore);
-            RoleManager = new AppRoleManager(roleStore);
 
             userLicLogic = new UserLicenseLogic();
-            userLogic.UserManager = UserManager;
-            userLogic.RoleManager = RoleManager;
 
 
             licLogic = new Logic.ServiceLogic.LicenseLogic();
