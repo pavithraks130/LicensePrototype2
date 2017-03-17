@@ -159,7 +159,7 @@ namespace License.MetCalWeb.Controllers
             return View(listdata);
         }
 
-        public List<LicenseMapModel> GetLicenseListBySubscription(string userId)
+        public List<License.MetCalWeb.Models.LicenseMapModel> GetLicenseListBySubscription(string userId)
         {
             TempData["UserId"] = userId;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
@@ -195,7 +195,7 @@ namespace License.MetCalWeb.Controllers
         {
             TempData["UserId"] = userId;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
-            List<LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
+            List<Models.LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
             return View(licenseMapModelList);
         }
 
