@@ -9,7 +9,7 @@ namespace License.Logic.ServiceLogic
 {
     public class UserLicenseLogic : BaseLogic
     {
-        public bool CreateUserLicense(UserLicense lic)
+        private bool CreateUserLicense(UserLicense lic)
         {
             var obj = AutoMapper.Mapper.Map<UserLicense, Core.Model.UserLicense>(lic);
             obj = Work.UserLicenseRepository.Create(obj);
@@ -46,7 +46,7 @@ namespace License.Logic.ServiceLogic
             return true;
         }
 
-        public bool RemoveUserLicense(UserLicense lic)
+        private bool RevokeUserLicense(UserLicense lic)
         {
             var obj = Work.UserLicenseRepository.GetData(r => r.LicenseId == lic.LicenseId && r.UserId == lic.UserId).FirstOrDefault();
             if (obj == null)
@@ -63,7 +63,7 @@ namespace License.Logic.ServiceLogic
             foreach (var lic in licList)
             {
                 var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.License.ProductId && l.License.UserSubscriptionId == lic.License.UserSubscriptionId);
-                RemoveUserLicense(obj);
+                RevokeUserLicense(obj);
                 i++;
             }
             if (i > 0)
@@ -71,21 +71,21 @@ namespace License.Logic.ServiceLogic
             return true;
         }
 
-        public bool RemoveById(int id)
-        {
-            return Work.UserLicenseRepository.Delete(id);
-        }
+        //public bool RemoveById(int id)
+        //{
+        //    return Work.UserLicenseRepository.Delete(id);
+        //}
 
-        public int GetUserLicenseCount(int licenseId)
-        {
-            return Work.UserLicenseRepository.GetData(l => l.LicenseId == licenseId).Count();
-        }
+        //public int GetUserLicenseCount(int licenseId)
+        //{
+        //    return Work.UserLicenseRepository.GetData(l => l.LicenseId == licenseId).Count();
+        //}
 
-        public UserLicense GetUserLicenseById(int id)
-        {
-            var obj = Work.UserLicenseRepository.GetById(id);
-            return AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(obj);
-        }
+        //public UserLicense GetUserLicenseById(int id)
+        //{
+        //    var obj = Work.UserLicenseRepository.GetById(id);
+        //    return AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(obj);
+        //}
 
         public int GetUserLicenseCount(int userSubscriptionId, int productId)
         {
@@ -102,9 +102,5 @@ namespace License.Logic.ServiceLogic
             return licenses;
         }
 
-        public void save()
-        {
-            Work.UserLicenseRepository.Save();
-        }
     }
 }

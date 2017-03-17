@@ -80,6 +80,9 @@ namespace License.Logic.Common
                     RMCrypto.CreateDecryptor(key, key),
                     CryptoStreamMode.Read);
 
+                if (!Directory.Exists(tempFolderPath))
+                    Directory.CreateDirectory(tempFolderPath);
+
                 FileStream fsOut = new FileStream(outputFile, FileMode.Create);
 
                 int data;

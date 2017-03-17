@@ -111,7 +111,7 @@ namespace License.MetCalWeb.Controllers
 
                 // Authentication is supparated for the On Premises user and SuperAdmin User. Super Admin will  be authenticate with LicenseServer Db 
                 // and on premises user will be authenticated with on premise DB
-                AppUser user = logic.AutheticateUser(model.Email, model.Password);
+                AppUser user = logic.AuthenticateUser(model.Email, model.Password);
                 if (user != null)
                 {
                     //Code need to be removed added only for verfication

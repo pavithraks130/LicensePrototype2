@@ -9,6 +9,7 @@ using License.Core.Manager;
 using Microsoft.AspNet.Identity.EntityFramework;
 using License.Core.Model;
 using License.Core.DBContext;
+
 namespace License.MetCalWeb.Tests.LicenseLogic
 {
     [TestClass]
@@ -35,7 +36,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             manager = new Moq.Mock<AppUserManager>(userStore);
             rolemanager = new Moq.Mock<AppRoleManager>(roleStore);
             logic.UserManager = new AppUserManager(userStore);
-            logic.RoleManager = new AppRoleManager(roleStore);
+            logic.RoleManager =  new AppRoleManager(roleStore);
             var users = logic.GetUsers();
             Assert.IsTrue(users.Count > 0);
         }
@@ -69,5 +70,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
                 Assert.Fail("Register user is not exist in License Server. WHich tracks the admin users");
 
         }
+
+
     }
 }

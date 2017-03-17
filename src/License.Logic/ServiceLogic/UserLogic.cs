@@ -63,7 +63,7 @@ namespace License.Logic.ServiceLogic
             }
             catch (Exception ex)
             {
-                 //throw ex;
+                //throw ex;
                 result = new IdentityResult(new string[] { ex.Message });
             }
             return result;
@@ -97,9 +97,10 @@ namespace License.Logic.ServiceLogic
             return UserManager.ResetPassword(userId, token, password);
         }
 
-        public bool GetUserByEmail(string email)
+        public Model.User GetUserByEmail(string email)
         {
-            return UserManager.FindByEmail<AppUser, string>(email) != null;
+            var data = UserManager.FindByEmail<AppUser, string>(email);
+            return AutoMapper.Mapper.Map<User>(data);
         }
 
         public User ForgotPassword(string email)
@@ -108,7 +109,13 @@ namespace License.Logic.ServiceLogic
             return AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
         }
 
-        public AppUser AutheticateUser(string userName, string password)
+        public bool ChangePassword(string userId, string oldPassword, string newPassword)
+        {
+            var result = UserManager.ChangePassword(userId, oldPassword, newPassword);
+            return result.Succeeded;
+        }
+
+        public AppUser AuthenticateUser(string userName, string password)
         {
             AppUser user = UserManager.Find(userName, password);
             return user;

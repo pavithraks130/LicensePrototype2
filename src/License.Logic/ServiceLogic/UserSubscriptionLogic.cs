@@ -21,23 +21,6 @@ namespace License.Logic.ServiceLogic
             return subscriptionList;
         }
 
-        //public LicenseDetailModel GetLicenseDetailModel(LicenseData lic)
-        //{
-        //    LicenseDetailModel model = new LicenseDetailModel();
-        //    model.LicenseId = lic.Id;
-        //    model.LicenseKey = lic.LicenseKey;
-        //    var key = model.LicenseKey.Split(new char[] { '-' })[0];
-        //    var data = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(key, true);
-        //    var splitData = data.Split(new char[] { '^' });
-        //    model.ProductCode = splitData[0];
-        //    model.TotalLicenseCount = Convert.ToInt32(splitData[1]);
-        //    model.ExpireDate = Convert.ToDateTime(splitData[2]);
-        //    UserLicenseLogic userLicenseLogic = new UserLicenseLogic();
-        //    model.UsedLicenseCount = userLicenseLogic.UserLicenseCount(lic.Id);
-
-        //    return model;
-        //}
-
         public List<UserSubscription> GetSubscriptionByIDList(List<int> idList)
         {
             List<UserSubscription> subscriptionList = new List<UserSubscription>();
