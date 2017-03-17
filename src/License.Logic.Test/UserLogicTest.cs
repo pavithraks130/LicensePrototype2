@@ -111,8 +111,8 @@ namespace License.Logic.Test
             roleStore = new RoleStore<Core.Model.Role>(applicationDBContext);
             rolemanager = new Moq.Mock<AppRoleManager>(roleStore);
 
-            userLogic.UserManager = userManager.Object;
-            userLogic.RoleManager = rolemanager.Object;
+            //userLogic.UserManager = userManager.Object;
+            //userLogic.RoleManager = rolemanager.Object;
         }
         //private IdentityResult CreateUserSetup()
         //{
