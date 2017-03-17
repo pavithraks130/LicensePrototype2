@@ -162,7 +162,7 @@ namespace License.MetCalDesktop.ViewModel
                 var status = IsNetworkAvilable;
                 if (status)
                 {
-                    var result = logic.AutheticateUser(Email, Password);
+                    var result = logic.AuthenticateUser(Email, Password);
                 }
                 else
                 {
