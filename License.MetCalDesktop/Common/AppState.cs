@@ -18,5 +18,7 @@ namespace License.MetCalDesktop.Common
         public List<LicenseMapModel> UserLicenseList { get; set; }
 
         public bool IsUserLoggedIn { get; set; }
+
+        public User User { get; set; }
     }
 }

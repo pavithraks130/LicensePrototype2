@@ -5,16 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using License.MetCalDesktop.Common;
 using License.Model;
+using System.Windows.Input;
+
 namespace License.MetCalDesktop.ViewModel
 {
     public class DashboardViewModel : BaseEntity
     {
         public List<Feature> FeataureList { get; set; }
 
+        public string LoggedInUser { get; set; }
+
+        public ICommand LogoutCommand { get; set; }
         public DashboardViewModel()
         {
             FeataureList = new List<Feature>();
+            LogoutCommand = new RelayCommand(LogOut);
             LoadFeatures();
+            LoggedInUser = AppState.Instance.User.FirstName + ", " + AppState.Instance.User.LastName;
         }
         public void LoadFeatures()
         {
@@ -31,6 +38,15 @@ namespace License.MetCalDesktop.ViewModel
                     }
                 }
             }
+        }
+
+        public void LogOut(object param)
+        {
+            AppState.Instance.User = null;
+            AppState.Instance.UserLicenseList = null;
+            AppState.Instance.IsUserLoggedIn = false;
+            if (NavigateNextPage != null)
+                NavigateNextPage("login", null);
         }
 
     }

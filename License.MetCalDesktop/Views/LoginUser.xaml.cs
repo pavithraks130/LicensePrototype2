@@ -23,6 +23,7 @@ namespace License.MetCalDesktop.Views
     {
         public LoginUser()
         {
+            InitializeComponent();
             var viewModel = new LoginViewModel();
             viewModel.NavigateNextPage += NavigateNextPage;
             DataContext = viewModel;
@@ -36,7 +37,6 @@ namespace License.MetCalDesktop.Views
 
         private void ButtonNewUser_OnClick(object sender, RoutedEventArgs e)
         {
-            // this.NavigationService.Navigate(new RegisterUser());
         }
     }
 }

@@ -177,6 +177,7 @@ namespace License.MetCalDesktop.ViewModel
 
                     AppState.Instance.IsUserLoggedIn = true;
                     AppState.Instance.UserLicenseList = prodLogic.GetUserLicenseDetails(user.UserId, true);
+                    AppState.Instance.User = user;
                     NavigateNextPage?.Invoke("Dashboard", null);
                     IsEnableLogin = true;
                 }

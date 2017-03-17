@@ -31,7 +31,12 @@ namespace License.MetCalDesktop.Views
 
         public void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
         {
-
+            switch (screenName.ToLower())
+            {
+                case "login":
+                    this.NavigationService.Navigate(new LoginUser());
+                    break;
+            }
         }
     }
 }
