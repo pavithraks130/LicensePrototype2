@@ -6,39 +6,34 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <script>
-var x,y,n=0,ny=0,rotINT,rotYINT
-function rotateYDIV()
-{
-y=document.getElementById("rotate3D")
-clearInterval(rotYINT)
-rotYINT=setInterval("startYRotate()",10)
-}
-function startRotate()
-{
-n=n+1
-x.style.transform="rotate(" + n + "deg)"
-x.style.webkitTransform="rotate(" + n + "deg)"
-x.style.OTransform="rotate(" + n + "deg)"
-x.style.MozTransform = "rotate(" + n + "deg)"
-if (n==360)
-{
-clearInterval(rotINT)
-if (n==360){n=0}
-}
-}
-function startYRotate()
-{
-ny=ny+1
-y.style.transform="rotateY(" + ny + "deg)"
-y.style.webkitTransform="rotateY(" + ny + "deg)"
-y.style.OTransform="rotateY(" + ny + "deg)"
-y.style.MozTransform="rotateY(" + ny + "deg)"
-if (ny==360)
-{
-clearInterval(rotYINT)
-if (ny>=360){ny=0}
-}
-}
+    var x, y, n = 0, ny = 0, rotINT, rotYINT
+    function rotateYDIV() {
+        y = document.getElementById("rotate3D")
+        clearInterval(rotYINT)
+        rotYINT = setInterval("startYRotate()", 10)
+    }
+    function startRotate() {
+        n = n + 1
+        x.style.transform = "rotate(" + n + "deg)"
+        x.style.webkitTransform = "rotate(" + n + "deg)"
+        x.style.OTransform = "rotate(" + n + "deg)"
+        x.style.MozTransform = "rotate(" + n + "deg)"
+        if (n == 360) {
+            clearInterval(rotINT)
+            if (n == 360) { n = 0 }
+        }
+    }
+    function startYRotate() {
+        ny = ny + 1
+        y.style.transform = "rotateY(" + ny + "deg)"
+        y.style.webkitTransform = "rotateY(" + ny + "deg)"
+        y.style.OTransform = "rotateY(" + ny + "deg)"
+        y.style.MozTransform = "rotateY(" + ny + "deg)"
+        if (ny == 360) {
+            clearInterval(rotYINT)
+            if (ny >= 360) { ny = 0 }
+        }
+    }
 </script>
 
 <link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
@@ -53,7 +48,8 @@ if (ny>=360){ny=0}
     }
 
     label {
-        font-weight: normal !important;font-family:Arial;
+        font-weight: normal !important;
+        font-family: Arial;
     }
 </style>
 

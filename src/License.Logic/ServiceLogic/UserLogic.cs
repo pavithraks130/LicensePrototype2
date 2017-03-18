@@ -80,7 +80,6 @@ namespace License.Logic.ServiceLogic
             var appuser = UserManager.FindById(id);
             appuser.FirstName = user.FirstName;
             appuser.LastName = user.LastName;
-            appuser.Email = user.Email;
             appuser.PhoneNumber = user.PhoneNumber;
             var result = UserManager.Update(appuser);
             if (!result.Succeeded)

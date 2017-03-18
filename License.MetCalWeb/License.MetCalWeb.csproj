@@ -305,6 +305,8 @@
     <Content Include="Views\Team\LicenseCart.cshtml" />
     <Content Include="Views\UserToken\Index.cshtml" />
     <Content Include="Views\UserToken\CreateToken.cshtml" />
+    <Content Include="Views\Account\Profile.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

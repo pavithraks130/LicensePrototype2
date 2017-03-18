@@ -74,32 +74,36 @@ namespace LicenseServer.Logic
             return user;
         }
 
-        public IdentityResult UpdateUser(string id, User user)
+        public bool UpdateUser(string id, User user)
         {
             var appuser = UserManager.FindById(id);
             appuser.FirstName = user.FirstName;
             appuser.LastName = user.LastName;
             appuser.Email = user.Email;
             appuser.PhoneNumber = user.PhoneNumber;
-            return UserManager.Update(appuser);
+            var result = UserManager.Update(appuser);
+            return result.Succeeded;
         }
 
-        public IdentityResult DeleteUser(string id)
+        public bool DeleteUser(string id)
         {
             var user = UserManager.FindById(id);
-            return UserManager.Delete(user);
+            var result = UserManager.Delete(user);
+            return result.Succeeded;
         }
 
-        public IdentityResult ResetPassword(string userId, string token, string password)
+        public bool ResetPassword(string userId, string token, string password)
         {
-            return UserManager.ResetPassword(userId, token, password);
+            var result = UserManager.ResetPassword(userId, token, password);
+            return result.Succeeded;
         }
 
-        public bool ChangePassword(string userId,string oldPassword, string newPassword)
+        public bool ChangePassword(string userId, string oldPassword, string newPassword)
         {
             var result = UserManager.ChangePassword(userId, oldPassword, newPassword);
             return result.Succeeded;
         }
+
         public User GetUserByEmail(string email)
         {
             var usr = UserManager.FindByEmail<Core.Model.Appuser, string>(email);
@@ -115,14 +119,9 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
         }
 
-        public Core.Model.Appuser AuthenticateUser(string userName, string password)
+        public User AuthenticateUser(string userName, string password)
         {
             Core.Model.Appuser user = UserManager.Find(userName, password);
-            return user;
-        }
-
-        public User GetUserDataByAppuser(Core.Model.Appuser user)
-        {
             User userObj = AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
             IList<string> roles = UserManager.GetRoles(user.Id);
             userObj.Roles = roles;
