@@ -46,9 +46,6 @@ html {
       -ms-text-size-adjust: 100%;
 }
 
-body {
-  margin: 0;
-}
 
 a:focus {
   outline: thin dotted;
@@ -300,6 +297,7 @@ html {
 }
 
 body {
+    margin:0px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   line-height: 1.428571429;

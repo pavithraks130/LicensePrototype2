@@ -20,16 +20,7 @@ html {
     margin: 0;
     padding: 0;
 }
-/*
-body {
-    border-top: solid 10px #000;
-    color: #333;
-    font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    margin: 0;
-    padding: 0;
-}
-    */
+
 
 /* Home layout slideshow image properties layout
 ----------------------------------------------------------*/
@@ -828,4 +819,19 @@ tr.pager td {
         height: 150px;
         text-indent: -9999px; /* hides the link text */
     }
+
+}
+
+ul.dropdown-menu li{
+    float:left;
+    padding-bottom:15px;
+}
+
+ul.dropdown-menu li a{
+    color:black;
+}
+
+ul.dropdown-menu li a:hover{
+    color : #000000 !important;
+
 }
