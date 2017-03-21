@@ -195,6 +195,7 @@
     <Content Include="EmailTemplate\WelcometoFlukeCalibration.htm" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\admin.png" />
     <Content Include="Images\down-arrow.png" />
     <Content Include="Images\download.png" />
     <Content Include="Images\Users-icon.png" />
