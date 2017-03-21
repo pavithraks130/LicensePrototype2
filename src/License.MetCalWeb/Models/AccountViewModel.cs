@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using License.Model.Model;
+using System.Web.Mvc;
+using License.Model;
 
 namespace License.MetCalWeb.Models
 {
@@ -40,11 +41,10 @@ namespace License.MetCalWeb.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        
+
         [Display(Name = "Contact Number")]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         public string PhoneNumber { get { return RegistratoinModel.PhoneNumber; } set { RegistratoinModel.PhoneNumber = value; } }
 
         [Required]
@@ -58,6 +58,14 @@ namespace License.MetCalWeb.Models
             }
         }
 
+
+        public string ServerUserId
+        {
+            get { return RegistratoinModel.ServerUserId; }
+            set { RegistratoinModel.ServerUserId = value; }
+        }
+
+        public string Token { get; set; }
 
     }
 
@@ -77,7 +85,58 @@ namespace License.MetCalWeb.Models
         public bool RememberMe { get; set; }
     }
 
+    public class ResetPassword
+    {
+        [Display(Name = "New Password")]
+        public string Password { get; set; }
 
+        [Display(Name = "Confirm Password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "New Password and Confirm Password not matching")]
+        public string ConfirmPassword { get; set; }
 
+        public string UserId { get; set; }
+
+        public string Token { get; set; }
+    }
+
+    public class ForgotPassword
+    {
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class UserInviteModel
+    {
+        public Registration RegistratoinModel = new Registration();
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get { return RegistratoinModel.Email; } set { RegistratoinModel.Email = value; } }
+
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password
+        {
+            get { return RegistratoinModel.Password; }
+            set
+            {
+                RegistratoinModel.Password = value;
+            }
+        }
+    }
+
+    public class ChangePassword
+    {
+        public string UserId { get; set; }
+
+        public string CurrentPassword { get; set; }
+
+        public string NewPassword { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessage = "New Password and Confirm Password Does not match")]
+        public string ConfirmPassword { get; set; }
+    }
 
 }

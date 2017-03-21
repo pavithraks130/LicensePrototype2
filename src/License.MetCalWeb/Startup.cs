@@ -1,26 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using License.Core.DBContext;
-using License.Core.Manager;
+using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security.Cookies;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 [assembly: OwinStartup(typeof(License.MetCalWeb.Startup))]
+
 namespace License.MetCalWeb
 {
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
-            app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
-            app.CreatePerOwinContext< AppRoleManager>(AppRoleManager.Create);
+            // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
 
-            //Intialize AutoMapper
+            AreaRegistration.RegisterAllAreas();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
+            LicenseServer.Logic.Initializer.AutoMapperInitializer();
 
+            ConfigureOAuth(app);
+        }
+
+        private void ConfigureOAuth(IAppBuilder app)
+        {
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                LoginPath = new PathString("/Account/Login"),
+                ExpireTimeSpan = TimeSpan.FromMinutes(30)
+            });
+           
         }
     }
 }

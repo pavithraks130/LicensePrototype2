@@ -3,23 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 
 namespace License.MetCalWeb.Controllers
 {
-    public class BaseController: Controller
+    public class BaseController : Controller
     {
-        public void GetErrorResult(IdentityResult result)
+        //private AppUserManager _userManager = null;
+        //public AppUserManager UserManager
+        //{
+        //    get
+        //    {
+        //        if (_userManager == null)
+        //            _userManager = Request.GetOwinContext().GetUserManager<AppUserManager>();
+        //        return _userManager;
+        //    }
+        //}
+
+        //private AppRoleManager _roleManager = null;
+        //public AppRoleManager RoleManager
+        //{
+        //    get
+        //    {
+        //        if (_roleManager == null)
+        //            _roleManager = Request.GetOwinContext().GetUserManager<AppRoleManager>();
+        //        return _roleManager;
+        //    }
+        //}
+        protected override void OnException(ExceptionContext filterContext)
         {
-            if (!result.Succeeded)
+            base.OnException(filterContext);
+            RedirectToAction("Login", "Account");
+        }
+        public void GetErrorResult(List<string> result)
+        {
+            foreach (string error in result)
             {
-                if (result.Errors != null)
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
+                ModelState.AddModelError("", error);
             }
         }
     }
