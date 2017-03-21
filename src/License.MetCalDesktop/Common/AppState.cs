@@ -7,6 +7,7 @@ using License.Model;
 
 namespace License.MetCalDesktop.Common
 {
+
     public class AppState
     {
         private static AppState _instance = null;
