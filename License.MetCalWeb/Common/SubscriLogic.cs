@@ -31,16 +31,19 @@ namespace License.MetCalWeb.Common
             foreach (var userSub in subscriptionList)
             {
                 var subType = dataList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
-                SubscriptionProductModel model = new SubscriptionProductModel();
-                model.SubscriptionId = subType.Id;
-                model.SubscriptionName = subType.SubscriptionName;
-                foreach (var pro in subType.Product)
+                if (subType != null)
                 {
-                    UserLicenseLogic userLicLogic = new UserLicenseLogic();
-                    int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                    model.ProductDtls.Add(new ProductDetails() { ProductId = pro.Id, ProductName = pro.Name, ProductCode = pro.ProductCode, TotalCount = (pro.QtyPerSubscription * userSub.Quantity), UsedLicenseCount = usedLicCount });
+                    SubscriptionProductModel model = new SubscriptionProductModel();
+                    model.SubscriptionId = subType.Id;
+                    model.SubscriptionName = subType.SubscriptionName;
+                    foreach (var pro in subType.Product)
+                    {
+                        UserLicenseLogic userLicLogic = new UserLicenseLogic();
+                        int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
+                        model.ProductDtls.Add(new ProductDetails() { ProductId = pro.Id, ProductName = pro.Name, ProductCode = pro.ProductCode, TotalCount = (pro.QtyPerSubscription * userSub.Quantity), UsedLicenseCount = usedLicCount });
+                    }
+                    subscriptionProList.Add(model);
                 }
-                subscriptionProList.Add(model);
             }
             LicenseSessionState.Instance.SubscriptionList = subscriptionProList;
             return subscriptionProList;
