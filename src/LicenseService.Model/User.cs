@@ -28,5 +28,13 @@ namespace LicenseServer.DataModel
 
         public IList<string> Roles { get; set; }
 
+        public IList<SubscriptionType> SubscriptionList { get; set; }
+
+        public User()
+        {
+            Roles = new List<string>();
+            SubscriptionList = new List<SubscriptionType>();
+        }
+
     }
 }
