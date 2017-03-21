@@ -170,6 +170,7 @@ namespace License.MetCalWeb.Controllers
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
+        [Authorize]
         public ActionResult Profile()
         {
             var user = LicenseSessionState.Instance.User;
@@ -224,6 +225,7 @@ namespace License.MetCalWeb.Controllers
             return View(usermodel);
         }
 
+        [Authorize]
         public ActionResult ChangePassword()
         {
             var changePwdModel = new Models.ChangePassword();            

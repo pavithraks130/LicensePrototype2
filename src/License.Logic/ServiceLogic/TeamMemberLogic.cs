@@ -16,8 +16,12 @@ namespace License.Logic.ServiceLogic
         public TeamMembers CreateInvite(TeamMembers invit)
         {
             License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
-            var obj = Work.UserInviteLicenseRepository.Create(userinvit);
-            Work.UserInviteLicenseRepository.Save();
+            var obj = Work.UserInviteLicenseRepository.GetData(f => f.AdminId == invit.AdminId && f.InviteeEmail == invit.InviteeEmail && f.TeamId == invit.TeamId).FirstOrDefault();
+            if (obj == null)
+            {
+                obj = Work.UserInviteLicenseRepository.Create(userinvit);
+                Work.UserInviteLicenseRepository.Save();
+            }
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
@@ -37,6 +41,18 @@ namespace License.Logic.ServiceLogic
                 inviteList.AcceptedInvites =
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
                 inviteList.AcceptedInvites.Add(new TeamMembers()
+                {
+                    AdminId = adminId,
+                    InviteeEmail = user.Email,
+                    InviteeStatus = InviteStatus.Accepted.ToString(),
+                    InviteeUserId = adminId,
+                    IsAdmin = true
+                });
+            }
+            else
+            {
+               
+               inviteList.AcceptedInvites.Add(new TeamMembers()
                 {
                     AdminId = adminId,
                     InviteeEmail = user.Email,

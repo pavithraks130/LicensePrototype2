@@ -48,7 +48,7 @@ namespace License.MetCalWeb.Controllers
 
                 body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/RegistrationToken.html"));
                 body = body.Replace("{{UserToken}}", token.Token);
-                body = body.Replace("{{RegisterUrl}}", Url.Action("Register", "Account"));
+                body = body.Replace("{{RegisterUrl}}", String.Concat(Request.Url.ToString().Replace(Request.Url.AbsolutePath, ""), Url.Action("Register", "Account")));
                 Common.EmailService emailService = new Common.EmailService();
 
                 emailService.SendEmail(token.Email, subject, body);

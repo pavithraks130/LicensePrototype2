@@ -75,13 +75,36 @@
                     <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.SubscriptionName</h3></div>
                 </div>
 
-                <div class="row" style="margin-top:20%">
-                    <div class="animated_div"><label>Feature</label></div>
-                    <div class="animated_div"><label>Version</label></div>
-                    <div class="animated_div"><label>Info</label></div>
-                </div>
+
                 foreach (var product in productLicense.ProductList)
                 {
+                    <div class="row" style="margin-top:25%">
+                        <div class="col-md-12">
+                            <h4><label>@product.ProductName</label></h4>
+                        </div>
+                    </div>
+                    @*<div class="row" style="margin-top:20%">
+                        <div class="col-md-4">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label>@product.</label>
+                        </div>
+                    </div>*@
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Expire Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label>@product.ExpireDate.Date.ToString("D")</label>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:1%">
+                        <div class="animated_div"><label>Feature</label></div>
+                        <div class="animated_div"><label>Version</label></div>
+                        <div class="animated_div"><label>Info</label></div>
+                    </div>
                     for (int i = 0; i < product.Features.Count; i++)
                     {
                         <div class="row">
