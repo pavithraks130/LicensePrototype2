@@ -18,9 +18,9 @@
         x.style.webkitTransform = "rotate(" + n + "deg)"
         x.style.OTransform = "rotate(" + n + "deg)"
         x.style.MozTransform = "rotate(" + n + "deg)"
-        if (n == 360) {
+        if (n == 45) {
             clearInterval(rotINT)
-            if (n == 360) { n = 0 }
+            if (n == 45) { n = 0 }
         }
     }
     function startYRotate() {
@@ -29,9 +29,9 @@
         y.style.webkitTransform = "rotateY(" + ny + "deg)"
         y.style.OTransform = "rotateY(" + ny + "deg)"
         y.style.MozTransform = "rotateY(" + ny + "deg)"
-        if (ny == 360) {
+        if (ny == 45) {
             clearInterval(rotYINT)
-            if (ny >= 360) { ny = 0 }
+            if (ny >= 45) { ny = 0 }
         }
     }
 </script>

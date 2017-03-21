@@ -219,20 +219,20 @@ hr {
     position: relative;
     font-weight: bold;
     font-size: 15px;
-    padding: 50px;
+    vertical-align:central;
     float: left;
-    margin-right: 50px;
     border-radius: 20px;
     border: 0px solid #000000;
-    background:#d4b21a;
+    background:#FFC20E;
     margin: 10px;
+    text-align:center;
 }
 
 .animated_div{
  width:370px;
  height:40px;
- background:#92B901;
- color:#ffffff;
+ background:#FFC20E;
+ color:black;
  position:center;
  font-weight:bold;
  font-size:15px;
@@ -248,13 +248,13 @@ margin:5px;
 transition-property:width,height,transform,background,font-size,opacity;
 transition-duration:1s,1s,1s,1s,1s,1s;
 border-radius:5px;
-opacity:0.6;
 }
 .animated_div:hover
 {
 opacity:1;
-background:#92B901;
-width:330px;
-height:110px;
-font-size:35px;
+background:#FFC20E;
+width:370px;
+height:70px;
+font-size:25px;
+color:black;
 }
