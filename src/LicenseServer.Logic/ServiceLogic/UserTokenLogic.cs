@@ -32,6 +32,12 @@ namespace LicenseServer.Logic
             return null;
         }
 
+        public UserToken IsTokenGenerated(string email)
+        {
+            var tokenObj = Work.UserTokenRepository.GetData(u => u.Email == email).FirstOrDefault();
+            return Mapper.Map<LicenseServer.DataModel.UserToken>(tokenObj);
+        }
+
         public bool VerifyUserToken(UserToken t)
         {
             var obj = Work.UserTokenRepository.GetData(u => u.Email == t.Email && u.Token == t.Token);

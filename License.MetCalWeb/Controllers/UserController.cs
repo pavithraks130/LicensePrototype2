@@ -84,6 +84,7 @@ namespace License.MetCalWeb.Controllers
                 }
                 LicenseSessionState.Instance.User.FirstName = usermodel.FirstName;
                 LicenseSessionState.Instance.User.LastName = usermodel.LastName;
+                LicenseSessionState.Instance.User.Name = usermodel.FirstName + " " + usermodel.LastName;
                 LicenseSessionState.Instance.User.PhoneNumber = usermodel.PhoneNumber;
                 if (status)
                     return RedirectToAction("Home", "Tab");

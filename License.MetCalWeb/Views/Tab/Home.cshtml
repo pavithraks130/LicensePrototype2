@@ -58,7 +58,7 @@
 
     @using (Html.BeginForm())
     {
-        if (LicenseSessionState.Instance.ProductLicense == null)
+        if (LicenseSessionState.Instance.ProductLicense == null || LicenseSessionState.Instance.ProductLicense.Count == 0)
         {
             <div class="row">
                 No License assigned
@@ -75,10 +75,14 @@
                     <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.SubscriptionName</h3></div>
                 </div>
 
+                <div class="row"  style="margin-top:20%">
+                    <div class="col-md-12">
 
+                    </div>
+                </div>
                 foreach (var product in productLicense.ProductList)
                 {
-                    <div class="row" style="margin-top:25%">
+                    <div class="row" style="margin-top:5%">
                         <div class="col-md-12">
                             <h4><label>@product.ProductName</label></h4>
                         </div>

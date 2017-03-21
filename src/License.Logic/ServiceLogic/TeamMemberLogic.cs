@@ -51,8 +51,8 @@ namespace License.Logic.ServiceLogic
             }
             else
             {
-               
-               inviteList.AcceptedInvites.Add(new TeamMembers()
+
+                inviteList.AcceptedInvites.Add(new TeamMembers()
                 {
                     AdminId = adminId,
                     InviteeEmail = user.Email,
@@ -96,9 +96,23 @@ namespace License.Logic.ServiceLogic
 
         public bool DeleteTeamMember(int id)
         {
-            var status = Work.UserInviteLicenseRepository.Delete(id);
-            Work.UserInviteLicenseRepository.Save();
-            return status;
+            try
+            {
+                var teamObj = Work.UserInviteLicenseRepository.GetById(id);
+                var licenseData = Work.UserLicenseRepository.GetData(u => u.UserId == teamObj.InviteeUserId);
+                if (licenseData.Count() > 0)
+                    foreach (var dt in licenseData)
+                        Work.UserLicenseRepository.Delete(dt);
+                var status = Work.UserInviteLicenseRepository.Delete(teamObj);
+                Work.UserInviteLicenseRepository.Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            return false;
+
         }
 
     }
