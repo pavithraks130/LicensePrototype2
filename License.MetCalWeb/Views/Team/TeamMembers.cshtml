@@ -126,7 +126,12 @@
                                 <td class="col-md-2">
                                     @if (t.IsAdmin)
                                     {
+                                        @Html.Image("/Images/admin.png", "Admin", "33", "33", null)
+                                    }
+                                    else
+                                    {
                                         @Html.Image("/Images/Users-icon.png", "Admin", "33", "33", null)
+
                                     }
                                 </td>
                                 <td class="col-md-4">
