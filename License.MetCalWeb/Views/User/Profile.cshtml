@@ -5,7 +5,7 @@
 
 <h2>Profile</h2>
 <div class="row">
-    @using (Html.BeginForm("Profile", "Account", new { userId = Model.UserId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Profile", "User", new { userId = Model.UserId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m=>m.UserId)
