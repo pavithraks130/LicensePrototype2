@@ -50,17 +50,21 @@
 
                 @if (LicenseSessionState.Instance.IsAuthenticated)
                 {
-                    <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
-                    if (LicenseSessionState.Instance.User.Roles.Contains("Admin") || LicenseSessionState.Instance.IsSuperAdmin)
-                    {
-                        <li hidden="hidden">@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
-                    }
                     if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                        <li hidden="hidden">@Html.ActionLink("User Token", "Index", "UserToken")</li>
+                        <li>@Html.ActionLink("Users", "Index", "User")</li>
+                        <li>@Html.ActionLink("User Token", "Index", "UserToken")</li>
+                        <li>@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
+                    }
+                    else if (LicenseSessionState.Instance.User.Roles.Contains("Admin"))
+                    {
+                        <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
+                        <li>@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
+                        <li>@Html.ActionLink("Team", "TeamContainer", "Team")</li>
                     }
                     else
                     {
+                        <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
                         <li hidden="hidden">@Html.ActionLink("Team", "TeamContainer", "Team")</li>
                     }
                 }
