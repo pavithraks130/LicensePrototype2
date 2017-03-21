@@ -151,7 +151,7 @@ namespace License.MetCalWeb.Controllers
                 SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))
-                    return RedirectToAction("Profile", "Account");
+                    return RedirectToAction("Profile", "User");
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                     return RedirectToAction("Index", "User");
                 return RedirectToAction("Home", "Tab");
