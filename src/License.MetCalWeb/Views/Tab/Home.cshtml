@@ -18,9 +18,9 @@
         x.style.webkitTransform = "rotate(" + n + "deg)"
         x.style.OTransform = "rotate(" + n + "deg)"
         x.style.MozTransform = "rotate(" + n + "deg)"
-        if (n == 360) {
+        if (n == 45) {
             clearInterval(rotINT)
-            if (n == 360) { n = 0 }
+            if (n == 45) { n = 0 }
         }
     }
     function startYRotate() {
@@ -29,9 +29,9 @@
         y.style.webkitTransform = "rotateY(" + ny + "deg)"
         y.style.OTransform = "rotateY(" + ny + "deg)"
         y.style.MozTransform = "rotateY(" + ny + "deg)"
-        if (ny == 360) {
+        if (ny == 45) {
             clearInterval(rotYINT)
-            if (ny >= 360) { ny = 0 }
+            if (ny >= 45) { ny = 0 }
         }
     }
 </script>
@@ -58,7 +58,7 @@
 
     @using (Html.BeginForm())
     {
-        if (LicenseSessionState.Instance.ProductLicense == null)
+        if (LicenseSessionState.Instance.ProductLicense == null || LicenseSessionState.Instance.ProductLicense.Count == 0)
         {
             <div class="row">
                 No License assigned
@@ -75,13 +75,40 @@
                     <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.SubscriptionName</h3></div>
                 </div>
 
-                <div class="row" style="margin-top:20%">
-                    <div class="animated_div"><label>Feature</label></div>
-                    <div class="animated_div"><label>Version</label></div>
-                    <div class="animated_div"><label>Info</label></div>
+                <div class="row"  style="margin-top:20%">
+                    <div class="col-md-12">
+
+                    </div>
                 </div>
                 foreach (var product in productLicense.ProductList)
                 {
+                    <div class="row" style="margin-top:5%">
+                        <div class="col-md-12">
+                            <h4><label>@product.ProductName</label></h4>
+                        </div>
+                    </div>
+                    @*<div class="row" style="margin-top:20%">
+                        <div class="col-md-4">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label>@product.</label>
+                        </div>
+                    </div>*@
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Expire Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label>@product.ExpireDate.Date.ToString("D")</label>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:1%">
+                        <div class="animated_div"><label>Feature</label></div>
+                        <div class="animated_div"><label>Version</label></div>
+                        <div class="animated_div"><label>Info</label></div>
+                    </div>
                     for (int i = 0; i < product.Features.Count; i++)
                     {
                         <div class="row">

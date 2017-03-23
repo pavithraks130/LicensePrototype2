@@ -43,6 +43,8 @@ namespace License.MetCalWeb.Models
 
         public List<Feature> Features { get; set; }
 
+        public DateTime ExpireDate { get; set; }
+
         public SubscriptionProduct()
         {
             Features = new List<Feature>();

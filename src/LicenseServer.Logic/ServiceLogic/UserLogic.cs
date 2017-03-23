@@ -25,11 +25,15 @@ namespace LicenseServer.Logic
 
         public ICollection<User> GetUsers()
         {
+            OrganizationLogic orgLogic = new OrganizationLogic();
             List<User> usersList = new List<User>();
+            UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
             var users = UserManager.Users.ToList();
             foreach (var u in users)
             {
                 User temp = AutoMapper.Mapper.Map<LicenseServer.Core.Model.Appuser, User>(u);
+                temp.Organization = orgLogic.GetTeamById(temp.OrganizationId);
+                temp.SubscriptionList = subscriptionLogic.GetUserSubscription(temp.UserId).Select(s => s.Subtype).ToList();
                 usersList.Add(temp);
             }
             return usersList;

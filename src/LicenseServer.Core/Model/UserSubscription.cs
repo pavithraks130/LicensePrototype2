@@ -24,7 +24,7 @@ namespace LicenseServer.Core.Model
         public int ActiveDurataion { get; set; }
 
         [ForeignKey("SubscriptionTypeId")]
-        public SubscriptionType Subtype { get; set; }
+        public virtual SubscriptionType Subtype { get; set; }
 
         [ForeignKey("UserId")]
         public Appuser User { get; set; }

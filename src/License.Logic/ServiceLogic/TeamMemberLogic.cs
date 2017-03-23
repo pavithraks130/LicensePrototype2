@@ -16,8 +16,12 @@ namespace License.Logic.ServiceLogic
         public TeamMembers CreateInvite(TeamMembers invit)
         {
             License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
-            var obj = Work.UserInviteLicenseRepository.Create(userinvit);
-            Work.UserInviteLicenseRepository.Save();
+            var obj = Work.UserInviteLicenseRepository.GetData(f => f.AdminId == invit.AdminId && f.InviteeEmail == invit.InviteeEmail && f.TeamId == invit.TeamId).FirstOrDefault();
+            if (obj == null)
+            {
+                obj = Work.UserInviteLicenseRepository.Create(userinvit);
+                Work.UserInviteLicenseRepository.Save();
+            }
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
         }
 
@@ -36,6 +40,18 @@ namespace License.Logic.ServiceLogic
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
                 inviteList.AcceptedInvites =
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
+                inviteList.AcceptedInvites.Add(new TeamMembers()
+                {
+                    AdminId = adminId,
+                    InviteeEmail = user.Email,
+                    InviteeStatus = InviteStatus.Accepted.ToString(),
+                    InviteeUserId = adminId,
+                    IsAdmin = true
+                });
+            }
+            else
+            {
+
                 inviteList.AcceptedInvites.Add(new TeamMembers()
                 {
                     AdminId = adminId,
@@ -80,9 +96,23 @@ namespace License.Logic.ServiceLogic
 
         public bool DeleteTeamMember(int id)
         {
-            var status = Work.UserInviteLicenseRepository.Delete(id);
-            Work.UserInviteLicenseRepository.Save();
-            return status;
+            try
+            {
+                var teamObj = Work.UserInviteLicenseRepository.GetById(id);
+                var licenseData = Work.UserLicenseRepository.GetData(u => u.UserId == teamObj.InviteeUserId);
+                if (licenseData.Count() > 0)
+                    foreach (var dt in licenseData)
+                        Work.UserLicenseRepository.Delete(dt);
+                var status = Work.UserInviteLicenseRepository.Delete(teamObj);
+                Work.UserInviteLicenseRepository.Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            return false;
+
         }
 
     }

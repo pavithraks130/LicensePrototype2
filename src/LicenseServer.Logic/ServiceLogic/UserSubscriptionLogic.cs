@@ -82,7 +82,7 @@ namespace LicenseServer.Logic
             {
                 var pro = produLogic.GetProductById(data.ProductId);
                 var count = data.Quantity;
-                string keyData = pro.ProductCode + "^" + "^" + DateTime.Now.AddDays(type.ActiveDays).Date.ToString() + "^" + type.Id + "^" + teamId;
+                string keyData = pro.ProductCode + "^" + DateTime.Now.AddDays(type.ActiveDays).Date.ToString() + "^" + type.Id + "^" + teamId;
                 for (int i = 0; i < (data.Quantity * qty); i++)
                 {
                     var key = LicenseKey.LicenseKeyGen.CryptoEngine.Encrypt(keyData, true);

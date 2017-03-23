@@ -31,16 +31,19 @@ namespace License.MetCalWeb.Common
             foreach (var userSub in subscriptionList)
             {
                 var subType = dataList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
-                SubscriptionProductModel model = new SubscriptionProductModel();
-                model.SubscriptionId = subType.Id;
-                model.SubscriptionName = subType.SubscriptionName;
-                foreach (var pro in subType.Product)
+                if (subType != null)
                 {
-                    UserLicenseLogic userLicLogic = new UserLicenseLogic();
-                    int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                    model.ProductDtls.Add(new ProductDetails() { ProductId = pro.Id, ProductName = pro.Name, ProductCode = pro.ProductCode, TotalCount = (pro.QtyPerSubscription * userSub.Quantity), UsedLicenseCount = usedLicCount });
+                    SubscriptionProductModel model = new SubscriptionProductModel();
+                    model.SubscriptionId = subType.Id;
+                    model.SubscriptionName = subType.SubscriptionName;
+                    foreach (var pro in subType.Product)
+                    {
+                        UserLicenseLogic userLicLogic = new UserLicenseLogic();
+                        int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
+                        model.ProductDtls.Add(new ProductDetails() { ProductId = pro.Id, ProductName = pro.Name, ProductCode = pro.ProductCode, TotalCount = (pro.QtyPerSubscription * userSub.Quantity), UsedLicenseCount = usedLicCount });
+                    }
+                    subscriptionProList.Add(model);
                 }
-                subscriptionProList.Add(model);
             }
             LicenseSessionState.Instance.SubscriptionList = subscriptionProList;
             return subscriptionProList;
@@ -68,16 +71,33 @@ namespace License.MetCalWeb.Common
                 var subscriptionList = dataList.Where(s => subscriptionIdList.Contains(s.Id)).ToList();
                 foreach (var subs in subscriptionList)
                 {
-                    var proList = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList().Select(u => u.License.ProductId).ToList();
+                    var userLicLicst = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
+                    var proList = userLicLicst.Select(u => u.License.ProductId).ToList();
                     LicenseMapModel mapModel = new LicenseMapModel();
                     mapModel.SubscriptionName = subs.SubscriptionName;
                     mapModel.UserSubscriptionId = userSubscriptionList.FirstOrDefault(us => us.SubscriptionId == subs.Id).Id;
+                    DateTime licExpireData = DateTime.MinValue;
 
                     foreach (var pro in subs.Product.Where(p => proList.Contains(p.Id)))
                     {
+
+                        var objLic = userLicLicst.FirstOrDefault(f => f.License.ProductId == pro.Id);
+                        if (objLic != null)
+                        {
+                            string licenseKeydata = String.Empty;
+                            licenseKeydata = objLic.License.LicenseKey;
+                            var splitData = licenseKeydata.Split(new char[] { '-' });
+                            var datakey = splitData[0];
+                            var decryptObj = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(datakey, true);
+                            var licdataList = decryptObj.Split(new char[] { '^' });
+                            licExpireData = Convert.ToDateTime(licdataList[1]);
+
+                        }
                         SubscriptionProduct prod = new SubscriptionProduct();
                         prod.ProductId = pro.Id;
                         prod.ProductName = pro.Name;
+                        prod.ExpireDate = licExpireData;
+
                         if (!isFeatureRequired)
                         {
                             var tempsub = LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(s => s.SubscriptionId == subs.Id);
@@ -87,7 +107,7 @@ namespace License.MetCalWeb.Common
                         }
                         else
                         {
-                            foreach(var fet in pro.Features)
+                            foreach (var fet in pro.Features)
                             {
                                 var feature = new Feature();
                                 feature.Id = fet.Id;

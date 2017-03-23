@@ -51,6 +51,19 @@
     .dropdown:hover .dropbtn {
         background-color: #FFFFFF;
     }
+
+     #photos img {
+        width: 33px;
+        height: 33px;
+        transition: width 500ms, height 500ms, transform 500ms;
+        -moz-transition: width 500ms, height 500ms, -moz-transform 500ms;
+        -webkit-transition: width 500ms, height 500ms, -webkit-transform 500ms;
+        -o-transition: width 500ms, height 500ms,-o-transform 500ms;
+    }
+    #photos img:hover {
+        width: 100%;
+        height:100%;
+    }
 </style>
 <div class="row">
     @if (Model == null || (Model.AcceptedUsers.Count == 0 && Model.PendinigUsers.Count == 0))
@@ -126,7 +139,16 @@
                                 <td class="col-md-2">
                                     @if (t.IsAdmin)
                                     {
-                                        @Html.Image("/Images/Users-icon.png", "Admin", "33", "33", null)
+                                        <div id="photos">
+                                            <img src="/Images/admin.png" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+
+                                        <div id="photos">
+                                            <img src="/Images/Users-icon.png" />
+                                        </div>
                                     }
                                 </td>
                                 <td class="col-md-4">

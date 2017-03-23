@@ -34,21 +34,26 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                LicenseKey.GenerateKey keyGen = new LicenseKey.GenerateKey();
-                keyGen.LicenseTemplate = "xxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx";
-                keyGen.UseBase10 = false;
-                keyGen.UseBytes = false;
-                keyGen.CreateKey();
-                token.Token = keyGen.GetLicenseKey();
-                tokenLogic.CreateUserToken(token);
+                var data = tokenLogic.IsTokenGenerated(token.Email);
+                if (data == null)
+                {
+                    LicenseKey.GenerateKey keyGen = new LicenseKey.GenerateKey();
+                    keyGen.LicenseTemplate = "xxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx";
+                    keyGen.UseBase10 = false;
+                    keyGen.UseBytes = false;
+                    keyGen.CreateKey();
+                    token.Token = keyGen.GetLicenseKey();
+                    tokenLogic.CreateUserToken(token);
+                    data = token;
+                }
                 string subject = string.Empty;
                 string body = string.Empty;
 
                 subject = "Admin Invite to Fluke Calibration";
 
                 body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/RegistrationToken.html"));
-                body = body.Replace("{{UserToken}}", token.Token);
-                body = body.Replace("{{RegisterUrl}}", Url.Action("Register", "Account"));
+                body = body.Replace("{{UserToken}}", data.Token);
+                body = body.Replace("{{RegisterUrl}}", String.Concat(Request.Url.ToString().Replace(Request.Url.AbsolutePath, ""), Url.Action("Register", "Account")));
                 Common.EmailService emailService = new Common.EmailService();
 
                 emailService.SendEmail(token.Email, subject, body);
