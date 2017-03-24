@@ -124,6 +124,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\AccountControllerTest.cs" />
     <Compile Include="InitializerClass.cs" />
     <Compile Include="LicenseLogic\LicenseLogicTest.cs" />
     <Compile Include="LicenseLogic\TeamMemberLogicTest.cs" />
@@ -147,6 +148,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\License.MetCalWeb\License.MetCalWeb.csproj">
+      <Project>{987570CA-0B5D-49C2-A5A0-DC5D91BF84EF}</Project>
+      <Name>License.MetCalWeb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\License.Core\License.Core.csproj">
       <Project>{f491dfb2-2c8b-4d4e-b797-36109917dd78}</Project>
       <Name>License.Core</Name>
@@ -177,7 +182,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controller\" />
     <Folder Include="License.Model\" />
   </ItemGroup>
   <ItemGroup>
