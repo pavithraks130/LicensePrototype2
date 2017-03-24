@@ -4,11 +4,17 @@
 }
 <div class="row">
     <div class="form-group">
-        @if (Model.AdminUser != null)
+        @if (Model != null && Model.AdminUser != null)
             {
             <h2>
                 Team Admin : @Html.ActionLink(Model.AdminUser.Name, "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
             </h2>
+        }
+        else
+        {
+            <div class="form-group">
+                <h2> Team </h2>
+            </div>
         }
         @if (LicenseSessionState.Instance.IsAdmin && Model.AcceptedUsers.Count > 0)
         {

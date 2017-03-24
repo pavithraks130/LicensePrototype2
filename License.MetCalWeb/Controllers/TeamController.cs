@@ -62,6 +62,8 @@ namespace License.MetCalWeb.Controllers
                 model.AcceptedUsers = inviteList.AcceptedInvites;
                 model.PendinigUsers = inviteList.PendingInvites;
             }
+            if (model == null)
+                return null;
             if (model.AcceptedUsers.Count <= 0 || Convert.ToBoolean(TempData["IsTeamAdmin"]))
                 return model;
             var obj =
