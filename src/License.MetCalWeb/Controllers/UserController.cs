@@ -51,7 +51,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 bool status = false;
-                if (LicenseSessionState.Instance.IsSuperAdmin)
+                if (LicenseSessionState.Instance.IsGlobalAdmin)
                 {
                     LicenseServer.DataModel.User user = new LicenseServer.DataModel.User();
                     user.FirstName = usermodel.FirstName;
@@ -59,7 +59,7 @@ namespace License.MetCalWeb.Controllers
                     user.PhoneNumber = usermodel.PhoneNumber;
                     status = userLogic.UpdateUser(userId, user);
                 }
-                else if (LicenseSessionState.Instance.IsAdmin)
+                else if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
                     LicenseServer.DataModel.User userObj = new LicenseServer.DataModel.User();
                     userObj.FirstName = usermodel.FirstName;
@@ -108,9 +108,9 @@ namespace License.MetCalWeb.Controllers
             {
                 string userId = LicenseSessionState.Instance.User.UserId;
                 bool status = false;
-                if (LicenseSessionState.Instance.IsSuperAdmin)
+                if (LicenseSessionState.Instance.IsGlobalAdmin)
                     status = userLogic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
-                else if (LicenseSessionState.Instance.IsAdmin)
+                else if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
                     string serverUserId = LicenseSessionState.Instance.User.ServerUserId;
                     status = userLogic.ChangePassword(serverUserId, model.CurrentPassword, model.NewPassword);

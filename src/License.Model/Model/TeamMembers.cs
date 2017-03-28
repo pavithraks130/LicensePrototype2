@@ -20,6 +20,8 @@ namespace License.Model
         public bool IsAdmin { get; set; }
         public bool IsSelected { get; set; }
 
+        public bool IsActive { get; set; }
+
     }
 
     public class UserInviteList

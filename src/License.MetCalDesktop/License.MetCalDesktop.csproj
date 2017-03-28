@@ -148,9 +148,9 @@
     <Resource Include="Resources\User.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\License.Logger\License.Logger.csproj">
+    <ProjectReference Include="..\License.Logger\Logger.csproj">
       <Project>{50961cdc-c21f-43ea-9f6f-ab74a7a8e547}</Project>
-      <Name>License.Logger</Name>
+      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\License.Logic\License.Logic.csproj">
       <Project>{2b6303e7-4f04-4538-83cb-5f3ab977a626}</Project>

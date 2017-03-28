@@ -25,5 +25,23 @@ namespace License.MetCalWeb.Controllers
 			//TODO: Need to add actual code
 			return hm;
 		}
-    }
+
+		public ActionResult AssetConfiguration(int id, string actionType)
+		{
+			//TeamAssetLogic logic = new TeamAssetLogic();
+			switch (actionType)
+			{
+				case "Admin":
+					//logic.SetAsAdmin(id, userId, true);
+					break;
+				case "EditAsset":
+					//logic.SetAsAdmin(id, userId, false);
+					break;
+				case "Remove":
+					//logic.DeleteTeamMember(id);
+					break;
+			}
+			return RedirectToAction("TeamContainer");
+		}
+	}
 }

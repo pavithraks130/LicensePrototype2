@@ -60,9 +60,10 @@
         -webkit-transition: width 500ms, height 500ms, -webkit-transform 500ms;
         -o-transition: width 500ms, height 500ms,-o-transform 500ms;
     }
+
         #photos img:hover {
             width: 100%;
-            height:100%;
+            height: 100%;
         }
 </style>
 <div class="row">
@@ -125,7 +126,18 @@
                         @foreach (TeamMembers t in Model.AcceptedUsers)
                         {
                             <tr>
-                                <td class="col-md-6">
+                                <td class="col-md-2">
+                                    @if (t.InviteeUser.IsActive)
+                                    {
+                                        <div style="background-color:green;width:10px;height:10px" class="img-circle"></div>
+                                    }
+                                    else
+                                    {
+                                        <div style="background-color:grey;width:10px;height:10px" class="img-circle"></div>
+                                    }
+
+                                </td>
+                                <td class="col-md-4">
                                     @if (t.InviteeUser != null)
                                     {
                                         <div>@t.InviteeUser.Name</div>
@@ -195,46 +207,46 @@
                 <hr />
                 <div class="form-group">
                     <h4>Pending for license approval list</h4>
-                   
-                            @*<table class="table dropdown-content" style="border: none">
-                                <tr>
-                                    <td>Shruthi </td>
+
+                    @*<table class="table dropdown-content" style="border: none">
+                            <tr>
+                                <td>Shruthi </td>
 
 
-                                    <td>Product B, Product C</td>
+                                <td>Product B, Product C</td>
 
-                                    <td>
-                                        <button class="alert-succes"> Approve </button>
-                                    </td>
-                                    <td>
-                                        <button class="alert-warning"> Reject </button>
-                                    </td>
-                                </tr>
+                                <td>
+                                    <button class="alert-succes"> Approve </button>
+                                </td>
+                                <td>
+                                    <button class="alert-warning"> Reject </button>
+                                </td>
+                            </tr>
 
-                                <tr>
-                                    <td>Charan </td>
+                            <tr>
+                                <td>Charan </td>
 
 
-                                    <td>Product B, Product D</td>
+                                <td>Product B, Product D</td>
 
-                                    <td>
-                                        <button class="alert-succes"> Approve </button>
-                                    
-                                    </td>
-                                    <td>
-                                        <button class="alert-warning"> Reject </button>
-                                    </td>
-                                </tr>
-                               
-                            </table>*@
+                                <td>
+                                    <button class="alert-succes"> Approve </button>
+
+                                </td>
+                                <td>
+                                    <button class="alert-warning"> Reject </button>
+                                </td>
+                            </tr>
+
+                        </table>*@
+                </div>
+
+                <hr />
+                        <div>
+                            <button class="alert-success">
+                                @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, bulkLicenseAdd = true }, null)
+                            </button>
                         </div>
-                  
-                    <hr />
-                    <div>
-                        <button class="alert-success">
-                            @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, bulkLicenseAdd = true }, null)
-                        </button>
-                    </div>
             }
         </div>
 

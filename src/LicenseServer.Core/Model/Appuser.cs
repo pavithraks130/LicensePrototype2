@@ -52,6 +52,7 @@ namespace LicenseServer.Core.Model
             }
         }
          
+        public bool IsActive { get; set; }
         public int OrganizationId { get; set; }
 
         [ForeignKey("OrganizationId")]

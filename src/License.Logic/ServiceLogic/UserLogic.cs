@@ -133,6 +133,11 @@ namespace License.Logic.ServiceLogic
         public User AuthenticateUser(string userName, string password)
         {
             AppUser user = UserManager.Find(userName, password);
+            if (user != null)
+            {
+                user.IsActive = true;
+                UserManager.Update(user);
+            }
             User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
             if (userObj == null) return null;
             IList<string> roles = UserManager.GetRoles(user.Id);
@@ -144,6 +149,13 @@ namespace License.Logic.ServiceLogic
         {
             var obj = UserManager.FindById(userId);
             return UserManager.CreateIdentity(obj, DefaultAuthenticationTypes.ApplicationCookie);
+        }
+
+        public void UpdateLogOutStatus(string userid, bool status)
+        {
+            var user = UserManager.FindById(userid);
+            user.IsActive = status;
+            UserManager.Update(user);
         }
 
     }

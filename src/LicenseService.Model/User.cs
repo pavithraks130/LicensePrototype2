@@ -29,6 +29,8 @@ namespace LicenseServer.DataModel
         public IList<string> Roles { get; set; }
 
         public IList<SubscriptionType> SubscriptionList { get; set; }
+        
+        public bool IsActive { get; set; }
 
         public User()
         {
