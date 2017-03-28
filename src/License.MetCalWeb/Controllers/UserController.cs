@@ -21,13 +21,14 @@ namespace License.MetCalWeb.Controllers
             foreach (var user in usersList)
             {
                 if (user.Email == LicenseSessionState.Instance.User.Email)
-                    break;
+                    continue;
                 UserModel model = new UserModel();
                 model.FirstName = user.FirstName;
                 model.LastName = user.LastName;
                 model.Name = user.Name;
                 model.Email = user.Email;
                 model.OrganizationName = user.Organization.Name;
+                model.IsActive = user.IsActive;
                 foreach (var obj in user.SubscriptionList)
                 {
                     model.SubscriptionList.Add(new Subscription() { Name = obj.Name });

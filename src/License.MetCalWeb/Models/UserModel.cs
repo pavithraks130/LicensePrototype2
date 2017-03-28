@@ -20,6 +20,8 @@ namespace License.MetCalWeb.Models
         public List<Subscription> SubscriptionList { get; set; }
         public string ServerUserId { get; set; }
 
+        public bool IsActive { get; set; }
+
         public UserModel()
         {
             SubscriptionList = new List<Subscription>();

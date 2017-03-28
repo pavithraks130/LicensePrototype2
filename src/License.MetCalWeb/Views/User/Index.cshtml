@@ -8,6 +8,7 @@
 
 <table class="table">
     <tr>
+
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -25,8 +26,16 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
+            <td class="form-group">
                 @Html.DisplayFor(modelItem => item.Name)
+                @if (item.IsActive)
+                {
+                    <div style="background-color:green;width:10px;height:10px" class="img-circle"></div><label>Online</label>
+                }
+                else
+                {
+                    <div style="background-color:grey;width:10px;height:10px" class="img-circle"></div><label>Offline</label>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)

@@ -158,11 +158,13 @@ namespace LicenseServer.Logic
             return UserManager.CreateIdentity(obj, DefaultAuthenticationTypes.ApplicationCookie);
         }
 
-        public void UpdateLogOutStatus(string userid, bool status)
+        public void UpdateLogInStatus(string userid, bool status)
         {
             var user = UserManager.FindById(userid);
             user.IsActive = status;
             UserManager.Update(user);
         }
+
+
     }
 }
