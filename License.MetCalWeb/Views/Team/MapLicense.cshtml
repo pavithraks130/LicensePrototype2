@@ -21,21 +21,22 @@
     });
 </script>
 @*<style>
-    input[type="radio"] {
-        width: 20px !important;
-        margin: 0px !important;
-    }
+        input[type="radio"] {
+            width: 20px !important;
+            margin: 0px !important;
+        }
 
-    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
-        border-top: none !important;
-    }
-</style>*@
+        .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+            border-top: none !important;
+        }
+    </style>*@
 <div class="row">
     <h2>
         License Mapping To User
     </h2>
     <br />
-    @using (Html.BeginForm())
+   @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
+    @using (Html.BeginForm(user, "Team",  FormMethod.Post))
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()
@@ -86,9 +87,18 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-8">
-                    <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
-                </div>
+                @if (!(bool)TempData["CanAddBulk"])
+                {
+                    <div class="col-md-8">
+                        <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-8">
+                        <input type="submit" value="Select Team Members" class="btn btn-default btn-custom btn-save" />
+                    </div>
+                }
             </div>
         }
     }

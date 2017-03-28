@@ -52,7 +52,7 @@
         background-color: #FFFFFF;
     }
 
-     #photos img {
+    #photos img {
         width: 33px;
         height: 33px;
         transition: width 500ms, height 500ms, transform 500ms;
@@ -60,10 +60,10 @@
         -webkit-transition: width 500ms, height 500ms, -webkit-transform 500ms;
         -o-transition: width 500ms, height 500ms,-o-transform 500ms;
     }
-    #photos img:hover {
-        width: 100%;
-        height:100%;
-    }
+        #photos img:hover {
+            width: 100%;
+            height:100%;
+        }
 </style>
 <div class="row">
     @if (Model == null || (Model.AcceptedUsers.Count == 0 && Model.PendinigUsers.Count == 0))
@@ -156,7 +156,7 @@
                                     {
 
                                         <button class="alert-success">
-                                            @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId }, null)
+                                            @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId, canAddBulkLicense = false }, null)
                                             @*@Html.ActionLink("Add License", "LicenseCart", "Team", new { userId = @t.InviteeUserId }, null)*@
 
                                         </button>
@@ -192,9 +192,54 @@
                         }
                     </table>
                 </div>
+                <hr />
+                <div class="form-group">
+                    <h4>Pending for license approval list</h4>
+                   
+                            <table class="table dropdown-content" style="border: none">
+                                <tr>
+                                    <td>Shruthi </td>
+
+
+                                    <td>Product B, Product C</td>
+
+                                    <td>
+                                        <button class="alert-succes"> Approve </button>
+                                    </td>
+                                    <td>
+                                        <button class="alert-warning"> Reject </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Charan </td>
+
+
+                                    <td>Product B, Product D</td>
+
+                                    <td>
+                                        <button class="alert-succes"> Approve </button>
+                                    
+                                    </td>
+                                    <td>
+                                        <button class="alert-warning"> Reject </button>
+                                    </td>
+                                </tr>
+                               
+                            </table>
+                        </div>
+                  
+                    <hr />
+                    <div>
+                        <button class="alert-success">
+                            @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, canAddBulkLicense = true }, null)
+                        </button>
+                    </div>
             }
         </div>
+
     }
+
     <div class="modal" id="myModal">
         @{ Html.RenderAction("Invite"); }
     </div>

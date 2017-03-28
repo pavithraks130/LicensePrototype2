@@ -1,0 +1,49 @@
+﻿@using License.MetCalWeb.Models
+@model TeamModel
+@{
+    ViewBag.Title = "SelectListOfUser";
+}
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            return isPostEnabled;
+        });
+    });
+</script>
+<h2>Select User</h2>
+@using (Html.BeginForm("SelectedUsers", "Team",FormMethod.Post))
+{
+    <table class="table">
+        @foreach (var user in Model.AcceptedUsers)
+        {
+            <tr>
+                <td>
+                    <label class="control-label">
+                        <input type="checkbox" name="SelectedUser" value="@user.InviteeUserId" checked="@user.IsSelected" class="checkbox-inline">
+                        @user.InviteeEmail
+                    </label>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="form-group">
+        <div class="col-md-8">
+            <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+        </div>
+    </div>
+}
+

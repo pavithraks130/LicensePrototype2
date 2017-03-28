@@ -11,6 +11,7 @@ using License.MetCalWeb.Models;
 using License.Model;
 
 using TeamMembers = License.Model.TeamMembers;
+using System.Collections;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -26,8 +27,6 @@ namespace License.MetCalWeb.Controllers
             logic = new TeamMemberLogic();
             userLogic = new UserLogic();
             subscriptionLogic = new UserSubscriptionLogic();
-
-
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -60,6 +59,10 @@ namespace License.MetCalWeb.Controllers
                 model = new TeamModel();
                 model.AdminUser = inviteList.AdminUser;
                 model.AcceptedUsers = inviteList.AcceptedInvites;
+                //foreach(var user in model.AcceptedUsers)
+                //{
+                //    var result = SubscriLogic.GetUserLicenseDetails(user.InviteeUserId,false);
+                //}
                 model.PendinigUsers = inviteList.PendingInvites;
             }
             if (model == null)
@@ -155,16 +158,45 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("TeamContainer");
         }
 
-        public ActionResult MapLicense(string userId)
+        public ActionResult MapLicense(string userId, bool bulkLicenseAdd)
         {
-            var listdata = GetLicenseListBySubscription(userId);
+            var listdata = GetLicenseListBySubscription(userId, bulkLicenseAdd);
             return View(listdata);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MapLicense(params string[] SelectedSubscription)
+        {
+            UpdateRevokeLicense(SelectedSubscription);
+            return RedirectToAction("TeamContainer", "Team");
+        }
 
-        public List<License.MetCalWeb.Models.LicenseMapModel> GetLicenseListBySubscription(string userId)
+        /// <summary>
+        /// It will store selected subscription list in  temp and disply user list for selection
+        /// </summary>
+        /// <param name="SelectedSubscription"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SelectListOfUser(params string[] SelectedSubscription)
+        {
+            TempData["SelectedSubscription"] = SelectedSubscription;
+            var teamMember = LoadTeamMember();
+            return View(teamMember);
+        }
+        [HttpPost]
+        public ActionResult SelectedUsers(params string[] SelectedUser)
+        {
+            string[] temp = TempData["SelectedSubscription"] as string[];
+            var teamMember = LoadTeamMember();
+            UpdateRevokeLicense(temp, "Add", SelectedUser,true);
+            return RedirectToAction("TeamContainer", "Team");
+        }
+        public List<License.MetCalWeb.Models.LicenseMapModel> GetLicenseListBySubscription(string userId, bool canAddBulkLicense)
         {
             TempData["UserId"] = userId;
-            ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
+            ViewData["TeamMember"] = userId == null ? string.Empty : userLogic.GetUserById(userId).Email;
+            TempData["CanAddBulk"] = canAddBulkLicense;
+
 
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
             string adminUserId = string.Empty;
@@ -180,16 +212,10 @@ namespace License.MetCalWeb.Controllers
             return licenseMapModelList;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult MapLicense(params string[] SelectedSubscription)
-        {
-            UpdateRevokeLicense(SelectedSubscription);
-            return RedirectToAction("TeamContainer", "Team");
-        }
+
         public ActionResult LicenseCart(string userId)
         {
-            var listdata = GetLicenseListBySubscription(userId);
+            var listdata = GetLicenseListBySubscription(userId, false);
             return View(listdata);
         }
 
@@ -209,29 +235,43 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("TeamContainer", "Team");
         }
 
-        public void UpdateRevokeLicense(string[] SelectedSubscription, string action = "Add")
+        public void UpdateRevokeLicense(string[] SelectedSubscription, string action = "Add", string[] SelectedUserIdList = null,bool canAddBulkLicense=false)
         {
-            string userId = Convert.ToString(TempData["UserId"]);
+            List<string> userIdList = new List<string>();
+            if (canAddBulkLicense)
+            {
+                foreach (var userId in SelectedUserIdList)
+                {
+                    userIdList.Add(userId);
+                }
+            }
+            else
+            {
+                userIdList.Add(Convert.ToString(TempData["UserId"]));
+            }
             UserLicenseLogic logic = new UserLicenseLogic();
             License.Logic.ServiceLogic.LicenseLogic licenseLogic = new LicenseLogic();
             List<License.Model.UserLicense> userLicesList = new List<License.Model.UserLicense>();
-            foreach (var data in SelectedSubscription)
+            foreach (var userId in userIdList)
             {
-                var splitValue = data.Split(new char[] { '-' });
-                var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-                License.Model.UserLicense lic = new License.Model.UserLicense();
-                lic.UserId = userId;
-                License.Model.LicenseData licData = new License.Model.LicenseData();
-                licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
-                licData.ProductId = Convert.ToInt32(prodId);
-                lic.License = licData;
-                userLicesList.Add(lic);
+                foreach (var data in SelectedSubscription)
+                {
+                    var splitValue = data.Split(new char[] { '-' });
+                    var prodId = splitValue[0].Split(new char[] { ':' })[1];
+                    var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
+                    License.Model.UserLicense lic = new License.Model.UserLicense();
+                    lic.UserId = userId;
+                    License.Model.LicenseData licData = new License.Model.LicenseData();
+                    licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
+                    licData.ProductId = Convert.ToInt32(prodId);
+                    lic.License = licData;
+                    userLicesList.Add(lic);
+                }
             }
             if (action == "Add")
-                logic.CreateUserLicense(userLicesList, userId);
+                logic.CreateUserLicense(userLicesList, userIdList);
             else
-                logic.RevokeUserLicense(userLicesList, userId);
+                logic.RevokeUserLicense(userLicesList, userIdList.FirstOrDefault());//temporary data changes
         }
 
         public ActionResult UserConfiguration(int id, string userId, string actionType)

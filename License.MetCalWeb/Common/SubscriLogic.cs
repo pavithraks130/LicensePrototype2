@@ -100,7 +100,7 @@ namespace License.MetCalWeb.Common
 
                         if (!isFeatureRequired)
                         {
-                            var tempsub = LicenseSessionState.Instance.SubscriptionList.FirstOrDefault(s => s.SubscriptionId == subs.Id);
+                            var tempsub = LicenseSessionState.Instance.SubscriptionList?.FirstOrDefault(s => s.SubscriptionId == subs.Id);
                             var tempPro = tempsub == null ? null : tempsub.ProductDtls.FirstOrDefault(p => p.ProductId == prod.ProductId);
                             if (tempPro != null)
                                 prod.IsDisabled = tempPro.AvailableCount == 0;
