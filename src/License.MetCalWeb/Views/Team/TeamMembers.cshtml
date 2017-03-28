@@ -156,7 +156,7 @@
                                     {
 
                                         <button class="alert-success">
-                                            @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId, canAddBulkLicense = false }, null)
+                                            @Html.ActionLink("Add License", "MapLicense", "Team", new { userId = @t.InviteeUserId, bulkLicenseAdd = false }, null)
                                             @*@Html.ActionLink("Add License", "LicenseCart", "Team", new { userId = @t.InviteeUserId }, null)*@
 
                                         </button>
@@ -232,7 +232,7 @@
                     <hr />
                     <div>
                         <button class="alert-success">
-                            @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, canAddBulkLicense = true }, null)
+                            @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, bulkLicenseAdd = true }, null)
                         </button>
                     </div>
             }

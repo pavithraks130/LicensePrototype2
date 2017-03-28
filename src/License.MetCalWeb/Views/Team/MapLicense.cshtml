@@ -36,7 +36,7 @@
     </h2>
     <br />
    @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
-    @using (Html.BeginForm(user, "Team",  FormMethod.Post))
+    @using (Html.BeginForm(user, "Team",   FormMethod.Post))
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()

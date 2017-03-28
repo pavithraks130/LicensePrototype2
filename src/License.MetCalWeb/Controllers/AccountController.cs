@@ -151,7 +151,9 @@ namespace License.MetCalWeb.Controllers
                 SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))
-                    return RedirectToAction("Profile", "Account");
+                    return RedirectToAction("Profile", "User");
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    return RedirectToAction("Index", "User");
                 return RedirectToAction("Home", "Tab");
             }
             return View();
@@ -168,92 +170,6 @@ namespace License.MetCalWeb.Controllers
                 identity = logic.CreateClaimsIdentity(user.UserId);
             }
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
-        }
-
-        public ActionResult Profile()
-        {
-            var user = LicenseSessionState.Instance.User;
-            return View(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Profile(UserModel usermodel, string userId)
-        {
-            if (ModelState.IsValid)
-            {
-                bool status = false;
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                {
-                    LicenseServer.DataModel.User user = new LicenseServer.DataModel.User();
-                    user.FirstName = usermodel.FirstName;
-                    user.LastName = usermodel.LastName;
-                    user.PhoneNumber = usermodel.PhoneNumber;
-                    status = userLogic.UpdateUser(userId, user);
-                }
-                else if (LicenseSessionState.Instance.IsAdmin)
-                {
-                    LicenseServer.DataModel.User userObj = new LicenseServer.DataModel.User();
-                    userObj.FirstName = usermodel.FirstName;
-                    userObj.LastName = usermodel.LastName;
-                    userObj.PhoneNumber = usermodel.PhoneNumber;
-                    status = userLogic.UpdateUser(LicenseSessionState.Instance.User.ServerUserId, userObj);
-
-                    License.Model.User user = new License.Model.User();
-                    user.FirstName = usermodel.FirstName;
-                    user.LastName = usermodel.LastName;
-                    user.PhoneNumber = usermodel.PhoneNumber;
-                    status = logic.UpdateUser(userId, user);
-                }
-                else
-                {
-
-                    License.Model.User user = new License.Model.User();
-                    user.FirstName = usermodel.FirstName;
-                    user.LastName = usermodel.LastName;
-                    user.PhoneNumber = usermodel.PhoneNumber;
-                    status = logic.UpdateUser(userId, user);
-                }
-                LicenseSessionState.Instance.User.FirstName = usermodel.FirstName;
-                LicenseSessionState.Instance.User.LastName = usermodel.LastName;
-                LicenseSessionState.Instance.User.PhoneNumber = usermodel.PhoneNumber;
-                if (status)
-                    return RedirectToAction("Home", "Tab");
-                ModelState.AddModelError("", logic.ErrorMessage);
-            }
-            return View(usermodel);
-        }
-
-        public ActionResult ChangePassword()
-        {
-            var changePwdModel = new Models.ChangePassword();            
-            return View(changePwdModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(ChangePassword model)
-        {
-            if (ModelState.IsValid)
-            {
-                string userId = LicenseSessionState.Instance.User.UserId;
-                bool status = false;
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                    status = userLogic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
-                else if (LicenseSessionState.Instance.IsAdmin)
-                {
-                    string serverUserId = LicenseSessionState.Instance.User.ServerUserId;
-                    status = userLogic.ChangePassword(serverUserId, model.CurrentPassword, model.NewPassword);
-                    status = logic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
-                }
-                else
-                    status = logic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
-
-                if (status)
-                    return RedirectToAction("Home", "Tab");
-                ModelState.AddModelError("", logic.ErrorMessage);
-            }
-            return View(model);
         }
 
         public ActionResult ForgotPassword()
