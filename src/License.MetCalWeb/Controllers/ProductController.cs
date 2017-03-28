@@ -9,7 +9,7 @@ using LicenseServer.DataModel;
 
 namespace License.MetCalWeb.Controllers
 {
-    [Authorize(Roles ="Admin,BackendAdmin")]
+    [Authorize(Roles ="SuperAdmin,BackendAdmin")]
     public class ProductController : BaseController
     {
         CartLogic cartLogic = null;
