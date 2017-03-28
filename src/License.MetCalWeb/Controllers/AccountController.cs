@@ -162,7 +162,7 @@ namespace License.MetCalWeb.Controllers
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))
                     return RedirectToAction("Profile", "User");
-                if (LicenseSessionState.Instance.IsSuperAdmin)
+                if (LicenseSessionState.Instance.IsGlobalAdmin)
                     return RedirectToAction("Index", "User");
                 return RedirectToAction("Home", "Tab");
             }
@@ -173,7 +173,7 @@ namespace License.MetCalWeb.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             System.Security.Claims.ClaimsIdentity identity = null;
-            if (LicenseSessionState.Instance.IsSuperAdmin)
+            if (LicenseSessionState.Instance.IsGlobalAdmin)
                 identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
             else
             {
