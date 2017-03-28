@@ -37,14 +37,14 @@ namespace License.Logic.ServiceLogic
                     }
                     userLicList.Remove(obj);
                 }
-                if(userLicList.Count > 0)
-                {
-                    foreach (var ul in userLicList)
-                    {
-                        i++;
-                        Work.UserLicenseRepository.Delete(ul);
-                    }
-                }
+                //if(userLicList.Count > 0)
+                //{
+                //    foreach (var ul in userLicList)
+                //    {
+                //        i++;
+                //        Work.UserLicenseRepository.Delete(ul);
+                //    }
+                //}
 
                 if (i > 0)
                     Work.UserLicenseRepository.Save();
