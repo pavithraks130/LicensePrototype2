@@ -20,6 +20,7 @@ namespace License.Core.DBContext
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<AppUser>().Property(p => p.IsActive).IsConcurrencyToken();
             base.OnModelCreating(modelBuilder);
 
         }
@@ -28,7 +29,7 @@ namespace License.Core.DBContext
         {
             return new ApplicationDbContext();
         }
-        
+
         public DbSet<TeamMembers> UserInvite { get; set; }
 
         //public DbSet<Product> Product { get; set; }
@@ -36,7 +37,7 @@ namespace License.Core.DBContext
         //public DbSet<Subscription> Subscription { get; set; }
 
         //public DbSet<ProductSubscriptionMapping> ProductSubscriptionMapping { get; set; }
-        
+
         public DbSet<UserSubscription> UserSubscription { get; set; }
 
         public DbSet<LicenseData> LicenseData { get; set; }
