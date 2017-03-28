@@ -252,22 +252,19 @@ namespace License.MetCalWeb.Controllers
             UserLicenseLogic logic = new UserLicenseLogic();
             License.Logic.ServiceLogic.LicenseLogic licenseLogic = new LicenseLogic();
             List<License.Model.UserLicense> userLicesList = new List<License.Model.UserLicense>();
-            foreach (var userId in userIdList)
-            {
                 foreach (var data in SelectedSubscription)
                 {
                     var splitValue = data.Split(new char[] { '-' });
                     var prodId = splitValue[0].Split(new char[] { ':' })[1];
                     var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
                     License.Model.UserLicense lic = new License.Model.UserLicense();
-                    lic.UserId = userId;
+                    lic.UserId = string.Empty;//Multiple users adding user Id is not required here
                     License.Model.LicenseData licData = new License.Model.LicenseData();
                     licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
                     licData.ProductId = Convert.ToInt32(prodId);
                     lic.License = licData;
                     userLicesList.Add(lic);
                 }
-            }
             if (action == "Add")
                 logic.CreateUserLicense(userLicesList, userIdList);
             else
