@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using License.Logic.ServiceLogic;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 
 namespace License.WebAPIService.Controller

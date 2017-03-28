@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Http;
 using License.Core.Model;
 using License.Logic.ServiceLogic;
-using License.Model.Model;
+using License.Model;
 using Microsoft.AspNet.Identity;
 
 namespace License.WebAPIService.Controller
@@ -25,10 +25,10 @@ namespace License.WebAPIService.Controller
         [HttpGet]
         public IHttpActionResult GetUsers()
         {
-            if (logic.UserManager == null)
-                logic.UserManager = UserManager;
-            if (logic.RoleManager == null)
-                logic.RoleManager = RoleManager;
+            //if (logic.UserManager == null)
+            //    logic.UserManager = UserManager;
+            //if (logic.RoleManager == null)
+            //    logic.RoleManager = RoleManager;
             return Ok(logic.GetUsers());
         }
 
@@ -36,15 +36,15 @@ namespace License.WebAPIService.Controller
         [HttpPost]
         public HttpResponseMessage CreateUser(Registration user)
         {
-            if (logic.UserManager == null)
-                logic.UserManager = UserManager;
-            if (logic.RoleManager == null)
-                logic.RoleManager = RoleManager;
-            IdentityResult result = logic.CreateUser(user);
-            if (result.Succeeded)
+            //if (logic.UserManager == null)
+            //    logic.UserManager = UserManager;
+            //if (logic.RoleManager == null)
+            //    logic.RoleManager = RoleManager;
+            var result = logic.CreateUser(user);
+            if (result)
                 return Request.CreateResponse(HttpStatusCode.Created, "Sucess");
-            else
-                return this.GetErrorResult(result);
+            //else
+               // return this.GetErrorResult(result);
         }
 
         [Route("Update/{id}")]
