@@ -173,7 +173,7 @@ namespace License.MetCalWeb.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             System.Security.Claims.ClaimsIdentity identity = null;
-            if (LicenseSessionState.Instance.IsSuperAdmin)
+            if (LicenseSessionState.Instance.IsGlobalAdmin)
                 identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
             else
             {
