@@ -26,12 +26,12 @@ namespace License.Logic.ServiceLogic
                 foreach (var lic in licList)
                 {
                     var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
-                    var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId);
+                    var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == userId);
                     if (obj == null)
                     {
                         i++;
                         UserLicense ul = new UserLicense();
-                        ul.UserId = lic.UserId;
+                        ul.UserId = userId;
                         ul.LicenseId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
                         CreateUserLicense(ul);
                     }
