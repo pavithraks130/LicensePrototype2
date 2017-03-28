@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using License.MetCalWeb.Models;
+
+namespace License.MetCalWeb.Controllers
+{
+    public class HardwareController : BaseController
+    {
+        // GET: Hardware
+        public ActionResult HardwareContainer()
+        {
+			HardwareModel model = LoadHardware();
+			return View(model);
+        }
+
+		private HardwareModel LoadHardware()
+		{
+			var hm = new HardwareModel();
+			hm.Assets = new List<Core.Model.TeamAsset>();
+			hm.Assets.Add(new Core.Model.TeamAsset { Name = "FC5222A", SerialNumber = "123", Description = "Calibrator" });
+			hm.Assets.Add(new Core.Model.TeamAsset { Name = "FCDMM3000", SerialNumber = "256", Description = "Hand Held DMM" });
+			//TODO: Need to add actual code
+			return hm;
+		}
+    }
+}

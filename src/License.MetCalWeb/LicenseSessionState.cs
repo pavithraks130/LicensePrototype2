@@ -23,8 +23,10 @@ namespace License.MetCalWeb
         public bool IsSuperAdmin { get; set; }
 
         public bool IsAdmin { get; set; }
-        
-        public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
+
+		public bool IsGlobalAdmin { get; set; }
+
+		public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
 
         public List<Models.LicenseMapModel>  ProductLicense { get; set; }
 

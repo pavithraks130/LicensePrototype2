@@ -140,14 +140,24 @@ namespace License.MetCalWeb.Controllers
                     }
                 }
                 LicenseSessionState.Instance.User = userObj;
-                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                    LicenseSessionState.Instance.IsAdmin = true;
-                else
-                {
-                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-                    SubscriLogic.GetUserLicenseForUser();
-                }
+                LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
+				if (LicenseSessionState.Instance.IsGlobalAdmin)
+				{
+					LicenseSessionState.Instance.IsSuperAdmin = true;
+					LicenseSessionState.Instance.IsAdmin = true;
+				}
+				else
+				{
+					LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+
+					if (LicenseSessionState.Instance.IsSuperAdmin)
+						LicenseSessionState.Instance.IsAdmin = true;
+					else
+						LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+					
+
+					SubscriLogic.GetUserLicenseForUser();
+				}
                 SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))

@@ -265,6 +265,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TabController.cs" />
@@ -279,6 +280,7 @@
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\CartItemModel.cs" />
+    <Compile Include="Models\HardwareModel.cs" />
     <Compile Include="Models\LicenseMapModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\SubscriptionProductModel.cs" />
@@ -327,6 +329,8 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Team\SelectListOfUser.cshtml" />
+    <Content Include="Views\Hardware\HardwareContainer.cshtml" />
+    <Content Include="Views\Hardware\TeamAssets.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
