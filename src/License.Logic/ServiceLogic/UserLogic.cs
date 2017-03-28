@@ -21,7 +21,7 @@ namespace License.Logic.ServiceLogic
             return usersList;
         }
 
-        public bool CreateUser(Registration u, string roleName = "Admin")
+        public bool CreateUser(Registration u, string roleName = "SuperAdmin")
         {
             User ur = new User();
             ur.FirstName = u.FirstName;

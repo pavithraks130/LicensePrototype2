@@ -61,9 +61,10 @@
                         <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
                         <li>@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
                         <li>@Html.ActionLink("Team", "TeamContainer", "Team")</li>
-                    }
-                    else
-                    {
+						<li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
+					}
+					else
+					{
                         <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
                         <li hidden="hidden">@Html.ActionLink("Team", "TeamContainer", "Team")</li>
                     }

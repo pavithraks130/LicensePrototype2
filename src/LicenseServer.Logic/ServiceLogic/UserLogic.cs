@@ -39,7 +39,7 @@ namespace LicenseServer.Logic
             return usersList;
         }
 
-        public string CreateUser(Registration u, string roleName = "Admin")
+        public string CreateUser(Registration u, string roleName = "BackendAdmin")
         {
             User ur = new User();
             ur.FirstName = u.FirstName;
