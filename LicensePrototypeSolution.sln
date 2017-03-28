@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.Logger", "Src\License.Logger\License.Logger.csproj", "{50961CDC-C21F-43EA-9F6F-AB74A7A8E547}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Src\License.Logger\Logger.csproj", "{50961CDC-C21F-43EA-9F6F-AB74A7A8E547}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.Model", "src\License.Model\License.Model.csproj", "{E4B922B6-6723-4E85-9522-C9EB666FD620}"
 EndProject
@@ -30,6 +30,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.MetCalDesktop", "src\License.MetCalDesktop\License.MetCalDesktop.csproj", "{00FB0707-DC8F-4E6C-A240-D5E0A45334B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "License.WebAPIService", "src\License.WebAPIService\License.WebAPIService.csproj", "{D04A6F28-1D63-4743-B427-9BA3A2AE4C0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Centralized", "Centralized", "{DA90B7FE-328A-474A-B7AB-473D21F734E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnPremise", "OnPremise", "{409348E1-9CE4-4253-9B33-65399974E6EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -204,5 +208,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1ED08BE7-861A-4878-8F96-62C7648BDC9B} = {13A9624C-8417-43EF-B184-14653BF4207F}
 		{8B649A85-AA1C-41CF-BFF0-C45A7E53D2AA} = {13A9624C-8417-43EF-B184-14653BF4207F}
+		{D04A6F28-1D63-4743-B427-9BA3A2AE4C0C} = {DA90B7FE-328A-474A-B7AB-473D21F734E7}
 	EndGlobalSection
 EndGlobal

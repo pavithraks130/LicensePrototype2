@@ -7,8 +7,8 @@
     <ProjectGuid>{50961CDC-C21F-43EA-9F6F-AB74A7A8E547}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>License.Logger</RootNamespace>
-    <AssemblyName>License.Logger</AssemblyName>
+    <RootNamespace>Logger</RootNamespace>
+    <AssemblyName>Logger</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

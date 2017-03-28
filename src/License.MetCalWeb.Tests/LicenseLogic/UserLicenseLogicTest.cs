@@ -41,11 +41,8 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             subLogic = new UserSubscriptionLogic();
             AdminUser = userLogic.GetUserByEmail("pavithra.shivarudrappa@fluke.com");
             TeamMember = userLogic.GetUserByEmail("pavithraks2006@yahoo.com");
-
             Sub = subLogic.GetSubscription(AdminUser.UserId).First();
-
             LicenseList = licLogic.GetLicenseList(Sub.Id);
-
         }
 
         [TestMethod]
@@ -64,7 +61,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
                 lic1.LicenseId = LicenseList[1].Id;
                 lic1.License = licLogic.GetLicenseById(lic1.LicenseId);
                 userLicList.Add(lic1);
-                userLicLogic.CreateUserLicense(userLicList, TeamMember.UserId);
+                userLicLogic.CreateUserLicense(userLicList, new List<string>() { TeamMember.UserId });
 
                 userLicList = new List<UserLicense>();
                 UserLicense lic2 = new UserLicense();
@@ -72,7 +69,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
                 lic2.LicenseId = LicenseList[2].Id;
                 lic2.License = licLogic.GetLicenseById(lic2.LicenseId);
                 userLicList.Add(lic2);
-                userLicLogic.CreateUserLicense(userLicList, AdminUser.UserId);
+                userLicLogic.CreateUserLicense(userLicList, new List<string>() { AdminUser.UserId });
             }
             catch (Exception ex)
             {

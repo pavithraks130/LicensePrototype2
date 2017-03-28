@@ -22,5 +22,6 @@ namespace License.Model
         public IList<string> Roles { get; set; }
 
         public string ServerUserId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

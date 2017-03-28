@@ -125,7 +125,18 @@
                         @foreach (TeamMembers t in Model.AcceptedUsers)
                         {
                             <tr>
-                                <td class="col-md-6">
+                                <td class="col-md-2">
+                                    @if (t.InviteeUser.IsActive)
+                                    {
+                                        <div style="background-color:" class="img-circle"></div>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                    
+                                </td>
+                                <td class="col-md-4">
                                     @if (t.InviteeUser != null)
                                     {
                                         <div>@t.InviteeUser.Name</div>

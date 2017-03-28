@@ -20,9 +20,9 @@ namespace License.Core.Model
         public string InviteeStatus { get; set; }
         public DateTime InvitationDate { get; set; }
         [ForeignKey("AdminId")]
-        public AppUser AdminUser { get; set; }
+        public virtual AppUser AdminUser { get; set; }
         [ForeignKey("InviteeUserId")]
-        public AppUser InviteeUser { get; set; }
+        public virtual AppUser InviteeUser { get; set; }
         public bool IsAdmin { get; set; }
     }
 }
