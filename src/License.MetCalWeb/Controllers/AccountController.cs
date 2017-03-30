@@ -157,9 +157,7 @@ namespace License.MetCalWeb.Controllers
                     }
                     else
                         LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-
-
-                    SubscriLogic.GetUserLicenseForUser();
+                  
                 }
                 SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
