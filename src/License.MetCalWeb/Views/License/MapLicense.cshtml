@@ -1,5 +1,4 @@
 ﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {
@@ -20,23 +19,13 @@
         });
     });
 </script>
-@*<style>
-        input[type="radio"] {
-            width: 20px !important;
-            margin: 0px !important;
-        }
-
-        .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
-            border-top: none !important;
-        }
-    </style>*@
 <div class="row">
     <h2>
         License Mapping To User
     </h2>
     <br />
    @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
-    @using (Html.BeginForm(user, "Team",   FormMethod.Post))
+    @using (Html.BeginForm(user, "License",   FormMethod.Post))
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()

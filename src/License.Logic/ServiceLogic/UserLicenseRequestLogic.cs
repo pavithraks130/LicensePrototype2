@@ -84,6 +84,22 @@ namespace License.Logic.ServiceLogic
             return null;
         }
 
+        public List<UserLicenseRequest> GetLicenseRequest()
+        {
+            var licReqList = Work.UserLicenseRequestRepo.GetData().ToList();
+            if (licReqList.Count > 0)
+            {
+                List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
+                foreach (var obj in licReqList)
+                {
+                    var tempObj = AutoMapper.Mapper.Map<License.Model.UserLicenseRequest>(obj);
+                    userLicReq.Add(tempObj);
+                }
+                return userLicReq;
+            }
+            return null;
+        }
+
 
 
     }

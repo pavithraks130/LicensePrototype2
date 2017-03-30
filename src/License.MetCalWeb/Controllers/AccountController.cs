@@ -159,6 +159,12 @@ namespace License.MetCalWeb.Controllers
                         LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
                   
                 }
+                LicenseSessionState.Instance.IsTeamMember = !LicenseSessionState.Instance.IsAdmin;
+                if (!LicenseSessionState.Instance.IsSuperAdmin)
+                {
+                    TeamMemberLogic tmLogic = new TeamMemberLogic();
+                    LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                }
                 SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))

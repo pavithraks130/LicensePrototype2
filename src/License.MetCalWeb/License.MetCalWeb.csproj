@@ -290,6 +290,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TabController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -342,18 +343,19 @@
     <Content Include="Views\Product\CartDetails.cshtml" />
     <Content Include="Views\Product\ProductCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
-    <Content Include="Views\Team\MapLicense.cshtml" />
-    <Content Include="Views\Team\RevokeLicense.cshtml" />
+    <Content Include="Views\License\MapLicense.cshtml" />
+    <Content Include="Views\License\RevokeLicense.cshtml" />
     <Content Include="Views\Tab\Home.cshtml" />
-    <Content Include="Views\Team\LicenseCart.cshtml" />
+    <Content Include="Views\License\LicenseCart.cshtml" />
     <Content Include="Views\UserToken\Index.cshtml" />
     <Content Include="Views\UserToken\CreateToken.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Team\SelectListOfUser.cshtml" />
+    <Content Include="Views\License\SelectListOfUser.cshtml" />
     <Content Include="Views\Hardware\HardwareContainer.cshtml" />
     <Content Include="Views\Hardware\TeamAssets.cshtml" />
+    <Content Include="Views\License\LicenseRequest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
