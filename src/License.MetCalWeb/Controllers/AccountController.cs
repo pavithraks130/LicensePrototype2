@@ -161,6 +161,7 @@ namespace License.MetCalWeb.Controllers
 
                     SubscriLogic.GetUserLicenseForUser();
                 }
+                LicenseSessionState.Instance.IsTeamMember = !LicenseSessionState.Instance.IsAdmin;
                 SignInAsync(userObj, true);
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))
