@@ -18,7 +18,6 @@ namespace License.MetCalWeb.Controllers
         private UserLogic userLogic = null;
         private UserSubscriptionLogic subscriptionLogic = null;
 
-
         // GET: License
         public ActionResult Index()
         {
@@ -44,7 +43,6 @@ namespace License.MetCalWeb.Controllers
         /// </summary>
         /// <param name="SelectedSubscription"></param>
         /// <returns></returns>
-
         [HttpPost]
         public ActionResult SelectListOfUser(params string[] SelectedSubscription)
         {
@@ -193,6 +191,13 @@ namespace License.MetCalWeb.Controllers
             UserLicenseRequestLogic reqLogic = new UserLicenseRequestLogic();
             reqLogic.Create(licReqList);
             return RedirectToAction("TeamContainer", "Team");
+        }
+
+        public ActionResult RequestStatus()
+        {
+            UserLicenseRequestLogic reqLogic = new UserLicenseRequestLogic();
+            var listlic = reqLogic.GetLicenseRequest(LicenseSessionState.Instance.User.UserId);
+            return View(listlic);
         }
     }
 }

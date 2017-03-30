@@ -35,5 +35,6 @@ namespace License.MetCalWeb.Models
         public int TotalCount { get; set; }
         public int UsedLicenseCount { get; set; }
     }
+    
     #endregion
 }

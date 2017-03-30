@@ -1,0 +1,56 @@
+﻿@model List<License.Model.UserLicenseRequest>
+@{
+    ViewBag.Title = "RequestStatus";
+}
+
+<h2>License Request Status</h2>
+<div class="row">
+    <table class="table">
+        <tr>
+            <th class="col-md-2">
+                Subscription Name
+            </th>
+            <th class="col-md-2">
+                Product Name
+            </th>
+            <th class="col-md-2">
+                Status
+            </th>
+            <th class="col-md-2">
+                Approved By
+            </th>
+            <th class="col-md-4">
+                Comment
+            </th>
+        </tr>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@Model[i].UserSubscripption.Subscription.SubscriptionName</td>
+                <td>
+                    @Model[i].Product.Name
+                </td>
+                <td>
+                    @if (String.IsNullOrEmpty(Model[i].ApprovedBy))
+                    {
+                        @Html.Display("Pending")
+                    }
+                    else if (Model[i].IsApproved)
+                    {
+                        @Html.Display("Approved")
+                    }
+                    else if (Model[i].IsRejected)
+                    {
+                        @Html.Display("Rejected")
+                    }
+                </td>
+                <td>
+                    @Model[i].ApprovedBy
+                </td>
+                <td>
+                    @Model[i].Comment
+                </td>
+            </tr>
+        }
+    </table>
+</div>

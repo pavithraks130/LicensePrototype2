@@ -18,6 +18,7 @@ namespace License.Model
         public string ApprovedBy { get; set; }
         public User User { get; set; }
         public UserSubscription UserSubscripption { get; set; }
+        public Product Product { get; set; }
         public String Comment { get; set; }
     }
 }

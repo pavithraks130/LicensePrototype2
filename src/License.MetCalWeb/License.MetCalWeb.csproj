@@ -307,6 +307,7 @@
     <Compile Include="Models\HardwareModel.cs" />
     <Compile Include="Models\LicenseMapModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\RequestedLicense.cs" />
     <Compile Include="Models\SubscriptionProductModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
@@ -356,6 +357,7 @@
     <Content Include="Views\Hardware\HardwareContainer.cshtml" />
     <Content Include="Views\Hardware\TeamAssets.cshtml" />
     <Content Include="Views\License\LicenseRequest.cshtml" />
+    <Content Include="Views\License\RequestStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

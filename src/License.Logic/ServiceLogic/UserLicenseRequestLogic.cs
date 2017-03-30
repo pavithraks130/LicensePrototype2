@@ -70,6 +70,8 @@ namespace License.Logic.ServiceLogic
         /// <returns></returns>
         public List<UserLicenseRequest> GetRequestList(string adminId)
         {
+            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+            var subList = proSubLogic.GetSubscriptionFromFile();
             var userlist = Work.UserInviteRepository.GetData(f => f.AdminId == adminId).ToList();
             if (userlist.Count > 0)
             {
@@ -81,6 +83,9 @@ namespace License.Logic.ServiceLogic
                     foreach (var obj in licReqList)
                     {
                         var tempObj = AutoMapper.Mapper.Map<License.Model.UserLicenseRequest>(obj);
+                        var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
+                        tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
+                        tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
                         userLicReq.Add(tempObj);
                     }
                     return userLicReq;
@@ -95,13 +100,20 @@ namespace License.Logic.ServiceLogic
         /// <returns></returns>
         public List<UserLicenseRequest> GetLicenseRequest(string userId)
         {
-            var licReqList = Work.UserLicenseRequestRepo.GetData(f=> f.Requested_UserId == userId).ToList();
+            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+            var subList = proSubLogic.GetSubscriptionFromFile();
+
+            var licReqList = Work.UserLicenseRequestRepo.GetData(f => f.Requested_UserId == userId).ToList();
             if (licReqList.Count > 0)
             {
+                var list = licReqList.GroupBy(f => f.UserSubscriptionId).ToList();
                 List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
                 foreach (var obj in licReqList)
                 {
                     var tempObj = AutoMapper.Mapper.Map<License.Model.UserLicenseRequest>(obj);
+                    var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
+                    tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };                    
+                    tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
                     userLicReq.Add(tempObj);
                 }
                 return userLicReq;

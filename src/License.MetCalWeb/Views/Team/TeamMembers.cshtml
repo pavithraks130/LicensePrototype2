@@ -204,33 +204,36 @@
                         }
                     </table>
                 </div>
-                <hr />
+                <br />
+                <br />
                 if (LicenseSessionState.Instance.IsAdmin && Model.LicenseRequestList != null)
                 {
                     <div class="form-group">
-                        <h4>Pending license approval list</h4>
-                        <table class="table" style="border: none">
-                            <tr class="col-md-20">
-                                <th class="col-md-4">Email</th>
-                                <th class="col-md-4">ProductId</th>
-                                <th class="col-md-4">RequestedDate</th>
-                            </tr>
-                            @foreach (UserLicenseRequest userLicenseRequest in Model.LicenseRequestList)
-                            {
+                        <h4>Pending Approval list</h4>
+                        <div class="col-md-12">
+                            <table class="table" style="border: none">
+                                <tr>
+                                    <th class="col-md-2">Email</th>
+                                    <th class="col-md-4">Subscription Type</th>
+                                    <th class="col-md-3">Product Name</th>
+                                    <th class="col-md-3"></th>
+                                </tr>
+                                @foreach (UserLicenseRequest userLicenseRequest in Model.LicenseRequestList)
+                                {
 
-                            <tr>
-                                <td>@userLicenseRequest.User.Email</td>
-                                <td>@userLicenseRequest.ProductId</td>
-                                <td>@userLicenseRequest.RequestedDate</td>
-                                <td>
-                                    <button class="alert-succes"> @Html.ActionLink("Approve", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = true}, null) </button>
-                                </td>
-                                <td>
-                                    <button class="alert-warning"> @Html.ActionLink("Reject", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = false }, null)  </button>
-                                </td>
-                            </tr>
-                            }
-                        </table>
+                                    <tr>
+                                        <td class="col-md-2">@userLicenseRequest.User.Name</td>
+                                        <td class="col-md-4">@userLicenseRequest.UserSubscripption.Subscription.SubscriptionName</td>
+                                        <td class="col-md-3">@userLicenseRequest.Product.Name</td>
+                                        <td class="col-md-3">
+                                            <button class="alert-succes"> @Html.ActionLink("Approve", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = true }, null) </button>
+
+                                            <button class="alert-succes"> @Html.ActionLink("Reject", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = false }, null)  </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
                     </div>
                     <hr />
                 }
