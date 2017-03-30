@@ -68,22 +68,16 @@ namespace License.MetCalWeb.Controllers
             License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
-            if (LicenseSessionState.Instance.IsAdmin)
-            {
+            if (LicenseSessionState.Instance.IsSuperAdmin)
                 adminId = LicenseSessionState.Instance.User.UserId;
-            }
             else
-                adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                adminId = LicenseSessionState.Instance.AdminId;
             if (!String.IsNullOrEmpty(adminId))
             {
                 inviteList = logic.GetUserInviteDetails(adminId);
                 model = new TeamModel();
                 model.AdminUser = inviteList.AdminUser;
-                model.AcceptedUsers = inviteList.AcceptedInvites;
-                //foreach(var user in model.AcceptedUsers)
-                //{
-                //    var result = SubscriLogic.GetUserLicenseDetails(user.InviteeUserId,false);
-                //}
+                model.AcceptedUsers = inviteList.AcceptedInvites;                
                 model.PendinigUsers = inviteList.PendingInvites;
             }
             if (model == null)
@@ -118,7 +112,6 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Invite()
         {
-
             return View();
         }
 
@@ -132,7 +125,6 @@ namespace License.MetCalWeb.Controllers
                 if (userLogic.GetUserByEmail(model.Email) == null)
                 {
                     model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
-                    model.RegistratoinModel.ManagerId = LicenseSessionState.Instance.User.UserId;
                     status = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
 
                 }
@@ -143,7 +135,10 @@ namespace License.MetCalWeb.Controllers
                 {
                     User user = userLogic.GetUserByEmail(model.Email);
                     TeamMembers invite = new TeamMembers();
-                    invite.AdminId = LicenseSessionState.Instance.User.UserId;
+                    if (LicenseSessionState.Instance.IsSuperAdmin)
+                        invite.AdminId = LicenseSessionState.Instance.User.UserId;
+                    else
+                        invite.AdminId = LicenseSessionState.Instance.AdminId;
                     invite.InviteeUserId = user.UserId;
                     invite.InvitationDate = DateTime.Now.Date;
                     invite.InviteeEmail = model.Email;

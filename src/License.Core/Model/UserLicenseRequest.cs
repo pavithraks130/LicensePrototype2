@@ -16,12 +16,13 @@ namespace License.Core.Model
         public DateTime RequestedDate { get; set; }
         public bool IsApproved { get; set; }
         public bool IsRejected { get; set; }
-        public string ModifiedBy { get; set; }
+        public string ApprovedBy { get; set; }
 
         [ForeignKey("Requested_UserId")]
         public virtual AppUser User { get; set; }
 
         [ForeignKey("UserSubscriptionId")]
         public virtual UserSubscription UserSubscripption { get; set; }
+        public String Comment { get; set; }
     }
 }

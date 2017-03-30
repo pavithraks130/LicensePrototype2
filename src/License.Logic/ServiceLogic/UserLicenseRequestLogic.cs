@@ -31,7 +31,7 @@ namespace License.Logic.ServiceLogic
             var obj = Work.UserLicenseRequestRepo.GetById(req.Id);
             obj.IsApproved = req.IsApproved;
             obj.IsRejected = req.IsRejected;
-            obj.ModifiedBy = req.ModifiedBy;
+            obj.ApprovedBy = req.ApprovedBy;
             obj = Work.UserLicenseRequestRepo.Update(obj);
             Work.UserLicenseRequestRepo.Save();
             return obj != null;
@@ -74,7 +74,7 @@ namespace License.Logic.ServiceLogic
             if (userlist.Count > 0)
             {
                 var idList = userlist.Select(u => u.InviteeUserId).ToList();
-                var licReqList = Work.UserLicenseRequestRepo.GetData(f => idList.Contains(f.Requested_UserId) && String.IsNullOrEmpty(f.ModifiedBy)).ToList();
+                var licReqList = Work.UserLicenseRequestRepo.GetData(f => idList.Contains(f.Requested_UserId) && String.IsNullOrEmpty(f.ApprovedBy)).ToList();
                 if (licReqList.Count > 0)
                 {
                     List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();

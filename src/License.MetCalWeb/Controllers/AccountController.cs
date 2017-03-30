@@ -99,21 +99,26 @@ namespace License.MetCalWeb.Controllers
             {
                 MetCalWeb.Models.UserModel userObj = new Models.UserModel();
 
-                // Authentication is supparated for the On Premises user and SuperAdmin User. Super Admin will  be authenticate with LicenseServer Db 
-                // and on premises user will be authenticated with on premise DB
+                // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
+                // and on premises user and admin will be authenticated with on premise DB
                 User user = logic.AuthenticateUser(model.Email, model.Password);
                 if (user != null)
                 {
+                    bool status = false;
+                    if (!String.IsNullOrEmpty(user.ServerUserId))
+                        status = userLogic.ValidateUser(model.Email, model.Password);
+
                     userObj.Email = user.Email;
                     userObj.FirstName = user.FirstName;
                     userObj.LastName = user.LastName;
-                    userObj.ManagerId = user.ManagerId;
                     userObj.Name = user.Name;
                     userObj.PhoneNumber = user.PhoneNumber;
                     userObj.Roles = user.Roles;
                     userObj.ServerUserId = user.ServerUserId;
                     userObj.UserId = user.UserId;
                     userObj.UserName = user.UserName;
+
+
                 }
                 else
                 {
@@ -153,11 +158,10 @@ namespace License.MetCalWeb.Controllers
                     if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
                         LicenseSessionState.Instance.IsAdmin = true;
-                        userLogic.UpdateLogInStatus(user.ServerUserId, true);
                     }
                     else
                         LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-                  
+
                 }
                 LicenseSessionState.Instance.IsTeamMember = !LicenseSessionState.Instance.IsAdmin;
                 if (!LicenseSessionState.Instance.IsSuperAdmin)

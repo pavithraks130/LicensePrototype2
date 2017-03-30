@@ -148,6 +148,8 @@ namespace LicenseServer.Logic
         public bool ValidateUser(string userName, string password)
         {
             var user = UserManager.Find(userName, password);
+            user.IsActive = true;
+            UserManager.Update(user);
             return user != null;
         }
 

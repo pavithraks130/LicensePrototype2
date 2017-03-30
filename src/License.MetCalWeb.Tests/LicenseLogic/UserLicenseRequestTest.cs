@@ -66,7 +66,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
             {
                 var dt = data[0];
                 dt.IsApproved = true;
-                dt.ModifiedBy = "pavithra.shivavrudrappa@fluke.com";
+                dt.ApprovedBy = "pavithra.shivavrudrappa@fluke.com";
                 List<UserLicenseRequest> reqList = new List<UserLicenseRequest>();
                 reqList.Add(dt);
                 UserLicenseRequestLogic reqLogic = new UserLicenseRequestLogic();

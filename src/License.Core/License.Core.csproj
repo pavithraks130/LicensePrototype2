@@ -152,6 +152,14 @@
     <Compile Include="Migrations\201703300636395_userLicenseRequest.Designer.cs">
       <DependentUpon>201703300636395_userLicenseRequest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703301217219_AddedCommentsAndColumnNameChange.cs" />
+    <Compile Include="Migrations\201703301217219_AddedCommentsAndColumnNameChange.Designer.cs">
+      <DependentUpon>201703301217219_AddedCommentsAndColumnNameChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703301222115_RemovedManagerIdFromUser.cs" />
+    <Compile Include="Migrations\201703301222115_RemovedManagerIdFromUser.Designer.cs">
+      <DependentUpon>201703301222115_RemovedManagerIdFromUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -200,6 +208,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703300636395_userLicenseRequest.resx">
       <DependentUpon>201703300636395_userLicenseRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703301217219_AddedCommentsAndColumnNameChange.resx">
+      <DependentUpon>201703301217219_AddedCommentsAndColumnNameChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703301222115_RemovedManagerIdFromUser.resx">
+      <DependentUpon>201703301222115_RemovedManagerIdFromUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

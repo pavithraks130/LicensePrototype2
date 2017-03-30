@@ -58,34 +58,24 @@ namespace License.MetCalWeb.Controllers
             License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
-            TempData["IsTeamAdmin"] = false;
-            if (LicenseSessionState.Instance.IsAdmin)
+            if (LicenseSessionState.Instance.IsSuperAdmin)
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
-                TempData["IsTeamAdmin"] = true;
             }
             else
-                adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                adminId = LicenseSessionState.Instance.AdminId;
             if (!String.IsNullOrEmpty(adminId))
             {
                 inviteList = logic.GetUserInviteDetails(adminId);
                 model = new TeamModel();
                 model.AdminUser = inviteList.AdminUser;
                 model.AcceptedUsers = inviteList.AcceptedInvites;
-                //foreach(var user in model.AcceptedUsers)
-                //{
-                //    var result = SubscriLogic.GetUserLicenseDetails(user.InviteeUserId,false);
-                //}
                 model.PendinigUsers = inviteList.PendingInvites;
             }
             if (model == null)
                 return null;
             if (model.AcceptedUsers.Count <= 0 || Convert.ToBoolean(TempData["IsTeamAdmin"]))
                 return model;
-            var obj =
-                model.AcceptedUsers
-                    .FirstOrDefault(t => t.InviteeUserId == LicenseSessionState.Instance.User.UserId);
-            TempData["IsTeamAdmin"] = obj?.IsAdmin ?? false;
             return model;
         }
 
@@ -197,6 +187,7 @@ namespace License.MetCalWeb.Controllers
                 req.Requested_UserId = LicenseSessionState.Instance.User.UserId;
                 req.ProductId = Convert.ToInt32(prodId);
                 req.UserSubscriptionId = Convert.ToInt32(subscriptionId);
+                req.RequestedDate = DateTime.Now.Date;
                 licReqList.Add(req);
             }
             UserLicenseRequestLogic reqLogic = new UserLicenseRequestLogic();
