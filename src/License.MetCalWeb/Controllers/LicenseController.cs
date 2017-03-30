@@ -101,19 +101,16 @@ namespace License.MetCalWeb.Controllers
         public List<License.MetCalWeb.Models.LicenseMapModel> GetLicenseListBySubscription(string userId, bool canAddBulkLicense)
         {
             TempData["UserId"] = userId;
-            ViewData["TeamMember"] = userId == null ? string.Empty : userLogic.GetUserById(userId).Email;
+            ViewData["TeamMember"] = userId == null ? string.Empty : LicenseSessionState.Instance.User.Email;
             TempData["CanAddBulk"] = canAddBulkLicense;
 
 
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
             string adminUserId = string.Empty;
-            if (LicenseSessionState.Instance.IsAdmin)
+            if (LicenseSessionState.Instance.IsSuperAdmin)
                 adminUserId = LicenseSessionState.Instance.User.UserId;
             else
-            {
-                License.Logic.ServiceLogic.TeamMemberLogic teamMemlogic = new TeamMemberLogic();
-                adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
-            }
+                adminUserId = LicenseSessionState.Instance.AdminId;
 
             var licenseMapModelList = SubscriLogic.GetSubForLicenseMap(userId, adminUserId);
             return licenseMapModelList;
@@ -180,12 +177,9 @@ namespace License.MetCalWeb.Controllers
         public ActionResult LicenseRequest()
         {
             string adminId = String.Empty;
-            if (LicenseSessionState.Instance.IsSuperAdmin)
-                adminId = LicenseSessionState.Instance.User.UserId;
-            else
-                adminId = LicenseSessionState.Instance.AdminId;
-            var subscripriptionlist = SubscriLogic.GetSubscription(adminId);
-            return View(subscripriptionlist);
+            string userId = LicenseSessionState.Instance.User.UserId;
+            var listdata = GetLicenseListBySubscription(userId, false);
+            return View(listdata);
         }
 
         [HttpPost]
@@ -202,7 +196,7 @@ namespace License.MetCalWeb.Controllers
                 License.Model.UserLicenseRequest req = new License.Model.UserLicenseRequest();
                 req.Requested_UserId = LicenseSessionState.Instance.User.UserId;
                 req.ProductId = Convert.ToInt32(prodId);
-                req.UserSubscriptionId = Convert.ToInt32(subscriptionId);                
+                req.UserSubscriptionId = Convert.ToInt32(subscriptionId);
                 licReqList.Add(req);
             }
             return RedirectToAction("TeamContainer", "Team");

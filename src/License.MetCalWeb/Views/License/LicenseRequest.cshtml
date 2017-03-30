@@ -1,5 +1,4 @@
-﻿
-@model List<License.MetCalWeb.Models.LicenseMapModel>
+﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
 @{
     ViewBag.Title = "LicenseRequest";
 }
@@ -26,10 +25,6 @@
     });
 </script>
 <div class="row">
-    <h2>
-        License Mapping To User
-    </h2>
-    <br />
     @using (Html.BeginForm("LicenseRequest", "License", FormMethod.Post))
     {
         @Html.ValidationSummary()
@@ -59,7 +54,7 @@
                                             <tr>
                                                 <td>
                                                     <label class="control-label">
-                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].ProductList[j].IsSelected" class="checkbox-inline">
+                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId"  @(Model[i].ProductList[j].IsSelected == true? "disabled='disabled checked=checked'":"")  class="checkbox-inline">
                                                         @Model[i].ProductList[j].ProductName
                                                     </label>
                                                 </td>
