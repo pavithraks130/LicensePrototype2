@@ -205,48 +205,40 @@
                     </table>
                 </div>
                 <hr />
-                <div class="form-group">
-                    <h4>Pending for license approval list</h4>
-
-                    @*<table class="table dropdown-content" style="border: none">
-                            <tr>
-                                <td>Shruthi </td>
-
-
-                                <td>Product B, Product C</td>
-
-                                <td>
-                                    <button class="alert-succes"> Approve </button>
-                                </td>
-                                <td>
-                                    <button class="alert-warning"> Reject </button>
-                                </td>
+                if (LicenseSessionState.Instance.IsSuperAdmin && ViewBag.LicenseRequestList != null)
+                {
+                    <div class="form-group">
+                        <h4>Pending license approval list</h4>
+                        <table class="table" style="border: none">
+                            <tr class="col-md-20">
+                                <th class="col-md-4">Email</th>
+                                <th class="col-md-4">ProductId</th>
+                                <th class="col-md-4">RequestedDate</th>
                             </tr>
-
-                            <tr>
-                                <td>Charan </td>
-
-
-                                <td>Product B, Product D</td>
-
-                                <td>
-                                    <button class="alert-succes"> Approve </button>
-
-                                </td>
-                                <td>
-                                    <button class="alert-warning"> Reject </button>
-                                </td>
-                            </tr>
-
-                        </table>*@
+                            @foreach (UserLicenseRequest userLicenseRequest in ViewBag.LicenseRequestList)
+                            {
+                               
+                                <tr>
+                                    <td>@userLicenseRequest.User.Email</td>
+                                    <td>@userLicenseRequest.ProductId</td>
+                                    <td>@userLicenseRequest.RequestedDate</td>
+                                    <td>
+                                        <button class="alert-succes"> @Html.ActionLink("Approve", "UserConfiguration", "Team", new { userLicense = userLicenseRequest, isApproved = true}, null) </button>
+                                    </td>
+                                    <td>
+                                        <button class="alert-warning"> @Html.ActionLink("Reject", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = false }, null)  </button>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                        <hr />
+                }
+                <div>
+                    <button class="alert-success">
+                        @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, bulkLicenseAdd = true }, null)
+                    </button>
                 </div>
-
-                <hr />
-                        <div>
-                            <button class="alert-success">
-                                @Html.ActionLink("Add Bulk License", "MapLicense", "Team", new { userId = string.Empty, bulkLicenseAdd = true }, null)
-                            </button>
-                        </div>
             }
         </div>
 

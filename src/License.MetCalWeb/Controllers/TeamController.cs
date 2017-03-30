@@ -21,12 +21,14 @@ namespace License.MetCalWeb.Controllers
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
         private UserSubscriptionLogic subscriptionLogic = null;
+        private UserLicenseRequestLogic userLicenseRequestLogic = null;
 
         public TeamController()
         {
             logic = new TeamMemberLogic();
             userLogic = new UserLogic();
             subscriptionLogic = new UserSubscriptionLogic();
+            userLicenseRequestLogic = new UserLicenseRequestLogic();
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -37,9 +39,28 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult TeamMembers()
         {
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+            {
+                var userLicenseRequestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.User.UserId);
+                ViewBag.LicenseRequestList = userLicenseRequestList;
+            }
             return View();
         }
 
+        [HttpPost]
+        public ActionResult TeamMembers(UserLicenseRequest userLicense,bool isApproved)
+        {
+            if (isApproved)
+            {
+                userLicense.IsApproved = true;
+            }
+            else
+            {
+                userLicense.IsRejected = true;
+            }
+            userLicenseRequestLogic.Update(new List<UserLicenseRequest> {userLicense});
+            return View();
+        }
         private TeamModel LoadTeamMember()
         {
             License.Model.UserInviteList inviteList = new UserInviteList();
@@ -188,7 +209,7 @@ namespace License.MetCalWeb.Controllers
         {
             string[] temp = TempData["SelectedSubscription"] as string[];
             var teamMember = LoadTeamMember();
-            UpdateRevokeLicense(temp, "Add", SelectedUser,true);
+            UpdateRevokeLicense(temp, "Add", SelectedUser, true);
             return RedirectToAction("TeamContainer", "Team");
         }
         public List<License.MetCalWeb.Models.LicenseMapModel> GetLicenseListBySubscription(string userId, bool canAddBulkLicense)
@@ -235,7 +256,7 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("TeamContainer", "Team");
         }
 
-        public void UpdateRevokeLicense(string[] SelectedSubscription, string action = "Add", string[] SelectedUserIdList = null,bool canAddBulkLicense=false)
+        public void UpdateRevokeLicense(string[] SelectedSubscription, string action = "Add", string[] SelectedUserIdList = null, bool canAddBulkLicense = false)
         {
             List<string> userIdList = new List<string>();
             if (canAddBulkLicense)
@@ -252,19 +273,19 @@ namespace License.MetCalWeb.Controllers
             UserLicenseLogic logic = new UserLicenseLogic();
             License.Logic.ServiceLogic.LicenseLogic licenseLogic = new LicenseLogic();
             List<License.Model.UserLicense> userLicesList = new List<License.Model.UserLicense>();
-                foreach (var data in SelectedSubscription)
-                {
-                    var splitValue = data.Split(new char[] { '-' });
-                    var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                    var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-                    License.Model.UserLicense lic = new License.Model.UserLicense();
-                    lic.UserId = string.Empty;//Multiple users adding user Id is not required here
-                    License.Model.LicenseData licData = new License.Model.LicenseData();
-                    licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
-                    licData.ProductId = Convert.ToInt32(prodId);
-                    lic.License = licData;
-                    userLicesList.Add(lic);
-                }
+            foreach (var data in SelectedSubscription)
+            {
+                var splitValue = data.Split(new char[] { '-' });
+                var prodId = splitValue[0].Split(new char[] { ':' })[1];
+                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
+                License.Model.UserLicense lic = new License.Model.UserLicense();
+                lic.UserId = string.Empty;//Multiple users adding user Id is not required here
+                License.Model.LicenseData licData = new License.Model.LicenseData();
+                licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
+                licData.ProductId = Convert.ToInt32(prodId);
+                lic.License = licData;
+                userLicesList.Add(lic);
+            }
             if (action == "Add")
                 logic.CreateUserLicense(userLicesList, userIdList);
             else
