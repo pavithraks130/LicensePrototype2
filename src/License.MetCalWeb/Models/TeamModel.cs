@@ -11,5 +11,7 @@ namespace License.MetCalWeb.Models
         public User AdminUser { get; set; }
         public List<TeamMembers> PendinigUsers { get; set; }
         public List<TeamMembers> AcceptedUsers { get; set; }
+
+        public List<UserLicenseRequest> LicenseRequestList { get; set; }
     }
 }

@@ -21,12 +21,14 @@ namespace License.MetCalWeb.Controllers
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
         private UserSubscriptionLogic subscriptionLogic = null;
+        private UserLicenseRequestLogic userLicenseRequestLogic = null;
 
         public TeamController()
         {
             logic = new TeamMemberLogic();
             userLogic = new UserLogic();
             subscriptionLogic = new UserSubscriptionLogic();
+            userLicenseRequestLogic = new UserLicenseRequestLogic();
         }
         // GET: Team
         public ActionResult TeamContainer()
@@ -37,6 +39,27 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult TeamMembers()
         {
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+            {
+                // ViewBag.LicenseRequestList =
+
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult TeamMembers(UserLicenseRequest userLicense, bool isApproved)
+        {
+            if (isApproved)
+            {
+                userLicense.IsApproved = true;
+            }
+            else
+            {
+                userLicense.IsApproved = true;
+            }
+            userLicenseRequestLogic.Update(new List<UserLicenseRequest> { userLicense });
+
             return View();
         }
 
@@ -45,11 +68,9 @@ namespace License.MetCalWeb.Controllers
             License.Model.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
-            TempData["IsTeamAdmin"] = false;
             if (LicenseSessionState.Instance.IsAdmin)
             {
                 adminId = LicenseSessionState.Instance.User.UserId;
-                TempData["IsTeamAdmin"] = true;
             }
             else
                 adminId = logic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
@@ -67,12 +88,12 @@ namespace License.MetCalWeb.Controllers
             }
             if (model == null)
                 return null;
-            if (model.AcceptedUsers.Count <= 0 || Convert.ToBoolean(TempData["IsTeamAdmin"]))
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                model.LicenseRequestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.User.UserId);
+            else if (LicenseSessionState.Instance.IsAdmin)
+                model.LicenseRequestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.AdminId);
+            if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamMember)
                 return model;
-            var obj =
-                model.AcceptedUsers
-                    .FirstOrDefault(t => t.InviteeUserId == LicenseSessionState.Instance.User.UserId);
-            TempData["IsTeamAdmin"] = obj?.IsAdmin ?? false;
             return model;
         }
 
@@ -157,7 +178,7 @@ namespace License.MetCalWeb.Controllers
             }
             return RedirectToAction("TeamContainer");
         }
-        
+
         public ActionResult UserConfiguration(int id, string userId, string actionType)
         {
             TeamMemberLogic logic = new TeamMemberLogic();

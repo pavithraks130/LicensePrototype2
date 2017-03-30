@@ -205,7 +205,7 @@
                     </table>
                 </div>
                 <hr />
-                if (LicenseSessionState.Instance.IsSuperAdmin && ViewBag.LicenseRequestList != null)
+                if (LicenseSessionState.Instance.IsAdmin && Model.LicenseRequestList != null)
                 {
                     <div class="form-group">
                         <h4>Pending license approval list</h4>
@@ -215,24 +215,24 @@
                                 <th class="col-md-4">ProductId</th>
                                 <th class="col-md-4">RequestedDate</th>
                             </tr>
-                            @foreach (UserLicenseRequest userLicenseRequest in ViewBag.LicenseRequestList)
+                            @foreach (UserLicenseRequest userLicenseRequest in Model.LicenseRequestList)
                             {
-                               
-                                <tr>
-                                    <td>@userLicenseRequest.User.Email</td>
-                                    <td>@userLicenseRequest.ProductId</td>
-                                    <td>@userLicenseRequest.RequestedDate</td>
-                                    <td>
-                                        <button class="alert-succes"> @Html.ActionLink("Approve", "UserConfiguration", "Team", new { userLicense = userLicenseRequest, isApproved = true}, null) </button>
-                                    </td>
-                                    <td>
-                                        <button class="alert-warning"> @Html.ActionLink("Reject", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = false }, null)  </button>
-                                    </td>
-                                </tr>
+
+                            <tr>
+                                <td>@userLicenseRequest.User.Email</td>
+                                <td>@userLicenseRequest.ProductId</td>
+                                <td>@userLicenseRequest.RequestedDate</td>
+                                <td>
+                                    <button class="alert-succes"> @Html.ActionLink("Approve", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = true}, null) </button>
+                                </td>
+                                <td>
+                                    <button class="alert-warning"> @Html.ActionLink("Reject", "TeamMembers", "Team", new { userLicense = userLicenseRequest, isApproved = false }, null)  </button>
+                                </td>
+                            </tr>
                             }
                         </table>
                     </div>
-                        <hr />
+                    <hr />
                 }
                 <div>
                     <button class="alert-success">
