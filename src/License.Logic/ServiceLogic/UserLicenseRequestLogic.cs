@@ -63,6 +63,11 @@ namespace License.Logic.ServiceLogic
                 Work.UserLicenseRequestRepo.Save();
         }
 
+        /// <summary>
+        /// Function to get the Licence Request of all the users based  on the admin id
+        /// </summary>
+        /// <param name="adminId"></param>
+        /// <returns></returns>
         public List<UserLicenseRequest> GetRequestList(string adminId)
         {
             var userlist = Work.UserInviteRepository.GetData(f => f.AdminId == adminId).ToList();
@@ -84,9 +89,13 @@ namespace License.Logic.ServiceLogic
             return null;
         }
 
-        public List<UserLicenseRequest> GetLicenseRequest()
+        /// <summary>
+        /// Get the Requested License based on the UserId1
+        /// </summary>
+        /// <returns></returns>
+        public List<UserLicenseRequest> GetLicenseRequest(string userId)
         {
-            var licReqList = Work.UserLicenseRequestRepo.GetData().ToList();
+            var licReqList = Work.UserLicenseRequestRepo.GetData(f=> f.Requested_UserId == userId).ToList();
             if (licReqList.Count > 0)
             {
                 List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();

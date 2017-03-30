@@ -199,6 +199,8 @@ namespace License.MetCalWeb.Controllers
                 req.UserSubscriptionId = Convert.ToInt32(subscriptionId);
                 licReqList.Add(req);
             }
+            UserLicenseRequestLogic reqLogic = new UserLicenseRequestLogic();
+            reqLogic.Create(licReqList);
             return RedirectToAction("TeamContainer", "Team");
         }
     }
