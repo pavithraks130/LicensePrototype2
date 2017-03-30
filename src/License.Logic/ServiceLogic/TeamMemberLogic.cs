@@ -16,11 +16,11 @@ namespace License.Logic.ServiceLogic
 		public TeamMembers CreateInvite(TeamMembers invit)
 		{
 			License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<Model.TeamMembers, License.Core.Model.TeamMembers>(invit);
-			var obj = Work.UserInviteLicenseRepository.GetData(f => f.AdminId == invit.AdminId && f.InviteeEmail == invit.InviteeEmail && f.TeamId == invit.TeamId).FirstOrDefault();
+			var obj = Work.UserInviteRepository.GetData(f => f.AdminId == invit.AdminId && f.InviteeEmail == invit.InviteeEmail && f.TeamId == invit.TeamId).FirstOrDefault();
 			if (obj == null)
 			{
-				obj = Work.UserInviteLicenseRepository.Create(userinvit);
-				Work.UserInviteLicenseRepository.Save();
+				obj = Work.UserInviteRepository.Create(userinvit);
+				Work.UserInviteRepository.Save();
 			}
 			return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
 		}
@@ -31,7 +31,7 @@ namespace License.Logic.ServiceLogic
 			UserInviteList inviteList = new UserInviteList();
 			inviteList.AdminUser = AutoMapper.Mapper.Map<AppUser, User>(user);
 			List<TeamMembers> teamMembers = new List<TeamMembers>();
-			var listData = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminId);
+			var listData = Work.UserInviteRepository.GetData(filter: t => t.AdminId == adminId);
 			foreach (var data in listData)
 				teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMembers, Model.TeamMembers>(data));
 			if (teamMembers.Count > 0)
@@ -68,21 +68,21 @@ namespace License.Logic.ServiceLogic
 
 		public TeamMembers VerifyUserInvited(string email, string adminid)
 		{
-			var obj = Work.UserInviteLicenseRepository.GetData(filter: t => t.AdminId == adminid && t.InviteeEmail == email).FirstOrDefault();
+			var obj = Work.UserInviteRepository.GetData(filter: t => t.AdminId == adminid && t.InviteeEmail == email).FirstOrDefault();
 			return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
 		}
 
 		public void UpdateInviteStatus(object inviteId, string status)
 		{
-			Core.Model.TeamMembers invite = Work.UserInviteLicenseRepository.GetById(inviteId);
+			Core.Model.TeamMembers invite = Work.UserInviteRepository.GetById(inviteId);
 			invite.InviteeStatus = status;
-			Core.Model.TeamMembers ember = Work.UserInviteLicenseRepository.Update(invite);
-			Work.UserInviteLicenseRepository.Save();
+			Core.Model.TeamMembers ember = Work.UserInviteRepository.Update(invite);
+			Work.UserInviteRepository.Save();
 		}
 
 		public string GetUserAdminDetails(string userId)
 		{
-			var obj = Work.UserInviteLicenseRepository.GetData(t => t.InviteeUserId == userId).FirstOrDefault();
+			var obj = Work.UserInviteRepository.GetData(t => t.InviteeUserId == userId).FirstOrDefault();
 			if (obj != null)
 				return obj.AdminId;
 			return string.Empty;
@@ -90,26 +90,26 @@ namespace License.Logic.ServiceLogic
 
 		public void SetAsAdmin(int id, string userId, bool status)
 		{
-			Core.Model.TeamMembers teamMembers = Work.UserInviteLicenseRepository.GetById(id);
+			Core.Model.TeamMembers teamMembers = Work.UserInviteRepository.GetById(id);
 			if (!RoleManager.RoleExists("Admin"))
 				RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
 			UserManager.AddToRole(userId, "Admin");
 			teamMembers.IsAdmin = status;
-			Work.UserInviteLicenseRepository.Update(teamMembers);
-			Work.UserInviteLicenseRepository.Save();
+			Work.UserInviteRepository.Update(teamMembers);
+			Work.UserInviteRepository.Save();
 		}
 
 		public bool DeleteTeamMember(int id)
 		{
 			try
 			{
-				var teamObj = Work.UserInviteLicenseRepository.GetById(id);
+				var teamObj = Work.UserInviteRepository.GetById(id);
 				var licenseData = Work.UserLicenseRepository.GetData(u => u.UserId == teamObj.InviteeUserId);
 				if (licenseData.Count() > 0)
 					foreach (var dt in licenseData)
 						Work.UserLicenseRepository.Delete(dt);
-				var status = Work.UserInviteLicenseRepository.Delete(teamObj);
-				Work.UserInviteLicenseRepository.Save();
+				var status = Work.UserInviteRepository.Delete(teamObj);
+				Work.UserInviteRepository.Save();
 				return true;
 			}
 			catch (Exception ex)

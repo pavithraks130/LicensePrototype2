@@ -148,6 +148,10 @@
     <Compile Include="Migrations\201703280625435_AddedIsActiveToUser.Designer.cs">
       <DependentUpon>201703280625435_AddedIsActiveToUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703300636395_userLicenseRequest.cs" />
+    <Compile Include="Migrations\201703300636395_userLicenseRequest.Designer.cs">
+      <DependentUpon>201703300636395_userLicenseRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Model\TeamAsset.cs" />
     <Compile Include="Model\TeamMembers.cs" />
     <Compile Include="Model\UserLicense.cs" />
+    <Compile Include="Model\UserLicenseRequest.cs" />
     <Compile Include="Model\UserSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -192,6 +197,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703280625435_AddedIsActiveToUser.resx">
       <DependentUpon>201703280625435_AddedIsActiveToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703300636395_userLicenseRequest.resx">
+      <DependentUpon>201703300636395_userLicenseRequest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

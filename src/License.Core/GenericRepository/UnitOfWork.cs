@@ -12,31 +12,13 @@ namespace License.Core.GenericRepository
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
 
-        //private LicenseRepository<Product> _productLicenseRepository;
-        //public LicenseRepository<Product> ProductLicenseRepository
-        //{
-        //    get { return _productLicenseRepository ?? (_productLicenseRepository = new LicenseRepository<Product>(_dbContext)); }
-        //}
-        
-        //private LicenseRepository<Subscription> _subscriptionRepository;
-        //public LicenseRepository<Subscription> SubscriptionRepository
-        //{
-        //    get { return _subscriptionRepository ?? (_subscriptionRepository = new LicenseRepository<Subscription>(_dbContext)); }
-        //}
-
-        //private LicenseRepository<ProductSubscriptionMapping> _productSubscriptionMapping;
-        //public LicenseRepository<ProductSubscriptionMapping> ProductSubscriptionMapping
-        //{
-        //    get { return _productSubscriptionMapping ?? ( _productSubscriptionMapping = new LicenseRepository<Model.ProductSubscriptionMapping>(_dbContext)); }
-        //}
-
-        private LicenseRepository<TeamMembers> _userInviteLicenseRepository;
-        public LicenseRepository<TeamMembers> UserInviteLicenseRepository
+        private LicenseRepository<TeamMembers> _userInviteRepository;
+        public LicenseRepository<TeamMembers> UserInviteRepository
         {
             get
             {
-                return _userInviteLicenseRepository ??
-                       (_userInviteLicenseRepository = new LicenseRepository<TeamMembers>(_dbContext));
+                return _userInviteRepository ??
+                       (_userInviteRepository = new LicenseRepository<TeamMembers>(_dbContext));
             }
         }
 
@@ -68,6 +50,12 @@ namespace License.Core.GenericRepository
             }
         }
 
+        public LicenseRepository<UserLicenseRequest> _userLicenseRequestRepo;
+        public LicenseRepository<UserLicenseRequest> UserLicenseRequestRepo
+        {
+            get { return _userLicenseRequestRepo ?? (_userLicenseRequestRepo = new LicenseRepository<UserLicenseRequest>(_dbContext)); }
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {
@@ -81,6 +69,24 @@ namespace License.Core.GenericRepository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        //private LicenseRepository<Product> _productLicenseRepository;
+        //public LicenseRepository<Product> ProductLicenseRepository
+        //{
+        //    get { return _productLicenseRepository ?? (_productLicenseRepository = new LicenseRepository<Product>(_dbContext)); }
+        //}
+
+        //private LicenseRepository<Subscription> _subscriptionRepository;
+        //public LicenseRepository<Subscription> SubscriptionRepository
+        //{
+        //    get { return _subscriptionRepository ?? (_subscriptionRepository = new LicenseRepository<Subscription>(_dbContext)); }
+        //}
+
+        //private LicenseRepository<ProductSubscriptionMapping> _productSubscriptionMapping;
+        //public LicenseRepository<ProductSubscriptionMapping> ProductSubscriptionMapping
+        //{
+        //    get { return _productSubscriptionMapping ?? ( _productSubscriptionMapping = new LicenseRepository<Model.ProductSubscriptionMapping>(_dbContext)); }
+        //}
 
     }
 }

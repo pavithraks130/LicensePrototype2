@@ -111,6 +111,7 @@
     <Compile Include="ServiceLogic\RoleLogic.cs" />
     <Compile Include="ServiceLogic\TeamMemberLogic.cs" />
     <Compile Include="ServiceLogic\UserLicenseLogic.cs" />
+    <Compile Include="ServiceLogic\UserLicenseRequestLogic.cs" />
     <Compile Include="ServiceLogic\UserLogic.cs" />
     <Compile Include="ServiceLogic\UserSubscriptionLogic.cs" />
   </ItemGroup>

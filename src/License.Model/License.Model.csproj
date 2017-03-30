@@ -56,17 +56,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\LicenseData.cs" />
-    <Compile Include="Model\LicenseDetailModel.cs" />
-    <Compile Include="Model\LicenseMapModel.cs" />
-    <Compile Include="Model\Product.cs" />
-    <Compile Include="Model\Registration.cs" />
-    <Compile Include="Model\Role.cs" />
-    <Compile Include="Model\Subscription.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Model\TeamMembers.cs" />
-    <Compile Include="Model\UserLicense.cs" />
-    <Compile Include="Model\UserSubscription.cs" />
+    <Compile Include="LicenseData.cs" />
+    <Compile Include="LicenseDetailModel.cs" />
+    <Compile Include="LicenseMapModel.cs" />
+    <Compile Include="Product.cs" />
+    <Compile Include="Registration.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="Subscription.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="TeamMembers.cs" />
+    <Compile Include="UserLicense.cs" />
+    <Compile Include="UserLicenseRequest.cs" />
+    <Compile Include="UserSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
