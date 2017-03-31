@@ -58,6 +58,10 @@ namespace License.Logic
             cfg.CreateMap<License.Model.UserLicenseRequest, License.Core.Model.UserLicenseRequest>()
                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                .ForMember(dest => dest.UserSubscripption, opt => opt.MapFrom(src => src.UserSubscripption));
+
+            cfg.CreateMap<License.Model.TeamAsset, License.Core.Model.TeamAsset>();
+            cfg.CreateMap<License.Core.Model.TeamAsset, License.Model.TeamAsset>();
+
         }
 
     }

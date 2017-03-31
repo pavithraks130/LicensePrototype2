@@ -358,6 +358,7 @@
     <Content Include="Views\Hardware\TeamAssets.cshtml" />
     <Content Include="Views\License\LicenseRequest.cshtml" />
     <Content Include="Views\License\RequestStatus.cshtml" />
+    <Content Include="Views\Hardware\AddHardware.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
