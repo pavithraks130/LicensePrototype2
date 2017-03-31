@@ -109,6 +109,7 @@
     <Compile Include="ServiceLogic\LicenseLogic.cs" />
     <Compile Include="ServiceLogic\ProductSubscriptionLogic.cs" />
     <Compile Include="ServiceLogic\RoleLogic.cs" />
+    <Compile Include="ServiceLogic\TeamAssetLogic.cs" />
     <Compile Include="ServiceLogic\TeamMemberLogic.cs" />
     <Compile Include="ServiceLogic\UserLicenseLogic.cs" />
     <Compile Include="ServiceLogic\UserLicenseRequestLogic.cs" />
