@@ -292,6 +292,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\TabController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -358,6 +359,8 @@
     <Content Include="Views\Hardware\TeamAssets.cshtml" />
     <Content Include="Views\License\LicenseRequest.cshtml" />
     <Content Include="Views\License\RequestStatus.cshtml" />
+    <Content Include="Views\Cart\OfflinePayment.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

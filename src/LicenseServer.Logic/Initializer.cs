@@ -50,6 +50,20 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.UserToken, DataModel.UserToken>();
             cfg.CreateMap<DataModel.UserToken, Core.Model.UserToken>();
 
+            cfg.CreateMap<LicenseServer.Core.Model.PurchaseOrder, DataModel.PurchaseOrder>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+
+            cfg.CreateMap<DataModel.PurchaseOrder, LicenseServer.Core.Model.PurchaseOrder>()
+               .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+               .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+
+            cfg.CreateMap<DataModel.PurchaseOrderItem, LicenseServer.Core.Model.PurchaseOrderItem>()
+                .ForMember(dest => dest.Subscription, opt => opt.MapFrom(src => src.Subscription));
+
+            cfg.CreateMap<LicenseServer.Core.Model.PurchaseOrderItem, DataModel.PurchaseOrderItem>()
+                .ForMember(dest => dest.Subscription, opt => opt.MapFrom(src => src.Subscription));
+
             License.Logic.AutoMapperConfiguration.InitializeConfiguration(cfg);
         }
 

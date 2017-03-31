@@ -28,7 +28,6 @@ namespace License.MetCalWeb.Controllers
             ViewData["TotalAmount"] = logic.TotalAmount;
             return View(obj);
         }
-              
 
         public ActionResult RemoveItem(int id)
         {
@@ -36,12 +35,10 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("CartItem", "Cart");
         }
 
-
         public ActionResult PaymentGateway()
         {
             return View();
         }
-
 
         [HttpPost]
         public ActionResult DoPayment()
@@ -99,7 +96,7 @@ namespace License.MetCalWeb.Controllers
                     prod.ProductCode = pro.Product.ProductCode;
                     prod.QtyPerSubscription = pro.QtyPerSubscription;
                     prod.Features = new List<Model.Feature>();
-                    foreach(var f in pro.Product.AssociatedFeatures)
+                    foreach (var f in pro.Product.AssociatedFeatures)
                     {
                         var feture = new License.Model.Feature();
                         feture.Id = f.Id;
@@ -143,6 +140,32 @@ namespace License.MetCalWeb.Controllers
                 License.Logic.ServiceLogic.LicenseLogic licenseLogic = new Logic.ServiceLogic.LicenseLogic();
                 licenseLogic.CreateLicenseData(licenseDataList);
             }
+        }
+
+        public ActionResult OfflinePayment()
+        {
+            PurchaseOrder poOrder = new PurchaseOrder();
+            var cartItemList = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
+            if (cartItemList.Count > 0)
+            {
+                PurchaseOrderLogic logic = new PurchaseOrderLogic();
+                POItemLogic itemLogic = new POItemLogic();
+              
+                poOrder.UserId = LicenseSessionState.Instance.User.ServerUserId;
+                poOrder.CreatedDate = DateTime.Now.Date;
+                poOrder = logic.CreatePurchaseOrder(poOrder);
+                List<PurchaseOrderItem> itemList = new List<PurchaseOrderItem>();
+                foreach (CartItem ci in cartItemList)
+                {
+                    var item = new PurchaseOrderItem();
+                    item.Quantity = ci.Quantity;
+                    item.SubscriptionId = ci.SubscriptionTypeId;
+                    itemList.Add(item);
+                }
+                itemLogic.CreateItem(itemList, poOrder.Id);
+            }
+            return View(poOrder);
+
         }
 
     }

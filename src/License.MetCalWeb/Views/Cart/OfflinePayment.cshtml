@@ -1,0 +1,14 @@
+﻿@model  LicenseServer.DataModel.PurchaseOrder
+@{
+    ViewBag.Title = "OfflinePayment";
+}
+
+<h2>OfflinePayment</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            Order has been placed, pending for approval, atatus will be updated, once approved. Below is  the Purchase Order Number
+            Purchase Order Id : @Model.PurchaseOrderNo.
+        </div>
+    </div>
+</div>

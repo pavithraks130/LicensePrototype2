@@ -71,12 +71,10 @@ namespace LicenseServer.Core.Infrastructure
         {
             get
             {
-                return _featuresRepository ??(_featuresRepository=new GenericRepository<Feature>(_context));
+                return _featuresRepository ?? (_featuresRepository = new GenericRepository<Feature>(_context));
             }
 
         }
-
-      
 
         private GenericRepository<UserToken> _userTokenRepository;
         public GenericRepository<UserToken> UserTokenRepository
@@ -85,6 +83,22 @@ namespace LicenseServer.Core.Infrastructure
             {
                 return _userTokenRepository ?? (_userTokenRepository = new GenericRepository<UserToken>(_context));
             }
+        }
+
+
+        private GenericRepository<PurchaseOrder> _purchaseOrderRepository;
+        public GenericRepository<PurchaseOrder> PurchaseOrderRepository
+        {
+            get
+            {
+                return _purchaseOrderRepository ?? (_purchaseOrderRepository = new GenericRepository<PurchaseOrder>(_context));
+            }
+        }
+
+        private GenericRepository<PurchaseOrderItem> _poItemRepository;
+        public GenericRepository<PurchaseOrderItem> POItemRepository
+        {
+            get { return _poItemRepository ?? (_poItemRepository = new GenericRepository<PurchaseOrderItem>(_context)); }
         }
 
         private bool disposed = false;

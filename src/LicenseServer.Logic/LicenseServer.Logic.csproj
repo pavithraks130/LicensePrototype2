@@ -105,6 +105,8 @@
     <Compile Include="ServiceLogic\OrganizationLogic.cs" />
     <Compile Include="ServiceLogic\ProductLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLogic\POItemLogic.cs" />
+    <Compile Include="ServiceLogic\PurchaseOrderLogic.cs" />
     <Compile Include="ServiceLogic\RoleLogic.cs" />
     <Compile Include="ServiceLogic\SubscriptionDetailLogic.cs" />
     <Compile Include="ServiceLogic\SubscriptionTypeLogic.cs" />
