@@ -116,5 +116,12 @@ namespace LicenseServer.Logic
             else
                 return "PO-SUB-00001";
         }
+
+        public PurchaseOrder GetProductById(int id)
+        {
+            var order = Work.PurchaseOrderRepository.GetById(id);
+            return AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(order);
+
+        }
     }
 }

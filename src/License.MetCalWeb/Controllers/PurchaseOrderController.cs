@@ -44,5 +44,17 @@ namespace License.MetCalWeb.Controllers
             orderLogic.UpdatePurchaseOrder(orderList);
             return RedirectToAction("Index", "User");
         }
+
+        public ActionResult OrderStatus()
+        {
+            var poList = orderLogic.GetPurchaseOrderByUser(LicenseSessionState.Instance.User.ServerUserId);
+            return View(poList);
+        }
+
+        public ActionResult OrderDetail(int id)
+        {
+            var order = orderLogic.GetProductById(id);
+            return View(order);
+        }
     }
 }
