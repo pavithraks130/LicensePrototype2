@@ -1,0 +1,80 @@
+﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
+@{
+    ViewBag.Title = "LicenseRequest";
+}
+
+<h2>LicenseRequest</h2>
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            return isPostEnabled;
+        });
+    });
+</script>
+<div class="row">
+    @using (Html.BeginForm("LicenseRequest", "License", FormMethod.Post))
+    {
+        @Html.ValidationSummary()
+        @Html.AntiForgeryToken()
+
+        if (Model.Count == 0)
+        {
+            <div class="form-group">
+                <div class="col-md-8">
+                    <span>No Subscriptions exist  </span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="col-md-8">
+                    <table class="table" style="border: none">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr style="">
+                                <td>
+                                    @Model[i].SubscriptionName
+                                    <table class="table">
+                                        @for (int j = 0; j < Model[i].ProductList.Count; j++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label">
+                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId"  @(Model[i].ProductList[j].IsSelected == true? "disabled='disabled checked=checked'":"")  class="checkbox-inline">
+                                                        @Model[i].ProductList[j].ProductName
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <label style="display:none;color:red;" id="lblError">License  not selected</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+                </div>
+
+            </div>
+        }
+    }
+</div>

@@ -129,6 +129,7 @@
     <Compile Include="LicenseLogic\LicenseLogicTest.cs" />
     <Compile Include="LicenseLogic\TeamMemberLogicTest.cs" />
     <Compile Include="LicenseLogic\UserLicenseLogicTest.cs" />
+    <Compile Include="LicenseLogic\UserLicenseRequestTest.cs" />
     <Compile Include="LicenseLogic\UserLogicTest.cs" />
     <Compile Include="LicenseLogic\UserSubscriptionLogicTest.cs" />
     <Compile Include="LicenseServerLogic\CartLogicTest.cs" />

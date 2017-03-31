@@ -30,7 +30,6 @@ namespace License.Logic.ServiceLogic
             ur.PhoneNumber = u.PhoneNumber;
             ur.UserName = u.Email;
             ur.ServerUserId = u.ServerUserId;
-            ur.ManagerId = u.ManagerId;
 
             AppUser user = AutoMapper.Mapper.Map<License.Model.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;

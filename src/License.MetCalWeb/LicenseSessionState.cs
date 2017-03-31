@@ -16,6 +16,8 @@ namespace License.MetCalWeb
             }
         }
 
+        public string AdminId { get; set; }
+
         public Models.UserModel User { get; set; }
 
         public bool IsAuthenticated { get; set; }
@@ -24,11 +26,13 @@ namespace License.MetCalWeb
 
         public bool IsAdmin { get; set; }
 
-		public bool IsGlobalAdmin { get; set; }
+        public bool IsGlobalAdmin { get; set; }
 
-		public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
+        public bool IsTeamMember { get; set; }
 
-        public List<Models.LicenseMapModel>  ProductLicense { get; set; }
+        public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
+
+        public List<Models.LicenseMapModel> ProductLicense { get; set; }
 
     }
 }

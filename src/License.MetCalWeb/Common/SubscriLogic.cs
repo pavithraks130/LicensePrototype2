@@ -134,6 +134,8 @@ namespace License.MetCalWeb.Common
             UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
             var userSubscriptionList = subscriptionLogic.GetSubscription(adminUserId);
             var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId).ToList();
+            if (LicenseSessionState.Instance.SubscriptionList == null || LicenseSessionState.Instance.SubscriptionList.Count() == 0)
+                GetSubscription(adminUserId);
             var subscriptionList = LicenseSessionState.Instance.SubscriptionList.Where(s => subscriptionIdList.Contains(s.SubscriptionId)).ToList();
 
             foreach (var subs in subscriptionList)

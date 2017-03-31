@@ -6,6 +6,10 @@
         <ul class="dropdown-menu">
             <li>@Html.ActionLink("Profile", "Profile", "User")</li>
             <li>@Html.ActionLink("Change Password", "ChangePassword", "User")</li>
+            @if (LicenseSessionState.Instance.IsTeamMember)
+            {
+                <li>@Html.ActionLink("License Request Status", "RequestStatus", "License")</li>
+            }
             <li>@Html.ActionLink("Log Out", "LogOut", "Account")</li>
         </ul>
     </li>

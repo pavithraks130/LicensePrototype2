@@ -15,8 +15,10 @@ namespace License.Model
         public DateTime RequestedDate { get; set; }
         public bool IsApproved { get; set; }
         public bool IsRejected { get; set; }
-        public string ModifiedBy { get; set; }
+        public string ApprovedBy { get; set; }
         public User User { get; set; }
         public UserSubscription UserSubscripption { get; set; }
+        public Product Product { get; set; }
+        public String Comment { get; set; }
     }
 }
