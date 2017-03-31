@@ -39,29 +39,10 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult TeamMembers()
         {
-            if (LicenseSessionState.Instance.IsSuperAdmin)
-            {
-                // ViewBag.LicenseRequestList =
-
-            }
             return View();
         }
 
-        [HttpPost]
-        public ActionResult TeamMembers(UserLicenseRequest userLicense, bool isApproved)
-        {
-            if (isApproved)
-            {
-                userLicense.IsApproved = true;
-            }
-            else
-            {
-                userLicense.IsApproved = true;
-            }
-            userLicenseRequestLogic.Update(new List<UserLicenseRequest> { userLicense });
 
-            return View();
-        }
 
         private TeamModel LoadTeamMember()
         {
@@ -77,11 +58,13 @@ namespace License.MetCalWeb.Controllers
                 inviteList = logic.GetUserInviteDetails(adminId);
                 model = new TeamModel();
                 model.AdminUser = inviteList.AdminUser;
-                model.AcceptedUsers = inviteList.AcceptedInvites;                
+                model.AcceptedUsers = inviteList.AcceptedInvites;
                 model.PendinigUsers = inviteList.PendingInvites;
             }
             if (model == null)
+            {
                 return null;
+            }
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 model.LicenseRequestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.User.UserId);
             else if (LicenseSessionState.Instance.IsAdmin)
@@ -93,7 +76,7 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Subscriptions()
         {
-            if (!Convert.ToBoolean(TempData["IsTeamAdmin"]))
+            if (!LicenseSessionState.Instance.IsAdmin)
                 return View();
 
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin

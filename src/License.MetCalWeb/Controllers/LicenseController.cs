@@ -17,12 +17,36 @@ namespace License.MetCalWeb.Controllers
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
         private UserSubscriptionLogic subscriptionLogic = null;
+        private UserLicenseRequestLogic userLicenseRequestLogic = null;
 
         // GET: License
         public ActionResult Index()
         {
             return View();
         }
+
+        public LicenseController()
+        {
+            userLicenseRequestLogic = new UserLicenseRequestLogic();
+        }
+        //Http Post
+        public ActionResult LicenseApproval(int id, string status)
+        {
+            string[] selectedSubscription = new string[] { ""};
+
+            var selectedProduct = userLicenseRequestLogic.GetById(id);
+            selectedSubscription = new string[] { "ProdId:"+ selectedProduct.ProductId +"UserSubId:" + selectedProduct.UserSubscriptionId};
+            switch (status)
+            {
+                case "Approved": selectedProduct.IsApproved = true; break;
+                case "Rejected": selectedProduct.IsRejected = true; break;
+            }
+            selectedProduct.ApprovedBy = LicenseSessionState.Instance.User.UserId;
+            userLicenseRequestLogic.Update(new List<UserLicenseRequest> { selectedProduct });
+            UpdateRevokeLicense(selectedSubscription);
+            return RedirectToAction("TeamContainer", "Team");
+        }
+
 
         public ActionResult MapLicense(string userId, bool bulkLicenseAdd)
         {
