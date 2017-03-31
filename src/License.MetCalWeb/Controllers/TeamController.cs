@@ -89,7 +89,7 @@ namespace License.MetCalWeb.Controllers
                 adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
             }
 
-            LicenseSessionState.Instance.SubscriptionList = SubscriLogic.GetSubscription(adminUserId).AsEnumerable();
+            LicenseSessionState.Instance.SubscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
             return View(LicenseSessionState.Instance.SubscriptionList);
         }
 

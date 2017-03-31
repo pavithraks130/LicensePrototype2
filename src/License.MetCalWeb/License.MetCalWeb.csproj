@@ -280,9 +280,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\CentralizedSubscriptionLogic.cs" />
     <Compile Include="Common\EmailService.cs" />
     <Compile Include="Common\EncryptDecrypt.cs" />
-    <Compile Include="Common\SubscriLogic.cs" />
+    <Compile Include="Common\OnPremiseSubscriptionLogic.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />

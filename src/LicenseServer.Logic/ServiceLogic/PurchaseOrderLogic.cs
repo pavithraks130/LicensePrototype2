@@ -82,7 +82,7 @@ namespace LicenseServer.Logic
             return purchaseOrderList;
         }
 
-        public List<PurchaseOrder> POToBeSynchedByUser(String userId)
+        public List<PurchaseOrder> GetPOToBeSynchedByUser(String userId)
         {
             List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.UserId == userId && f.IsApproved == true && f.IsSynched == false);

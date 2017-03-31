@@ -14,6 +14,7 @@ namespace LicenseServer.DataModel
         public bool IsApproved { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public bool IsSynched { get; set; }
         public string ApprovedBy { get; set; }
         public User User { get; set; }
         public ICollection<PurchaseOrderItem> OrderItems { get; set; }

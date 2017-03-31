@@ -93,7 +93,7 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogIn(LoginViewModel model)
+        public async Task<ActionResult> LogIn(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -170,6 +170,7 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
                 }
                 SignInAsync(userObj, true);
+                SynchPurchaseOrder();
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))
                     return RedirectToAction("Profile", "User");
@@ -178,6 +179,30 @@ namespace License.MetCalWeb.Controllers
                 return RedirectToAction("Home", "Tab");
             }
             return View();
+        }
+
+        public async Task SynchPurchaseOrder()
+        {
+            LicenseServer.Logic.PurchaseOrderLogic reqLogic = new LicenseServer.Logic.PurchaseOrderLogic();
+            var poList = reqLogic.GetPOToBeSynchedByUser(LicenseSessionState.Instance.User.ServerUserId);
+            foreach(var poItem in poList)
+            {
+                List<LicenseServer.DataModel.UserSubscription> subsList = new List<LicenseServer.DataModel.UserSubscription>();
+                foreach (var item in poItem.OrderItems)
+                {
+
+                    LicenseServer.DataModel.UserSubscription usersubs = new LicenseServer.DataModel.UserSubscription();
+                    usersubs.UserId = LicenseSessionState.Instance.User.ServerUserId;
+                    usersubs.SubscriptionTypeId = item.SubscriptionId;
+                    usersubs.SubscriptionDate = DateTime.Now.Date;
+                    usersubs.Quantity = item.Quantity;
+                    subsList.Add(usersubs);
+                }
+                CentralizedSubscriptionLogic.UpdateUserSubscription(subsList);
+                poItem.IsSynched = true;
+                reqLogic.UpdatePurchaseOrder(poItem);
+            }
+            
         }
 
         private void SignInAsync(UserModel user, bool isPersistent)

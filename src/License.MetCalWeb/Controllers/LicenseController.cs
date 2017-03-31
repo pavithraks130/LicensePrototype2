@@ -36,20 +36,20 @@ namespace License.MetCalWeb.Controllers
         {
             string[] selectedSubscription;
 
-            var selectedProduct = userLicenseRequestLogic.GetById(id);
-            selectedSubscription = new string[] { "ProdId:"+ selectedProduct.ProductId +"-UserSubId:" + selectedProduct.UserSubscriptionId};
+            var userlicReq = userLicenseRequestLogic.GetById(id);
+            selectedSubscription = new string[] { "ProdId:" + userlicReq.ProductId + "-UserSubId:" + userlicReq.UserSubscriptionId };
             switch (status)
             {
-                case "Approved": selectedProduct.IsApproved = true;  break;
-                case "Rejected": selectedProduct.IsRejected = true; break;
+                case "Approved": userlicReq.IsApproved = true; break;
+                case "Rejected": userlicReq.IsRejected = true; break;
             }
-            selectedProduct.ApprovedBy = LicenseSessionState.Instance.User.UserId;
-            userLicenseRequestLogic.Update(new List<UserLicenseRequest> { selectedProduct });
+            userlicReq.ApprovedBy = LicenseSessionState.Instance.User.UserId;
+            userLicenseRequestLogic.Update(new List<UserLicenseRequest> { userlicReq });
             if (status == "Approved")
             {
                 UpdateRevokeLicense(selectedSubscription);
             }
-          
+
             return RedirectToAction("TeamContainer", "Team");
         }
 
@@ -130,7 +130,7 @@ namespace License.MetCalWeb.Controllers
             else
                 adminUserId = LicenseSessionState.Instance.AdminId;
 
-            var licenseMapModelList = SubscriLogic.GetSubForLicenseMap(userId, adminUserId);
+            var licenseMapModelList = OnPremiseSubscriptionLogic.GetSubForLicenseMap(userId, adminUserId);
             return licenseMapModelList;
         }
 
@@ -144,7 +144,7 @@ namespace License.MetCalWeb.Controllers
         {
             TempData["UserId"] = userId;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
-            List<Models.LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
+            List<Models.LicenseMapModel> licenseMapModelList = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false);
             return View(licenseMapModelList);
         }
 
