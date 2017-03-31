@@ -50,6 +50,15 @@ namespace License.Core.GenericRepository
             }
         }
 
+        private LicenseRepository<TeamAsset> _teamAssetRepository;
+        public LicenseRepository<TeamAsset> TeamAssetRepository
+        {
+            get
+            {
+                return _teamAssetRepository ?? (_teamAssetRepository = new LicenseRepository<TeamAsset>(_dbContext));
+            }
+        }
+
         public LicenseRepository<UserLicenseRequest> _userLicenseRequestRepo;
         public LicenseRepository<UserLicenseRequest> UserLicenseRequestRepo
         {

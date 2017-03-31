@@ -79,8 +79,7 @@ namespace License.Logic.Test
             {
                 FirstName = "Charan",
                 LastName = "Shetty",
-                Email = "Charan.shetty@fluke.com",
-                ManagerId = "2",
+                Email = "Charan.shetty@fluke.com"
 
             };
 
@@ -89,8 +88,7 @@ namespace License.Logic.Test
                 // UserId ="1",
                 FirstName = "Pavitra",
                 LastName = "",
-                Email = "Pavitra.aa@fluke.com",
-                ManagerId = "2",
+                Email = "Pavitra.aa@fluke.com"
 
             };
             usersList.Add(user);

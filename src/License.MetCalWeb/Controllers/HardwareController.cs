@@ -28,7 +28,7 @@ namespace License.MetCalWeb.Controllers
 
 		public ActionResult AssetConfiguration(int id, string actionType)
 		{
-			//TeamAssetLogic logic = new TeamAssetLogic();
+			TeamAssetLogic logic = new TeamAssetLogic();
 			switch (actionType)
 			{
 				case "Admin":
