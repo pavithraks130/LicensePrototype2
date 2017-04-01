@@ -146,31 +146,22 @@ namespace License.MetCalWeb.Controllers
                 }
                 LicenseSessionState.Instance.User = userObj;
                 LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
-                if (LicenseSessionState.Instance.IsGlobalAdmin)
-                {
-                    LicenseSessionState.Instance.IsSuperAdmin = true;
+                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                if (LicenseSessionState.Instance.IsSuperAdmin)
                     LicenseSessionState.Instance.IsAdmin = true;
-                }
                 else
-                {
-                    LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
 
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                    {
-                        LicenseSessionState.Instance.IsAdmin = true;
-                    }
-                    else
-                        LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-
-                }
-                LicenseSessionState.Instance.IsTeamMember = !LicenseSessionState.Instance.IsAdmin;
+                if(!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
+                LicenseSessionState.Instance.IsTeamMember =true ;
                 if (!LicenseSessionState.Instance.IsSuperAdmin)
                 {
                     TeamMemberLogic tmLogic = new TeamMemberLogic();
                     LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
                 }
                 SignInAsync(userObj, true);
-                SynchPurchaseOrder();
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                     SynchPurchaseOrder();
                 LicenseSessionState.Instance.IsAuthenticated = true;
                 if (String.IsNullOrEmpty(userObj.FirstName))
                     return RedirectToAction("Profile", "User");
@@ -185,7 +176,7 @@ namespace License.MetCalWeb.Controllers
         {
             LicenseServer.Logic.PurchaseOrderLogic reqLogic = new LicenseServer.Logic.PurchaseOrderLogic();
             var poList = reqLogic.GetPOToBeSynchedByUser(LicenseSessionState.Instance.User.ServerUserId);
-            foreach(var poItem in poList)
+            foreach (var poItem in poList)
             {
                 List<LicenseServer.DataModel.UserSubscription> subsList = new List<LicenseServer.DataModel.UserSubscription>();
                 foreach (var item in poItem.OrderItems)
@@ -202,7 +193,7 @@ namespace License.MetCalWeb.Controllers
                 poItem.IsSynched = true;
                 reqLogic.UpdatePurchaseOrder(poItem);
             }
-            
+
         }
 
         private void SignInAsync(UserModel user, bool isPersistent)

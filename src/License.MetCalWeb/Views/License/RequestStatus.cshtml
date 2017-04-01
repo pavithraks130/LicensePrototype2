@@ -4,53 +4,64 @@
 }
 
 <h2>License Request Status</h2>
-<div class="row">
-    <table class="table">
-        <tr>
-            <th class="col-md-2">
-                Subscription Name
-            </th>
-            <th class="col-md-2">
-                Product Name
-            </th>
-            <th class="col-md-2">
-                Status
-            </th>
-            <th class="col-md-2">
-                Approved By
-            </th>
-            <th class="col-md-4">
-                Comment
-            </th>
-        </tr>
-        @for (int i = 0; i < Model.Count; i++)
-        {
+@if (Model == null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            No License Request Exist
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <table class="table">
             <tr>
-                <td>@Model[i].UserSubscripption.Subscription.SubscriptionName</td>
-                <td>
-                    @Model[i].Product.Name
-                </td>
-                <td>
-                    @if (String.IsNullOrEmpty(Model[i].ApprovedBy))
-                    {
-                        @Html.Display("Pending")
-                    }
-                    else if (Model[i].IsApproved)
-                    {
-                        @Html.Display("Approved")
-                    }
-                    else if (Model[i].IsRejected)
-                    {
-                        @Html.Display("Rejected")
-                    }
-                </td>
-                <td>
-                    @Model[i].ApprovedBy
-                </td>
-                <td>
-                    @Model[i].Comment
-                </td>
+                <th class="col-md-2">
+                    Subscription Name
+                </th>
+                <th class="col-md-2">
+                    Product Name
+                </th>
+                <th class="col-md-2">
+                    Status
+                </th>
+                <th class="col-md-2">
+                    Approved By
+                </th>
+                <th class="col-md-4">
+                    Comment
+                </th>
             </tr>
-        }
-    </table>
-</div>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].UserSubscripption.Subscription.SubscriptionName</td>
+                    <td>
+                        @Model[i].Product.Name
+                    </td>
+                    <td>
+                        @if (String.IsNullOrEmpty(Model[i].ApprovedBy))
+                    {
+                            <label>Pending</label>
+                        }
+                        else if (Model[i].IsApproved)
+                        {
+                            <label>Approved</label>
+                        }
+                        else if (Model[i].IsRejected)
+                        {
+                            <label>Rejected</label>
+                        }
+                    </td>
+                    <td>
+                        @Model[i].ApprovedBy
+                    </td>
+                    <td>
+                        @Model[i].Comment
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}

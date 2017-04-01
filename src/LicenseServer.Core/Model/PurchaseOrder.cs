@@ -19,6 +19,7 @@ namespace LicenseServer.Core.Model
         public string ApprovedBy { get; set; }
         [ForeignKey("UserId")]
         public virtual Appuser User { get; set; }
+        public string Comment { get; set; }
         public virtual ICollection<PurchaseOrderItem> OrderItems { get; set; }
         public PurchaseOrder()
         {

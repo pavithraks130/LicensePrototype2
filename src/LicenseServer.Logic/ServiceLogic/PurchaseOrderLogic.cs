@@ -26,6 +26,9 @@ namespace LicenseServer.Logic
             var tempObj = Work.PurchaseOrderRepository.GetById(order.Id);
             tempObj.IsApproved = order.IsApproved;
             tempObj.ApprovedBy = order.ApprovedBy;
+            tempObj.IsSynched = order.IsSynched;
+            tempObj.UpdatedDate = DateTime.Now.Date;
+            tempObj.Comment = order.Comment;
             tempObj = Work.PurchaseOrderRepository.Update(tempObj);
             Work.PurchaseOrderRepository.Save();
             return AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(tempObj);

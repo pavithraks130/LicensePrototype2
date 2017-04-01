@@ -65,10 +65,6 @@ namespace License.MetCalWeb.Controllers
             {
                 return null;
             }
-            if (LicenseSessionState.Instance.IsSuperAdmin)
-                model.LicenseRequestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.User.UserId);
-            else if (LicenseSessionState.Instance.IsAdmin)
-                model.LicenseRequestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.AdminId);
             if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamMember)
                 return model;
             return model;

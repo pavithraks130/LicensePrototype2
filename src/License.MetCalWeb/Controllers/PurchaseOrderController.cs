@@ -22,7 +22,7 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(string button, params string[] selectedPurchaseOrder)
+        public ActionResult Index(string comment, string button, params string[] selectedPurchaseOrder)
         {
             List<int> poIdList = new List<int>();
             foreach (string str in selectedPurchaseOrder)
@@ -39,6 +39,7 @@ namespace License.MetCalWeb.Controllers
             foreach (var obj in orderList)
             {
                 obj.IsApproved = isApproved;
+                obj.Comment = comment;                
                 obj.ApprovedBy = LicenseSessionState.Instance.User.UserName;
             }
             orderLogic.UpdatePurchaseOrder(orderList);

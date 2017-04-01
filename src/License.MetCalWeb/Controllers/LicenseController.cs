@@ -31,25 +31,55 @@ namespace License.MetCalWeb.Controllers
             logic = new TeamMemberLogic();
 
         }
-        //Http Post
-        public ActionResult LicenseApproval(int id, string status)
+
+        public ActionResult LicenseApproval()
         {
-            string[] selectedSubscription;
+            List<UserLicenseRequest> requestList = null;
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                requestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.User.UserId);
+            else if (LicenseSessionState.Instance.IsAdmin)
+                requestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.AdminId);
+            return View(requestList);
+        }
 
-            var userlicReq = userLicenseRequestLogic.GetById(id);
-            selectedSubscription = new string[] { "ProdId:" + userlicReq.ProductId + "-UserSubId:" + userlicReq.UserSubscriptionId };
-            switch (status)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LicenseApproval(string comment, string status, params string[] selectLicenseRequest)
+        {
+            List<UserLicenseRequest> licReqList = new List<UserLicenseRequest>();
+            List<UserLicense> userlicList = new List<UserLicense>();
+            foreach (var id in selectLicenseRequest)
             {
-                case "Approved": userlicReq.IsApproved = true; break;
-                case "Rejected": userlicReq.IsRejected = true; break;
-            }
-            userlicReq.ApprovedBy = LicenseSessionState.Instance.User.UserId;
-            userLicenseRequestLogic.Update(new List<UserLicenseRequest> { userlicReq });
-            if (status == "Approved")
-            {
-                UpdateRevokeLicense(selectedSubscription);
-            }
+                var userlicReq = userLicenseRequestLogic.GetById(Convert.ToInt32(id));
+                var licSubId = "ProdId:" + userlicReq.ProductId + "-UserSubId:" + userlicReq.UserSubscriptionId;
+                switch (status)
+                {
+                    case "Approve": userlicReq.IsApproved = true; break;
+                    case "Reject": userlicReq.IsRejected = true; break;
+                }
+                userlicReq.Comment = comment;
+                userlicReq.ApprovedBy = LicenseSessionState.Instance.User.UserName;
+                licReqList.Add(userlicReq);
+                if (status == "Approve")
+                {
+                    UserLicense lic = new UserLicense();
+                    lic.UserId = userlicReq.Requested_UserId;
+                    lic.License = new LicenseData();
+                    lic.License.ProductId = userlicReq.ProductId;
+                    lic.License.UserSubscriptionId = userlicReq.UserSubscriptionId;
+                    userlicList.Add(lic);
+                }
 
+            }
+            if (licReqList.Count > 0)
+            {
+                userLicenseRequestLogic.Update(licReqList);
+                if(userlicList.Count > 0)
+                {
+                    UserLicenseLogic licLogic = new UserLicenseLogic();
+                    licLogic.CreataeUserLicense(userlicList);
+                }
+            }
             return RedirectToAction("TeamContainer", "Team");
         }
 
@@ -187,7 +217,7 @@ namespace License.MetCalWeb.Controllers
                 userLicesList.Add(lic);
             }
             if (action == "Add")
-                logic.CreateUserLicense(userLicesList, userIdList);
+                logic.CreateMultiUserLicense(userLicesList, userIdList);
             else
                 logic.RevokeUserLicense(userLicesList, userIdList.FirstOrDefault());//temporary data changes
         }

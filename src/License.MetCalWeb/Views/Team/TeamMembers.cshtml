@@ -202,54 +202,16 @@
                         }
                     </table>
                 </div>
-                <br />
-                <br />
-                if (LicenseSessionState.Instance.IsAdmin && Model.LicenseRequestList != null)
-                {
-                    <div class="form-group">
-                        <h4>Pending Approval list</h4>
-                        <div class="col-md-36">
-                            <table class="table" style="border: none">
-                                <tr>
-                                     <th class="col-md-6">Email</th>
-                                    <th class="col-md-6">Subscription Type</th>
-                                    <th class="col-md-6">Product Name</th>
-                                    <th class="col-md-6">Comment</th>
-                                    <th class="col-md-6"></th>
-                                    <th class="col-md-6"></th>
-                                </tr>
-                                @foreach (UserLicenseRequest userLicenseRequest in Model.LicenseRequestList)
-                                {
-
-                                    <tr>
-                                        <td class="col-md-6">@userLicenseRequest.User.UserName</td>
-                                        <td class="col-md-6">@userLicenseRequest.UserSubscripption.Subscription.SubscriptionName</td>
-                                        <td class="col-md-6">@userLicenseRequest.Product.Name</td>
-                                        <td class="col-md-6">@Html.TextBox("comments", userLicenseRequest.Comment)@userLicenseRequest.Comment</td>
-                                        <td class="col-md-6">
-                                            <button class="alert-success"> @Html.ActionLink("Approve", "LicenseApproval", "License", new { id= @userLicenseRequest.Id, status="Approved" }, null) </button>
-                                        </td>
-                                        <td class="col-md-6">
-                                            <button class="alert-warning"> @Html.ActionLink("Reject", "LicenseApproval", "License", new { id = @userLicenseRequest.Id, status ="Rejected" }, null)  </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                    <br />
-                    <br />
-                }
             }
         </div>
-        if (LicenseSessionState.Instance.IsAdmin)
+        @*if (LicenseSessionState.Instance.IsAdmin)
         {
-        <div>
-            <button class="alert-success">
-                @Html.ActionLink("Add Bulk License", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)
-            </button>
-        </div>
-        }
+            <div>
+                <button class="alert-success">
+                    @Html.ActionLink("Add Bulk License", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)
+                </button>
+            </div>
+        }*@
     }
 
     <div class="modal" id="myModal">

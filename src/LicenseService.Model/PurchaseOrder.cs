@@ -17,6 +17,7 @@ namespace LicenseServer.DataModel
         public bool IsSynched { get; set; }
         public string ApprovedBy { get; set; }
         public User User { get; set; }
+        public string Comment { get; set; }
         public ICollection<PurchaseOrderItem> OrderItems { get; set; }
 
         public PurchaseOrder()
