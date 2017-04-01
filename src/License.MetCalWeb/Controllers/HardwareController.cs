@@ -26,6 +26,11 @@ namespace License.MetCalWeb.Controllers
 			return hm;
 		}
 
+        public ActionResult EditHardware(int id)
+        {
+            var obj = new Core.Model.TeamAsset();
+            return View(obj);
+        }
 		public ActionResult AssetConfiguration(int id, string actionType)
 		{
 			TeamAssetLogic logic = new TeamAssetLogic();

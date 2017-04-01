@@ -53,24 +53,18 @@ else
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <label class="col-md-4"> Comment/Feedback </label>
-                        @Html.TextArea("comment", new { @class = "col-md-4" })
-                    </div>
+                <div class="form-group">
+                    <label> Comment/Feedback </label>
+                    @Html.TextArea("comment", new { @class = "col-md-4" })
                 </div>
             </div>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <div class="row">
             <div class="col-md-12">
-                <div class="col-md-6">
-                    <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
-                </div>
-                <div class="col-md-6">
-                    <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save" />
-                </div>
+                <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
+                <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save" />
             </div>
         </div>
         <div class="row">

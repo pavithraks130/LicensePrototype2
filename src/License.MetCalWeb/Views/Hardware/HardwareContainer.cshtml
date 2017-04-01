@@ -1,12 +1,31 @@
-﻿ 
+﻿
 @{
     ViewBag.Title = "HardwareContainer";
 }
 
 <h2>Assets Used by Team</h2>
-<div class="form-group">
-	<div class="col-md-8">
-		@{ Html.RenderPartial("TeamAssets"); }
-	</div>
-	</div>
+<script>
+    $(function () {
+        $('.editModal').modal();
 
+        $('#btnEdit').click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    $('#modalWrapper').html(data);
+                }
+            });
+        });
+    });
+</script>
+<div class="form-group">
+    <div class="col-md-8">
+        @{ Html.RenderPartial("TeamAssets"); }
+    </div>
+</div>
+
+<div id="modalWrapper">
+
+</div>
