@@ -10,26 +10,45 @@
         <h4 class="modal-title">Edit</h4>
     </div>
     <div class="modal-body">
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Model)
-            @Html.TextBoxFor(m => m.Model)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Model, new { @class = "col-md-4" })
+                    @Html.TextBoxFor(m => m.Model, new { @class = "col-md-8" })
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, new { @class = "col-md-4" })
+                    @Html.TextBoxFor(m => m.Name, new { @class = "col-md-8" })
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.SerialNumber)
-            @Html.TextBoxFor(m => m.SerialNumber)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.SerialNumber, new { @class = "col-md-4" })
+                    @Html.TextBoxFor(m => m.SerialNumber, new { @class = "col-md-8" })
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Type)
-            @Html.TextBoxFor(m => m.Type)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Type, new { @class = "col-md-4" })
+                    @Html.TextBoxFor(m => m.Type, new { @class = "col-md-8" })
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Description)
-            @Html.TextBoxFor(m => m.Description)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Description, new { @class = "col-md-4" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "col-md-8" })
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
