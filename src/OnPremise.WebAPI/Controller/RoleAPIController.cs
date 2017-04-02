@@ -9,7 +9,7 @@ using License.Logic.ServiceLogic;
 using License.Model;
 using Microsoft.AspNet.Identity;
 
-namespace License.WebAPIService.Controller
+namespace OnPremise.WebAPI.Controller
 {
     [RoutePrefix("api/Role")]
     public class RoleAPIController :BaseApiController

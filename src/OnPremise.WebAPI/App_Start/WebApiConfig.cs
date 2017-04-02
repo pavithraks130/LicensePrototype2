@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace License.WebAPIService
+namespace OnPremise.WebAPI
 {
     public static class WebApiConfig
     {

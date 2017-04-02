@@ -6,9 +6,9 @@ using License.Core.Manager;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(License.WebAPIService.StartupAuth))]
+[assembly: OwinStartup(typeof(OnPremise.WebAPI.StartupAuth))]
 
-namespace License.WebAPIService
+namespace OnPremise.WebAPI
 {
     public class StartupAuth
     {

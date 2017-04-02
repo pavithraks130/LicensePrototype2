@@ -14,13 +14,8 @@ namespace LicenseServer.Logic
 {
     public class UserLogic : BaseLogic
     {
-        private LicUserManager UserManager;
-        private AppDbContext _context;
-
         public UserLogic()
         {
-            _context = AppDbContext.Create();
-            UserManager = LicUserManager.Create(_context);
         }
 
         public ICollection<User> GetUsers()
@@ -39,21 +34,21 @@ namespace LicenseServer.Logic
             return usersList;
         }
 
-        public string CreateUser(Registration u, string roleName = "BackendAdmin")
+        public User CreateUser(User u, string roleName = "BackendAdmin")
         {
-            User ur = new User();
-            ur.FirstName = u.FirstName;
-            ur.LastName = u.LastName;
-            ur.Email = u.Email;
-            ur.PhoneNumber = u.PhoneNumber;
-            ur.UserName = u.Email;
-            var teamName = u.OrganizationName;
+            //User ur = new User();
+            //ur.FirstName = u.FirstName;
+            //ur.LastName = u.LastName;
+            //ur.Email = u.Email;
+            //ur.PhoneNumber = u.PhoneNumber;
+            //ur.UserName = u.Email;
+            var teamName = u.Organization.Name;
             OrganizationLogic logic = new OrganizationLogic();
             DataModel.Organization t = logic.GetTeamByName(teamName);
             if (t == null)
-                t = logic.CreateTeam(new DataModel.Organization() { Name = u.OrganizationName });
-            ur.OrganizationId = t.Id;
-            LicenseServer.Core.Model.Appuser user = AutoMapper.Mapper.Map<User, LicenseServer.Core.Model.Appuser>(ur);
+                t = logic.CreateTeam(new DataModel.Organization() { Name = teamName });
+            u.OrganizationId = t.Id;
+            LicenseServer.Core.Model.Appuser user = AutoMapper.Mapper.Map<User, LicenseServer.Core.Model.Appuser>(u);
             IdentityResult result;
             try
             {
@@ -68,7 +63,7 @@ namespace LicenseServer.Logic
             {
                 throw ex;
             }
-            return user.Id;
+            return AutoMapper.Mapper.Map<User>(user);
         }
 
         public User GetUserById(string id)

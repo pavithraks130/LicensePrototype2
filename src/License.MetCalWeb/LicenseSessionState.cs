@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using License.MetCalWeb.Common;
 
 
 namespace License.MetCalWeb
@@ -29,6 +30,10 @@ namespace License.MetCalWeb
         public bool IsGlobalAdmin { get; set; }
 
         public bool IsTeamMember { get; set; }
+
+        public AccessToken OnPremiseToken { get; set; }
+
+        public AccessToken CentralizedToken { get; set; }
 
         public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
 

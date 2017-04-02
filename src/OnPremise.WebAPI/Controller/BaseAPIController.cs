@@ -9,7 +9,7 @@ using License.Core.Manager;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
-namespace License.WebAPIService.Controller
+namespace OnPremise.WebAPI.Controller
 {
     public class BaseApiController: ApiController
     {

@@ -12,19 +12,21 @@ namespace License.Logic.ServiceLogic
     {
         public UnitOfWork Work = new UnitOfWork();
 
-        private Core.DBContext.ApplicationDbContext _context = Core.DBContext.ApplicationDbContext.Create();
+        public AppUserManager UserManager { get; set; }
+        public AppRoleManager RoleManager { get; set; }
+        //private Core.DBContext.ApplicationDbContext _context = Core.DBContext.ApplicationDbContext.Create();
 
-        private AppUserManager _userManager = null;
-        protected AppUserManager UserManager
-        {
-            get { return _userManager ?? (_userManager = AppUserManager.Create(_context)); }
-        }
+        //private AppUserManager _userManager = null;
+        //protected AppUserManager UserManager
+        //{
+        //    get { return _userManager ?? (_userManager = AppUserManager.Create(_context)); }
+        //}
 
-        private AppRoleManager _roleManager = null;
-        protected AppRoleManager RoleManager
-        {
-            get { return _roleManager ?? (_roleManager = AppRoleManager.Create(_context)); }
-        }
+        //private AppRoleManager _roleManager = null;
+        //protected AppRoleManager RoleManager
+        //{
+        //    get { return _roleManager ?? (_roleManager = AppRoleManager.Create(_context)); }
+        //}
 
         public String ErrorMessage { get; set; }
     }

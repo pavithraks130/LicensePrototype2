@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace License.WebAPIService
+namespace OnPremise.WebAPI
 {
     public class ServiceResponse
     {

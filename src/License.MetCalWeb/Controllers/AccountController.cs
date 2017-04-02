@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -14,6 +11,7 @@ using License.MetCalWeb.Models;
 using License.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using System.Net.Http;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -64,8 +62,8 @@ namespace License.MetCalWeb.Controllers
                     return View();
                 }
 
-                string servUserId = serUserLogic.CreateUser(reg);
-                model.RegistratoinModel.ServerUserId = servUserId;
+                //string servUserId = serUserLogic.CreateUser(reg);
+                //model.RegistratoinModel.ServerUserId = servUserId;
                 var result = logic.CreateUser(model.RegistratoinModel);
                 if (result)
                 {
@@ -95,79 +93,99 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogIn(LoginViewModel model)
         {
+            string data = null;
             if (ModelState.IsValid)
             {
                 MetCalWeb.Models.UserModel userObj = new Models.UserModel();
 
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
                 // and on premises user and admin will be authenticated with on premise DB
-                User user = logic.AuthenticateUser(model.Email, model.Password);
-                if (user != null)
+                string serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+                HttpClient client = WebApiServiceLogic.CreateClient(serviceType);
+                var formContent = new FormUrlEncodedContent(new[] {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", model.Email),
+                    new KeyValuePair<string, string>("password", model.Password)
+                });
+                var response = await client.PostAsync("Authenticate", formContent);
+                if (response.IsSuccessStatusCode)
                 {
-                    bool status = false;
-                    if (!String.IsNullOrEmpty(user.ServerUserId))
-                        status = userLogic.ValidateUser(model.Email, model.Password);
-
-                    userObj.Email = user.Email;
-                    userObj.FirstName = user.FirstName;
-                    userObj.LastName = user.LastName;
-                    userObj.Name = user.Name;
-                    userObj.PhoneNumber = user.PhoneNumber;
-                    userObj.Roles = user.Roles;
-                    userObj.ServerUserId = user.ServerUserId;
-                    userObj.UserId = user.UserId;
-                    userObj.UserName = user.UserName;
-
-
+                    data = response.Content.ReadAsStringAsync().Result;
+                    var token = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
+                    client.Dispose();
+                    client = WebApiServiceLogic.CreateClient(serviceType);
                 }
-                else
-                {
 
-                    var status = userLogic.ValidateUser(model.Email, model.Password);
-                    if (status)
-                    {
-                        var obj = userLogic.GetUserByEmail(model.Email);
-                        userObj.Email = obj.Email;
-                        userObj.FirstName = obj.FirstName;
-                        userObj.LastName = obj.LastName;
-                        userObj.ManagerId = String.Empty;
-                        userObj.Name = obj.Name;
-                        userObj.PhoneNumber = obj.PhoneNumber;
-                        userObj.Roles = obj.Roles;
-                        userObj.ServerUserId = String.Empty;
-                        userObj.UserId = obj.UserId;
-                        userObj.UserName = obj.UserName;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "invalid Credentials");
-                        return View();
-                    }
-                }
-                LicenseSessionState.Instance.User = userObj;
-                LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
-                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                    LicenseSessionState.Instance.IsAdmin = true;
-                else
-                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
 
-                if(!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
-                LicenseSessionState.Instance.IsTeamMember =true ;
-                if (!LicenseSessionState.Instance.IsSuperAdmin)
-                {
-                    TeamMemberLogic tmLogic = new TeamMemberLogic();
-                    LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
-                }
-                SignInAsync(userObj, true);
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                     SynchPurchaseOrder();
-                LicenseSessionState.Instance.IsAuthenticated = true;
-                if (String.IsNullOrEmpty(userObj.FirstName))
-                    return RedirectToAction("Profile", "User");
-                if (LicenseSessionState.Instance.IsGlobalAdmin)
-                    return RedirectToAction("Index", "User");
-                return RedirectToAction("Home", "Tab");
+
+
+                //// User user = logic.AuthenticateUser(model.Email, model.Password);
+                // if (user != null)
+                // {
+                //     bool status = false;
+                //     if (!String.IsNullOrEmpty(user.ServerUserId))
+                //         status = userLogic.ValidateUser(model.Email, model.Password);
+
+                //     userObj.Email = user.Email;
+                //     userObj.FirstName = user.FirstName;
+                //     userObj.LastName = user.LastName;
+                //     userObj.Name = user.Name;
+                //     userObj.PhoneNumber = user.PhoneNumber;
+                //     userObj.Roles = user.Roles;
+                //     userObj.ServerUserId = user.ServerUserId;
+                //     userObj.UserId = user.UserId;
+                //     userObj.UserName = user.UserName;
+
+
+                // }
+                // else
+                // {
+
+                //     var status = userLogic.ValidateUser(model.Email, model.Password);
+                //     if (status)
+                //     {
+                //         var obj = userLogic.GetUserByEmail(model.Email);
+                //         userObj.Email = obj.Email;
+                //         userObj.FirstName = obj.FirstName;
+                //         userObj.LastName = obj.LastName;
+                //         userObj.ManagerId = String.Empty;
+                //         userObj.Name = obj.Name;
+                //         userObj.PhoneNumber = obj.PhoneNumber;
+                //         userObj.Roles = obj.Roles;
+                //         userObj.ServerUserId = String.Empty;
+                //         userObj.UserId = obj.UserId;
+                //         userObj.UserName = obj.UserName;
+                //     }
+                //     else
+                //     {
+                //         ModelState.AddModelError("", "invalid Credentials");
+                //         return View();
+                //     }
+                // }
+                // LicenseSessionState.Instance.User = userObj;
+                // LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
+                // LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                // if (LicenseSessionState.Instance.IsSuperAdmin)
+                //     LicenseSessionState.Instance.IsAdmin = true;
+                // else
+                //     LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+
+                // if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
+                //     LicenseSessionState.Instance.IsTeamMember = true;
+                // if (!LicenseSessionState.Instance.IsSuperAdmin)
+                // {
+                //     TeamMemberLogic tmLogic = new TeamMemberLogic();
+                //     LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                // }
+                // SignInAsync(userObj, true);
+                // if (LicenseSessionState.Instance.IsSuperAdmin)
+                //     SynchPurchaseOrder();
+                // LicenseSessionState.Instance.IsAuthenticated = true;
+                // if (String.IsNullOrEmpty(userObj.FirstName))
+                //     return RedirectToAction("Profile", "User");
+                // if (LicenseSessionState.Instance.IsGlobalAdmin)
+                //     return RedirectToAction("Index", "User");
+                // return RedirectToAction("Home", "Tab");
             }
             return View();
         }

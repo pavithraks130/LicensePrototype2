@@ -11,6 +11,11 @@ namespace LicenseServer.Logic
     public class BaseLogic
     {
         public UnitOfWork Work { get; set; }
+
+        public LicUserManager UserManager { get; set; }
+        public LicRoleManager RoleManager { get; set; }
+
+        public string ErrorMessage { get; set; }
         public BaseLogic()
         {
             Work = new UnitOfWork();
