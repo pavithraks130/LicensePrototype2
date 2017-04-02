@@ -5,7 +5,6 @@
     Layout = null;
 }
 @model HardwareModel
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <style>
         tr {
             border: none !important;
@@ -102,7 +101,9 @@
                                             </span>
                                         </button>
                                         <div class="dropdown-content">
-                                            @Html.ActionLink("Edit Asset", "EditHardware", "Hardware", new { id = @t.Id }, new { @id = "btnEdit" })
+                                            @*<input type="button" onclick="editModel(@t.Id)" class="btn btn-primary"*@
+                                            <a href="javascript:void(0);" class="anchorDetail" data-id="@t.Id">Details</a>  
+                                                   @*@Html.ActionLink("Edit Asset", "EditHardware", "Hardware", new { id = @t.Id }, new { @id = "btnEdit" })*@
                                             @Html.ActionLink("Remove Asset", "DeleteHardware", "Hardware", new { id = @t.Id }, null)
                                         </div>
                                     </div>

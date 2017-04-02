@@ -28,8 +28,8 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult EditHardware(int id)
         {
-            var obj = new Core.Model.TeamAsset();
-            return View(obj);
+            var obj = new Core.Model.TeamAsset { Name = "FC5222A", SerialNumber = "123", Description = "Calibrator" };
+            return PartialView(obj);
         }
 		public ActionResult AssetConfiguration(int id, string actionType)
 		{

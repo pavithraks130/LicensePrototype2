@@ -4,21 +4,35 @@
 }
 
 <h2>Assets Used by Team</h2>
+
 <script>
     $(function () {
-        $('.editModal').modal();
-
-        $('#btnEdit').click(function (e) {
-            e.preventDefault();
-            var url = $(this).attr("href");
+        $(".anchorDetail").click(function () {
+            var id =  $(this).attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
             $.ajax({
-                url: url,
+                type: "GET",
+                url: "/Hardware/EditHardware",
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": id },
+                datatype: "json",
                 success: function (data) {
-                    $('#modalWrapper').html(data);
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
                 }
             });
         });
-    });
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });  
+
 </script>
 <div class="form-group">
     <div class="col-md-8">
@@ -26,6 +40,11 @@
     </div>
 </div>
 
-<div id="modalWrapper">
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
 
-</div>
+</div>  
