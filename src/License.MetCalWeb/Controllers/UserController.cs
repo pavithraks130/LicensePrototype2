@@ -27,11 +27,11 @@ namespace License.MetCalWeb.Controllers
                 model.LastName = user.LastName;
                 model.Name = user.Name;
                 model.Email = user.Email;
-                model.OrganizationName = user.Organization.Name;
+                model.Organization.Name = user.Organization.Name;
                 model.IsActive = user.IsActive;
                 foreach (var obj in user.SubscriptionList)
                 {
-                    model.SubscriptionList.Add(new Subscription() { Name = obj.Name });
+                    model.SubscriptionList.Add(new SubscriptionType() { Name = obj.Name });
                 }
                 users.Add(model);
             }

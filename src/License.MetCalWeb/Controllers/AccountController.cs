@@ -93,6 +93,7 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogIn(LoginViewModel model)
         {
+            UserModel user = null;
             string data = null;
             if (ModelState.IsValid)
             {
@@ -112,80 +113,69 @@ namespace License.MetCalWeb.Controllers
                 {
                     data = response.Content.ReadAsStringAsync().Result;
                     var token = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
+                    ServiceType typeData = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
+                    switch (typeData)
+                    {
+                        case ServiceType.CentralizeWebApi: LicenseSessionState.Instance.CentralizedToken = token; break;
+                        case ServiceType.OnPremiseWebApi: LicenseSessionState.Instance.OnPremiseToken = token; break;
+                    }
                     client.Dispose();
                     client = WebApiServiceLogic.CreateClient(serviceType);
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
+                    response = await client.GetAsync("api/user/UserById/" + token.Id);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var userJson = response.Content.ReadAsStringAsync().Result;
+                        client.Dispose();
+                        user = Newtonsoft.Json.JsonConvert.DeserializeObject<UserModel>(userJson);
+                        if (user.Roles.Contains("SuperAdmin"))
+                        {
+                            client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                            response = await client.PostAsync("AUthenticate", formContent);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                data = response.Content.ReadAsStringAsync().Result;
+                                var token1 = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
+                                LicenseSessionState.Instance.CentralizedToken = token1;
+                            }
+                        }
+                    }
+                    LicenseSessionState.Instance.User = user;
+                    LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
+                    LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                    if (LicenseSessionState.Instance.IsSuperAdmin)
+                        LicenseSessionState.Instance.IsAdmin = true;
+                    else
+                        LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+
+                    if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
+                        LicenseSessionState.Instance.IsTeamMember = true;
+                    if (!LicenseSessionState.Instance.IsSuperAdmin)
+                    {
+                        //TeamMemberLogic tmLogic = new TeamMemberLogic();
+                        //LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                    }
+                    //SignInAsync(userObj, true);
+                    //if (LicenseSessionState.Instance.IsSuperAdmin)
+                    //    SynchPurchaseOrder();
+                    LicenseSessionState.Instance.IsAuthenticated = true;
+                    if (String.IsNullOrEmpty(userObj.FirstName))
+                        return RedirectToAction("Profile", "User");
+                    if (LicenseSessionState.Instance.IsGlobalAdmin)
+                        return RedirectToAction("Index", "User");
+                    return RedirectToAction("Home", "Tab");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invali Credentials");
                 }
 
 
 
 
-                //// User user = logic.AuthenticateUser(model.Email, model.Password);
-                // if (user != null)
-                // {
-                //     bool status = false;
-                //     if (!String.IsNullOrEmpty(user.ServerUserId))
-                //         status = userLogic.ValidateUser(model.Email, model.Password);
-
-                //     userObj.Email = user.Email;
-                //     userObj.FirstName = user.FirstName;
-                //     userObj.LastName = user.LastName;
-                //     userObj.Name = user.Name;
-                //     userObj.PhoneNumber = user.PhoneNumber;
-                //     userObj.Roles = user.Roles;
-                //     userObj.ServerUserId = user.ServerUserId;
-                //     userObj.UserId = user.UserId;
-                //     userObj.UserName = user.UserName;
-
-
-                // }
-                // else
-                // {
-
-                //     var status = userLogic.ValidateUser(model.Email, model.Password);
-                //     if (status)
-                //     {
-                //         var obj = userLogic.GetUserByEmail(model.Email);
-                //         userObj.Email = obj.Email;
-                //         userObj.FirstName = obj.FirstName;
-                //         userObj.LastName = obj.LastName;
-                //         userObj.ManagerId = String.Empty;
-                //         userObj.Name = obj.Name;
-                //         userObj.PhoneNumber = obj.PhoneNumber;
-                //         userObj.Roles = obj.Roles;
-                //         userObj.ServerUserId = String.Empty;
-                //         userObj.UserId = obj.UserId;
-                //         userObj.UserName = obj.UserName;
-                //     }
-                //     else
-                //     {
-                //         ModelState.AddModelError("", "invalid Credentials");
-                //         return View();
-                //     }
-                // }
+               
                 // LicenseSessionState.Instance.User = userObj;
-                // LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
-                // LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
-                // if (LicenseSessionState.Instance.IsSuperAdmin)
-                //     LicenseSessionState.Instance.IsAdmin = true;
-                // else
-                //     LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-
-                // if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
-                //     LicenseSessionState.Instance.IsTeamMember = true;
-                // if (!LicenseSessionState.Instance.IsSuperAdmin)
-                // {
-                //     TeamMemberLogic tmLogic = new TeamMemberLogic();
-                //     LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
-                // }
-                // SignInAsync(userObj, true);
-                // if (LicenseSessionState.Instance.IsSuperAdmin)
-                //     SynchPurchaseOrder();
-                // LicenseSessionState.Instance.IsAuthenticated = true;
-                // if (String.IsNullOrEmpty(userObj.FirstName))
-                //     return RedirectToAction("Profile", "User");
-                // if (LicenseSessionState.Instance.IsGlobalAdmin)
-                //     return RedirectToAction("Index", "User");
-                // return RedirectToAction("Home", "Tab");
+                //
             }
             return View();
         }
@@ -218,12 +208,12 @@ namespace License.MetCalWeb.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             System.Security.Claims.ClaimsIdentity identity = null;
-            if (LicenseSessionState.Instance.IsGlobalAdmin)
-                identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
-            else
-            {
-                identity = logic.CreateClaimsIdentity(user.UserId);
-            }
+            //if (LicenseSessionState.Instance.IsGlobalAdmin)
+            //    identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
+            //else
+            //{
+            //    identity = logic.CreateClaimsIdentity(user.UserId);
+            //}
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 

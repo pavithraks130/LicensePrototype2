@@ -9,6 +9,14 @@ namespace License.MetCalWeb.Models
     /// This entire region is used to deserialize the Json data which contains the Subscription
     /// with Product details to Object which can be used in the application.
     /// </summary>
+    /// 
+
+   public class SubscriptionType
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+        
     #region XMLfileDataStruucture 
     public class SubscriptionProductModel
     {

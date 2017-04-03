@@ -70,6 +70,8 @@ namespace LicenseServer.Logic
         {
             var u = UserManager.FindById(id);
             var user = AutoMapper.Mapper.Map<LicenseServer.Core.Model.Appuser, User>(u);
+            IList<string> roles = UserManager.GetRoles(user.UserId);
+            user.Roles = roles;
             return user;
         }
 
@@ -148,11 +150,12 @@ namespace LicenseServer.Logic
             return user != null;
         }
 
-        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId)
+        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId,string authType)
         {
             var obj = UserManager.FindById(userId);
             //Appuser user = AutoMapper.Mapper.Map<Appuser>(obj);
-            return UserManager.CreateIdentity(obj, DefaultAuthenticationTypes.ApplicationCookie);
+            return UserManager.CreateIdentity(obj, authType);
+            
         }
 
         public void UpdateLogInStatus(string userid, bool status)

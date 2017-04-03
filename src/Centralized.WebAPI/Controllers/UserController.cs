@@ -7,16 +7,43 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Net;
 using LicenseServer.DataModel;
+using LicenseServer.Core.Manager;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Centralized.WebAPI.Controllers
 {
     [RoutePrefix("api/user")]
+    [Authorize]
     public class UserController : BaseController
     {
         UserLogic logic = null;
         public UserController()
         {
             logic = new UserLogic();
+        }
+
+        private LicUserManager _userManager = null;
+        public LicUserManager UserManager
+        {
+            get
+            {
+                if (_userManager == null)
+                    _userManager = HttpContext.Current.GetOwinContext().Get<LicUserManager>();
+                return _userManager;
+            }
+        }
+
+        private LicRoleManager _roleManager = null;
+        public LicRoleManager RoleManager
+        {
+            get
+            {
+                if (_roleManager == null)
+                    _roleManager = Request.GetOwinContext().GetUserManager<LicRoleManager>();
+                return _roleManager;
+            }
         }
 
         public void Initialize()
@@ -29,6 +56,7 @@ namespace Centralized.WebAPI.Controllers
 
         [HttpPost]
         [Route("Create")]
+        [AllowAnonymous]
         public HttpResponseMessage Create(User user)
         {
             Initialize();
@@ -49,7 +77,7 @@ namespace Centralized.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("User/{id}")]
+        [Route("UserById/{id}")]
         public IHttpActionResult GetUserById(string id)
         {
             Initialize();

@@ -17,13 +17,24 @@ namespace Centralized.WebAPI.Controllers
         private LicUserManager _userManager = null;
         public LicUserManager UserManager
         {
-            get { return _userManager ?? (_userManager = Request.GetOwinContext().GetUserManager<LicUserManager>()); }
+            get
+            {
+                if (_userManager == null)
+                    _userManager = HttpContext.Current.GetOwinContext().Get<LicUserManager>();
+                return _userManager;
+            }
         }
 
         private LicRoleManager _roleManager = null;
         public LicRoleManager RoleManager
         {
-            get { return _roleManager ?? (_roleManager = Request.GetOwinContext().GetUserManager<LicRoleManager>()); }
+            get
+            {
+                if (_roleManager == null)
+                    _roleManager = Request.GetOwinContext().GetUserManager<LicRoleManager>();
+                return _roleManager;
+            }
         }
+
     }
 }

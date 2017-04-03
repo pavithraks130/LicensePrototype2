@@ -18,8 +18,7 @@ namespace Centralized.WebAPI
         public void Configuration(IAppBuilder app)
         {
             HttpConfiguration config = new HttpConfiguration();
-            WebApiConfig.Register(config);
-            app.UseWebApi(config);
+           
             app.CreatePerOwinContext(AppDbContext.Create);
             app.CreatePerOwinContext<LicUserManager>(LicUserManager.Create);
             app.CreatePerOwinContext<LicRoleManager>(LicRoleManager.Create);
@@ -27,6 +26,9 @@ namespace Centralized.WebAPI
             LicenseServer.Logic.Initializer.AutoMapperInitializer();
 
             ConfigureOAuth(app);
+            WebApiConfig.Register(config);
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            app.UseWebApi(config);
 
         }
 
@@ -37,8 +39,7 @@ namespace Centralized.WebAPI
                 TokenEndpointPath = new PathString("/Authenticate"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
                 AllowInsecureHttp = true,
-                Provider = new CustomOAuthPerovider()
-               
+                Provider = new CustomOAuthPerovider()               
             };
             app.UseOAuthBearerTokens(opt);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());

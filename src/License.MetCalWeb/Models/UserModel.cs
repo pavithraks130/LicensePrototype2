@@ -14,23 +14,25 @@ namespace License.MetCalWeb.Models
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }
-        public string ManagerId { get; set; }
         public IList<string> Roles { get; set; }
-        public string OrganizationName { get; set; }
-        public List<Subscription> SubscriptionList { get; set; }
+        public int OrganizationId { get; set; }
+        public Organization Organization { get; set; }
         public string ServerUserId { get; set; }
-
         public bool IsActive { get; set; }
-
+        
+        public List<SubscriptionType> SubscriptionList { get; set; }
         public UserModel()
         {
-            SubscriptionList = new List<Subscription>();
+            Organization = new Organization();
+            SubscriptionList = new List<SubscriptionType>();
         }
     }
 
-    public class Subscription
+    public class Organization
     {
-        public string Name { get; set; }    
-        public string Description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+
     }
 }
+
