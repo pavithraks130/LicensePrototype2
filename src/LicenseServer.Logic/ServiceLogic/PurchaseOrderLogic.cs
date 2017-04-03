@@ -42,6 +42,7 @@ namespace LicenseServer.Logic
                 var tempObj = Work.PurchaseOrderRepository.GetById(order.Id);
                 tempObj.IsApproved = order.IsApproved;
                 tempObj.ApprovedBy = order.ApprovedBy;
+                tempObj.Comment = order.Comment;
                 tempObj = Work.PurchaseOrderRepository.Update(tempObj);
                 i++;
             }

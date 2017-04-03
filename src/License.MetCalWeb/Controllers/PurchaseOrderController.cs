@@ -39,23 +39,16 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(string comment, string button, params string[] selectedPurchaseOrder)
+        public async Task<ActionResult> Index(string comment, string button, params string[] selectedPurchaseOrder)
         {
-            List<int> poIdList = new List<int>();
+            List<PurchaseOrder> orderList = new List<PurchaseOrder>();
             foreach (string str in selectedPurchaseOrder)
             {
-                poIdList.Add(Convert.ToInt32(str));
+                PurchaseOrder po = new PurchaseOrder();
+                po.Id = Convert.ToInt32(str);
+                orderList.Add(po);
             }
-            List<PurchaseOrder> orderList = new List<PurchaseOrder>();
-            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var result = await client.GetAsync("api/purchaseorder/All");
-            if (result.IsSuccessStatusCode)
-            {
-                var data = result.Content.ReadAsStringAsync().Result;
-                orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
-            }
-            var orderList = orderLogic.GetPurchaseOrderByIds(poIdList);
+
             bool isApproved = false;
             switch (button)
             {
@@ -68,19 +61,43 @@ namespace License.MetCalWeb.Controllers
                 obj.Comment = comment;
                 obj.ApprovedBy = LicenseSessionState.Instance.User.UserName;
             }
-            orderLogic.UpdatePurchaseOrder(orderList);
-            return RedirectToAction("Index", "User");
+            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var result = await client.PutAsJsonAsync("/api/purchaseorder/update", orderList);
+            if (result.IsSuccessStatusCode)
+                return RedirectToAction("Index", "User");
+            else
+            {
+                ModelState.AddModelError("", result.ReasonPhrase);
+            }
+            return View();
         }
 
-        public ActionResult OrderStatus()
+        public async Task<ActionResult> OrderStatus()
         {
-            var poList = orderLogic.GetPurchaseOrderByUser(LicenseSessionState.Instance.User.ServerUserId);
+            List<PurchaseOrder> poList = new List<PurchaseOrder>();
+            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.GetAsync("api/purchaseorder/OrderByUser/" + LicenseSessionState.Instance.User.ServerUserId);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                poList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(jsonData);
+            }
             return View(poList);
         }
 
-        public ActionResult OrderDetail(int id)
+        public async Task<ActionResult> OrderDetail(int id)
         {
-            var order = orderLogic.GetProductById(id);
+            PurchaseOrder order = new PurchaseOrder();
+            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.GetAsync("api/purchaseorder/OrderById/" + id.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                order = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+            }
             return View(order);
         }
     }
