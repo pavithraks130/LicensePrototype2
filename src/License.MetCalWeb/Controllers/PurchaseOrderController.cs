@@ -3,21 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using LicenseServer.Logic;
+using License.MetCalWeb.Common;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using License.MetCalWeb.Models;
+
 namespace License.MetCalWeb.Controllers
 {
     public class PurchaseOrderController : Controller
     {
-        PurchaseOrderLogic orderLogic = null;
+
+        ServiceType webApitype;
+
         public PurchaseOrderController()
         {
-            orderLogic = new PurchaseOrderLogic();
+            var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+            webApitype = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
         }
+
         // GET: PurchaseOrder
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var list = orderLogic.GetAllPendingPurchaseOrder();
-            return View(list);
+            List<PurchaseOrder> orderList = new List<PurchaseOrder>();
+            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var result = await client.GetAsync("api/purchaseorder/All");
+            if (result.IsSuccessStatusCode)
+            {
+                var data = result.Content.ReadAsStringAsync().Result;
+                orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
+            }
+            return View(orderList);
         }
 
         [HttpPost]
@@ -29,6 +46,15 @@ namespace License.MetCalWeb.Controllers
             {
                 poIdList.Add(Convert.ToInt32(str));
             }
+            List<PurchaseOrder> orderList = new List<PurchaseOrder>();
+            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var result = await client.GetAsync("api/purchaseorder/All");
+            if (result.IsSuccessStatusCode)
+            {
+                var data = result.Content.ReadAsStringAsync().Result;
+                orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
+            }
             var orderList = orderLogic.GetPurchaseOrderByIds(poIdList);
             bool isApproved = false;
             switch (button)
@@ -39,7 +65,7 @@ namespace License.MetCalWeb.Controllers
             foreach (var obj in orderList)
             {
                 obj.IsApproved = isApproved;
-                obj.Comment = comment;                
+                obj.Comment = comment;
                 obj.ApprovedBy = LicenseSessionState.Instance.User.UserName;
             }
             orderLogic.UpdatePurchaseOrder(orderList);

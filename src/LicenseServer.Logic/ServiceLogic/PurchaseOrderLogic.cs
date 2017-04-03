@@ -21,9 +21,9 @@ namespace LicenseServer.Logic
             return null;
         }
 
-        public PurchaseOrder UpdatePurchaseOrder(PurchaseOrder order)
+        public PurchaseOrder UpdatePurchaseOrder(int id,PurchaseOrder order)
         {
-            var tempObj = Work.PurchaseOrderRepository.GetById(order.Id);
+            var tempObj = Work.PurchaseOrderRepository.GetById(id);
             tempObj.IsApproved = order.IsApproved;
             tempObj.ApprovedBy = order.ApprovedBy;
             tempObj.IsSynched = order.IsSynched;
@@ -120,7 +120,7 @@ namespace LicenseServer.Logic
                 return "PO-SUB-00001";
         }
 
-        public PurchaseOrder GetProductById(int id)
+        public PurchaseOrder GetPurchaseOrderById(int id)
         {
             var order = Work.PurchaseOrderRepository.GetById(id);
             return AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(order);
