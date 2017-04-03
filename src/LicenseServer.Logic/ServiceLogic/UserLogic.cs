@@ -130,11 +130,12 @@ namespace LicenseServer.Logic
             {
                 user.IsActive = true;
                 UserManager.Update(user);
+                User userObj = AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
+                IList<string> roles = UserManager.GetRoles(user.Id);
+                userObj.Roles = roles;
+                return userObj;
             }
-            User userObj = AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
-            IList<string> roles = UserManager.GetRoles(user.Id);
-            userObj.Roles = roles;
-            return userObj;
+            return null;
         }
 
 
