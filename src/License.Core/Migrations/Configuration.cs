@@ -14,7 +14,7 @@ namespace License.Core.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(License.Core.DBContext.ApplicationDbContext context)
