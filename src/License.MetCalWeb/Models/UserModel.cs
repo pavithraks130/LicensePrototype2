@@ -34,5 +34,12 @@ namespace License.MetCalWeb.Models
         public string Name { get; set; }
 
     }
+
+    public class UserToken
+    {
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string Token { get; set; }
+    }
 }
 

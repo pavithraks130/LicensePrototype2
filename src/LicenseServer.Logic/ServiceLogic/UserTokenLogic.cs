@@ -24,7 +24,18 @@ namespace LicenseServer.Logic
 
         public UserToken CreateUserToken(UserToken t)
         {
+            var token = IsTokenGenerated(t.Email);
+            if (token != null)
+                return token;
             var obj = Mapper.Map<Core.Model.UserToken>(t);
+
+            LicenseKey.GenerateKey keyGen = new LicenseKey.GenerateKey();
+            keyGen.LicenseTemplate = "xxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx";
+            keyGen.UseBase10 = false;
+            keyGen.UseBytes = false;
+            keyGen.CreateKey();
+            obj.Token = keyGen.GetLicenseKey();            
+
             var tokenObj = Work.UserTokenRepository.Create(obj);
             Work.UserTokenRepository.Save();
             if (tokenObj != null)

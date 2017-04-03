@@ -136,12 +136,13 @@ namespace License.Logic.ServiceLogic
             {
                 user.IsActive = true;
                 UserManager.Update(user);
+                User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
+                if (userObj == null) return null;
+                IList<string> roles = UserManager.GetRoles(user.Id);
+                userObj.Roles = roles;
+                return userObj;
             }
-            User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
-            if (userObj == null) return null;
-            IList<string> roles = UserManager.GetRoles(user.Id);
-            userObj.Roles = roles;
-            return userObj;
+            return null;
         }
 
         public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId)

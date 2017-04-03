@@ -28,6 +28,8 @@ namespace LicenseServer.Logic
         public bool CreateCartItem(CartItem item)
         {
             Core.Model.CartItem cartItem = AutoMapper.Mapper.Map<CartItem, Core.Model.CartItem>(item);
+            var obj = Work.SubscriptionRepository.GetById(item.SubscriptionTypeId);
+            cartItem.Price = obj.Price;
             cartItem = Work.CartItemLicenseRepository.Create(cartItem);
             Work.CartItemLicenseRepository.Save();
             return cartItem.Id > 0;
@@ -35,7 +37,7 @@ namespace LicenseServer.Logic
 
         public bool UpdateCartItem(CartItem item)
         {
-            Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById( item.Id);
+            Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById(item.Id);
             cartItem.IsPurchased = item.IsPurchased;
             cartItem = Work.CartItemLicenseRepository.Update(cartItem);
             Work.CartItemLicenseRepository.Save();
@@ -50,7 +52,7 @@ namespace LicenseServer.Logic
 
         public bool DeleteCartItem(int id)
         {
-            var obj = Work.CartItemLicenseRepository.Delete(id);         
+            var obj = Work.CartItemLicenseRepository.Delete(id);
             Work.CartItemLicenseRepository.Save();
             return obj;
         }

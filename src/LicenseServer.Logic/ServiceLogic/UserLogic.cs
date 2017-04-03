@@ -127,11 +127,13 @@ namespace LicenseServer.Logic
             {
                 user.IsActive = true;
                 UserManager.Update(user);
+                User userObj = AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
+                IList<string> roles = UserManager.GetRoles(user.Id);
+                userObj.Roles = roles;
+                return userObj;
             }
-            User userObj = AutoMapper.Mapper.Map<Core.Model.Appuser, User>(user);
-            IList<string> roles = UserManager.GetRoles(user.Id);
-            userObj.Roles = roles;
-            return userObj;
+            return null;
+
         }
 
 
@@ -150,12 +152,12 @@ namespace LicenseServer.Logic
             return user != null;
         }
 
-        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId,string authType)
+        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId, string authType)
         {
             var obj = UserManager.FindById(userId);
             //Appuser user = AutoMapper.Mapper.Map<Appuser>(obj);
             return UserManager.CreateIdentity(obj, authType);
-            
+
         }
 
         public void UpdateLogInStatus(string userid, bool status)
