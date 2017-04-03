@@ -104,6 +104,14 @@
     <Compile Include="Migrations\201703280641469_AddedIsActiveToUser.Designer.cs">
       <DependentUpon>201703280641469_AddedIsActiveToUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703310750075_AddedPurchaseOrder.cs" />
+    <Compile Include="Migrations\201703310750075_AddedPurchaseOrder.Designer.cs">
+      <DependentUpon>201703310750075_AddedPurchaseOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704011444382_AddedCommentColumnToPOTable.cs" />
+    <Compile Include="Migrations\201704011444382_AddedCommentColumnToPOTable.Designer.cs">
+      <DependentUpon>201704011444382_AddedCommentColumnToPOTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -111,6 +119,7 @@
     <Compile Include="Model\Feature.cs" />
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\Product.cs" />
+    <Compile Include="Model\PurchaseOrder.cs" />
     <Compile Include="Model\SubscriptionDetail.cs" />
     <Compile Include="Model\SubscriptionType.cs" />
     <Compile Include="Model\UserSubscription.cs" />
@@ -130,6 +139,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703280641469_AddedIsActiveToUser.resx">
       <DependentUpon>201703280641469_AddedIsActiveToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703310750075_AddedPurchaseOrder.resx">
+      <DependentUpon>201703310750075_AddedPurchaseOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704011444382_AddedCommentColumnToPOTable.resx">
+      <DependentUpon>201704011444382_AddedCommentColumnToPOTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

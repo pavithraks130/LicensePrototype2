@@ -7,7 +7,7 @@ using License.Logic.ServiceLogic;
 
 namespace License.MetCalWeb.Common
 {
-    public class SubscriLogic
+    public class OnPremiseSubscriptionLogic
     {
         public static void GetUserLicenseForUser()
         {
@@ -124,7 +124,7 @@ namespace License.MetCalWeb.Common
             }
             return licenseMapModelList;
         }
-
+        
         public static List<LicenseMapModel> GetSubForLicenseMap(string userId, string adminUserId)
         {
             var licenseMapModelList = new List<LicenseMapModel>();

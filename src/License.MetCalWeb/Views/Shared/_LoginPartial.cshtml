@@ -9,6 +9,9 @@
             @if (LicenseSessionState.Instance.IsTeamMember)
             {
                 <li>@Html.ActionLink("License Request Status", "RequestStatus", "License")</li>
+            } else if (LicenseSessionState.Instance.IsSuperAdmin)
+            {
+                <li>@Html.ActionLink("Order Status","OrderStatus","PurchaseOrder")</li>
             }
             <li>@Html.ActionLink("Log Out", "LogOut", "Account")</li>
         </ul>

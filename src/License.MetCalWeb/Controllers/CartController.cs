@@ -28,7 +28,6 @@ namespace License.MetCalWeb.Controllers
             ViewData["TotalAmount"] = logic.TotalAmount;
             return View(obj);
         }
-              
 
         public ActionResult RemoveItem(int id)
         {
@@ -36,12 +35,10 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("CartItem", "Cart");
         }
 
-
         public ActionResult PaymentGateway()
         {
             return View();
         }
-
 
         [HttpPost]
         public ActionResult DoPayment()
@@ -53,7 +50,7 @@ namespace License.MetCalWeb.Controllers
         public void Purchase()
         {
             var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
-            UserSubscriptionLogic subscriptionlogic = new UserSubscriptionLogic();
+
             List<UserSubscription> subsList = new List<UserSubscription>();
             foreach (var item in obj)
             {
@@ -65,9 +62,7 @@ namespace License.MetCalWeb.Controllers
                 usersubs.Quantity = item.Quantity;
                 subsList.Add(usersubs);
             }
-
-            UserSubscriptionList userSubscriptionList = subscriptionlogic.CreateUserSubscription(subsList, LicenseSessionState.Instance.User.ServerUserId);
-            UpdateSubscriptionOnpremise(userSubscriptionList);
+            Common.CentralizedSubscriptionLogic.UpdateUserSubscription(subsList);
             foreach (var item in obj)
             {
                 item.IsPurchased = true;
@@ -75,74 +70,34 @@ namespace License.MetCalWeb.Controllers
             }
         }
 
-        private void UpdateSubscriptionOnpremise(UserSubscriptionList subs)
+        public ActionResult OfflinePayment()
         {
-            string userId = string.Empty;
-            if (LicenseSessionState.Instance.User.ServerUserId != subs.UserId)
+            PurchaseOrder poOrder = new PurchaseOrder();
+            var cartItemList = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
+            if (cartItemList.Count > 0)
             {
-                License.Logic.ServiceLogic.UserLogic userLogic = new License.Logic.ServiceLogic.UserLogic();
-            }
-            else
-                userId = LicenseSessionState.Instance.User.UserId;
-
-            foreach (var subDtls in subs.SubscriptionList)
-            {
-                //Code to save the Subscription Data with Product in to file.
-                //Begin
-                List<License.Model.Product> productList = new List<License.Model.Product>();
-                foreach (var pro in subDtls.Products)
+                PurchaseOrderLogic pologic = new PurchaseOrderLogic();
+                POItemLogic itemLogic = new POItemLogic();
+                poOrder.UserId = LicenseSessionState.Instance.User.ServerUserId;
+                poOrder.CreatedDate = DateTime.Now.Date;
+                poOrder = pologic.CreatePurchaseOrder(poOrder);
+                List<PurchaseOrderItem> itemList = new List<PurchaseOrderItem>();
+                foreach (CartItem ci in cartItemList)
                 {
-                    License.Model.Product prod = new License.Model.Product();
-                    prod.Id = pro.Product.Id;
-                    prod.Name = pro.Product.Name;
-                    prod.Description = pro.Product.Description;
-                    prod.ProductCode = pro.Product.ProductCode;
-                    prod.QtyPerSubscription = pro.QtyPerSubscription;
-                    prod.Features = new List<Model.Feature>();
-                    foreach(var f in pro.Product.AssociatedFeatures)
-                    {
-                        var feture = new License.Model.Feature();
-                        feture.Id = f.Id;
-                        feture.Name = f.Name;
-                        feture.Description = f.Description;
-                        feture.Version = f.Version;
-                        prod.Features.Add(feture);
-                    }
-                    productList.Add(prod);
+                    var item = new PurchaseOrderItem();
+                    item.Quantity = ci.Quantity;
+                    item.SubscriptionId = ci.SubscriptionTypeId;
+                    itemList.Add(item);
                 }
-
-                License.Model.Subscription subsModel = new Model.Subscription();
-                subsModel.Id = subDtls.SubscriptionType.Id;
-                subsModel.SubscriptionName = subDtls.SubscriptionType.Name;
-                subsModel.Product = productList;
-
-                Logic.ServiceLogic.ProductSubscriptionLogic proSubLogic = new Logic.ServiceLogic.ProductSubscriptionLogic();
-                proSubLogic.SaveToFile(subsModel);
-                //End
-
-                //Code to save the user Subscription details to Database.
-                License.Model.UserSubscription userSubscription = new Model.UserSubscription();
-                userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
-                userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
-                userSubscription.UserId = userId;
-                userSubscription.Quantity = subDtls.OrderdQuantity;
-
-                License.Logic.ServiceLogic.UserSubscriptionLogic userSubscriptionLogic = new Logic.ServiceLogic.UserSubscriptionLogic();
-                int userSubscriptionId = userSubscriptionLogic.CreateSubscription(userSubscription);
-
-
-                List<License.Model.LicenseData> licenseDataList = new List<Model.LicenseData>();
-                foreach (var lic in subDtls.LicenseKeyProductMapping)
+                itemLogic.CreateItem(itemList, poOrder.Id);
+                foreach (CartItem ci in cartItemList)
                 {
-                    License.Model.LicenseData licenseData = new Model.LicenseData();
-                    licenseData.LicenseKey = lic.LicenseKey;
-                    licenseData.ProductId = lic.ProductId;
-                    licenseData.UserSubscriptionId = userSubscriptionId;
-                    licenseDataList.Add(licenseData);
+                    ci.IsPurchased = true;
+                    logic.UpdateCartItem(ci);
                 }
-                License.Logic.ServiceLogic.LicenseLogic licenseLogic = new Logic.ServiceLogic.LicenseLogic();
-                licenseLogic.CreateLicenseData(licenseDataList);
             }
+            return View(poOrder);
+
         }
 
     }

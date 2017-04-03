@@ -32,6 +32,7 @@ namespace License.Logic.ServiceLogic
             obj.IsApproved = req.IsApproved;
             obj.IsRejected = req.IsRejected;
             obj.ApprovedBy = req.ApprovedBy;
+            obj.Comment = req.Comment;
             obj = Work.UserLicenseRequestRepo.Update(obj);
             Work.UserLicenseRequestRepo.Save();
             return obj != null;
@@ -112,7 +113,7 @@ namespace License.Logic.ServiceLogic
                 {
                     var tempObj = AutoMapper.Mapper.Map<License.Model.UserLicenseRequest>(obj);
                     var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
-                    tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };                    
+                    tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
                     tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
                     userLicReq.Add(tempObj);
                 }
@@ -122,6 +123,11 @@ namespace License.Logic.ServiceLogic
         }
 
 
+        public UserLicenseRequest GetById(int id)
+        {
+            var data = Work.UserLicenseRequestRepo.GetById(id);
+            return AutoMapper.Mapper.Map<Model.UserLicenseRequest>(data);
+        }
 
     }
 }

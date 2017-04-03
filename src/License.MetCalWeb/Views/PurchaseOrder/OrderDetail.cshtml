@@ -1,0 +1,106 @@
+﻿@model LicenseServer.DataModel.PurchaseOrder
+@{
+    ViewBag.Title = "OrderDetail";
+}
+
+<h3>OrderDetail</h3>
+<br />
+<br />
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PurchaseOrderNo, new { @class = "col-md-4" })
+          <div class="col-md-4">
+              <label>@Model.PurchaseOrderNo</label>
+          </div>
+        </div>
+
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <div class="col-md-4">
+                <label>Status</label>
+            </div>
+            <div class="col-md-4">
+                @if (String.IsNullOrEmpty(Model.ApprovedBy))
+                {
+                    <label>Pending</label>
+                }
+                else if (Model.IsApproved)
+                {
+                    <label>Approved</label>
+                }
+                else
+                {
+                    <label>Rejected</label>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <div class="col-md-4">
+                <label>Approved By</label>
+            </div>
+            <div class="col-md-4 float-left">
+                <label>@Model.ApprovedBy</label>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th class="col-md-4">
+                    Subscription Type
+                </th>
+                <th class="col-md-4">
+                    Quantity
+                </th>
+                <th class="col-md-4">
+                    Amount
+                </th>
+            </tr>
+            @{int total = 0;}
+            @foreach (var m in Model.OrderItems)
+            {
+                <tr>
+                    <td class="col-md-4">
+                        @m.Subscription.Name
+                    </td>
+                    <td class="col-md-4">
+                        @m.Quantity
+                    </td>
+                    <td class="col-md-4">
+                        @(m.Quantity * m.Subscription.Price)
+                        @{total += Convert.ToInt32(m.Quantity * m.Subscription.Price);}
+                    </td>
+                </tr>
+                            }
+            <tr>
+                <td class="col-md-4"></td>
+                <td class="col-md-4"></td>
+                <td class="col-md-4">
+                    <div class="form-group">
+                        <div class="col-md-2" style="font-weight:bold;">
+                            Total
+                        </div>
+                        <div class="col-md-2" style="font-weight:bold;">
+                            @total
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

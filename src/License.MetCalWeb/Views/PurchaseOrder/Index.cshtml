@@ -1,0 +1,96 @@
+﻿@model List<LicenseServer.DataModel.PurchaseOrder>
+@{
+    ViewBag.Title = "Purchase Order Request For Approval";
+}
+
+<h3>Purchase Order Approval</h3>
+
+@if (Model.Count == 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <br /><br />
+            <label>No Order exist for Approval</label>
+        </div>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("Index", "PurchaseOrder", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td class="col-md-1">
+                                <input type="checkbox" name="selectedPurchaseOrder" value="@Model[i].Id" class="checkbox" />
+                            </td>
+                            <td class="col-md-3">
+                                @Model[i].User.Name
+                            </td>
+                            <td class="col-md-3">
+                                @Model[i].PurchaseOrderNo
+                            </td>
+                            <td>
+                                <div class="row">
+                                    @foreach (var item in Model[i].OrderItems)
+                                    {
+                                        <label>@item.Subscription.Name</label>
+                                        <br />
+                                    }
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label> Comment/Feedback </label>
+                    @Html.TextArea("comment", new { @class = "col-md-4" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
+                <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label id="lblError" style="display:none">No purchase Order selected for the approval/Reject.</label>
+            </div>
+        </div>
+    }
+}
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            return isPostEnabled;
+        });
+    });
+</script>

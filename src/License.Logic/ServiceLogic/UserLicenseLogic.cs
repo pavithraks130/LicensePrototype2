@@ -16,10 +16,48 @@ namespace License.Logic.ServiceLogic
             return obj.Id > 0;
         }
 
-        public bool CreateUserLicense(List<UserLicense> licList, List<string> userIdList)
+
+        /// <summary>
+        /// creating the UserLicense this can be used to update the single user.
+        /// </summary>
+        /// <param name="licList"></param>
+        /// <returns></returns>
+        public bool CreataeUserLicense(List<UserLicense> licList)
         {
             LicenseLogic licLogic = new LicenseLogic();
             int i = 0;
+            foreach (var lic in licList)
+            {
+                var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == lic.UserId).ToList();
+                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
+                var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId);
+                if (obj == null)
+                {
+                    i++;
+                    UserLicense ul = new UserLicense();
+                    ul.UserId = lic.UserId;
+                    ul.LicenseId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
+                    CreateUserLicense(ul);
+                }
+                userLicList.Remove(obj);
+            }
+            if (i > 0)
+                Work.UserLicenseRepository.Save();
+            return true;
+        }
+
+        /// <summary>
+        /// function to create the License  for multiple User . This function will be used for bulk license mapping to 
+        /// multiple User.
+        /// </summary>
+        /// <param name="licList"></param>
+        /// <param name="userIdList"></param>
+        /// <returns></returns>
+        public bool CreateMultiUserLicense(List<UserLicense> licList, List<string> userIdList)
+        {
+            LicenseLogic licLogic = new LicenseLogic();
+            int i = 0;
+
             foreach (var userId in userIdList)
             {
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == userId).ToList();
@@ -37,14 +75,6 @@ namespace License.Logic.ServiceLogic
                     }
                     userLicList.Remove(obj);
                 }
-                //if(userLicList.Count > 0)
-                //{
-                //    foreach (var ul in userLicList)
-                //    {
-                //        i++;
-                //        Work.UserLicenseRepository.Delete(ul);
-                //    }
-                //}
 
                 if (i > 0)
                     Work.UserLicenseRepository.Save();
@@ -76,23 +106,7 @@ namespace License.Logic.ServiceLogic
                 Work.UserLicenseRepository.Save();
             return true;
         }
-
-        //public bool RemoveById(int id)
-        //{
-        //    return Work.UserLicenseRepository.Delete(id);
-        //}
-
-        //public int GetUserLicenseCount(int licenseId)
-        //{
-        //    return Work.UserLicenseRepository.GetData(l => l.LicenseId == licenseId).Count();
-        //}
-
-        //public UserLicense GetUserLicenseById(int id)
-        //{
-        //    var obj = Work.UserLicenseRepository.GetById(id);
-        //    return AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(obj);
-        //}
-
+               
         public int GetUserLicenseCount(int userSubscriptionId, int productId)
         {
             var licenseIdList = Work.LicenseDataRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId && l.ProductId == productId).Select(l => l.Id).ToList();

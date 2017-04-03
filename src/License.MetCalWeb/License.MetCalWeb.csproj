@@ -151,7 +151,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -281,9 +280,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\CentralizedSubscriptionLogic.cs" />
     <Compile Include="Common\EmailService.cs" />
     <Compile Include="Common\EncryptDecrypt.cs" />
-    <Compile Include="Common\SubscriLogic.cs" />
+    <Compile Include="Common\OnPremiseSubscriptionLogic.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -292,7 +292,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\TabController.cs" />
+    <Compile Include="Controllers\TeamAssetLogic.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTokenController.cs" />
@@ -358,7 +360,12 @@
     <Content Include="Views\Hardware\TeamAssets.cshtml" />
     <Content Include="Views\License\LicenseRequest.cshtml" />
     <Content Include="Views\License\RequestStatus.cshtml" />
-    <Content Include="Views\Hardware\AddHardware.cshtml" />
+    <Content Include="Views\Cart\OfflinePayment.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\OrderStatus.cshtml" />
+    <Content Include="Views\PurchaseOrder\OrderDetail.cshtml" />
+    <Content Include="Views\License\LicenseApproval.cshtml" />
+    <Content Include="Views\Hardware\EditHardware.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

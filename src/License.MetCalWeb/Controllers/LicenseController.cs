@@ -16,13 +16,73 @@ namespace License.MetCalWeb.Controllers
     {
         private TeamMemberLogic logic = null;
         private UserLogic userLogic = null;
-        private UserSubscriptionLogic subscriptionLogic = null;
+        private UserLicenseRequestLogic userLicenseRequestLogic = null;
 
         // GET: License
         public ActionResult Index()
         {
             return View();
         }
+
+        public LicenseController()
+        {
+            userLicenseRequestLogic = new UserLicenseRequestLogic();
+            userLogic = new UserLogic();
+            logic = new TeamMemberLogic();
+
+        }
+
+        public ActionResult LicenseApproval()
+        {
+            List<UserLicenseRequest> requestList = null;
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                requestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.User.UserId);
+            else if (LicenseSessionState.Instance.IsAdmin)
+                requestList = userLicenseRequestLogic.GetRequestList(LicenseSessionState.Instance.AdminId);
+            return View(requestList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LicenseApproval(string comment, string status, params string[] selectLicenseRequest)
+        {
+            List<UserLicenseRequest> licReqList = new List<UserLicenseRequest>();
+            List<UserLicense> userlicList = new List<UserLicense>();
+            foreach (var id in selectLicenseRequest)
+            {
+                var userlicReq = userLicenseRequestLogic.GetById(Convert.ToInt32(id));
+                var licSubId = "ProdId:" + userlicReq.ProductId + "-UserSubId:" + userlicReq.UserSubscriptionId;
+                switch (status)
+                {
+                    case "Approve": userlicReq.IsApproved = true; break;
+                    case "Reject": userlicReq.IsRejected = true; break;
+                }
+                userlicReq.Comment = comment;
+                userlicReq.ApprovedBy = LicenseSessionState.Instance.User.UserName;
+                licReqList.Add(userlicReq);
+                if (status == "Approve")
+                {
+                    UserLicense lic = new UserLicense();
+                    lic.UserId = userlicReq.Requested_UserId;
+                    lic.License = new LicenseData();
+                    lic.License.ProductId = userlicReq.ProductId;
+                    lic.License.UserSubscriptionId = userlicReq.UserSubscriptionId;
+                    userlicList.Add(lic);
+                }
+
+            }
+            if (licReqList.Count > 0)
+            {
+                userLicenseRequestLogic.Update(licReqList);
+                if(userlicList.Count > 0)
+                {
+                    UserLicenseLogic licLogic = new UserLicenseLogic();
+                    licLogic.CreataeUserLicense(userlicList);
+                }
+            }
+            return RedirectToAction("TeamContainer", "Team");
+        }
+
 
         public ActionResult MapLicense(string userId, bool bulkLicenseAdd)
         {
@@ -100,7 +160,7 @@ namespace License.MetCalWeb.Controllers
             else
                 adminUserId = LicenseSessionState.Instance.AdminId;
 
-            var licenseMapModelList = SubscriLogic.GetSubForLicenseMap(userId, adminUserId);
+            var licenseMapModelList = OnPremiseSubscriptionLogic.GetSubForLicenseMap(userId, adminUserId);
             return licenseMapModelList;
         }
 
@@ -114,7 +174,7 @@ namespace License.MetCalWeb.Controllers
         {
             TempData["UserId"] = userId;
             ViewData["TeamMember"] = userLogic.GetUserById(userId).Email;
-            List<Models.LicenseMapModel> licenseMapModelList = SubscriLogic.GetUserLicenseDetails(userId, false);
+            List<Models.LicenseMapModel> licenseMapModelList = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false);
             return View(licenseMapModelList);
         }
 
@@ -157,7 +217,7 @@ namespace License.MetCalWeb.Controllers
                 userLicesList.Add(lic);
             }
             if (action == "Add")
-                logic.CreateUserLicense(userLicesList, userIdList);
+                logic.CreateMultiUserLicense(userLicesList, userIdList);
             else
                 logic.RevokeUserLicense(userLicesList, userIdList.FirstOrDefault());//temporary data changes
         }
