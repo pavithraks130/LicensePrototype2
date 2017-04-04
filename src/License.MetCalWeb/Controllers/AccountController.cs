@@ -47,47 +47,39 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterModel model)
         {
             ViewData["SucessMessageDisplay"] = false;
             if (ModelState.IsValid)
             {
 
-                LicenseServer.Logic.UserLogic serUserLogic = new LicenseServer.Logic.UserLogic();
-                LicenseServer.DataModel.Registration reg = new LicenseServer.DataModel.Registration();
-                reg.Email = model.Email;
-                reg.FirstName = model.FName;
-                reg.LastName = model.LName;
-                reg.OrganizationName = model.Organization;
-                reg.Password = model.Password;
-                reg.PhoneNumber = model.PhoneNumber;
-
-                LicenseServer.Logic.UserTokenLogic tokenLogic = new LicenseServer.Logic.UserTokenLogic();
-                var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = model.Email, Token = model.Token });
-                if (!status)
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                var response = await client.PostAsJsonAsync("api/user/create", model);
+                if (response.IsSuccessStatusCode)
                 {
-                    ModelState.AddModelError("", "Invalid Token Specified please verify the token");
-                    return View();
-                }
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var datamodel = JsonConvert.DeserializeObject<UserModel>(jsonData);
 
-                //string servUserId = serUserLogic.CreateUser(reg);
-                //model.RegistratoinModel.ServerUserId = servUserId;
-                var result = logic.CreateUser(model.RegistratoinModel);
-                if (result)
-                {
-                    User user = logic.GetUserByEmail(model.Email);
-                    ViewData["SucessMessageDisplay"] = true;
-                    FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
-                    StreamReader reader = new StreamReader(stream);
-                    string str = reader.ReadToEnd();
-                    reader.Close();
-                    stream.Close();
-                    stream.Dispose();
-                    EmailService service = new EmailService();
-                    service.SendEmail(model.Email, "Welcome to Fluke", str);
+                    client.Dispose();
+                    model.ServerUserId = datamodel.UserId;
+                    client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    response = await client.PostAsJsonAsync("api/user/create", model);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        User user = logic.GetUserByEmail(model.Email);
+                        ViewData["SucessMessageDisplay"] = true;
+                        FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
+                        StreamReader reader = new StreamReader(stream);
+                        string str = reader.ReadToEnd();
+                        reader.Close();
+                        stream.Close();
+                        stream.Dispose();
+                        EmailService service = new EmailService();
+                        service.SendEmail(model.Email, "Welcome to Fluke", str);
+                    }
                 }
                 else
-                    ModelState.AddModelError("", logic.ErrorMessage);
+                    ModelState.AddModelError("", response.ReasonPhrase);
             }
             return View();
         }
@@ -159,8 +151,8 @@ namespace License.MetCalWeb.Controllers
                         LicenseSessionState.Instance.IsTeamMember = true;
                     if (!LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                        //TeamMemberLogic tmLogic = new TeamMemberLogic();
-                        //LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                        TeamMemberLogic tmLogic = new TeamMemberLogic();
+                        LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
                     }
                     SignInAsync(userObj, true);
                     if (LicenseSessionState.Instance.IsSuperAdmin)
@@ -213,22 +205,21 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPassword model)
+        public ActionResult ForgotPassword(ForgotPassword model)
         {
             if (ModelState.IsValid)
             {
-                var user = logic.ForgotPassword(model.Email);
-                if (user == null)
+                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
+                var response = client.GetAsync("api/user/GetResetToken" + model.Email).Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    ModelState.AddModelError("", "Enter Valid Email ");
-                    return View();
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var user = JsonConvert.DeserializeObject<ForgotPasswordToken>(jsonData);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.UserId, code = user.Token }, protocol: Request.Url.Scheme);
+                    EmailService service = new EmailService();
+                    service.SendEmail(model.Email, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+                    ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
                 }
-
-                string token = logic.CreateResetPasswordToken(user.UserId);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.UserId, code = token }, protocol: Request.Url.Scheme);
-                EmailService service = new EmailService();
-                service.SendEmail(model.Email, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
-                ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
             }
 
             return View();
@@ -244,42 +235,63 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPassword model, string userId, string code)
+        public ActionResult ResetPassword(ResetPassword model, string userId, string code)
         {
             string email = string.Empty;
             if (ModelState.IsValid)
             {
-
-                var result = logic.ResetPassword(userId, code, model.Password);
-                if (result)
+                model.Token = code;
+                model.UserId = userId;
+                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
+                var response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    var user = logic.GetUserById(userId);
-                    if (!String.IsNullOrEmpty(user.ServerUserId))
+                    var jsondata = response.Content.ReadAsStringAsync().Result;
+                    var user = JsonConvert.DeserializeObject<UserModel>(jsondata);
+                    if (user != null && !String.IsNullOrEmpty(user.ServerUserId))
                     {
-                        LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
-                        var status = await userLogic.ResetPassword(user.ServerUserId, model.Password);
+                        client.Dispose();
+                        client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                        model.UserId = user.ServerUserId;
+                        model.Token = string.Empty;
+                        response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            ModelState.AddModelError("", response.ReasonPhrase);
+                            return View();
+                        }
                     }
                     ViewBag.Display = "inline";
                     ViewBag.ResetMessage = "Success";
                 }
                 else
-                    ModelState.AddModelError("", logic.ErrorMessage);
+                    ModelState.AddModelError("", response.ReasonPhrase);
             }
             return View();
         }
 
         public ActionResult LogOut()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            if (LicenseSessionState.Instance.IsGlobalAdmin)
-                userLogic.UpdateLogInStatus(LicenseSessionState.Instance.User.UserId, false);
-            else if (LicenseSessionState.Instance.IsSuperAdmin)
+
+            HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
+            UserModel userModel = new UserModel();
+            userModel.UserId = LicenseSessionState.Instance.User.ServerUserId;
+            userModel.IsActive = false;
+            switch (webAPiType)
             {
-                userLogic.UpdateLogInStatus(LicenseSessionState.Instance.User.ServerUserId, false);
-                logic.UpdateLogOutStatus(LicenseSessionState.Instance.User.UserId, false);
+                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
+                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
             }
-            else
-                logic.UpdateLogOutStatus(LicenseSessionState.Instance.User.UserId, false);
+            client.PostAsJsonAsync("api/user/UpdateActiveStatus", userModel);
+
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+            {
+                client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                userModel.UserId = LicenseSessionState.Instance.User.ServerUserId;
+                client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+                client.PostAsJsonAsync("api/user/UpdateActiveStatus", userModel);
+            }
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
             return RedirectToAction("LogIn");
         }

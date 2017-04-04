@@ -8,7 +8,7 @@ using License.Model;
 
 namespace License.MetCalWeb.Models
 {
-    public class RegisterViewModel
+    public class RegisterModel
     {
         public Registration RegistratoinModel = new Registration();
 
@@ -139,4 +139,10 @@ namespace License.MetCalWeb.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ForgotPasswordToken
+    {
+        public string UserId { get; set; }
+
+        public string Token { get; set; }
+    }
 }

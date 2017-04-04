@@ -68,6 +68,44 @@ namespace Centralized.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetResetToken/{email}")]
+        public HttpResponseMessage GetPasswordResetToken(string email)
+        {
+            var user = UserManager.FindByEmail(email);
+            var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
+            ForgotPasswordToken passwordToken = new ForgotPasswordToken();
+            passwordToken.UserId = user.UserId;
+            passwordToken.Token = token;
+            return Request.CreateResponse(HttpStatusCode.OK, passwordToken);
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public HttpResponseMessage ResetuserPassword(ResetPassword model)
+        {
+            string token = string.Empty;
+            if (string.IsNullOrEmpty(model.Token))
+                token = UserManager.GeneratePasswordResetToken(model.UserId);
+            var result = UserManager.ResetPassword(model.UserId, token, model.Password);
+            var user = logic.GetUserById(model.UserId);
+            if (result.Succeeded)
+                return Request.CreateResponse(HttpStatusCode.OK, user);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
+        }
+
+        [HttpPost]
+        [Route("UpdateActiveStatus")]
+        public HttpResponseMessage UpdateActiveStatus(User model)
+        {
+            logic.UpdateLogInStatus(model.UserId, model.IsActive);
+            if (!String.IsNullOrEmpty(logic.ErrorMessage))
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, "updated");
+        }
+
+        [HttpGet]
         [Route("All")]
         public IHttpActionResult GetUsers()
         {

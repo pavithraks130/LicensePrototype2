@@ -19,7 +19,7 @@ namespace License.MetCalWeb.Models
         public Organization Organization { get; set; }
         public string ServerUserId { get; set; }
         public bool IsActive { get; set; }
-        
+        public string Password { get; set; }
         public List<SubscriptionType> SubscriptionList { get; set; }
         public UserModel()
         {
