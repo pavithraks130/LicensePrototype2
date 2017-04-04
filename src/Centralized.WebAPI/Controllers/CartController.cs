@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
+using LicenseServer.Logic.BusinessLogic;
 
 namespace Centralized.WebAPI.Controllers
 {
@@ -13,10 +14,12 @@ namespace Centralized.WebAPI.Controllers
     public class CartController : ApiController
     {
         private CartLogic logic = null;
+        private CartBO cartBOLogic = null;
 
         public CartController()
         {
             logic = new CartLogic();
+            cartBOLogic = new CartBO();
         }
 
         [HttpPost]
@@ -49,6 +52,30 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpPost]
+        [Route("OfflinePayment/{userId}")]
+        public HttpResponseMessage OfflinePayment(string userId)
+        {
+            var poOrder = cartBOLogic.OfflinePayment(userId);
+            if (poOrder != null)
+                return Request.CreateResponse(HttpStatusCode.OK, poOrder);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);
+
+        }
+
+        [HttpPost]
+        [Route("OnlinePayment/{userId}")]
+        public HttpResponseMessage OnlinePayment(string userId)
+        {
+            var userSubscriptionList = cartBOLogic.OnlinePayment(userId);
+            if (userSubscriptionList != null)
+                return Request.CreateResponse(HttpStatusCode.OK, userSubscriptionList);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);
+
         }
     }
 }

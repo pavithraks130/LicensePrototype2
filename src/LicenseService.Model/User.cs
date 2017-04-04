@@ -27,7 +27,7 @@ namespace LicenseServer.DataModel
         public Organization Organization { get; set; }
 
         public IList<string> Roles { get; set; }
-        public IList<SubscriptionType> SubscriptionList { get; set; }        
+        public IList<SubscriptionType> SubscriptionList { get; set; }
         public string Password { get; set; }
         public bool IsActive { get; set; }
 
@@ -37,5 +37,15 @@ namespace LicenseServer.DataModel
             SubscriptionList = new List<SubscriptionType>();
         }
 
+    }
+
+    public class ChangePassword
+    {
+        public string UserId { get; set; }
+        public string Email { get; set; }
+
+        public string CurrentPassword { get; set; }
+
+        public string NewPassword { get; set; }
     }
 }

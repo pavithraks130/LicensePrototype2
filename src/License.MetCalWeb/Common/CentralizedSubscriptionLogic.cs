@@ -2,19 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Common
 {
     public class CentralizedSubscriptionLogic
     {
-        public static void UpdateUserSubscription(List<LicenseServer.DataModel.UserSubscription> subsList)
+        public static async Task UpdateUserSubscription()
         {
-            LicenseServer.Logic.UserSubscriptionLogic subscriptionlogic = new LicenseServer.Logic.UserSubscriptionLogic();
-            LicenseServer.DataModel.UserSubscriptionList userSubscriptionList = subscriptionlogic.CreateUserSubscription(subsList, LicenseSessionState.Instance.User.ServerUserId);
-            UpdateSubscriptionOnpremise(userSubscriptionList);
+            UserSubscriptionList userSubscriptionList = null;
+            var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+            HttpClient client = WebApiServiceLogic.CreateClient(serviceType);
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.PostAsync("api/OnlinePayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrEmpty(jsondata))
+                {
+                    userSubscriptionList = JsonConvert.DeserializeObject<UserSubscriptionList>(jsondata);
+                    UpdateSubscriptionOnpremise(userSubscriptionList);
+                }
+            }
+
+
         }
 
-        private static void UpdateSubscriptionOnpremise(LicenseServer.DataModel.UserSubscriptionList subs)
+        public static void UpdateSubscriptionOnpremise(UserSubscriptionList subs)
         {
             string userId = string.Empty;
             if (LicenseSessionState.Instance.User.ServerUserId != subs.UserId)
@@ -29,16 +46,16 @@ namespace License.MetCalWeb.Common
                 //Code to save the Subscription Data with Product in to file.
                 //Begin
                 List<License.Model.Product> productList = new List<License.Model.Product>();
-                foreach (var pro in subDtls.Products)
+                foreach (var dtls in subDtls.SubscriptionType.SubDetails)
                 {
                     License.Model.Product prod = new License.Model.Product();
-                    prod.Id = pro.Product.Id;
-                    prod.Name = pro.Product.Name;
-                    prod.Description = pro.Product.Description;
-                    prod.ProductCode = pro.Product.ProductCode;
-                    prod.QtyPerSubscription = pro.QtyPerSubscription;
+                    prod.Id = dtls.Product.Id;
+                    prod.Name = dtls.Product.Name;
+                    prod.Description = dtls.Product.Description;
+                    prod.ProductCode = dtls.Product.ProductCode;
+                    prod.QtyPerSubscription = dtls.Quantity;
                     prod.Features = new List<Model.Feature>();
-                    foreach (var f in pro.Product.AssociatedFeatures)
+                    foreach (var f in dtls.Product.AssociatedFeatures)
                     {
                         var feture = new License.Model.Feature();
                         feture.Id = f.Id;

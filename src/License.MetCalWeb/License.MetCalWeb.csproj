@@ -315,7 +315,6 @@
     <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\HardwareModel.cs" />
     <Compile Include="Models\LicenseMapModel.cs" />
-    <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\RequestedLicense.cs" />
     <Compile Include="Models\SubscriptionProductModel.cs" />
@@ -407,14 +406,6 @@
     <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
       <Name>LicenseKey</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LicenseServer.Logic\LicenseServer.Logic.csproj">
-      <Project>{18cb8256-ee2f-4c58-a630-6d4b216dfbd7}</Project>
-      <Name>LicenseServer.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LicenseService.Model\LicenseServer.DataModel.csproj">
-      <Project>{e0418f45-1461-4539-a760-6a6e4a66d4b8}</Project>
-      <Name>LicenseServer.DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

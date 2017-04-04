@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
+using LicenseServer.Logic.BusinessLogic;
 
 namespace Centralized.WebAPI.Controllers
 {
@@ -17,7 +18,7 @@ namespace Centralized.WebAPI.Controllers
         {
             logic = new PurchaseOrderLogic();
         }
-        
+
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetPurchaseOrder()
@@ -71,7 +72,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("UpdataMuliplePO")]
         public HttpResponseMessage UpdateMultiplePurchaseOrder(List<PurchaseOrder> orders)
         {
-           logic.UpdatePurchaseOrder(orders);
+            logic.UpdatePurchaseOrder(orders);
             if (String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.OK, "success");
             else
@@ -87,6 +88,18 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, obj);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpPost]
+        [Route("SyncPO/{userId}")]
+        public HttpResponseMessage SyncPurchaseOrder(string userId)
+        {
+            CartBO cartBOLogic = new CartBO();
+            var obj = cartBOLogic.SyncPurchaseOrder(userId);
+            if (obj == null)
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, obj);
         }
     }
 }

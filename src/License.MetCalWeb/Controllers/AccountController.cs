@@ -12,13 +12,15 @@ using License.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
     public class AccountController : BaseController
     {
+
+        ServiceType webAPiType;
         private UserLogic logic = new UserLogic();
-        LicenseServer.Logic.UserLogic userLogic = new LicenseServer.Logic.UserLogic();
         private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
         {
@@ -28,6 +30,12 @@ namespace License.MetCalWeb.Controllers
                     _authManager = HttpContext.GetOwinContext().Authentication;
                 return _authManager;
             }
+        }
+
+        public AccountController()
+        {
+            string serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+            webAPiType = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
         }
 
         public ActionResult Register()
@@ -101,8 +109,8 @@ namespace License.MetCalWeb.Controllers
 
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
                 // and on premises user and admin will be authenticated with on premise DB
-                string serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-                HttpClient client = WebApiServiceLogic.CreateClient(serviceType);
+
+                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
                 var formContent = new FormUrlEncodedContent(new[] {
                     new KeyValuePair<string, string>("grant_type", "password"),
                     new KeyValuePair<string, string>("username", model.Email),
@@ -113,14 +121,13 @@ namespace License.MetCalWeb.Controllers
                 {
                     data = response.Content.ReadAsStringAsync().Result;
                     var token = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
-                    ServiceType typeData = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
-                    switch (typeData)
+                    switch (webAPiType)
                     {
                         case ServiceType.CentralizeWebApi: LicenseSessionState.Instance.CentralizedToken = token; break;
                         case ServiceType.OnPremiseWebApi: LicenseSessionState.Instance.OnPremiseToken = token; break;
                     }
                     client.Dispose();
-                    client = WebApiServiceLogic.CreateClient(serviceType);
+                    client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
                     client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
                     response = await client.GetAsync("api/user/UserById/" + token.Id);
                     if (response.IsSuccessStatusCode)
@@ -155,9 +162,9 @@ namespace License.MetCalWeb.Controllers
                         //TeamMemberLogic tmLogic = new TeamMemberLogic();
                         //LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
                     }
-                    //SignInAsync(userObj, true);
-                    //if (LicenseSessionState.Instance.IsSuperAdmin)
-                    //    SynchPurchaseOrder();
+                    SignInAsync(userObj, true);
+                    if (LicenseSessionState.Instance.IsSuperAdmin)
+                        SynchPurchaseOrder();
                     LicenseSessionState.Instance.IsAuthenticated = true;
                     if (String.IsNullOrEmpty(userObj.FirstName))
                         return RedirectToAction("Profile", "User");
@@ -167,39 +174,23 @@ namespace License.MetCalWeb.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invali Credentials");
+                    ModelState.AddModelError("", "Invalid Credentials");
                 }
-
-
-
-
-               
-                // LicenseSessionState.Instance.User = userObj;
-                //
             }
             return View();
         }
 
         public async Task SynchPurchaseOrder()
         {
-            LicenseServer.Logic.PurchaseOrderLogic reqLogic = new LicenseServer.Logic.PurchaseOrderLogic();
-            var poList = reqLogic.GetPOToBeSynchedByUser(LicenseSessionState.Instance.User.ServerUserId);
-            foreach (var poItem in poList)
+            HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.PostAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId, null);
+            if (response.IsSuccessStatusCode)
             {
-                List<LicenseServer.DataModel.UserSubscription> subsList = new List<LicenseServer.DataModel.UserSubscription>();
-                foreach (var item in poItem.OrderItems)
-                {
-
-                    LicenseServer.DataModel.UserSubscription usersubs = new LicenseServer.DataModel.UserSubscription();
-                    usersubs.UserId = LicenseSessionState.Instance.User.ServerUserId;
-                    usersubs.SubscriptionTypeId = item.SubscriptionId;
-                    usersubs.SubscriptionDate = DateTime.Now.Date;
-                    usersubs.Quantity = item.Quantity;
-                    subsList.Add(usersubs);
-                }
-                CentralizedSubscriptionLogic.UpdateUserSubscription(subsList);
-                poItem.IsSynched = true;
-                reqLogic.UpdatePurchaseOrder(poItem);
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<UserSubscriptionList>(jsonData);
+                if (obj.SubscriptionList.Count > 0)
+                    CentralizedSubscriptionLogic.UpdateSubscriptionOnpremise(obj);
             }
 
         }
@@ -207,13 +198,10 @@ namespace License.MetCalWeb.Controllers
         private void SignInAsync(UserModel user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            System.Security.Claims.ClaimsIdentity identity = null;
-            //if (LicenseSessionState.Instance.IsGlobalAdmin)
-            //    identity = userLogic.CreateClaimsIdentity(LicenseSessionState.Instance.User.UserId);
-            //else
-            //{
-            //    identity = logic.CreateClaimsIdentity(user.UserId);
-            //}
+            System.Security.Claims.ClaimsIdentity identity = new System.Security.Claims.ClaimsIdentity();
+            identity.AddClaim(new System.Security.Claims.Claim("username", LicenseSessionState.Instance.User.UserName.ToString()));
+            identity.AddClaim(new System.Security.Claims.Claim("userId", LicenseSessionState.Instance.User.UserId.ToString()));
+            identity.AddClaim(new System.Security.Claims.Claim("Role", LicenseSessionState.Instance.User.Roles.ToString()));
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 

@@ -18,9 +18,9 @@ namespace LicenseServer.Logic
             return subscriptions;
         }
 
-        public ProductSubscriptionDtls CreateUserSubscription(UserSubscription subscription, int teamId)
+        public Subscription CreateUserSubscription(UserSubscription subscription, int teamId)
         {
-            ProductSubscriptionDtls proDtls = new ProductSubscriptionDtls();
+            Subscription purchasedSubscription = new Subscription();
             SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
             UserSubscription sub = null;
             SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
@@ -31,26 +31,18 @@ namespace LicenseServer.Logic
 
             if (obj != null)
             {
-                proDtls.SubscriptionTypeId = obj.SubscriptionTypeId;
-                proDtls.SubscriptionDate = obj.SubscriptionDate;
-                proDtls.OrderdQuantity = obj.Quantity;
+                purchasedSubscription.SubscriptionDate = obj.SubscriptionDate;
+                purchasedSubscription.OrderdQuantity = obj.Quantity;
                 sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
-                proDtls.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
-                proDtls.SubscriptionType = typeLogic.GetById(obj.SubscriptionTypeId);
-                var details = detailsLogic.GetSubscriptionDetails(proDtls.SubscriptionTypeId);
-                foreach (var dt in details)
-                {
-                    ProductDetails dtls = new ProductDetails();
-                    dtls.Product = dt.Product;
-                    dtls.QtyPerSubscription = dt.Quantity;
-                    dtls.Features.AddRange(dt.Product.AssociatedFeatures);
-                    proDtls.Products.Add(dtls);
-                }
+                purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
+                purchasedSubscription.SubscriptionType = typeLogic.GetById(obj.SubscriptionTypeId);
+                var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionTypeId);
+                purchasedSubscription.SubscriptionType.SubDetails = details;
             }
-            return proDtls;
+            return purchasedSubscription;
         }
 
-        public UserSubscriptionList CreateUserSubscription(List<UserSubscription> subsList, string userId)
+        public UserSubscriptionList CreateUserSubscriptionList(List<UserSubscription> subsList, string userId)
         {
             UserLogic logic = new UserLogic();
             User userObj = logic.GetUserById(userId);

@@ -19,6 +19,7 @@
                             </td>
                             <td></td>
                         </tr>
+                        @{ double totalamount = 0;}
                         @foreach (var pro in Model)
                         {
                             <tr>
@@ -27,6 +28,7 @@
                                 </td>
                                 <td>
                                     @pro.TotalPrice
+                                    @{totalamount += pro.TotalPrice; }
                                 </td>
                                 <td>
                                     <button id="delete-item" class="alert-warning" type="button" onclick="location.href='@Url.Action("RemoveItem", "Cart", new { Id = @pro.Id}, null)'">
@@ -36,33 +38,34 @@
                                 <td></td>
 
                             </tr>
-                        }
+                                        }
                         <tr></tr>
                         <tr>
                             <td><h2>Total</h2></td>
                             <td>
-                                <h2>  @ViewData["TotalAmount"]
+                                <h2>
+                                    @totalamount
                                 </h2>
                             </td>
                             <td></td>
                         </tr>
-                       
+
                     </table>
                     <div class="float-right">
                         <button class="alert-success"> @Html.ActionLink("Offline Payment", "OfflinePayment", "Cart")</button>
                         <button class="alert-success"> @Html.ActionLink("Onlinie Payment", "PaymentGateway", "Cart")</button>
                     </div>
-                }
-                else
-                {
-                    <div>
-                        <span style="font-size: 14px; font-weight:bold">No items added to Cart</span>
-                    </div>
-                }
+                                        }
+                                        else
+                                        {
+                                            <div>
+                                                <span style="font-size: 14px; font-weight:bold">No items added to Cart</span>
+                                            </div>
+                                        }
             </div>
             <br />
 
         </div>
 
-    }
+                                        }
 </div>

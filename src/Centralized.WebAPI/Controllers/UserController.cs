@@ -95,10 +95,10 @@ namespace Centralized.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("Update")]
-        public HttpResponseMessage UpdateUser(User user)
+        [Route("Update/{id}")]
+        public HttpResponseMessage UpdateUser(string id, User user)
         {
-            bool status = logic.UpdateUser(user.UserId, user);
+            bool status = logic.UpdateUser(id, user);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Updated");
             else
@@ -112,6 +112,17 @@ namespace Centralized.WebAPI.Controllers
             bool status = logic.DeleteUser(id);
             if (status)
                 return Request.CreateResponse<string>("Deleted");
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpPost]
+        [Route("UpdatePassword/{userId}")]
+        public HttpResponseMessage UpdatePassword(string userId, ChangePassword model)
+        {
+            var status = logic.ChangePassword(model.UserId, model.CurrentPassword, model.NewPassword);
+            if (status)
+                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }

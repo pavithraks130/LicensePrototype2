@@ -11,12 +11,73 @@ namespace License.MetCalWeb.Models
     /// </summary>
     /// 
 
-   public class SubscriptionType
+    public class UserSubscriptionList
+    {
+        public string UserId { get; set; }
+
+        public List<Subscription> SubscriptionList { get; set; }
+
+        public UserSubscriptionList()
+        {
+            SubscriptionList = new List<Subscription>();
+        }
+    }
+
+    public class Subscription
+    {
+        public int SubscriptionTypeId { get; set; }
+
+        public DateTime SubscriptionDate { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
+
+        public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
+
+        public Subscription()
+        {
+            LicenseKeyProductMapping = new List<LicenseKeyProductMapping>();
+        }
+
+        public int OrderdQuantity { get; set; }
+    }
+
+    public class LicenseKeyProductMapping
+    {
+        public string LicenseKey { get; set; }
+        public int ProductId { get; set; }
+
+    }
+
+    public class SubscriptionType
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public IEnumerable<SubscriptionDetails> SubDetails { get; set; }
     }
-        
+
+    public class SubscriptionDetails
+    {
+        public int Id { get; set; }
+
+        public int SubscriptionTypeId { get; set; }
+
+        public int ProductId { get; set; }
+
+        public int Quantity { get; set; }
+
+        public Product Product { get; set; }
+    }
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ProductCode { get; set; }
+        public ICollection<Feature> AssociatedFeatures { get; set; }
+
+    }
+
     #region XMLfileDataStruucture 
     public class SubscriptionProductModel
     {
@@ -43,6 +104,6 @@ namespace License.MetCalWeb.Models
         public int TotalCount { get; set; }
         public int UsedLicenseCount { get; set; }
     }
-    
+
     #endregion
 }

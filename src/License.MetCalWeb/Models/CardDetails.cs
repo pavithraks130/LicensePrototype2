@@ -1,8 +1,10 @@
-﻿namespace CalLicense.Core.Model
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace License.MetCalWeb.Models
 {
-    /// <summary>
-    /// This class holds credit card details 
-    /// </summary>
     public class CardDetails
     {
         /// <summary>
