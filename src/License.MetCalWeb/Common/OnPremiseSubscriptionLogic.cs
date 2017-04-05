@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using License.MetCalWeb.Models;
-using License.Logic.DataLogic;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Common
 {
@@ -20,32 +21,18 @@ namespace License.MetCalWeb.Common
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static IList<SubscriptionProductModel> GetSubscription(string userId)
+        public static IList<SubscriptionDetails> GetSubscription(string userId)
         {
-            IList<License.MetCalWeb.Models.SubscriptionProductModel> subscriptionProList = new List<License.MetCalWeb.Models.SubscriptionProductModel>();
-            UserSubscriptionLogic subscriptionLogic = null;
-            subscriptionLogic = new UserSubscriptionLogic();
-            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
-            var dataList = proSubLogic.GetSubscriptionFromFile();
-            var subscriptionList = subscriptionLogic.GetSubscription(userId);
-            foreach (var userSub in subscriptionList)
+            IList<SubscriptionDetails> subscriptionProList = new List<SubscriptionDetails>();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            var response = client.GetAsync("api/UserSubscription/SubscriptionDetils" + userId).Result;
+            if (response.IsSuccessStatusCode)
             {
-                var subType = dataList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
-                if (subType != null)
-                {
-                    SubscriptionProductModel model = new SubscriptionProductModel();
-                    model.SubscriptionId = subType.Id;
-                    model.SubscriptionName = subType.SubscriptionName;
-                    foreach (var pro in subType.Product)
-                    {
-                        UserLicenseLogic userLicLogic = new UserLicenseLogic();
-                        int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                        model.ProductDtls.Add(new ProductDetails() { ProductId = pro.Id, ProductName = pro.Name, ProductCode = pro.ProductCode, TotalCount = (pro.QtyPerSubscription * userSub.Quantity), UsedLicenseCount = usedLicCount });
-                    }
-                    subscriptionProList.Add(model);
-                }
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrEmpty(jsonData))
+                    subscriptionProList = JsonConvert.DeserializeObject<List<SubscriptionDetails>>(jsonData);
             }
-            LicenseSessionState.Instance.SubscriptionList = subscriptionProList;
             return subscriptionProList;
         }
 
@@ -124,7 +111,7 @@ namespace License.MetCalWeb.Common
             }
             return licenseMapModelList;
         }
-        
+
         public static List<LicenseMapModel> GetSubForLicenseMap(string userId, string adminUserId)
         {
             var licenseMapModelList = new List<LicenseMapModel>();

@@ -316,7 +316,7 @@
     <Compile Include="Models\LicenseMapModel.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\RequestedLicense.cs" />
-    <Compile Include="Models\SubscriptionProductModel.cs" />
+    <Compile Include="Models\SubscriptionModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
     <Compile Include="Models\UserModel.cs" />

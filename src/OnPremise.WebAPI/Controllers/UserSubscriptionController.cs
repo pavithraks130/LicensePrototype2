@@ -10,7 +10,7 @@ using License.Logic.BusinessLogic;
 namespace OnPremise.WebAPI.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/UserSubscriptions")]
+    [RoutePrefix("api/UserSubscription")]
     public class UserSubscriptionController : BaseController
     {
         UserSubscriptionBO usersubBOLogic = null;
@@ -29,10 +29,14 @@ namespace OnPremise.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("SubscriptionDetils")]
-        public HttpResponseMessage GetSubscriptionDetails(string userId)
+        [Route("SubscriptionDetils/{adminId}")]
+        public HttpResponseMessage GetSubscriptionDetails(string adminId)
         {
-
+            var lstSubscriptionDetails = usersubBOLogic.GetSubscriptionList(adminId);
+            if (lstSubscriptionDetails.Count == 0)
+                return Request.CreateResponse(HttpStatusCode.OK, "");
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, lstSubscriptionDetails);
         }
 
     }

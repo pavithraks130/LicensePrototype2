@@ -6,10 +6,10 @@ using System.Web;
 namespace License.MetCalWeb.Models
 {
     /// <summary>
-    /// This entire region is used to deserialize the Json data which contains the Subscription
-    /// with Product details to Object which can be used in the application.
+    /// This entire region is used to sync the subscription details between 2 servers.
     /// </summary>
     /// 
+    #region syncSubscription 
 
     public class SubscriptionList
     {
@@ -80,5 +80,30 @@ namespace License.MetCalWeb.Models
         public int Quantity { get; set; }
 
         public List<LicenseKeyProductMapping> LicenseKeys { get; set; }
+    }
+
+
+    #endregion
+    public class SubscriptionDetails
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<ProductDetails> Products { get; set; }
+
+        public SubscriptionDetails()
+        {
+            Products = new List<ProductDetails>();
+        }
+    }
+
+    public class ProductDetails
+    {
+        public int Id { get; set; }
+        public string ProductCode { get; set; }
+        public string Name { get; set; }
+        public String Description { get; set; }
+        public int TotalLicenseCount { get; set; }
+
+        public int UsedLicenseCount { get; set; }
     }
 }

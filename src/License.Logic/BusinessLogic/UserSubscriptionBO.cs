@@ -44,11 +44,39 @@ namespace License.Logic.BusinessLogic
                 licenseLogic.CreateLicenseData(licenseDataList);
             }
 
-            if(typeList.Count > 0)
+            if (typeList.Count > 0)
             {
                 Logic.DataLogic.ProductSubscriptionLogic proSubLogic = new Logic.DataLogic.ProductSubscriptionLogic();
                 proSubLogic.SaveToFile(typeList);
             }
+
+        }
+
+        public List<SubscriptionDetails> GetSubscriptionList(string adminId)
+        {
+            List<SubscriptionDetails> lstSsubscriptionDetail = new List<SubscriptionDetails>();
+            var usersubList = userSubLogic.GetSubscription(adminId);
+            var subIdList = usersubList.Select(p => p.SubscriptionId).ToList();
+            ProductSubscriptionLogic psLogic = new ProductSubscriptionLogic();
+            var subList = psLogic.GetSubscriptionFromFile();
+            foreach (var userSub in usersubList)
+            {
+                var subType = subList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
+                if (subType != null)
+                {
+                    SubscriptionDetails model = new SubscriptionDetails();
+                    model.Id = subType.Id;
+                    model.Name = subType.SubscriptionName;
+                    foreach (var pro in subType.Product)
+                    {
+                        UserLicenseLogic userLicLogic = new UserLicenseLogic();
+                        int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
+                        model.Products.Add(new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = (pro.Quantity * userSub.Quantity), UsedLicenseCount = usedLicCount });
+                    }
+                    lstSsubscriptionDetail.Add(model);
+                }
+            }
+            return lstSsubscriptionDetail;
 
         }
     }

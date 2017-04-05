@@ -47,15 +47,15 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult DoPayment()
+        public async Task<ActionResult> DoPayment()
         {
-            Purchase();
+           await  Purchase();
             return View();
         }
 
-        public void Purchase()
+        public async Task Purchase()
         {
-            Common.CentralizedSubscriptionLogic.UpdateUserSubscription();          
+           await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();          
         }
 
         public async Task<ActionResult> OfflinePayment()

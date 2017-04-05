@@ -30,6 +30,11 @@ namespace License.DataModel
         public int Id { get; set; }
         public string Name { get; set; }
         public List<ProductDetails> Products { get; set; }
+
+        public SubscriptionDetails()
+        {
+            Products = new List<ProductDetails>();
+        }
     }
 
     public class ProductDetails
@@ -39,6 +44,8 @@ namespace License.DataModel
         public string Name { get; set; }
         public String Description { get; set; }
         public int TotalLicenseCount { get; set; }
+
+        public int UsedLicenseCount { get; set; }
     }
     
     #region SyncSubscription

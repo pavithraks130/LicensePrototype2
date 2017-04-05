@@ -33,20 +33,9 @@ namespace License.MetCalWeb.Common
         {
             string userId = string.Empty;
             userId = LicenseSessionState.Instance.User.UserId;
+            List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
             foreach (var subDtls in subs.Subscriptions)
             {
-
-
-
-                //License.DataModel.Subscription subsModel = new DataModel.Subscription();
-                //subsModel.Id = subDtls.SubscriptionType.Id;
-                //subsModel.SubscriptionName = subDtls.SubscriptionType.Name;
-                //subsModel.Product = productList;
-
-                //Logic.DataLogic.ProductSubscriptionLogic proSubLogic = new Logic.DataLogic.ProductSubscriptionLogic();
-                //proSubLogic.SaveToFile(subsModel);
-                ////End
-
                 //Code to save the user Subscription details to Database.
                 UserSubscriptionData userSubscription = new UserSubscriptionData();
                 userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
@@ -55,22 +44,11 @@ namespace License.MetCalWeb.Common
                 userSubscription.Quantity = subDtls.OrderdQuantity;
                 userSubscription.Subscription = subDtls;
                 userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
-                //License.Logic.DataLogic.UserSubscriptionLogic userSubscriptionLogic = new Logic.DataLogic.UserSubscriptionLogic();
-                //int userSubscriptionId = userSubscriptionLogic.CreateSubscription(userSubscription);
-
-
-                //List<License.DataModel.LicenseData> licenseDataList = new List<DataModel.LicenseData>();
-                //foreach (var lic in subDtls.LicenseKeyProductMapping)
-                //{
-                //    License.DataModel.LicenseData licenseData = new DataModel.LicenseData();
-                //    licenseData.LicenseKey = lic.LicenseKey;
-                //    licenseData.ProductId = lic.ProductId;
-                //    licenseData.UserSubscriptionId = userSubscriptionId;
-                //    licenseDataList.Add(licenseData);
-                //}
-                //License.Logic.DataLogic.LicenseLogic licenseLogic = new Logic.ServiceLogic.LicenseLogic();
-                //licenseLogic.CreateLicenseData(licenseDataList);
+                subscriptionData.Add(userSubscription);
             }
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
         }
     }
 }
