@@ -60,7 +60,7 @@
                         <li>@Html.ActionLink("User Token", "Index", "UserToken")</li>
                         <li>@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
                         <li>@Html.ActionLink("Orders", "Index", "PurchaseOrder")</li>
-                        <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
+                       
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
@@ -73,7 +73,8 @@
                                 <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li> 
                             </ul>
                         </li>
-                      
+                        <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
+
                     }
                     else if (LicenseSessionState.Instance.IsAdmin)
                     {
@@ -84,7 +85,8 @@
                                 <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
                                 <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
                             </ul>
-                        </li>                     
+                        </li>
+                        <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
                     }
                     else
                     {

@@ -1,7 +1,7 @@
 ﻿@model License.MetCalWeb.Models.TeamModel
 @{
     ViewBag.Title = "TeamContainer";
-}
+}                                           
 <div class="row">
     <div class="form-group">
         @if (Model != null && Model.AdminUser != null)
@@ -18,7 +18,7 @@
         }
         @if (LicenseSessionState.Instance.IsAdmin)
         {
-            <div class="float-right">
+            <div class="float-right">                                                                       
                 <button class="btn btn-primary btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Invite Team Member</button>
             </div>
         }
