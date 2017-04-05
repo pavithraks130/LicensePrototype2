@@ -11,15 +11,15 @@ namespace License.MetCalWeb.Models
     /// </summary>
     /// 
 
-    public class UserSubscriptionList
+    public class SubscriptionList
     {
         public string UserId { get; set; }
 
-        public List<Subscription> SubscriptionList { get; set; }
+        public List<Subscription> Subscriptions { get; set; }
 
-        public UserSubscriptionList()
+        public SubscriptionList()
         {
-            SubscriptionList = new List<Subscription>();
+            Subscriptions = new List<Subscription>();
         }
     }
 
@@ -52,20 +52,7 @@ namespace License.MetCalWeb.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public IEnumerable<SubscriptionDetails> SubDetails { get; set; }
-    }
-
-    public class SubscriptionDetails
-    {
-        public int Id { get; set; }
-
-        public int SubscriptionTypeId { get; set; }
-
-        public int ProductId { get; set; }
-
-        public int Quantity { get; set; }
-
-        public Product Product { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 
     public class Product
@@ -74,36 +61,24 @@ namespace License.MetCalWeb.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string ProductCode { get; set; }
+        public int Quantity { get; set; }
         public ICollection<Feature> AssociatedFeatures { get; set; }
 
     }
 
-    #region XMLfileDataStruucture 
-    public class SubscriptionProductModel
+    public class UserSubscriptionData
     {
+
+        public string UserId { get; set; }
+
         public int SubscriptionId { get; set; }
-        public String SubscriptionName { get; set; }
 
-        public List<ProductDetails> ProductDtls { get; set; }
+        public DateTime SubscriptionDate { get; set; }
 
-        public SubscriptionProductModel()
-        {
-            ProductDtls = new List<ProductDetails>();
-        }
+        public Subscription Subscription { get; set; }
+
+        public int Quantity { get; set; }
+
+        public List<LicenseKeyProductMapping> LicenseKeys { get; set; }
     }
-
-    public class ProductDetails
-    {
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string ProductCode { get; set; }
-        public int AvailableCount
-        {
-            get { return TotalCount - UsedLicenseCount; }
-        }
-        public int TotalCount { get; set; }
-        public int UsedLicenseCount { get; set; }
-    }
-
-    #endregion
 }

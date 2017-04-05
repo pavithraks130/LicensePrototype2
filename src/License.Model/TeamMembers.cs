@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model
+namespace License.DataModel
 {
     public class TeamMembers
     {
@@ -35,5 +35,16 @@ namespace License.Model
             PendingInvites = new List<TeamMembers>();
             AcceptedInvites = new List<TeamMembers>();
         }
+    }
+
+    public class TeamMemberResponse
+    {
+        public string UserId { get; set; }
+
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
+
+        public int TeamMemberId { get; set; }
     }
 }

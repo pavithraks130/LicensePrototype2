@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using License.MetCalWeb.Models;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 
 namespace License.MetCalWeb.Common
 {

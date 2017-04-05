@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using License.MetCalDesktop.Common;
-using License.Model;
+using License.DataModel;
 using System.Windows.Input;
 
 namespace License.MetCalDesktop.ViewModel

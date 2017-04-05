@@ -11,6 +11,13 @@ namespace License.MetCalWeb.Common
         CentralizeWebApi
     }
 
+    public enum InviteStatus
+    {
+        Pending,
+        Accepted,
+        Declined
+    }
+
     public class AccessToken
     {
         public string access_token { get; set; }

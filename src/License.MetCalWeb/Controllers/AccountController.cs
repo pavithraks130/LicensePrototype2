@@ -4,11 +4,8 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using License.Logic.Common;
-using License.Logic.ServiceLogic;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using License.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System.Net.Http;
@@ -20,7 +17,6 @@ namespace License.MetCalWeb.Controllers
     {
 
         ServiceType webAPiType;
-        private UserLogic logic = new UserLogic();
         private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
         {
@@ -66,7 +62,7 @@ namespace License.MetCalWeb.Controllers
                     response = await client.PostAsJsonAsync("api/user/create", model);
                     if (response.IsSuccessStatusCode)
                     {
-                        User user = logic.GetUserByEmail(model.Email);
+
                         ViewData["SucessMessageDisplay"] = true;
                         FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
                         StreamReader reader = new StreamReader(stream);
@@ -151,8 +147,8 @@ namespace License.MetCalWeb.Controllers
                         LicenseSessionState.Instance.IsTeamMember = true;
                     if (!LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                        TeamMemberLogic tmLogic = new TeamMemberLogic();
-                        LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+                        //TeamMemberLogic tmLogic = new TeamMemberLogic();
+                        //LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
                     }
                     SignInAsync(userObj, true);
                     if (LicenseSessionState.Instance.IsSuperAdmin)
@@ -301,16 +297,27 @@ namespace License.MetCalWeb.Controllers
             string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
             string data = EncryptDecrypt.DecryptString(invite, passPhrase);
             var details = data.Split(new char[] { ',' });
+            ViewBag.ErrorMessage = string.Empty;
+            ViewBag.Message = string.Empty;
 
             string adminId = details[0];
             string inviteId = details[1];
 
-            TeamMemberLogic logic = new TeamMemberLogic();
-            logic.UpdateInviteStatus(Convert.ToInt32(inviteId), status);
-            ViewBag.Message = String.Empty;
-            License.Logic.Common.InviteStatus stat = (License.Logic.Common.InviteStatus)Enum.Parse(typeof(License.Logic.Common.InviteStatus), status);
-            if (stat == InviteStatus.Accepted)
-                ViewBag.Message = "You have accepted the invitation. Click below to Login with credentials which was shared through Mail";
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            TeamMember mem = new TeamMember();
+            mem.Id = Convert.ToInt32(inviteId);
+            mem.AdminId = adminId;
+            mem.InviteeStatus = status;
+            var response = client.PostAsJsonAsync("api/TeamMember/UpdateInvitation", mem).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var stat = (InviteStatus)Enum.Parse(typeof(InviteStatus), status);
+                if (stat == InviteStatus.Accepted)
+                    ViewBag.Message = "You have accepted the invitation. Click below to Login with credentials which was shared through Mail";
+            }
+            else
+                ViewBag.ErrorMessage = response.ReasonPhrase;
+           
             return View();
         }
     }

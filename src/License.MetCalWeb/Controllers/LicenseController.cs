@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using License.Logic.Common;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using License.Model;
+using License.DataModel;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -113,7 +113,7 @@ namespace License.MetCalWeb.Controllers
 
         private TeamModel LoadTeamMember()
         {
-            License.Model.UserInviteList inviteList = new UserInviteList();
+            License.DataModel.UserInviteList inviteList = new UserInviteList();
             string adminId = string.Empty;
             TeamModel model = null;
             if (LicenseSessionState.Instance.IsSuperAdmin)
@@ -201,16 +201,16 @@ namespace License.MetCalWeb.Controllers
                 userIdList.Add(Convert.ToString(TempData["UserId"]));
             }
             UserLicenseLogic logic = new UserLicenseLogic();
-            License.Logic.ServiceLogic.LicenseLogic licenseLogic = new LicenseLogic();
-            List<License.Model.UserLicense> userLicesList = new List<License.Model.UserLicense>();
+            License.Logic.DataLogic.LicenseLogic licenseLogic = new LicenseLogic();
+            List<License.DataModel.UserLicense> userLicesList = new List<License.DataModel.UserLicense>();
             foreach (var data in SelectedSubscription)
             {
                 var splitValue = data.Split(new char[] { '-' });
                 var prodId = splitValue[0].Split(new char[] { ':' })[1];
                 var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-                License.Model.UserLicense lic = new License.Model.UserLicense();
+                License.DataModel.UserLicense lic = new License.DataModel.UserLicense();
                 lic.UserId = string.Empty;//Multiple users adding user Id is not required here
-                License.Model.LicenseData licData = new License.Model.LicenseData();
+                License.DataModel.LicenseData licData = new License.DataModel.LicenseData();
                 licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
                 licData.ProductId = Convert.ToInt32(prodId);
                 lic.License = licData;
@@ -234,14 +234,14 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LicenseRequest(params string[] SelectedSubscription)
         {
-            List<License.Model.UserLicenseRequest> licReqList = new List<UserLicenseRequest>();
+            List<License.DataModel.UserLicenseRequest> licReqList = new List<UserLicenseRequest>();
             foreach (var data in SelectedSubscription)
             {
                 var splitValue = data.Split(new char[] { '-' });
                 var prodId = splitValue[0].Split(new char[] { ':' })[1];
                 var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
 
-                License.Model.UserLicenseRequest req = new License.Model.UserLicenseRequest();
+                License.DataModel.UserLicenseRequest req = new License.DataModel.UserLicenseRequest();
                 req.Requested_UserId = LicenseSessionState.Instance.User.UserId;
                 req.ProductId = Convert.ToInt32(prodId);
                 req.UserSubscriptionId = Convert.ToInt32(subscriptionId);

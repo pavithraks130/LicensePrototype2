@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.Model;
-namespace License.Logic.ServiceLogic
+using License.DataModel;
+
+namespace License.Logic.DataLogic
 {
     public class UserSubscriptionLogic : BaseLogic
     {

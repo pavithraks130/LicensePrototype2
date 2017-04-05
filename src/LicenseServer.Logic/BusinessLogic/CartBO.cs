@@ -10,6 +10,7 @@ namespace LicenseServer.Logic.BusinessLogic
     public class CartBO
     {
         public string ErrorMessage { get; set; }
+
         public PurchaseOrder OfflinePayment(string userId)
         {
             CartLogic cartLogic = new CartLogic();
@@ -50,7 +51,7 @@ namespace LicenseServer.Logic.BusinessLogic
             return null;
         }
 
-        public UserSubscriptionList OnlinePayment(string userId)
+        public SubscriptionList OnlinePayment(string userId)
         {
             List<UserSubscription> subsList = new List<UserSubscription>();
             CartLogic cartLogic = new CartLogic();
@@ -79,13 +80,13 @@ namespace LicenseServer.Logic.BusinessLogic
 
         }
 
-        public UserSubscriptionList SyncPurchaseOrder(string userId)
+        public SubscriptionList SyncPurchaseOrder(string userId)
         {
 
             UserSubscriptionLogic userSubLogic = new UserSubscriptionLogic();
             List<UserSubscription> subsList = new List<UserSubscription>();
             PurchaseOrderLogic logic = new PurchaseOrderLogic();
-            UserSubscriptionList userSsubList = new UserSubscriptionList();
+            SubscriptionList userSsubList = new SubscriptionList();
 
             userSsubList.UserId = userId;
             var poList = logic.GetPOToBeSynchedByUser(userId);
@@ -103,7 +104,7 @@ namespace LicenseServer.Logic.BusinessLogic
                 var dataList = userSubLogic.CreateUserSubscriptionList(subsList, userId);
                 poItem.IsSynched = true;
                 logic.UpdatePurchaseOrder(poItem.Id, poItem);
-                userSsubList.SubscriptionList.AddRange(dataList.SubscriptionList);
+                userSsubList.Subscriptions.AddRange(dataList.Subscriptions);
             }
             return userSsubList;
         }

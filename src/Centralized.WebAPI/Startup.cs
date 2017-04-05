@@ -39,7 +39,7 @@ namespace Centralized.WebAPI
                 TokenEndpointPath = new PathString("/Authenticate"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
                 AllowInsecureHttp = true,
-                Provider = new CustomOAuthPerovider()               
+                Provider = new CustomOAuthProvider()               
             };
             app.UseOAuthBearerTokens(opt);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());

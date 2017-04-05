@@ -4,27 +4,24 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using License.Model;
 
 namespace License.MetCalWeb.Models
 {
     public class RegisterModel
     {
-        public Registration RegistratoinModel = new Registration();
-
         [Required]
         [Display(Name = "FirstName")]
-        public string FName { get { return RegistratoinModel.FirstName; } set { RegistratoinModel.FirstName = value; } }
+        public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "LastName")]
-        public string LName { get { return RegistratoinModel.LastName; } set { RegistratoinModel.LastName = value; } }
+        public string LastName { get; set; }
 
 
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
-        public string Email { get { return RegistratoinModel.Email; } set { RegistratoinModel.Email = value; } }
+        public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
@@ -32,11 +29,7 @@ namespace License.MetCalWeb.Models
         [Display(Name = "Password")]
         public string Password
         {
-            get { return RegistratoinModel.Password; }
-            set
-            {
-                RegistratoinModel.Password = value;
-            }
+            get; set;
         }
 
         [DataType(DataType.Password)]
@@ -45,24 +38,19 @@ namespace License.MetCalWeb.Models
         public string ConfirmPassword { get; set; }
 
         [Display(Name = "Contact Number")]
-        public string PhoneNumber { get { return RegistratoinModel.PhoneNumber; } set { RegistratoinModel.PhoneNumber = value; } }
+        public string PhoneNumber { get; set; }
 
         [Required]
         [Display(Name = "Organization")]
-        public string Organization
+        public string OrganizationName
         {
-            get { return RegistratoinModel.OrganizationName; }
-            set
-            {
-                RegistratoinModel.OrganizationName = value;
-            }
+            get; set;
         }
 
 
         public string ServerUserId
         {
-            get { return RegistratoinModel.ServerUserId; }
-            set { RegistratoinModel.ServerUserId = value; }
+            get; set;
         }
 
         public string Token { get; set; }
@@ -107,23 +95,19 @@ namespace License.MetCalWeb.Models
 
     public class UserInviteModel
     {
-        public Registration RegistratoinModel = new Registration();
+        
 
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
-        public string Email { get { return RegistratoinModel.Email; } set { RegistratoinModel.Email = value; } }
+        public string Email { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password
         {
-            get { return RegistratoinModel.Password; }
-            set
-            {
-                RegistratoinModel.Password = value;
-            }
+            get;set;
         }
     }
 

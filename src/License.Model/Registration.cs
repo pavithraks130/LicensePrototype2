@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model
+namespace License.DataModel
 {
     public class Registration
     {
@@ -15,6 +15,5 @@ namespace License.Model
         public string OrganizationName { get; set; }
         public string Password { get; set; }
         public string ServerUserId { get; set; }
-        public string ManagerId { get; set; }
     }
 }

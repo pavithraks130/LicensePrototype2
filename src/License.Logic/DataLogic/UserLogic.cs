@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using License.Core.Model;
-using License.Model;
+using License.DataModel;
 using Microsoft.AspNet.Identity;
 
-namespace License.Logic.ServiceLogic
+namespace License.Logic.DataLogic
 {
     public class UserLogic : BaseLogic
     {
@@ -15,7 +15,7 @@ namespace License.Logic.ServiceLogic
             var users = UserManager.Users.ToList();
             foreach (var u in users)
             {
-                User temp = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.User>(u);
+                User temp = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.DataModel.User>(u);
                 usersList.Add(temp);
             }
             return usersList;
@@ -31,14 +31,14 @@ namespace License.Logic.ServiceLogic
             ur.UserName = u.Email;
             ur.ServerUserId = u.ServerUserId;
 
-            AppUser user = AutoMapper.Mapper.Map<License.Model.User, License.Core.Model.AppUser>(ur);
+            AppUser user = AutoMapper.Mapper.Map<License.DataModel.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
             try
             {
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
-                    result = rolelogic.CreateRole(new Model.Role() { Name = roleName });
+                    result = rolelogic.CreateRole(new DataModel.Role() { Name = roleName });
                 }
                 string userId = String.Empty;
                 var usr = UserManager.FindByEmail(u.Email);
@@ -70,7 +70,7 @@ namespace License.Logic.ServiceLogic
         public User GetUserById(string id)
         {
             var u = UserManager.FindById(id);
-            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Model.User>(u);
+            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.DataModel.User>(u);
             return user;
         }
 
@@ -111,7 +111,7 @@ namespace License.Logic.ServiceLogic
             return result.Succeeded;
         }
 
-        public Model.User GetUserByEmail(string email)
+        public DataModel.User GetUserByEmail(string email)
         {
             var data = UserManager.FindByEmail<AppUser, string>(email);
             return AutoMapper.Mapper.Map<User>(data);
@@ -144,13 +144,7 @@ namespace License.Logic.ServiceLogic
             }
             return null;
         }
-
-        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId)
-        {
-            var obj = UserManager.FindById(userId);
-            return UserManager.CreateIdentity(obj, DefaultAuthenticationTypes.ApplicationCookie);
-        }
-
+        
         public void UpdateLogOutStatus(string userid, bool status)
         {
             var user = UserManager.FindById(userid);

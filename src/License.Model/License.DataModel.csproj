@@ -7,8 +7,8 @@
     <ProjectGuid>{E4B922B6-6723-4E85-9522-C9EB666FD620}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>License.Model</RootNamespace>
-    <AssemblyName>License.Model</AssemblyName>
+    <RootNamespace>License.DataModel</RootNamespace>
+    <AssemblyName>License.DataModel</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -62,7 +62,6 @@
     <Compile Include="Product.cs" />
     <Compile Include="Registration.cs" />
     <Compile Include="Role.cs" />
-    <Compile Include="Subscription.cs" />
     <Compile Include="TeamAsset.cs" />
     <Compile Include="User.cs" />
     <Compile Include="TeamMembers.cs" />

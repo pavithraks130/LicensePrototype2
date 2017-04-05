@@ -1,49 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using LicenseServer.Logic;
-using System.Net.Http;
-using System.Web.Http;
 using System.Net;
-using LicenseServer.DataModel;
-using LicenseServer.Core.Manager;
+using System.Net.Http;
+using System.Web;
+using System.Web.Http;
+using License.Core.Model;
+using License.Logic.DataLogic;
+using License.DataModel;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Centralized.WebAPI.Controllers
+
+namespace OnPremise.WebAPI.Controllers
 {
-    [RoutePrefix("api/user")]
+    [RoutePrefix("api/User")]
     [Authorize]
     public class UserController : BaseController
     {
-        UserLogic logic = null;
+        private UserLogic logic = null;
+
         public UserController()
         {
             logic = new UserLogic();
-        }
-
-        private LicUserManager _userManager = null;
-        public LicUserManager UserManager
-        {
-            get
-            {
-                if (_userManager == null)
-                    _userManager = HttpContext.Current.GetOwinContext().Get<LicUserManager>();
-                return _userManager;
-            }
-        }
-
-        private LicRoleManager _roleManager = null;
-        public LicRoleManager RoleManager
-        {
-            get
-            {
-                if (_roleManager == null)
-                    _roleManager = Request.GetOwinContext().GetUserManager<LicRoleManager>();
-                return _roleManager;
-            }
         }
 
         public void Initialize()
@@ -54,17 +32,67 @@ namespace Centralized.WebAPI.Controllers
                 logic.RoleManager = RoleManager;
         }
 
+        [Route("All")]
+        [HttpGet]
+        public IHttpActionResult GetUsers()
+        {
+            Initialize();
+            return Ok(logic.GetUsers());
+        }
+
         [HttpPost]
         [Route("Create")]
         [AllowAnonymous]
-        public HttpResponseMessage Create(Registration user)
+        public HttpResponseMessage CreateUser(Registration user)
         {
             Initialize();
-            var userModel = logic.CreateUser(user);
-            if (userModel != null)
-                return Request.CreateResponse<User>(HttpStatusCode.OK, userModel);
+            var result = logic.CreateUser(user);
+            if (result)
+                return Request.CreateResponse(HttpStatusCode.Created, "Sucess");
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpPut]
+        [Route("Update/{id}")]
+        public HttpResponseMessage UpdateRole(string id, User user)
+        {
+            Initialize();
+            bool result = logic.UpdateUser(id, user);
+            if (result)
+                return Request.CreateResponse(HttpStatusCode.OK, "Updated Successfuly");
+            else
+                return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpGet]
+        [Route("UserById/{id}")]
+        public IHttpActionResult GetUserById(string id)
+        {
+            Initialize();
+            var result = logic.GetUserById(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("UserByEmail/{email}")]
+        public IHttpActionResult GetUserByEMail(string email)
+        {
+            Initialize();
+            var user = logic.GetUserByEmail(email);
+            return Ok(user);
+        }
+
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public HttpResponseMessage DeleteUser(string id)
+        {
+            Initialize();
+            var result = logic.DeleteUser(id);
+            if (result)
+                return Request.CreateResponse(HttpStatusCode.OK, "Deleted Successfuly");
+            else
+                return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
         [HttpGet]
@@ -100,60 +128,11 @@ namespace Centralized.WebAPI.Controllers
         [Route("UpdateActiveStatus")]
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
-            logic.UpdateLogInStatus(model.UserId, model.IsActive);
+            logic.UpdateLogOutStatus(model.UserId, model.IsActive);
             if (!String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
             else
                 return Request.CreateResponse(HttpStatusCode.OK, "updated");
-        }
-
-        [HttpGet]
-        [Route("All")]
-        public IHttpActionResult GetUsers()
-        {
-            Initialize();
-            var userList = logic.GetUsers();
-            return Ok(userList);
-        }
-
-        [HttpGet]
-        [Route("UserById/{id}")]
-        public IHttpActionResult GetUserById(string id)
-        {
-            Initialize();
-            var user = logic.GetUserById(id);
-            return Ok(user);
-        }
-
-        [HttpGet]
-        [Route("UserByEmail/{email}")]
-        public IHttpActionResult GetUserByEMail(string email)
-        {
-            Initialize();
-            var user = logic.GetUserByEmail(email);
-            return Ok(user);
-        }
-
-        [HttpPut]
-        [Route("Update/{id}")]
-        public HttpResponseMessage UpdateUser(string id, User user)
-        {
-            bool status = logic.UpdateUser(id, user);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
-        }
-
-        [HttpDelete]
-        [Route("Delete/{id}")]
-        public HttpResponseMessage DeleteUser(string id)
-        {
-            bool status = logic.DeleteUser(id);
-            if (status)
-                return Request.CreateResponse<string>("Deleted");
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
         [HttpPost]
@@ -166,6 +145,5 @@ namespace Centralized.WebAPI.Controllers
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
-
     }
 }

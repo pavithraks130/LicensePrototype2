@@ -34,21 +34,28 @@ namespace LicenseServer.Logic
             return usersList;
         }
 
-        public User CreateUser(User u, string roleName = "BackendAdmin")
+        public User CreateUser(Registration u, string roleName = "BackendAdmin")
         {
-            //User ur = new User();
-            //ur.FirstName = u.FirstName;
-            //ur.LastName = u.LastName;
-            //ur.Email = u.Email;
-            //ur.PhoneNumber = u.PhoneNumber;
-            //ur.UserName = u.Email;
-            var teamName = u.Organization.Name;
+            UserTokenLogic tokenLogic = new UserTokenLogic();
+            var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = u.Email, Token = u.Token });
+            if(!status)
+            {
+                ErrorMessage = "Invalid User Token";
+                return null;
+            }
+            User ur = new User();
+            ur.FirstName = u.FirstName;
+            ur.LastName = u.LastName;
+            ur.Email = u.Email;
+            ur.PhoneNumber = u.PhoneNumber;
+            ur.UserName = u.Email;
+            var teamName = u.OrganizationName;
             OrganizationLogic logic = new OrganizationLogic();
             DataModel.Organization t = logic.GetTeamByName(teamName);
             if (t == null)
                 t = logic.CreateTeam(new DataModel.Organization() { Name = teamName });
-            u.OrganizationId = t.Id;
-            LicenseServer.Core.Model.Appuser user = AutoMapper.Mapper.Map<User, LicenseServer.Core.Model.Appuser>(u);
+            ur.OrganizationId = t.Id;
+            LicenseServer.Core.Model.Appuser user = AutoMapper.Mapper.Map<User, LicenseServer.Core.Model.Appuser>(ur);
             IdentityResult result;
             try
             {

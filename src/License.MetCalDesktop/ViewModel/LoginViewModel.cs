@@ -1,5 +1,5 @@
 ﻿using License.Logic.Common;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 using License.MetCalDesktop.Common;
 using System;
 using System.Collections.Generic;
@@ -160,7 +160,7 @@ namespace License.MetCalDesktop.ViewModel
                 var logic = new UserLogic();
                 IsEnableLogin = false;
                 var status = IsNetworkAvilable;
-                License.Model.User user = null;
+                License.DataModel.User user = null;
                 if (status)
                 {
                     user = logic.AuthenticateUser(Email, Password);
@@ -173,7 +173,7 @@ namespace License.MetCalDesktop.ViewModel
                 }
                 if (status)
                 {
-                    License.Logic.ServiceLogic.ProductSubscriptionLogic prodLogic = new ProductSubscriptionLogic();
+                    License.Logic.DataLogic.ProductSubscriptionLogic prodLogic = new ProductSubscriptionLogic();
 
                     AppState.Instance.IsUserLoggedIn = true;
                     AppState.Instance.UserLicenseList = prodLogic.GetUserLicenseDetails(user.UserId, true);

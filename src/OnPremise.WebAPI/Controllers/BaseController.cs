@@ -9,9 +9,9 @@ using License.Core.Manager;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
-namespace OnPremise.WebAPI.Controller
+namespace OnPremise.WebAPI.Controllers
 {
-    public class BaseApiController: ApiController
+    public class BaseController: ApiController
     {
 
         private readonly AppUserManager _calUserManage = null;

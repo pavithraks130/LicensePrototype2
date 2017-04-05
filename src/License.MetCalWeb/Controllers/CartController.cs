@@ -55,26 +55,7 @@ namespace License.MetCalWeb.Controllers
 
         public void Purchase()
         {
-            Common.CentralizedSubscriptionLogic.UpdateUserSubscription();
-            //var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
-
-            //List<UserSubscription> subsList = new List<UserSubscription>();
-            //foreach (var item in obj)
-            //{
-
-            //    UserSubscription usersubs = new UserSubscription();
-            //    usersubs.UserId = LicenseSessionState.Instance.User.ServerUserId;
-            //    usersubs.SubscriptionTypeId = item.SubscriptionTypeId;
-            //    usersubs.SubscriptionDate = DateTime.Now.Date;
-            //    usersubs.Quantity = item.Quantity;
-            //    subsList.Add(usersubs);
-            //}
-            //Common.CentralizedSubscriptionLogic.UpdateUserSubscription(subsList);
-            //foreach (var item in obj)
-            //{
-            //    item.IsPurchased = true;
-            //    logic.UpdateCartItem(item);
-            //}
+            Common.CentralizedSubscriptionLogic.UpdateUserSubscription();          
         }
 
         public async Task<ActionResult> OfflinePayment()

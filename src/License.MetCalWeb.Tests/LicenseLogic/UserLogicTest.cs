@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 using License.Core.Manager;
 using Microsoft.AspNet.Identity.EntityFramework;
 using License.Core.Model;

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.Model;
+using License.DataModel;
 using Microsoft.AspNet.Identity;
 
-namespace License.Logic.ServiceLogic
+namespace License.Logic.DataLogic
 {
     public class RoleLogic : BaseLogic
     {
@@ -38,14 +38,14 @@ namespace License.Logic.ServiceLogic
 
         public IdentityResult UpdateRole(Role r)
         {
-            var role = AutoMapper.Mapper.Map<Model.Role, Core.Model.Role>(r);
+            var role = AutoMapper.Mapper.Map<DataModel.Role, Core.Model.Role>(r);
             return RoleManager.Update(role);
         }
 
         public Role GetRoleById(string id)
         {
             var r = RoleManager.FindById(id);
-            return AutoMapper.Mapper.Map<Core.Model.Role, Model.Role>(r);
+            return AutoMapper.Mapper.Map<Core.Model.Role, DataModel.Role>(r);
         }
 
         public IdentityResult DeleteRole(string id)

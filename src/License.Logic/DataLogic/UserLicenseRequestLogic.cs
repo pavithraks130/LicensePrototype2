@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.Model;
+using License.DataModel;
 
-namespace License.Logic.ServiceLogic
+namespace License.Logic.DataLogic
 {
     public class UserLicenseRequestLogic : BaseLogic
     {
@@ -83,7 +83,7 @@ namespace License.Logic.ServiceLogic
                     List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
                     foreach (var obj in licReqList)
                     {
-                        var tempObj = AutoMapper.Mapper.Map<License.Model.UserLicenseRequest>(obj);
+                        var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
                         var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
                         tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
                         tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
@@ -111,7 +111,7 @@ namespace License.Logic.ServiceLogic
                 List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
                 foreach (var obj in licReqList)
                 {
-                    var tempObj = AutoMapper.Mapper.Map<License.Model.UserLicenseRequest>(obj);
+                    var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
                     var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
                     tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
                     tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
@@ -126,7 +126,7 @@ namespace License.Logic.ServiceLogic
         public UserLicenseRequest GetById(int id)
         {
             var data = Work.UserLicenseRequestRepo.GetById(id);
-            return AutoMapper.Mapper.Map<Model.UserLicenseRequest>(data);
+            return AutoMapper.Mapper.Map<DataModel.UserLicenseRequest>(data);
         }
 
     }

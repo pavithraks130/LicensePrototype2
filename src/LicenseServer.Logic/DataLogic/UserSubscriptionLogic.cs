@@ -31,30 +31,39 @@ namespace LicenseServer.Logic
 
             if (obj != null)
             {
-                purchasedSubscription.SubscriptionDate = obj.SubscriptionDate;
-                purchasedSubscription.OrderdQuantity = obj.Quantity;
+
                 sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
                 purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
+
+                purchasedSubscription.SubscriptionDate = obj.SubscriptionDate;
+                purchasedSubscription.OrderdQuantity = obj.Quantity;
                 purchasedSubscription.SubscriptionType = typeLogic.GetById(obj.SubscriptionTypeId);
                 var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionTypeId);
-                purchasedSubscription.SubscriptionType.SubDetails = details;
+                var proList = new List<Product>();
+                foreach (var dt in details)
+                {
+                    var pro = dt.Product;
+                    pro.Quantity = dt.Quantity;
+                    proList.Add(pro);
+                }
+                purchasedSubscription.SubscriptionType.Products = proList;
             }
             return purchasedSubscription;
         }
 
-        public UserSubscriptionList CreateUserSubscriptionList(List<UserSubscription> subsList, string userId)
+        public SubscriptionList CreateUserSubscriptionList(List<UserSubscription> subsList, string userId)
         {
             UserLogic logic = new UserLogic();
             User userObj = logic.GetUserById(userId);
 
-            UserSubscriptionList userSubscriptionList = new UserSubscriptionList();
+            SubscriptionList userSubscriptionList = new SubscriptionList();
 
             userSubscriptionList.UserId = userId;
             int teamId = userObj.OrganizationId;
             foreach (var subObj in subsList)
             {
                 var obj = CreateUserSubscription(subObj, teamId);
-                userSubscriptionList.SubscriptionList.Add(obj);
+                userSubscriptionList.Subscriptions.Add(obj);
             }
             return userSubscriptionList;
         }

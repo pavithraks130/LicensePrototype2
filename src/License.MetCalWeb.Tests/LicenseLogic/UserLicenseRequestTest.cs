@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using License.Model;
-using License.Logic.ServiceLogic;
+using License.DataModel;
+using License.Logic.DataLogic;
 
 
 namespace License.MetCalWeb.Tests.LicenseLogic

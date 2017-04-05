@@ -126,7 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Common\CustomOAuthPerovider.cs" />
+    <Compile Include="Common\CustomOAuthProvider.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />

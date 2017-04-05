@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 
 namespace License.MetCalWeb.Controllers
 {

@@ -13,7 +13,7 @@ namespace License.MetCalWeb.Common
     {
         public static async Task UpdateUserSubscription()
         {
-            UserSubscriptionList userSubscriptionList = null;
+            SubscriptionList userSubscriptionList = null;
             var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
             HttpClient client = WebApiServiceLogic.CreateClient(serviceType);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
@@ -23,81 +23,53 @@ namespace License.MetCalWeb.Common
                 var jsondata = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsondata))
                 {
-                    userSubscriptionList = JsonConvert.DeserializeObject<UserSubscriptionList>(jsondata);
+                    userSubscriptionList = JsonConvert.DeserializeObject<SubscriptionList>(jsondata);
                     UpdateSubscriptionOnpremise(userSubscriptionList);
                 }
             }
-
-
         }
 
-        public static void UpdateSubscriptionOnpremise(UserSubscriptionList subs)
+        public static void UpdateSubscriptionOnpremise(SubscriptionList subs)
         {
             string userId = string.Empty;
-            if (LicenseSessionState.Instance.User.ServerUserId != subs.UserId)
+            userId = LicenseSessionState.Instance.User.UserId;
+            foreach (var subDtls in subs.Subscriptions)
             {
-                License.Logic.ServiceLogic.UserLogic userLogic = new License.Logic.ServiceLogic.UserLogic();
-            }
-            else
-                userId = LicenseSessionState.Instance.User.UserId;
 
-            foreach (var subDtls in subs.SubscriptionList)
-            {
-                //Code to save the Subscription Data with Product in to file.
-                //Begin
-                List<License.Model.Product> productList = new List<License.Model.Product>();
-                foreach (var dtls in subDtls.SubscriptionType.SubDetails)
-                {
-                    License.Model.Product prod = new License.Model.Product();
-                    prod.Id = dtls.Product.Id;
-                    prod.Name = dtls.Product.Name;
-                    prod.Description = dtls.Product.Description;
-                    prod.ProductCode = dtls.Product.ProductCode;
-                    prod.QtyPerSubscription = dtls.Quantity;
-                    prod.Features = new List<Model.Feature>();
-                    foreach (var f in dtls.Product.AssociatedFeatures)
-                    {
-                        var feture = new License.Model.Feature();
-                        feture.Id = f.Id;
-                        feture.Name = f.Name;
-                        feture.Description = f.Description;
-                        feture.Version = f.Version;
-                        prod.Features.Add(feture);
-                    }
-                    productList.Add(prod);
-                }
 
-                License.Model.Subscription subsModel = new Model.Subscription();
-                subsModel.Id = subDtls.SubscriptionType.Id;
-                subsModel.SubscriptionName = subDtls.SubscriptionType.Name;
-                subsModel.Product = productList;
 
-                Logic.ServiceLogic.ProductSubscriptionLogic proSubLogic = new Logic.ServiceLogic.ProductSubscriptionLogic();
-                proSubLogic.SaveToFile(subsModel);
-                //End
+                //License.DataModel.Subscription subsModel = new DataModel.Subscription();
+                //subsModel.Id = subDtls.SubscriptionType.Id;
+                //subsModel.SubscriptionName = subDtls.SubscriptionType.Name;
+                //subsModel.Product = productList;
+
+                //Logic.DataLogic.ProductSubscriptionLogic proSubLogic = new Logic.DataLogic.ProductSubscriptionLogic();
+                //proSubLogic.SaveToFile(subsModel);
+                ////End
 
                 //Code to save the user Subscription details to Database.
-                License.Model.UserSubscription userSubscription = new Model.UserSubscription();
+                UserSubscriptionData userSubscription = new UserSubscriptionData();
                 userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
                 userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
                 userSubscription.UserId = userId;
                 userSubscription.Quantity = subDtls.OrderdQuantity;
+                userSubscription.Subscription = subDtls;
+                userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
+                //License.Logic.DataLogic.UserSubscriptionLogic userSubscriptionLogic = new Logic.DataLogic.UserSubscriptionLogic();
+                //int userSubscriptionId = userSubscriptionLogic.CreateSubscription(userSubscription);
 
-                License.Logic.ServiceLogic.UserSubscriptionLogic userSubscriptionLogic = new Logic.ServiceLogic.UserSubscriptionLogic();
-                int userSubscriptionId = userSubscriptionLogic.CreateSubscription(userSubscription);
 
-
-                List<License.Model.LicenseData> licenseDataList = new List<Model.LicenseData>();
-                foreach (var lic in subDtls.LicenseKeyProductMapping)
-                {
-                    License.Model.LicenseData licenseData = new Model.LicenseData();
-                    licenseData.LicenseKey = lic.LicenseKey;
-                    licenseData.ProductId = lic.ProductId;
-                    licenseData.UserSubscriptionId = userSubscriptionId;
-                    licenseDataList.Add(licenseData);
-                }
-                License.Logic.ServiceLogic.LicenseLogic licenseLogic = new Logic.ServiceLogic.LicenseLogic();
-                licenseLogic.CreateLicenseData(licenseDataList);
+                //List<License.DataModel.LicenseData> licenseDataList = new List<DataModel.LicenseData>();
+                //foreach (var lic in subDtls.LicenseKeyProductMapping)
+                //{
+                //    License.DataModel.LicenseData licenseData = new DataModel.LicenseData();
+                //    licenseData.LicenseKey = lic.LicenseKey;
+                //    licenseData.ProductId = lic.ProductId;
+                //    licenseData.UserSubscriptionId = userSubscriptionId;
+                //    licenseDataList.Add(licenseData);
+                //}
+                //License.Logic.DataLogic.LicenseLogic licenseLogic = new Logic.ServiceLogic.LicenseLogic();
+                //licenseLogic.CreateLicenseData(licenseDataList);
             }
         }
     }

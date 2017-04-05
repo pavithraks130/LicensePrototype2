@@ -3,46 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.Model;
+using License.DataModel;
 using System.IO;
 using Newtonsoft.Json;
-using License.Model;
 
-namespace License.Logic.ServiceLogic
+namespace License.Logic.DataLogic
 {
     public class ProductSubscriptionLogic
     {
-        public void SaveToFile(Subscription subs)
+
+        public void SaveToFile(List<SubscriptionType> subscriptions)
         {
-            List<Subscription> subscriptionList;
-            if (Common.CommonFileIO.IsFileExist("productSubscription.txt"))
+
+            List<SubscriptionType> subscriptionList;
+            if (Common.CommonFileIO.IsFileExist("SubscriptionDetails.txt"))
             {
-                var existingData = Common.CommonFileIO.GetJsonDataFromFile("productSubscription.txt");
-                subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(existingData);
+                var existingData = Common.CommonFileIO.GetJsonDataFromFile("SubscriptionDetails.txt");
+                subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(existingData);
             }
             else
-                subscriptionList = new List<Subscription>();
-            if (!subscriptionList.Any(s => s.Id == subs.Id))
+                subscriptionList = new List<SubscriptionType>();
+            bool isDataModified = false;
+            foreach (var sub in subscriptions)
             {
-                subscriptionList.Add(subs);
+                if (!subscriptionList.Any(s => s.Id == sub.Id))
+                {
+                    isDataModified = true;
+                    subscriptionList.Add(sub);
+                }
+            }
+            if (isDataModified)
+            {
                 var data = JsonConvert.SerializeObject(subscriptionList);
                 Common.CommonFileIO.SaveDatatoFile(data, "productSubscription.txt");
             }
         }
 
-        public List<Subscription> GetSubscriptionFromFile()
+        public List<SubscriptionType> GetSubscriptionFromFile()
         {
-            List<Subscription> subscriptionList;
-            if (Common.CommonFileIO.IsFileExist("productSubscription.txt"))
+            List<SubscriptionType> subscriptionList;
+            if (Common.CommonFileIO.IsFileExist("SubscriptionDetails.txt"))
             {
-                var existingData = Common.CommonFileIO.GetJsonDataFromFile("productSubscription.txt");
-                subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(existingData);
+                var existingData = Common.CommonFileIO.GetJsonDataFromFile("SubscriptionDetails.txt");
+                subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(existingData);
             }
             else
-                subscriptionList = new List<Subscription>();
+                subscriptionList = new List<SubscriptionType>();
             return subscriptionList;
 
         }
+
         public List<LicenseMapModel> GetUserLicenseDetails(string userId, bool isFeatureRequired)
         {
             var licenseMapModelList = new List<LicenseMapModel>();

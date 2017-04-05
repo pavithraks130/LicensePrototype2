@@ -141,9 +141,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controller\BaseAPIController.cs" />
-    <Compile Include="Controller\RoleAPIController.cs" />
-    <Compile Include="Controller\UserAPIController.cs" />
+    <Compile Include="Common\CustomOAuthProvider.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserSubscriptionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceResponse.cs" />
     <Compile Include="StartupAuth.cs" />
@@ -161,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -177,9 +178,9 @@
       <Project>{2b6303e7-4f04-4538-83cb-5f3ab977a626}</Project>
       <Name>License.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\License.Model\License.Model.csproj">
+    <ProjectReference Include="..\License.Model\License.DataModel.csproj">
       <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
-      <Name>License.Model</Name>
+      <Name>License.DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -16,7 +16,7 @@ using Microsoft.Owin.Security.Cookies;
 
 namespace Centralized.WebAPI.Common
 {
-    public class CustomOAuthPerovider : OAuthAuthorizationServerProvider
+    public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {

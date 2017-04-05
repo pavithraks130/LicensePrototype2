@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Logic.ServiceLogic
+namespace License.Logic.DataLogic
 {
     class TeamAssetLogic : BaseLogic
     {

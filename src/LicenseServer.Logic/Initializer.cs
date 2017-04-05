@@ -31,8 +31,7 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>()
                 .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
 
-            cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>()
-                .ForMember(dest => dest.SubDetails, opt => opt.MapFrom(src => src.SubDetails));
+            cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>();
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionType, LicenseServer.Core.Model.SubscriptionType>();
 
             cfg.CreateMap<LicenseServer.Core.Model.SubscriptionDetail, LicenseServer.DataModel.SubscriptionDetails>();
