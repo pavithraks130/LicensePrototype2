@@ -107,7 +107,7 @@
                                         <div class="dropdown-content">                                          
                                             <a href="javascript:void(0);" class="anchorDetail" data-id="@t.Id">Details</a>
                                             
-                                            @Html.ActionLink("Remove Asset", "DeleteHardware", "Hardware", new { id = @t.Id }, null)
+                                            @Html.ActionLink("Remove Asset", "AssetConfiguration", "Hardware", new { id = @t.Id, actionType = "Remove" }, null)
                                         </div>
                                     </div>
                                 }
