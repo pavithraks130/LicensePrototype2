@@ -5,10 +5,17 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-	public class HardwareModel
-	{
-		public List<TeamAsset> Assets { get; set; }
-	}
+    public class HardwareModel
+    {
+        public List<TeamAsset> Assets { get; set; }
+        public TeamAsset SelectedAsset { get; set; }
+
+        public HardwareModel()
+        {
+            SelectedAsset = new TeamAsset();
+            Assets = new List<TeamAsset>();
+        }
+    }
 
     public class TeamAsset
     {
@@ -21,4 +28,5 @@ namespace License.MetCalWeb.Models
         public string Model { get; set; }
         public string Description { get; set; }
     }
+
 }

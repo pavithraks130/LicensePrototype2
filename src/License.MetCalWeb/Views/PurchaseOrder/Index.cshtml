@@ -4,7 +4,8 @@
 }
 
 <h3>Purchase Order Approval</h3>
-
+<br />
+<br />
 @if (Model.Count == 0)
 {
     <div class="row">
@@ -23,7 +24,21 @@ else
 
         <div class="row">
             <div class="col-md-12">
-                <table class="table">
+                <table class="table" style="border:none!important;">
+                    <tr>
+                        <th class="col-md-1">
+
+                        </th>
+                        <th class="col-md-3">
+                            User
+                        </th>
+                        <th class="col-md-3">
+                            Purchase Order
+                        </th>
+                        <th>
+                            Subscription
+                        </th>
+                    </tr>
                     @for (int i = 0; i < Model.Count; i++)
                     {
                         <tr>
@@ -54,8 +69,8 @@ else
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label> Comment/Feedback </label>
-                    @Html.TextArea("comment", new { @class = "col-md-4" })
+                    <label class="col-md-4"> Comment/Feedback </label>
+                    @Html.TextArea("comment", new { @class = "col-md-8 float-left" })
                 </div>
             </div>
         </div>
@@ -63,8 +78,12 @@ else
         <br />
         <div class="row">
             <div class="col-md-12">
-                <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
-                <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save" />
+                <div class="col-md-6">
+                    <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save float-left" />
+                </div>
             </div>
         </div>
         <div class="row">
