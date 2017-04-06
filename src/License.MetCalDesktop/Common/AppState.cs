@@ -23,6 +23,10 @@ namespace License.MetCalDesktop.Common
 
         public User User { get; set; }
 
+        public AccessToken OnPremiseToken { get; set; }
+
+        public AccessToken CentralizedToken { get; set; }
+
         public static HttpClient CreateClient(string serviceType)
         {
             string url = string.Empty;

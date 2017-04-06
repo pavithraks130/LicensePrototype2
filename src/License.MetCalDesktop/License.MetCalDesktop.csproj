@@ -84,6 +84,7 @@
     <Compile Include="Common\DataValidations.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
     <Compile Include="Model\Subscription.cs" />
+    <Compile Include="Model\AccessToken.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserLicense.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
@@ -158,14 +159,6 @@
     <ProjectReference Include="..\License.Logger\Logger.csproj">
       <Project>{50961cdc-c21f-43ea-9f6f-ab74a7a8e547}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\License.Logic\License.Logic.csproj">
-      <Project>{2b6303e7-4f04-4538-83cb-5f3ab977a626}</Project>
-      <Name>License.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\License.Model\License.DataModel.csproj">
-      <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
-      <Name>License.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
