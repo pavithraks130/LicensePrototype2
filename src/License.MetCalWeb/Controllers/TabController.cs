@@ -12,8 +12,8 @@ namespace License.MetCalWeb.Controllers
         // GET: Tab
         public ActionResult Home()
         {
-            OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-            return View();
+            var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+            return View(subscriptionDetails);
 
         }
 

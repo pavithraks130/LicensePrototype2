@@ -53,7 +53,7 @@ namespace License.Logic.DataLogic
         /// <param name="licList"></param>
         /// <param name="userIdList"></param>
         /// <returns></returns>
-        public bool CreateMultiUserLicense(List<UserLicense> licList, List<string> userIdList)
+        public bool CreateMultiUserLicense(List<LicenseData> licList, List<string> userIdList)
         {
             LicenseLogic licLogic = new LicenseLogic();
             int i = 0;
@@ -63,14 +63,14 @@ namespace License.Logic.DataLogic
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == userId).ToList();
                 foreach (var lic in licList)
                 {
-                    var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
+                    var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.ProductId && l.UserSubscriptionId == lic.UserSubscriptionId).ToList().Select(l => l.Id);
                     var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == userId);
                     if (obj == null)
                     {
                         i++;
                         UserLicense ul = new UserLicense();
                         ul.UserId = userId;
-                        ul.LicenseId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
+                        ul.LicenseId = licLogic.GetUnassignedLicense(lic.UserSubscriptionId, lic.ProductId).Id;
                         CreateUserLicense(ul);
                     }
                     userLicList.Remove(obj);
@@ -91,22 +91,25 @@ namespace License.Logic.DataLogic
             return obj1 != null;
         }
 
-        public bool RevokeUserLicense(List<UserLicense> licList, string userId)
+        public bool RevokeUserLicense(List<LicenseData> licList, List<string> userList)
         {
             int i = 0;
             LicenseLogic licLogic = new LicenseLogic();
-            var licdata = GetUserLicense(userId);
-            foreach (var lic in licList)
+            foreach (var userId in userList)
             {
-                var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.License.ProductId && l.License.UserSubscriptionId == lic.License.UserSubscriptionId);
-                RevokeUserLicense(obj);
-                i++;
+                var licdata = GetUserLicense(userId);
+                foreach (var lic in licList)
+                {
+                    var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId);
+                    RevokeUserLicense(obj);
+                    i++;
+                }
+                if (i > 0)
+                    Work.UserLicenseRepository.Save();
             }
-            if (i > 0)
-                Work.UserLicenseRepository.Save();
             return true;
         }
-               
+
         public int GetUserLicenseCount(int userSubscriptionId, int productId)
         {
             var licenseIdList = Work.LicenseDataRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId && l.ProductId == productId).Select(l => l.Id).ToList();

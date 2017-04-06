@@ -39,5 +39,15 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, lstSubscriptionDetails);
         }
 
+        [HttpGet]
+        [Route("GetSubscriptioDtlsForLicenseMap/{adminId}/{userId}")]
+        public HttpResponseMessage GetSubscriptionDetailsForLicenseMap(string adminId,string userId)
+        {
+            var lstSubscriptionDetails = usersubBOLogic.GetSubscriptionList(adminId,userId);
+            if (lstSubscriptionDetails.Count == 0)
+                return Request.CreateResponse(HttpStatusCode.OK, "");
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, lstSubscriptionDetails);
+        }
     }
 }

@@ -18,4 +18,11 @@ namespace License.DataModel
         
         public LicenseData License { get; set; }
     }
+
+    public class UserLicenseDetails
+    {
+        public User User { get; set; }
+
+        public List<SubscriptionDetails> SubscriptionDetails { get; set; }
+    }
 }

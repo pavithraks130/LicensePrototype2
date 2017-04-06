@@ -22,4 +22,12 @@ namespace License.DataModel
 
         public Product Product { get; set; }
     }
+
+    public class UserLicesneDataMapping
+    {
+        public List<string> UserId { get; set; }
+
+        public List<LicenseData> LicenseDataList { get; set; }
+    }
+    
 }

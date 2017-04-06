@@ -52,7 +52,7 @@ namespace License.Logic.BusinessLogic
 
         }
 
-        public List<SubscriptionDetails> GetSubscriptionList(string adminId)
+        public List<SubscriptionDetails> GetSubscriptionList(string adminId , string userId = "")
         {
             List<SubscriptionDetails> lstSsubscriptionDetail = new List<SubscriptionDetails>();
             var usersubList = userSubLogic.GetSubscription(adminId);
@@ -71,13 +71,35 @@ namespace License.Logic.BusinessLogic
                     {
                         UserLicenseLogic userLicLogic = new UserLicenseLogic();
                         int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                        model.Products.Add(new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = (pro.Quantity * userSub.Quantity), UsedLicenseCount = usedLicCount });
+                        var proObj = new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = (pro.Quantity * userSub.Quantity), UsedLicenseCount = usedLicCount };
+                        proObj.IsDisabled = proObj.TotalLicenseCount == proObj.UsedLicenseCount;
+                        model.Products.Add(proObj);
                     }
                     lstSsubscriptionDetail.Add(model);
+                }
+            }
+
+            if (!String.IsNullOrEmpty(userId))
+            {
+                UserLicenseLogic logic = new UserLicenseLogic();
+                var data = logic.GetUserLicense(userId);
+                foreach (var obj in data)
+                {
+                    var subObj = lstSsubscriptionDetail.FirstOrDefault(f => f.UserSubscriptionId == obj.License.UserSubscriptionId);
+                    if (subObj != null)
+                    {
+                        var pro = subObj.Products.FirstOrDefault(f => f.Id == obj.License.ProductId);
+                        if (pro != null)
+                            pro.IsSelected = true;
+                        pro.InitialState = true;
+                    }
                 }
             }
             return lstSsubscriptionDetail;
 
         }
+
+        
+      
     }
 }

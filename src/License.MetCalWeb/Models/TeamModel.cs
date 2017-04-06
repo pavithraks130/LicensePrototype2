@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using License.DataModel;
-
 namespace License.MetCalWeb.Models
 {
     public class TeamDetails

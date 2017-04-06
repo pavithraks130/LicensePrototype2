@@ -5,7 +5,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class UserModel
+    public class User
     {
         public string UserId { get; set; }
         public string FirstName { get; set; }
@@ -21,7 +21,7 @@ namespace License.MetCalWeb.Models
         public bool IsActive { get; set; }
         public string Password { get; set; }
         public List<SubscriptionType> SubscriptionList { get; set; }
-        public UserModel()
+        public User()
         {
             Organization = new Organization();
             SubscriptionList = new List<SubscriptionType>();

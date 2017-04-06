@@ -21,7 +21,7 @@ namespace License.MetCalWeb.Controllers
         // GET: Team
         public ActionResult TeamContainer()
         {
-            TeamModel model = LoadTeamMember();
+            TeamDetails model = LoadTeamMember();
             return View(model);
         }
 

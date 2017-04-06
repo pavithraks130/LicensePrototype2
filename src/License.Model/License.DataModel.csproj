@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="LicenseData.cs" />
     <Compile Include="LicenseDetailModel.cs" />
-    <Compile Include="LicenseMapModel.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Registration.cs" />
     <Compile Include="Role.cs" />

@@ -15,7 +15,7 @@ namespace License.MetCalWeb.Models
         public DateTime UpdatedDate { get; set; }
         public bool IsSynched { get; set; }
         public string ApprovedBy { get; set; }
-        public UserModel User { get; set; }
+        public User User { get; set; }
         public string Comment { get; set; }
         public ICollection<PurchaseOrderItem> OrderItems { get; set; }
 

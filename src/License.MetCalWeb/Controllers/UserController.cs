@@ -25,14 +25,14 @@ namespace License.MetCalWeb.Controllers
         // GET: User
         public async Task<ActionResult> Index()
         {
-            List<UserModel> users = new List<UserModel>();
+            List<User> users = new List<User>();
             HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("");
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                users = JsonConvert.DeserializeObject<List<UserModel>>(jsonData);
+                users = JsonConvert.DeserializeObject<List<User>>(jsonData);
                 var obj = users.FirstOrDefault(u => u.Email == LicenseSessionState.Instance.User.Email);
                 users.Remove(obj);
             }
@@ -48,7 +48,7 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Profile(UserModel usermodel, string userId)
+        public async Task<ActionResult> Profile(User usermodel, string userId)
         {
             if (ModelState.IsValid)
             {

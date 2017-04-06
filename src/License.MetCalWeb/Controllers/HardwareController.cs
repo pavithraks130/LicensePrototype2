@@ -19,33 +19,31 @@ namespace License.MetCalWeb.Controllers
 		private HardwareModel LoadHardware()
 		{
 			var hm = new HardwareModel();
-			hm.Assets = new List<Core.Model.TeamAsset>();
-			hm.Assets.Add(new Core.Model.TeamAsset { Name = "FC5222A", SerialNumber = "123", Description = "Calibrator" });
-			hm.Assets.Add(new Core.Model.TeamAsset { Name = "FCDMM3000", SerialNumber = "256", Description = "Hand Held DMM" });
+			
 			//TODO: Need to add actual code
 			return hm;
 		}
 
         public ActionResult EditHardware(int id)
         {
-            var obj = new Core.Model.TeamAsset { Name = "FC5222A", SerialNumber = "123", Description = "Calibrator" };
-            return PartialView(obj);
+            
+            return PartialView(null);
         }
 		public ActionResult AssetConfiguration(int id, string actionType)
 		{
-			TeamAssetLogic logic = new TeamAssetLogic();
-			switch (actionType)
-			{
-				case "Admin":
-					//logic.SetAsAdmin(id, userId, true);
-					break;
-				case "EditAsset":
-					//logic.SetAsAdmin(id, userId, false);
-					break;
-				case "Remove":
-					//logic.DeleteTeamMember(id);
-					break;
-			}
+			//TeamAssetLogic logic = new TeamAssetLogic();
+			//switch (actionType)
+			//{
+			//	case "Admin":
+			//		//logic.SetAsAdmin(id, userId, true);
+			//		break;
+			//	case "EditAsset":
+			//		//logic.SetAsAdmin(id, userId, false);
+			//		break;
+			//	case "Remove":
+			//		//logic.DeleteTeamMember(id);
+			//		break;
+			//}
 			return RedirectToAction("TeamContainer");
 		}
 	}

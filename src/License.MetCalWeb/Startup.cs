@@ -19,9 +19,6 @@ namespace License.MetCalWeb
 
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
-            License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
-
             ConfigureOAuth(app);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using License.MetCalWeb.Common;
+using License.MetCalWeb.Models;
 
 
 namespace License.MetCalWeb
@@ -19,7 +20,7 @@ namespace License.MetCalWeb
 
         public string AdminId { get; set; }
 
-        public Models.UserModel User { get; set; }
+        public User User { get; set; }
 
         public bool IsAuthenticated { get; set; }
 
@@ -35,9 +36,7 @@ namespace License.MetCalWeb
 
         public AccessToken CentralizedToken { get; set; }
 
-        public IEnumerable<Models.SubscriptionProductModel> SubscriptionList { get; set; }
-
-        public List<Models.LicenseMapModel> ProductLicense { get; set; }
+        public IEnumerable<SubscriptionDetails> SubscriptionList { get; set; }
 
     }
 }

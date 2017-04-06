@@ -1,5 +1,4 @@
-﻿using License.Logic.Common;
-using License.Logic.DataLogic;
+﻿
 using License.MetCalDesktop.Common;
 using System;
 using System.Collections.Generic;
@@ -8,10 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Net.Http;
+using Newtonsoft.Json;
+using License.MetCalDesktop.Model;
 
 namespace License.MetCalDesktop.ViewModel
 {
-    class LoginViewModel:BaseEntity
+    class LoginViewModel : BaseEntity
     {
         #region private field
 
@@ -176,7 +178,16 @@ namespace License.MetCalDesktop.ViewModel
                     License.Logic.DataLogic.ProductSubscriptionLogic prodLogic = new ProductSubscriptionLogic();
 
                     AppState.Instance.IsUserLoggedIn = true;
-                    AppState.Instance.UserLicenseList = prodLogic.GetUserLicenseDetails(user.UserId, true);
+                    HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    client.DefaultRequestHeaders.Add("authorization","Bearer ");
+                    var response = client.GetAsync("").Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonData = response.Content.ReadAsStringAsync().Result;
+                        var details = JsonConvert.DeserializeObject<UserLicenseDetails>(jsonData);
+                        AppState.Instance.UserLicenseList = details.SubscriptionDetails;
+                    }
+                    // AppState.Instance.UserLicenseList = prodLogic.GetUserLicenseDetails(user.UserId, true);
                     AppState.Instance.User = user;
                     NavigateNextPage?.Invoke("Dashboard", null);
                     IsEnableLogin = true;

@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using License.Logic.DataLogic;
 
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
     public class DashboardController : BaseController
     {
-        private TeamMemberLogic logic = null;
-        private UserLogic userLogic = null;
 
         public DashboardController()
         {
-            logic = new TeamMemberLogic();
-            userLogic = new UserLogic();
         }
 
         // GET: Dashboard

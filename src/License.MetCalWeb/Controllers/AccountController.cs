@@ -54,7 +54,7 @@ namespace License.MetCalWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var datamodel = JsonConvert.DeserializeObject<UserModel>(jsonData);
+                    var datamodel = JsonConvert.DeserializeObject<User>(jsonData);
 
                     client.Dispose();
                     model.ServerUserId = datamodel.UserId;
@@ -89,11 +89,11 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogIn(LoginViewModel model)
         {
-            UserModel user = null;
+            User user = null;
             string data = null;
             if (ModelState.IsValid)
             {
-                MetCalWeb.Models.UserModel userObj = new Models.UserModel();
+                MetCalWeb.Models.User userObj = new Models.User();
 
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
                 // and on premises user and admin will be authenticated with on premise DB
@@ -122,7 +122,7 @@ namespace License.MetCalWeb.Controllers
                     {
                         var userJson = response.Content.ReadAsStringAsync().Result;
                         client.Dispose();
-                        user = Newtonsoft.Json.JsonConvert.DeserializeObject<UserModel>(userJson);
+                        user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(userJson);
                         if (user.Roles.Contains("SuperAdmin"))
                         {
                             client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
@@ -176,14 +176,14 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<UserSubscriptionList>(jsonData);
-                if (obj.SubscriptionList.Count > 0)
+                var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
+                if (obj.Subscriptions.Count > 0)
                     CentralizedSubscriptionLogic.UpdateSubscriptionOnpremise(obj);
             }
 
         }
 
-        private void SignInAsync(UserModel user, bool isPersistent)
+        private void SignInAsync(User user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             System.Security.Claims.ClaimsIdentity identity = new System.Security.Claims.ClaimsIdentity();
@@ -243,7 +243,7 @@ namespace License.MetCalWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsondata = response.Content.ReadAsStringAsync().Result;
-                    var user = JsonConvert.DeserializeObject<UserModel>(jsondata);
+                    var user = JsonConvert.DeserializeObject<User>(jsondata);
                     if (user != null && !String.IsNullOrEmpty(user.ServerUserId))
                     {
                         client.Dispose();
@@ -270,7 +270,7 @@ namespace License.MetCalWeb.Controllers
         {
 
             HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-            UserModel userModel = new UserModel();
+            User userModel = new User();
             userModel.UserId = LicenseSessionState.Instance.User.ServerUserId;
             userModel.IsActive = false;
             switch (webAPiType)

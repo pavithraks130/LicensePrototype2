@@ -85,7 +85,7 @@ namespace License.Logic.DataLogic
                     {
                         var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
                         var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
-                        tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
+                        tempObj.UserSubscripption.Subscription = new SubscriptionType() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
                         tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
                         userLicReq.Add(tempObj);
                     }
@@ -113,7 +113,7 @@ namespace License.Logic.DataLogic
                 {
                     var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
                     var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
-                    tempObj.UserSubscripption.Subscription = new Subscription() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
+                    tempObj.UserSubscripption.Subscription = new SubscriptionType() { Id = subscription.Id, SubscriptionName = subscription.SubscriptionName };
                     tempObj.Product = subscription.Product.FirstOrDefault(p => p.Id == tempObj.ProductId);
                     userLicReq.Add(tempObj);
                 }
