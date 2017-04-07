@@ -74,7 +74,10 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.User.FirstName = usermodel.FirstName;
                     LicenseSessionState.Instance.User.LastName = usermodel.LastName;
                     LicenseSessionState.Instance.User.PhoneNumber = usermodel.PhoneNumber;
-                    return RedirectToAction("Home", "Tab");
+                    if (LicenseSessionState.Instance.IsGlobalAdmin)
+                        return RedirectToAction("Index", "User");
+                    else
+                        return RedirectToAction("Home", "Tab");
                 }
                 ModelState.AddModelError("", response.ReasonPhrase);
             }
@@ -102,7 +105,7 @@ namespace License.MetCalWeb.Controllers
                     case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
                 }
 
-                var response = await client.PutAsJsonAsync("api/user/updatepassword/" + LicenseSessionState.Instance.User.UserId, model);
+                var response = await client.PutAsJsonAsync("api/user/UpdatePassword/" + LicenseSessionState.Instance.User.UserId, model);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -111,9 +114,12 @@ namespace License.MetCalWeb.Controllers
                     {
                         client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
                         client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-                        response = await client.PutAsJsonAsync("api/user/updatepassword/" + LicenseSessionState.Instance.User.ServerUserId, model);
+                        response = await client.PutAsJsonAsync("api/user/UpdatePassword/" + LicenseSessionState.Instance.User.ServerUserId, model);
                     }
-                    return RedirectToAction("Home", "Tab");
+                    if (LicenseSessionState.Instance.IsGlobalAdmin)
+                        return RedirectToAction("Index", "User");
+                    else
+                        return RedirectToAction("Home", "Tab");
                 }
                 ModelState.AddModelError("", response.ReasonPhrase);
             }

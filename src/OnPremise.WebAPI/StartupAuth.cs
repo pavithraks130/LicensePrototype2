@@ -21,15 +21,16 @@ namespace OnPremise.WebAPI
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
-            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            
+            //Initializing AutoMapper
+            License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
 
             ConfigureOAuth(app);
             //Registering the Web Api Configuration
             WebApiConfig.Register(httpConfig);
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.UseWebApi(httpConfig);
 
-            //Initializing AutoMapper
-            License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
         }
 
         public void ConfigureOAuth(IAppBuilder app)

@@ -24,9 +24,9 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> ProductCatalog()
         {
             List<SubscriptionType> typeList = new List<SubscriptionType>();
-            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.GetAsync("api/subscriptiontype/All");
+            var response = await client.GetAsync("api/subscription/All");
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
@@ -42,7 +42,7 @@ namespace License.MetCalWeb.Controllers
             item.Quantity = 2;
             item.DateCreated = DateTime.Now;
             item.UserId = LicenseSessionState.Instance.User.ServerUserId;
-            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsJsonAsync("api/Cart/Create",item);
             if (response.IsSuccessStatusCode)

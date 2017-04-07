@@ -60,7 +60,7 @@ namespace Centralized.WebAPI.Controllers
         public HttpResponseMessage Create(Registration user)
         {
             Initialize();
-            var userModel = logic.CreateUser(user);
+            var userModel = logic.CreateUser(user, "SuperAdmin");
             if (userModel != null)
                 return Request.CreateResponse<User>(HttpStatusCode.OK, userModel);
             else
@@ -96,7 +96,7 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateActiveStatus")]
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
@@ -138,6 +138,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("Update/{id}")]
         public HttpResponseMessage UpdateUser(string id, User user)
         {
+            Initialize();
             bool status = logic.UpdateUser(id, user);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Updated");
@@ -149,6 +150,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteUser(string id)
         {
+            Initialize();
             bool status = logic.DeleteUser(id);
             if (status)
                 return Request.CreateResponse<string>("Deleted");
@@ -156,11 +158,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdatePassword/{userId}")]
         public HttpResponseMessage UpdatePassword(string userId, ChangePassword model)
         {
-            var status = logic.ChangePassword(model.UserId, model.CurrentPassword, model.NewPassword);
+            Initialize();
+            var status = logic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Updated");
             else

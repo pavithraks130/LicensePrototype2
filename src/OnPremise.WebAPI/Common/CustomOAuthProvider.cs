@@ -28,9 +28,14 @@ namespace OnPremise.WebAPI.Common
             userLogic.RoleManager = context.OwinContext.Get<AppRoleManager>();
 
             var userModel = userLogic.AuthenticateUser(context.UserName, context.Password);
-            if (userModel != null)
+            if (userModel == null)
             {
-                var identity = new ClaimsIdentity();
+                context.SetError("Invalid Credentials");
+                return;
+            }
+            else
+            {
+                var identity = userLogic.CreateClaimsIdentity(userModel.UserId, context.Options.AuthenticationType);
                 identity.AddClaim(new Claim("UserId", userModel.UserId));
                 identity.AddClaim(new Claim("UserName", userModel.UserName));
 
@@ -38,27 +43,26 @@ namespace OnPremise.WebAPI.Common
                 AuthenticationTicket ticket = new AuthenticationTicket(identity, prop);
                 context.Validated(ticket);
             }
-            else
-            {
-                context.SetError("Invalid Credentials");
-                return;
-            }
         }
 
-        public AuthenticationProperties CreateAuthenticationProperties(User model)
+        public AuthenticationProperties CreateAuthenticationProperties(User userObj)
         {
-            IDictionary<string, string> propList = new Dictionary<string, string>();
-            propList.Add("UserName", model.UserName);
-            propList.Add("UserId", model.UserId);
-            propList.Add("ServerUserId", model.ServerUserId);
-            return new AuthenticationProperties(propList);
+            IDictionary<string, string> data = new Dictionary<string, string>
+              {
+                  { "userName", userObj.UserName},
+                  { "Id",userObj.UserId.ToString()},
+                {"ServerUserId",userObj.ServerUserId }
+
+              };
+
+            return new AuthenticationProperties(data);
         }
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
-            foreach (var param in context.AdditionalResponseParameters)
+            foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
             {
-                context.AdditionalResponseParameters.Add(param.Key, param.Value);
+                context.AdditionalResponseParameters.Add(property.Key, property.Value);
             }
             return Task.FromResult<Object>(null);
         }

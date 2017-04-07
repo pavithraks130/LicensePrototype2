@@ -60,6 +60,7 @@ namespace LicenseServer.Logic
             try
             {
                 RoleLogic rolelogic = new RoleLogic();
+                rolelogic.RoleManager = RoleManager;
                 result = UserManager.Create(user, u.Password);
                 var roleObj = rolelogic.GetRoleByName(roleName);
                 if (roleObj == null)

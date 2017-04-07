@@ -38,6 +38,7 @@ namespace License.Logic.DataLogic
                 if (RoleManager.FindByName(roleName) == null)
                 {
                     RoleLogic rolelogic = new RoleLogic();
+                    rolelogic.RoleManager = RoleManager;
                     result = rolelogic.CreateRole(new DataModel.Role() { Name = roleName });
                 }
                 string userId = String.Empty;
@@ -71,6 +72,8 @@ namespace License.Logic.DataLogic
         {
             var u = UserManager.FindById(id);
             var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.DataModel.User>(u);
+            IList<string> roles = UserManager.GetRoles(user.UserId);
+            user.Roles = roles;
             return user;
         }
 
@@ -150,6 +153,13 @@ namespace License.Logic.DataLogic
             var user = UserManager.FindById(userid);
             user.IsActive = status;
             UserManager.Update(user);
+        }
+        public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId, string authType)
+        {
+            var obj = UserManager.FindById(userId);
+            //Appuser user = AutoMapper.Mapper.Map<Appuser>(obj);
+            return UserManager.CreateIdentity(obj, authType);
+
         }
 
     }

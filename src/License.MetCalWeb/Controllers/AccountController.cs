@@ -125,7 +125,12 @@ namespace License.MetCalWeb.Controllers
                         if (user.Roles.Contains("SuperAdmin"))
                         {
                             client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-                            response = await client.PostAsync("AUthenticate", formContent);
+                            formContent = new FormUrlEncodedContent(new[] {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", model.Email),
+                    new KeyValuePair<string, string>("password", model.Password)
+                });
+                            response = await client.PostAsync("Authenticate", formContent);
                             if (response.IsSuccessStatusCode)
                             {
                                 data = response.Content.ReadAsStringAsync().Result;
@@ -190,7 +195,12 @@ namespace License.MetCalWeb.Controllers
             new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.UserId), //user.Id from my database
             new System.Security.Claims.Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "MyApplication"),
             new System.Security.Claims.Claim("FirstName", user.FirstName) //user.FirstName from my database
-        };
+            };
+
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new System.Security.Claims.Claim(ClaimTypes.Role, role));
+            }
             System.Security.Claims.ClaimsIdentity identity = new System.Security.Claims.ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.Name, ClaimTypes.Role);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }

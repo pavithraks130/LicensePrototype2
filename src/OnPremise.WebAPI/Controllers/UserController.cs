@@ -113,6 +113,7 @@ namespace OnPremise.WebAPI.Controllers
         [AllowAnonymous]
         public HttpResponseMessage ResetuserPassword(ResetPassword model)
         {
+            Initialize();
             string token = string.Empty;
             if (string.IsNullOrEmpty(model.Token))
                 token = UserManager.GeneratePasswordResetToken(model.UserId);
@@ -124,10 +125,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateActiveStatus")]
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
+            Initialize();
             logic.UpdateLogOutStatus(model.UserId, model.IsActive);
             if (!String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
@@ -135,11 +137,12 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, "updated");
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdatePassword/{userId}")]
         public HttpResponseMessage UpdatePassword(string userId, ChangePassword model)
         {
-            var status = logic.ChangePassword(model.UserId, model.CurrentPassword, model.NewPassword);
+            Initialize();
+            var status = logic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Updated");
             else

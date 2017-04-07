@@ -44,13 +44,13 @@ namespace Centralized.WebAPI.Common
             //var identity1 = logic.CreateClaimsIdentity(user.UserId, CookieAuthenticationDefaults.AuthenticationType);
             AuthenticationProperties properties = CreateProperties(user);
 
-          
+
             var authTicket = new AuthenticationTicket(identity, properties);
             context.Validated(authTicket);
-           // context.Request.Context.Authentication.SignIn(identity1);
+            // context.Request.Context.Authentication.SignIn(identity1);
 
         }
-          public override Task TokenEndpoint(OAuthTokenEndpointContext context)
+        public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
             foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
             {
