@@ -15,7 +15,7 @@ namespace License.MetCalWeb.Common
         {
             SubscriptionList userSubscriptionList = null;
             var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            HttpClient client = WebApiServiceLogic.CreateClient(serviceType);
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsync("api/OnlinePayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
             if (response.IsSuccessStatusCode)

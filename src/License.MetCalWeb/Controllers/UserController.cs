@@ -26,7 +26,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<User> users = new List<User>();
-            HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("");
             if (response.IsSuccessStatusCode)

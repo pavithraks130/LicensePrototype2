@@ -24,7 +24,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<UserToken> tokenList = new List<UserToken>();
-            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/usertoken/All");
             if (response.IsSuccessStatusCode)
@@ -46,7 +46,7 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = await client.PostAsJsonAsync<UserToken>("api/usertoken/create", token);
                 if (response.IsSuccessStatusCode)

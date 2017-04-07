@@ -26,7 +26,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<PurchaseOrder> orderList = new List<PurchaseOrder>();
-            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var result = await client.GetAsync("api/purchaseorder/All");
             if (result.IsSuccessStatusCode)
@@ -61,7 +61,7 @@ namespace License.MetCalWeb.Controllers
                 obj.Comment = comment;
                 obj.ApprovedBy = LicenseSessionState.Instance.User.UserName;
             }
-            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var result = await client.PutAsJsonAsync("/api/purchaseorder/update", orderList);
             if (result.IsSuccessStatusCode)
@@ -76,7 +76,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> OrderStatus()
         {
             List<PurchaseOrder> poList = new List<PurchaseOrder>();
-            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/purchaseorder/OrderByUser/" + LicenseSessionState.Instance.User.ServerUserId);
             if (response.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> OrderDetail(int id)
         {
             PurchaseOrder order = new PurchaseOrder();
-            HttpClient client = WebApiServiceLogic.CreateClient(webApitype.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/purchaseorder/OrderById/" + id.ToString());
             if (response.IsSuccessStatusCode)
