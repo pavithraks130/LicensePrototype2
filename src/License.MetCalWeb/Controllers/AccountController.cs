@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using System.Security.Claims;
 namespace License.MetCalWeb.Controllers
 {
     public class AccountController : BaseController
@@ -93,7 +93,6 @@ namespace License.MetCalWeb.Controllers
             string data = null;
             if (ModelState.IsValid)
             {
-                MetCalWeb.Models.User userObj = new Models.User();
 
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
                 // and on premises user and admin will be authenticated with on premise DB
@@ -150,11 +149,11 @@ namespace License.MetCalWeb.Controllers
                         //TeamMemberLogic tmLogic = new TeamMemberLogic();
                         //LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
                     }
-                    SignInAsync(userObj, true);
+                    SignInAsync(user, true);
                     if (LicenseSessionState.Instance.IsSuperAdmin)
                         SynchPurchaseOrder();
                     LicenseSessionState.Instance.IsAuthenticated = true;
-                    if (String.IsNullOrEmpty(userObj.FirstName))
+                    if (String.IsNullOrEmpty(user.FirstName))
                         return RedirectToAction("Profile", "User");
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                         return RedirectToAction("Index", "User");
@@ -186,10 +185,13 @@ namespace License.MetCalWeb.Controllers
         private void SignInAsync(User user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            System.Security.Claims.ClaimsIdentity identity = new System.Security.Claims.ClaimsIdentity();
-            identity.AddClaim(new System.Security.Claims.Claim("username", LicenseSessionState.Instance.User.UserName.ToString()));
-            identity.AddClaim(new System.Security.Claims.Claim("userId", LicenseSessionState.Instance.User.UserId.ToString()));
-            identity.AddClaim(new System.Security.Claims.Claim("Role", LicenseSessionState.Instance.User.Roles.ToString()));
+            List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>            {
+            new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", user.Name), //user.Name from my database
+            new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.UserId), //user.Id from my database
+            new System.Security.Claims.Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "MyApplication"),
+            new System.Security.Claims.Claim("FirstName", user.FirstName) //user.FirstName from my database
+        };
+            System.Security.Claims.ClaimsIdentity identity = new System.Security.Claims.ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.Name, ClaimTypes.Role);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
@@ -317,7 +319,7 @@ namespace License.MetCalWeb.Controllers
             }
             else
                 ViewBag.ErrorMessage = response.ReasonPhrase;
-           
+
             return View();
         }
     }

@@ -11,7 +11,7 @@ namespace License.MetCalWeb.Common
         {
             get
             {
-                return ConfigurationManager.AppSettings["UserName"].ToString();
+                return ConfigurationManager.AppSettings["EmailUserName"].ToString();
             }
         }
 
@@ -19,7 +19,7 @@ namespace License.MetCalWeb.Common
         {
             get
             {
-                return ConfigurationManager.AppSettings["Password"].ToString();
+                return ConfigurationManager.AppSettings["EmailPassword"].ToString();
             }
         }
 
