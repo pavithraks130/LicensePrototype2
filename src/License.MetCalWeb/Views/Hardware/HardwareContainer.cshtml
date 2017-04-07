@@ -17,7 +17,49 @@
                 data: { "Id": id },
                 datatype: "json",
                 success: function (data) {
-                    $('#myModalContent').html(data);
+                    $('#myModal').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $(".anchorDetail").click(function () {
+            var id = $(this).attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "/Hardware/EditHardware",
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": id },
+                datatype: "json",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+
+        $(".addhardware").click(function () {
+           
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "/Hardware/AddHardware",
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $('#myModal').html(data);
                     $('#myModal').modal(options);
                     $('#myModal').modal('show');
 
@@ -41,10 +83,4 @@
 </div>
 
 <div id='myModal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
-        </div>
-    </div>
-
 </div>  

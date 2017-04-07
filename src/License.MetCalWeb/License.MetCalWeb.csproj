@@ -372,6 +372,7 @@
     <Content Include="Views\PurchaseOrder\OrderDetail.cshtml" />
     <Content Include="Views\License\LicenseApproval.cshtml" />
     <Content Include="Views\Hardware\EditHardware.cshtml" />
+    <Content Include="Views\Hardware\AddHardware.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
