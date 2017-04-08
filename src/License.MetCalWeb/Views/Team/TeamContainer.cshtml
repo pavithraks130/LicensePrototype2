@@ -16,7 +16,7 @@
                 <h2> Team </h2>
             </div>
         }
-        @if (LicenseSessionState.Instance.IsAdmin)
+        @if (LicenseSessionState.Instance.IsAdmin && Model.AcceptedUsers != null && Model.AcceptedUsers.Count > 0)
         {
             <div class="float-right">
                 <button class="btn btn-primary btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Invite Team Member</button>

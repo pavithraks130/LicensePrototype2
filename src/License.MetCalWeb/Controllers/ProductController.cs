@@ -23,6 +23,7 @@ namespace License.MetCalWeb.Controllers
 
         public async Task<ActionResult> ProductCatalog()
         {
+            TempData["CartCount"] = "";
             List<SubscriptionType> typeList = new List<SubscriptionType>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
@@ -32,6 +33,19 @@ namespace License.MetCalWeb.Controllers
                 var data = response.Content.ReadAsStringAsync().Result;
                 typeList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
             }
+            client.Dispose();
+            client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            response = await client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var count = JsonConvert.DeserializeObject<int>(data);
+                if (count > 0)
+                    TempData["CartCount"] = "(" + count + ")";
+            }
+            client.Dispose();
+
             return View(typeList);
         }
 
@@ -44,7 +58,7 @@ namespace License.MetCalWeb.Controllers
             item.UserId = LicenseSessionState.Instance.User.ServerUserId;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.PostAsJsonAsync("api/Cart/Create",item);
+            var response = await client.PostAsJsonAsync("api/Cart/Create", item);
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("ProductCatalog", "Product");
             return null;

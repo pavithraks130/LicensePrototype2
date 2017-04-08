@@ -43,6 +43,17 @@ namespace Centralized.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetCartItemCount/{userId}")]
+        public HttpResponseMessage GetCartItemCount(string userId)
+        {
+            var count = logic.GetCartItems(userId).Count;
+            if (count == 0)
+                return Request.CreateResponse(HttpStatusCode.OK, "");
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, count);
+        }
+
+        [HttpGet]
         [Route("GetItems/{userId}")]
         public IHttpActionResult GetCartItems(string userId)
         {
