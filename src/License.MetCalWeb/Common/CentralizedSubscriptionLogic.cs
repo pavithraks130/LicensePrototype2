@@ -17,7 +17,7 @@ namespace License.MetCalWeb.Common
             var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.PostAsync("api/OnlinePayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
+            var response = await client.PostAsync("api/cart/OnlinePayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
             if (response.IsSuccessStatusCode)
             {
                 var jsondata = response.Content.ReadAsStringAsync().Result;

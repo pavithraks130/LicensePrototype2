@@ -34,6 +34,12 @@ namespace License.Logic.DataLogic
             return teamAssets;
         }
 
+        public TeamAssetModel GetAssetById(int id)
+        {
+            var obj = Work.TeamAssetRepository.GetById(id);
+            return AutoMapper.Mapper.Map<TeamAssetModel>(obj);
+        }
+
         public bool RemoveAsset(int id)
         {
             try

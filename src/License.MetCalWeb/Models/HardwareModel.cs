@@ -8,11 +8,9 @@ namespace License.MetCalWeb.Models
     public class HardwareModel
     {
         public List<TeamAsset> Assets { get; set; }
-        public TeamAsset SelectedAsset { get; set; }
 
         public HardwareModel()
         {
-            SelectedAsset = new TeamAsset();
             Assets = new List<TeamAsset>();
         }
     }

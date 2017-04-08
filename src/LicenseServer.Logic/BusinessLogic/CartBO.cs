@@ -63,7 +63,11 @@ namespace LicenseServer.Logic.BusinessLogic
         {
             List<UserSubscription> subsList = new List<UserSubscription>();
             CartLogic cartLogic = new CartLogic();
+            cartLogic.UserManager = UserManager;
+            cartLogic.RoleManager = RoleManager;
             UserSubscriptionLogic userSubLogic = new UserSubscriptionLogic();
+            userSubLogic.UserManager = UserManager;
+            userSubLogic.RoleManager = RoleManager;
             var cartItems = cartLogic.GetCartItems(userId);
             if (cartItems.Count > 0)
             {

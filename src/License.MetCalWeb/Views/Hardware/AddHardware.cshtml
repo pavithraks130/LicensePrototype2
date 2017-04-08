@@ -63,6 +63,8 @@
 </style>
 @using (Html.BeginForm("AddEditHardware", "Hardware", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
     <div class="modal-dialog">
         <div class="modal-content">
             <div id='myModalContent'>
@@ -117,6 +119,18 @@
                             <div class="col-md-8">
                                 @Html.TextBoxFor(model => model.Description, new { @class = "text-danger" })
                                 @Html.ValidationMessageFor(model => model.Description)
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                    <div>
+                        <div style="padding-top: 15px;padding-bottom: 10px">
+                            <div class="col-md-4">
+                                <span>Type</span>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.Type, new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Type)
                             </div>
                             <br />
                         </div>

@@ -37,13 +37,14 @@ namespace License.MetCalWeb.Controllers
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.DeleteAsync("api/cartitem/Delete" + id);
+            var response = await client.DeleteAsync("api/cart/Delete/" + id);
             //if (response.IsSuccessStatusCode)
             return RedirectToAction("CartItem", "Cart");
         }
 
-        public ActionResult PaymentGateway()
+        public ActionResult PaymentGateway(string total)
         {
+            ViewData["Total"] = total;
             return View();
         }
 

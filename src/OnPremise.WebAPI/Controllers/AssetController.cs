@@ -38,6 +38,17 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        [HttpGet]
+        [Route("GetAssetById/{id}")]
+        public HttpResponseMessage GetAssetById(int id)
+        {
+            var asset = logic.GetAssetById(id);
+            if (asset != null)
+                return Request.CreateResponse(HttpStatusCode.OK, asset);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
         [HttpPut]
         [Route("UpdateAsset/{id}")]
         public HttpResponseMessage UpdateAsset(int id, TeamAsset model)

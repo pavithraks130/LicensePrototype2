@@ -1,14 +1,4 @@
-﻿@model LicenseServer.DataModel.CartItem
-    @using LicenseServer.Logic
-@{
-    CartLogic cartLogic = new CartLogic();
-    if (LicenseSessionState.Instance.User != null)
-    {
-        cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
-    }
-    double amount = cartLogic.TotalAmount;
-}
-<html>
+﻿<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>PaymentGateway</title>
@@ -101,7 +91,7 @@
         @using (Html.BeginForm("DoPayment", "Cart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <div >
-                <button class="btn-success btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Pay @cartLogic.TotalAmount $</button>
+                <button class="btn-success btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Pay @ViewData["Total"] $</button>
             </div>
         }
     </div>
