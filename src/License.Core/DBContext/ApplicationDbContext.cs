@@ -30,7 +30,7 @@ namespace License.Core.DBContext
             return new ApplicationDbContext();
         }
 
-        public DbSet<TeamMembers> UserInvite { get; set; }
+        public DbSet<TeamMember> UserInvite { get; set; }
 
         //public DbSet<Product> Product { get; set; }
 

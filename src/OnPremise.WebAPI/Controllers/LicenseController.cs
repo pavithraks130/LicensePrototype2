@@ -67,6 +67,8 @@ namespace OnPremise.WebAPI.Controllers
         public HttpResponseMessage ApproveLicense(List<UserLicenseRequest> licReqList)
         {
             LicenseBO licBOLogic = new LicenseBO();
+            licBOLogic.UserManager = UserManager;
+            licBOLogic.RoleManager = RoleManager;
             licBOLogic.ApproveOrRejectLicense(licReqList);
             if (String.IsNullOrEmpty(licBOLogic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");

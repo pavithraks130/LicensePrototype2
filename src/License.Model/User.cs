@@ -48,4 +48,9 @@ namespace License.DataModel
 
         public string Token { get; set; }
     }
+
+    public class ForgotPassword
+    {
+        public string Email { get; set; }
+    }
 }

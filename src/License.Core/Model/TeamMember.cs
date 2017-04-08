@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace License.Core.Model
 {
-    public class TeamMembers
+    public class TeamMember
     {
         [Key]
         public int Id { get; set; }

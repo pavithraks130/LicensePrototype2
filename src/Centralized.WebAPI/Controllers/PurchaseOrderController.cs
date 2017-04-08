@@ -19,6 +19,11 @@ namespace Centralized.WebAPI.Controllers
             logic = new PurchaseOrderLogic();
         }
 
+        public void Initializer()
+        {
+
+        }
+
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetPurchaseOrder()
@@ -95,6 +100,8 @@ namespace Centralized.WebAPI.Controllers
         public HttpResponseMessage SyncPurchaseOrder(string userId)
         {
             CartBO cartBOLogic = new CartBO();
+            cartBOLogic.UserManager = UserManager;
+            cartBOLogic.RoleManager = RoleManager;
             var obj = cartBOLogic.SyncPurchaseOrder(userId);
             if (obj == null)
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);

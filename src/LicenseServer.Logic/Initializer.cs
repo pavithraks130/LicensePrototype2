@@ -63,7 +63,6 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.PurchaseOrderItem, DataModel.PurchaseOrderItem>()
                 .ForMember(dest => dest.Subscription, opt => opt.MapFrom(src => src.Subscription));
 
-            License.Logic.AutoMapperConfiguration.InitializeConfiguration(cfg);
         }
 
 

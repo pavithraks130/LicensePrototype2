@@ -48,4 +48,10 @@ namespace LicenseServer.DataModel
 
         public string NewPassword { get; set; }
     }
+
+
+    public class ForgotPassword
+    {
+        public string Email { get; set; }
+    }
 }

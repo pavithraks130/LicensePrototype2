@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
     Layout = null;
 }
 @using License.MetCalWeb.Models
@@ -66,7 +64,7 @@
         }
 </style>
 <div class="row">
-    @if (Model == null || (Model.AcceptedUsers.Count == 0 && Model.PendinigUsers.Count == 0))
+    @if (Model == null || (Model.AcceptedUsers == null && Model.PendinigUsers == null))
     {
         <table class="table" style="border: none;">
 
@@ -92,7 +90,7 @@
                 <h4>Pending Users</h4>
                 <div class="col-md-12">
                     <table class="table" style="border: none">
-                        @foreach (TeamMembers t in Model.PendinigUsers)
+                        @foreach (TeamMember t in Model.PendinigUsers)
                     {
                             <tr>
                                 <td class="col-md-8">
@@ -122,7 +120,7 @@
                 <h4>Active Users</h4>
                 <div class="col-md-12">
                     <table class="table" style="border: none">
-                        @foreach (TeamMembers t in Model.AcceptedUsers)
+                        @foreach (TeamMember t in Model.AcceptedUsers)
                         {
                             <tr>
                                 <td class="col-md-2">
@@ -204,13 +202,13 @@
             }
         </div>
         @*if (LicenseSessionState.Instance.IsAdmin)
-        {
-            <div>
-                <button class="alert-success">
-                    @Html.ActionLink("Add Bulk License", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)
-                </button>
-            </div>
-        }*@
+            {
+                <div>
+                    <button class="alert-success">
+                        @Html.ActionLink("Add Bulk License", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)
+                    </button>
+                </div>
+            }*@
     }
 
     <div class="modal" id="myModal">

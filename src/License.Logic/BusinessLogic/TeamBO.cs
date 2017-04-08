@@ -31,21 +31,22 @@ namespace License.Logic.BusinessLogic
             userLogic.RoleManager = RoleManager;
         }
 
-        public UserInviteList GetUserInviteDetails(string adminId)
+        public TeamDetails GetUserInviteDetails(string adminId)
         {
+            Initialize();
             User user = userLogic.GetUserById(adminId);
-            UserInviteList inviteList = new UserInviteList()
+            TeamDetails inviteList = new TeamDetails()
             {
                 AdminUser = user
             };
             var teamMembers = logic.GetUserInviteList(adminId);
             if (teamMembers.Count > 0)
             {
-                inviteList.PendingInvites =
+                inviteList.PendinigUsers =
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
-                inviteList.AcceptedInvites =
+                inviteList.AcceptedUsers =
                     teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
-                inviteList.AcceptedInvites.Add(new TeamMembers()
+                inviteList.AcceptedUsers.Add(new TeamMember()
                 {
                     AdminId = adminId,
                     InviteeEmail = user.Email,
@@ -57,7 +58,7 @@ namespace License.Logic.BusinessLogic
             }
             else
             {
-                inviteList.AcceptedInvites.Add(new TeamMembers()
+                inviteList.AcceptedUsers.Add(new TeamMember()
                 {
                     AdminId = adminId,
                     InviteeEmail = user.Email,
@@ -71,8 +72,9 @@ namespace License.Logic.BusinessLogic
             return inviteList;
         }
 
-        public TeamMemberResponse CreateTeamMembereInvite(TeamMembers member)
+        public TeamMemberResponse CreateTeamMembereInvite(TeamMember member)
         {
+            Initialize();
             var user = userLogic.GetUserByEmail(member.InviteeEmail);
             TeamMemberResponse teamMemResObj = new TeamMemberResponse();
             if (user == null)
@@ -86,7 +88,7 @@ namespace License.Logic.BusinessLogic
                     user = userLogic.GetUserByEmail(member.InviteeEmail);
                     member.InviteeUserId = user.UserId;
                     var teamMemObj = logic.CreateInvite(member);
-                    if(teamMemObj != null)
+                    if (teamMemObj != null)
                     {
                         teamMemResObj.UserId = user.UserId;
                         teamMemResObj.UserName = user.UserName;
@@ -94,7 +96,11 @@ namespace License.Logic.BusinessLogic
                         teamMemResObj.TeamMemberId = teamMemObj.Id;
                         return teamMemResObj;
                     }
+                    else
+                        ErrorMessage = logic.ErrorMessage;
                 }
+                else
+                    ErrorMessage = userLogic.ErrorMessage;
             }
             return null;
 

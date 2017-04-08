@@ -35,7 +35,7 @@ namespace License.Logic.DataLogic
             if (isDataModified)
             {
                 var data = JsonConvert.SerializeObject(subscriptionList);
-                Common.CommonFileIO.SaveDatatoFile(data, "productSubscription.txt");
+                Common.CommonFileIO.SaveDatatoFile(data, "SubscriptionDetails.txt");
             }
         }
 

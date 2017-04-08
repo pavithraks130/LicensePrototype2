@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LicenseServer.DataModel;
+using LicenseServer.Core.Manager;
 
 namespace LicenseServer.Logic.BusinessLogic
 {
     public class CartBO
     {
         public string ErrorMessage { get; set; }
-
+        public LicUserManager UserManager { get; set; }
+        public LicRoleManager RoleManager { get; set; }
         public PurchaseOrder OfflinePayment(string userId)
         {
             CartLogic cartLogic = new CartLogic();
@@ -41,6 +43,12 @@ namespace LicenseServer.Logic.BusinessLogic
                         POItemLogic itemLogic = new POItemLogic();
                         itemLogic.CreateItem(poItemList, obj.Id);
                     }
+                    foreach(var item in items)
+                    {
+                        item.IsPurchased = true;
+                        cartLogic.UpdateCartItem(item);
+                    }
+                    
                 }
                 return obj;
             }
@@ -69,6 +77,11 @@ namespace LicenseServer.Logic.BusinessLogic
                     subsList.Add(usersubs);
                 }
                 var dataList = userSubLogic.CreateUserSubscriptionList(subsList, userId);
+                foreach (var item in cartItems)
+                {
+                    item.IsPurchased = true;
+                    cartLogic.UpdateCartItem(item);
+                }
                 return dataList;
             }
             else
@@ -87,6 +100,9 @@ namespace LicenseServer.Logic.BusinessLogic
             List<UserSubscription> subsList = new List<UserSubscription>();
             PurchaseOrderLogic logic = new PurchaseOrderLogic();
             SubscriptionList userSsubList = new SubscriptionList();
+
+            userSubLogic.UserManager = UserManager;
+            userSubLogic.RoleManager = RoleManager;
 
             userSsubList.UserId = userId;
             var poList = logic.GetPOToBeSynchedByUser(userId);

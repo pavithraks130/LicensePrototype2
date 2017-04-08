@@ -1,4 +1,4 @@
-﻿@model IList<License.MetCalWeb.Models.SubscriptionProductModel>
+﻿@model IList<License.MetCalWeb.Models.SubscriptionDetails>
 @{
     Layout = null;
 }
@@ -15,22 +15,25 @@
     }
     else
     {
-        foreach (var obj in Model)
+        if (Model != null)
         {
+            foreach (var obj in Model)
+            {
             <tr>
                 <td>
-                    <h3>@obj.SubscriptionName</h3>
+                    <h3>@obj.Name</h3>
 
-                    @foreach(var pro in obj.ProductDtls)
+                    @foreach (var pro in obj.Products)
                     {
-                        <h5>@pro.ProductName</h5>
-                        <spean>Avialable License: @pro.AvailableCount</spean>
+                        <h5>@pro.Name</h5>
+                        <spean>Avialable License: @(pro.TotalLicenseCount - pro.UsedLicenseCount)</spean>
                         <br />
                         <span>@pro.ProductCode</span>
                     }
                   
                 </td>
             </tr>
+            }
         }
     }
     <tr>

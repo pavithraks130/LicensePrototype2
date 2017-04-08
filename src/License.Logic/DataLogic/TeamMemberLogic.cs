@@ -7,44 +7,44 @@ using License.Core.Model;
 using License.Logic.Common;
 using License.DataModel;
 using Microsoft.AspNet.Identity;
-using TeamMembers = License.DataModel.TeamMembers;
+using DataModelTeamMember = License.DataModel.TeamMember;
 
 namespace License.Logic.DataLogic
 {
     public class TeamMemberLogic : BaseLogic
     {
-        public TeamMembers CreateInvite(TeamMembers invit)
+        public DataModelTeamMember CreateInvite(DataModelTeamMember invit)
         {
-            License.Core.Model.TeamMembers userinvit = AutoMapper.Mapper.Map<DataModel.TeamMembers, License.Core.Model.TeamMembers>(invit);
+            License.Core.Model.TeamMember userinvit = AutoMapper.Mapper.Map<DataModel.TeamMember, License.Core.Model.TeamMember>(invit);
             var obj = Work.UserInviteRepository.GetData(f => f.AdminId == invit.AdminId && f.InviteeEmail == invit.InviteeEmail && f.TeamId == invit.TeamId).FirstOrDefault();
             if (obj == null)
             {
                 obj = Work.UserInviteRepository.Create(userinvit);
                 Work.UserInviteRepository.Save();
             }
-            return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
+            return AutoMapper.Mapper.Map<License.Core.Model.TeamMember, DataModelTeamMember>(obj);
         }
 
-        public List<TeamMembers> GetUserInviteList(string adminId)
+        public List<DataModelTeamMember> GetUserInviteList(string adminId)
         {
-            List<TeamMembers> teamMembers = new List<TeamMembers>();
+            List<DataModelTeamMember> teamMembers = new List<DataModelTeamMember>();
             var listData = Work.UserInviteRepository.GetData(filter: t => t.AdminId == adminId);
             foreach (var data in listData)
-                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMembers, DataModel.TeamMembers>(data));
+                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMember, DataModel.TeamMember>(data));
             return teamMembers;
         }
 
-        public TeamMembers VerifyUserInvited(string email, string adminid)
+        public DataModelTeamMember VerifyUserInvited(string email, string adminid)
         {
             var obj = Work.UserInviteRepository.GetData(filter: t => t.AdminId == adminid && t.InviteeEmail == email).FirstOrDefault();
-            return AutoMapper.Mapper.Map<License.Core.Model.TeamMembers, TeamMembers>(obj);
+            return AutoMapper.Mapper.Map<License.Core.Model.TeamMember, DataModelTeamMember>(obj);
         }
 
         public void UpdateInviteStatus(object inviteId, string status)
         {
-            Core.Model.TeamMembers invite = Work.UserInviteRepository.GetById(inviteId);
+            Core.Model.TeamMember invite = Work.UserInviteRepository.GetById(inviteId);
             invite.InviteeStatus = status;
-            Core.Model.TeamMembers ember = Work.UserInviteRepository.Update(invite);
+            Core.Model.TeamMember ember = Work.UserInviteRepository.Update(invite);
             Work.UserInviteRepository.Save();
         }
 
@@ -58,7 +58,7 @@ namespace License.Logic.DataLogic
 
         public void SetAsAdmin(int id, string userId, bool adminStatus)
         {
-            Core.Model.TeamMembers teamMembers = Work.UserInviteRepository.GetById(id);
+            Core.Model.TeamMember teamMembers = Work.UserInviteRepository.GetById(id);
             if (!RoleManager.RoleExists("Admin"))
                 RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
             UserManager.AddToRole(userId, "Admin");

@@ -56,8 +56,6 @@ namespace License.MetCalWeb.Controllers
             {
                 return null;
             }
-            if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamMember)
-                return model;
             return model;
         }
 

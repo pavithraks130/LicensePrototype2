@@ -26,6 +26,7 @@ namespace License.Logic.BusinessLogic
             userLogic = new UserLogic();
         }
 
+
         public void ApproveOrRejectLicense(List<UserLicenseRequest> licReqList)
         {
             List<UserLicenseRequest> licenseRequestList = new List<UserLicenseRequest>();
@@ -82,9 +83,9 @@ namespace License.Logic.BusinessLogic
                     var userLicLicst = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
                     var proList = userLicLicst.Select(u => u.License.ProductId).ToList();
                     SubscriptionDetails mapModel = new SubscriptionDetails();
-                    mapModel.Name = subs.SubscriptionName;
+                    mapModel.Name = subs.Name;
                     mapModel.UserSubscriptionId = data.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId;
-                    foreach (var pro in subs.Product.Where(p => proList.Contains(p.Id)))
+                    foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
                     {
                         var objLic = userLicLicst.FirstOrDefault(f => f.License.ProductId == pro.Id);
                         if (objLic != null)
@@ -101,7 +102,7 @@ namespace License.Logic.BusinessLogic
                         prod.Id = pro.Id;
                         prod.Name = pro.Name;
                         prod.ExpireDate = licExpireData;
-                        foreach (var fet in pro.Features)
+                        foreach (var fet in pro.AssociatedFeatures)
                         {
                             var feature = new Feature();
                             feature.Id = fet.Id;

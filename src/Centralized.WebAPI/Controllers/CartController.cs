@@ -11,7 +11,7 @@ using LicenseServer.Logic.BusinessLogic;
 namespace Centralized.WebAPI.Controllers
 {
     [RoutePrefix("api/Cart")]
-    public class CartController : ApiController
+    public class CartController : BaseController
     {
         private CartLogic logic = null;
         private CartBO cartBOLogic = null;
@@ -20,6 +20,12 @@ namespace Centralized.WebAPI.Controllers
         {
             logic = new CartLogic();
             cartBOLogic = new CartBO();
+        }
+
+        public void Initialize()
+        {
+            cartBOLogic.UserManager = UserManager;
+            cartBOLogic.RoleManager = RoleManager;
         }
 
         [HttpPost]
@@ -58,6 +64,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("OfflinePayment/{userId}")]
         public HttpResponseMessage OfflinePayment(string userId)
         {
+            Initialize();
             var poOrder = cartBOLogic.OfflinePayment(userId);
             if (poOrder != null)
                 return Request.CreateResponse(HttpStatusCode.OK, poOrder);
@@ -70,6 +77,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("OnlinePayment/{userId}")]
         public HttpResponseMessage OnlinePayment(string userId)
         {
+            Initialize();
             var userSubscriptionList = cartBOLogic.OnlinePayment(userId);
             if (userSubscriptionList != null)
                 return Request.CreateResponse(HttpStatusCode.OK, userSubscriptionList);

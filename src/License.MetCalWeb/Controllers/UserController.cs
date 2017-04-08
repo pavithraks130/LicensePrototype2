@@ -28,7 +28,7 @@ namespace License.MetCalWeb.Controllers
             List<User> users = new List<User>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.GetAsync("");
+            var response = await client.GetAsync("api/user/All");
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

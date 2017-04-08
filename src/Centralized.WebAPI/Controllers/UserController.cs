@@ -24,27 +24,7 @@ namespace Centralized.WebAPI.Controllers
             logic = new UserLogic();
         }
 
-        private LicUserManager _userManager = null;
-        public LicUserManager UserManager
-        {
-            get
-            {
-                if (_userManager == null)
-                    _userManager = HttpContext.Current.GetOwinContext().Get<LicUserManager>();
-                return _userManager;
-            }
-        }
-
-        private LicRoleManager _roleManager = null;
-        public LicRoleManager RoleManager
-        {
-            get
-            {
-                if (_roleManager == null)
-                    _roleManager = Request.GetOwinContext().GetUserManager<LicRoleManager>();
-                return _roleManager;
-            }
-        }
+       
 
         public void Initialize()
         {
@@ -67,12 +47,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
-        [HttpGet]
-        [Route("GetResetToken/{email}")]
+        [HttpPost]
+        [Route("GetResetToken")]
         [AllowAnonymous]
-        public HttpResponseMessage GetPasswordResetToken(string email)
+        public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
         {
-            var user = UserManager.FindByEmail(email);
+            var user = UserManager.FindByEmail(model.Email);
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
             ForgotPasswordToken passwordToken = new ForgotPasswordToken();
             passwordToken.UserId = user.UserId;
@@ -85,9 +65,12 @@ namespace Centralized.WebAPI.Controllers
         [AllowAnonymous]
         public HttpResponseMessage ResetuserPassword(ResetPassword model)
         {
+            Initialize();
             string token = string.Empty;
             if (string.IsNullOrEmpty(model.Token))
                 token = UserManager.GeneratePasswordResetToken(model.UserId);
+            else
+                token = model.Token;
             var result = UserManager.ResetPassword(model.UserId, token, model.Password);
             var user = logic.GetUserById(model.UserId);
             if (result.Succeeded)
@@ -100,6 +83,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("UpdateActiveStatus")]
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
+            Initialize();
             logic.UpdateLogInStatus(model.UserId, model.IsActive);
             if (!String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);

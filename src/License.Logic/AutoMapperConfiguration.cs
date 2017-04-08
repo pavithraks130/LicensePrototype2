@@ -25,11 +25,11 @@ namespace License.Logic
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
             cfg.CreateMap<License.DataModel.User, License.Core.Model.AppUser>();
 
-            cfg.CreateMap<License.Core.Model.TeamMembers, TeamMembers>()
+            cfg.CreateMap<License.Core.Model.TeamMember, TeamMember>()
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
-            cfg.CreateMap<TeamMembers, License.Core.Model.TeamMembers>()
+            cfg.CreateMap<TeamMember, License.Core.Model.TeamMember>()
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 

@@ -34,7 +34,7 @@ namespace LicenseServer.Logic
 
                 sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
                 purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
-
+                purchasedSubscription.SubscriptionTypeId = obj.SubscriptionTypeId;
                 purchasedSubscription.SubscriptionDate = obj.SubscriptionDate;
                 purchasedSubscription.OrderdQuantity = obj.Quantity;
                 purchasedSubscription.SubscriptionType = typeLogic.GetById(obj.SubscriptionTypeId);
@@ -54,6 +54,8 @@ namespace LicenseServer.Logic
         public SubscriptionList CreateUserSubscriptionList(List<UserSubscription> subsList, string userId)
         {
             UserLogic logic = new UserLogic();
+            logic.UserManager = UserManager;
+            logic.RoleManager = RoleManager;
             User userObj = logic.GetUserById(userId);
 
             SubscriptionList userSubscriptionList = new SubscriptionList();

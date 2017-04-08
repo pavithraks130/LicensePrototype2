@@ -41,7 +41,7 @@ namespace OnPremise.WebAPI.Controllers
 
         [HttpPost]
         [Route("CreateInvite")]
-        public HttpResponseMessage CreateInvite(TeamMembers member)
+        public HttpResponseMessage CreateInvite(TeamMember member)
         {
             Initialize();
             var teamMemResponseObj = teamBoObject.CreateTeamMembereInvite(member);
@@ -64,7 +64,7 @@ namespace OnPremise.WebAPI.Controllers
 
         [HttpPut]
         [Route("UpdateInvitation")]
-        public HttpResponseMessage UpdateInvitationStatus(TeamMembers mem)
+        public HttpResponseMessage UpdateInvitationStatus(TeamMember mem)
         {
             logic.UpdateInviteStatus(mem.Id, mem.InviteeStatus);
             if (string.IsNullOrEmpty(logic.ErrorMessage))
@@ -75,7 +75,7 @@ namespace OnPremise.WebAPI.Controllers
 
         [HttpPut]
         [Route("UpdateAdminAccess")]
-        public HttpResponseMessage UpdateAdminAccess(TeamMembers mem)
+        public HttpResponseMessage UpdateAdminAccess(TeamMember mem)
         {
             logic.SetAsAdmin(mem.Id, mem.InviteeUserId, mem.IsAdmin);
             if (string.IsNullOrEmpty(logic.ErrorMessage))

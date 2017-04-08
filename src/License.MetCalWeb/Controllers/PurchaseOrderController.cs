@@ -63,7 +63,7 @@ namespace License.MetCalWeb.Controllers
             }
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var result = await client.PutAsJsonAsync("/api/purchaseorder/update", orderList);
+            var result = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
             if (result.IsSuccessStatusCode)
                 return RedirectToAction("Index", "User");
             else

@@ -174,9 +174,9 @@ namespace License.MetCalWeb.Controllers
 
         public async Task SynchPurchaseOrder()
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.PostAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId, null);
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = client.PostAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId, null).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -218,7 +218,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                var response = client.GetAsync("api/user/GetResetToken" + model.Email).Result;
+                var response = client.PostAsJsonAsync("api/user/GetResetToken", model).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -229,7 +229,6 @@ namespace License.MetCalWeb.Controllers
                     ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
                 }
             }
-
             return View();
         }
 

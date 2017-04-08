@@ -66,8 +66,8 @@ namespace License.Logic.BusinessLogic
                 {
                     SubscriptionDetails model = new SubscriptionDetails();
                     model.Id = subType.Id;
-                    model.Name = subType.SubscriptionName;
-                    foreach (var pro in subType.Product)
+                    model.Name = subType.Name;
+                    foreach (var pro in subType.Products)
                     {
                         UserLicenseLogic userLicLogic = new UserLicenseLogic();
                         int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);

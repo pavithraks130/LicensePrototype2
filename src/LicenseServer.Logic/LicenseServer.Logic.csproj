@@ -120,10 +120,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\License.Logic\License.Logic.csproj">
-      <Project>{2b6303e7-4f04-4538-83cb-5f3ab977a626}</Project>
-      <Name>License.Logic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
       <Name>LicenseKey</Name>

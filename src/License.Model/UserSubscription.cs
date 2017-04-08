@@ -91,9 +91,9 @@ namespace License.DataModel
     {
         public int Id { get; set; }
 
-        public string SubscriptionName { get; set; }
+        public string Name { get; set; }
 
-        public virtual ICollection<Product> Product { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
 
     }
 
@@ -104,7 +104,7 @@ namespace License.DataModel
         public string Description { get; set; }
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
-        public List<Feature> Features { get; set; }
+        public List<Feature> AssociatedFeatures { get; set; }
 
     }
 

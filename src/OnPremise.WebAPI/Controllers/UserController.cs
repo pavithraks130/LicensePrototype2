@@ -95,12 +95,12 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
-        [HttpGet]
-        [Route("GetResetToken/{email}")]
+        [HttpPost]
+        [Route("GetResetToken")]
         [AllowAnonymous]
-        public HttpResponseMessage GetPasswordResetToken(string email)
+        public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
         {
-            var user = UserManager.FindByEmail(email);
+            var user = UserManager.FindByEmail(model.Email);
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
             ForgotPasswordToken passwordToken = new ForgotPasswordToken();
             passwordToken.UserId = user.UserId;
@@ -117,6 +117,8 @@ namespace OnPremise.WebAPI.Controllers
             string token = string.Empty;
             if (string.IsNullOrEmpty(model.Token))
                 token = UserManager.GeneratePasswordResetToken(model.UserId);
+            else
+                token = model.Token;
             var result = UserManager.ResetPassword(model.UserId, token, model.Password);
             var user = logic.GetUserById(model.UserId);
             if (result.Succeeded)
