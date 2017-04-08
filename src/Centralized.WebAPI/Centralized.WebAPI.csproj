@@ -145,10 +145,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\LicenseServer.Core\LicenseServer.Core.csproj">
       <Project>{d3b38260-18db-4629-8d7b-a7123bc06297}</Project>
