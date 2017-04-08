@@ -9,6 +9,7 @@ using LicenseServer.DataModel;
 
 namespace Centralized.WebAPI.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/UserToken")]
     public class UserTokenController : BaseController
     {
@@ -40,6 +41,7 @@ namespace Centralized.WebAPI.Controllers
 
         [HttpPost]
         [Route("VerifyToken")]
+        [AllowAnonymous]
         public HttpResponseMessage VerifyToken(UserToken t)
         {
             bool status = logic.VerifyUserToken(t);

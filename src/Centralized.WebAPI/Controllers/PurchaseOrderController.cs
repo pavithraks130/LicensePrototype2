@@ -10,6 +10,7 @@ using LicenseServer.Logic.BusinessLogic;
 
 namespace Centralized.WebAPI.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/purchaseorder")]
     public class PurchaseOrderController : BaseController
     {

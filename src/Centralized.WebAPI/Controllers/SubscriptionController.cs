@@ -9,6 +9,7 @@ using LicenseServer.Logic;
 
 namespace Centralized.WebAPI.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/subscription")]
     public class SubscriptionController : BaseController
     {

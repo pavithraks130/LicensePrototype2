@@ -64,6 +64,7 @@ namespace OnPremise.WebAPI.Controllers
 
         [HttpPut]
         [Route("UpdateInvitation")]
+        [AllowAnonymous]
         public HttpResponseMessage UpdateInvitationStatus(TeamMember mem)
         {
             logic.UpdateInviteStatus(mem.Id, mem.InviteeStatus);

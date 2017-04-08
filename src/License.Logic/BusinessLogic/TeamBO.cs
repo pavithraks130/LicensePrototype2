@@ -81,7 +81,7 @@ namespace License.Logic.BusinessLogic
             {
                 Registration reg = new Registration();
                 reg.Email = member.InviteeEmail;
-                reg.Password = System.Configuration.ConfigurationSettings.AppSettings.Get("");
+                reg.Password = System.Configuration.ConfigurationSettings.AppSettings.Get("TeamMemberDefaultPassword");
                 var status = userLogic.CreateUser(reg, "TeamMember");
                 if (status)
                 {
