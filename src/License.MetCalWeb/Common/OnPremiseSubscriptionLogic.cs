@@ -22,12 +22,12 @@ namespace License.MetCalWeb.Common
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static IList<SubscriptionDetails> GetSubscription(string userId)
+        public static IList<SubscriptionDetails> GetSubscription(string adminId)
         {
             IList<SubscriptionDetails> subscriptionProList = new List<SubscriptionDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var response = client.GetAsync("api/UserSubscription/SubscriptionDetils/" + userId).Result;
+            var response = client.GetAsync("api/UserSubscription/SubscriptionDetils/" + adminId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

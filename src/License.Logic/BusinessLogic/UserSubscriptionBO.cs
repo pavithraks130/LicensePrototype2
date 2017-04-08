@@ -66,6 +66,7 @@ namespace License.Logic.BusinessLogic
                 {
                     SubscriptionDetails model = new SubscriptionDetails();
                     model.Id = subType.Id;
+                    model.UserSubscriptionId = userSub.Id;
                     model.Name = subType.Name;
                     foreach (var pro in subType.Products)
                     {

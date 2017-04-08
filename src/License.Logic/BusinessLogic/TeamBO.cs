@@ -77,31 +77,35 @@ namespace License.Logic.BusinessLogic
             Initialize();
             var user = userLogic.GetUserByEmail(member.InviteeEmail);
             TeamMemberResponse teamMemResObj = new TeamMemberResponse();
+            string password = System.Configuration.ConfigurationSettings.AppSettings.Get("TeamMemberDefaultPassword");
             if (user == null)
             {
                 Registration reg = new Registration();
                 reg.Email = member.InviteeEmail;
-                reg.Password = System.Configuration.ConfigurationSettings.AppSettings.Get("TeamMemberDefaultPassword");
+                reg.Password = password;
                 var status = userLogic.CreateUser(reg, "TeamMember");
                 if (status)
-                {
                     user = userLogic.GetUserByEmail(member.InviteeEmail);
-                    member.InviteeUserId = user.UserId;
-                    var teamMemObj = logic.CreateInvite(member);
-                    if (teamMemObj != null)
-                    {
-                        teamMemResObj.UserId = user.UserId;
-                        teamMemResObj.UserName = user.UserName;
-                        teamMemResObj.Password = reg.Password;
-                        teamMemResObj.TeamMemberId = teamMemObj.Id;
-                        return teamMemResObj;
-                    }
-                    else
-                        ErrorMessage = logic.ErrorMessage;
-                }
                 else
+                {
                     ErrorMessage = userLogic.ErrorMessage;
+                    return null;
+                }
             }
+
+            member.InviteeUserId = user.UserId;
+            var teamMemObj = logic.CreateInvite(member);
+            if (teamMemObj != null)
+            {
+                teamMemResObj.UserId = user.UserId;
+                teamMemResObj.UserName = user.UserName;
+                teamMemResObj.Password = password;
+                teamMemResObj.TeamMemberId = teamMemObj.Id;
+                return teamMemResObj;
+            }
+            else
+                ErrorMessage = logic.ErrorMessage;
+
             return null;
 
         }

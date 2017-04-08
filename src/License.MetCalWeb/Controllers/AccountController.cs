@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 namespace License.MetCalWeb.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : BaseController
     {
 
@@ -190,12 +191,14 @@ namespace License.MetCalWeb.Controllers
         private void SignInAsync(User user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>            {
-            new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", user.Name), //user.Name from my database
-            new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.UserId), //user.Id from my database
-            new System.Security.Claims.Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "MyApplication"),
-            new System.Security.Claims.Claim("FirstName", user.FirstName) //user.FirstName from my database
-            };
+            List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>();
+
+            claims.Add(new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", String.IsNullOrEmpty(user.Name) ? user.UserName : user.Name)); //user.Name from my database
+            claims.Add(new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.UserId)); //user.Id from my database
+            claims.Add(new System.Security.Claims.Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "MyApplication"));
+            if (!String.IsNullOrEmpty(user.FirstName))
+                claims.Add(new System.Security.Claims.Claim("FirstName", user.FirstName)); //user.FirstName from my database
+
 
             foreach (var role in user.Roles)
             {
@@ -319,7 +322,7 @@ namespace License.MetCalWeb.Controllers
             mem.Id = Convert.ToInt32(inviteId);
             mem.AdminId = adminId;
             mem.InviteeStatus = status;
-            var response = client.PostAsJsonAsync("api/TeamMember/UpdateInvitation", mem).Result;
+            var response = client.PutAsJsonAsync("api/TeamMember/UpdateInvitation", mem).Result;
             if (response.IsSuccessStatusCode)
             {
                 var stat = (InviteStatus)Enum.Parse(typeof(InviteStatus), status);

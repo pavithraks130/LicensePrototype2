@@ -138,11 +138,11 @@ namespace License.MetCalWeb.Controllers
             {
                 case "Admin":
                     mem.IsAdmin = true;
-                    response = client.PostAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
+                    response = client.PutAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
                     break;
                 case "RemoveAdmin":
                     mem.IsAdmin = false;
-                    response = client.PostAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
+                    response = client.PutAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
                     break;
                 case "Remove":
                     response = client.DeleteAsync("api/TeamMember/DeleteInvite/" + id).Result;

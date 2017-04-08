@@ -51,7 +51,7 @@ namespace OnPremise.WebAPI.Common
               {
                   { "userName", userObj.UserName},
                   { "Id",userObj.UserId.ToString()},
-                {"ServerUserId",userObj.ServerUserId }
+                {"ServerUserId",String.IsNullOrEmpty(userObj.ServerUserId)?"0":userObj.ServerUserId }
 
               };
 

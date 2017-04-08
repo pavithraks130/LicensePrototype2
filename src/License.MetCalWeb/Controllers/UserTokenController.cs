@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class UserTokenController : BaseController
     {
         ServiceType webApiType;

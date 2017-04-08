@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class LicenseController : Controller
     {
         // GET: License
@@ -78,14 +79,15 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult MapLicense(string userId, bool bulkLicenseAdd)
         {
-            TempData["CanAddBulk"] = bulkLicenseAdd;
-            var listdata = GetLicenseListBySubscription(userId);
+
+            var listdata = GetLicenseListBySubscription(userId, bulkLicenseAdd);
             return View(listdata);
         }
 
-        public IList<SubscriptionDetails> GetLicenseListBySubscription(string userId)
+        public IList<SubscriptionDetails> GetLicenseListBySubscription(string userId, bool bulkLicenseAdd)
         {
             TempData["UserId"] = userId;
+            TempData["CanAddBulk"] = bulkLicenseAdd;
             ViewData["TeamMember"] = userId == null ? string.Empty : LicenseSessionState.Instance.User.Email;
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
             string adminUserId = string.Empty;
@@ -94,7 +96,11 @@ namespace License.MetCalWeb.Controllers
             else
                 adminUserId = LicenseSessionState.Instance.AdminId;
 
-            var licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscriptionForLicenseMap(userId, adminUserId);
+            IList<SubscriptionDetails> licenseMapModelList = null;
+            if (bulkLicenseAdd)
+                licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId);
+            else
+                licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscriptionForLicenseMap(userId, adminUserId);
             return licenseMapModelList;
         }
 
@@ -237,7 +243,7 @@ namespace License.MetCalWeb.Controllers
         {
             string adminId = String.Empty;
             string userId = LicenseSessionState.Instance.User.UserId;
-            var listdata = GetLicenseListBySubscription(userId);
+            var listdata = GetLicenseListBySubscription(userId, false);
             return View(listdata);
         }
 
@@ -265,7 +271,7 @@ namespace License.MetCalWeb.Controllers
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RequestLicense", licReqList).Result;
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError("", response.ReasonPhrase);
                 return View();

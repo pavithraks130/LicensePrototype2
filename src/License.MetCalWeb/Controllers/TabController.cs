@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class TabController : Controller
     {
         // GET: Tab

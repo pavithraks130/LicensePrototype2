@@ -25,7 +25,7 @@ namespace License.DataModel
 
     public class UserLicesneDataMapping
     {
-        public List<string> UserId { get; set; }
+        public List<string> UserList { get; set; }
 
         public List<LicenseData> LicenseDataList { get; set; }
     }

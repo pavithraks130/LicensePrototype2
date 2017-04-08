@@ -29,7 +29,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("CreateUserLicence")]
         public HttpResponseMessage AddUserLicsen(UserLicesneDataMapping model)
         {
-            var status = logic.CreateMultiUserLicense(model.LicenseDataList, model.UserId);
+            var status = logic.CreateMultiUserLicense(model.LicenseDataList, model.UserList);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else
@@ -40,7 +40,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("RevokeUserLicence")]
         public HttpResponseMessage RemoveUserLicense(UserLicesneDataMapping model)
         {
-            var status = logic.RevokeUserLicense(model.LicenseDataList, model.UserId);
+            var status = logic.RevokeUserLicense(model.LicenseDataList, model.UserList);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else

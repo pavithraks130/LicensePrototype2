@@ -55,6 +55,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("DeleteInvite/{id}")]
         public HttpResponseMessage DeleteTeamMember(int id)
         {
+            Initialize();
             var status = logic.DeleteTeamMember(id);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
@@ -67,6 +68,7 @@ namespace OnPremise.WebAPI.Controllers
         [AllowAnonymous]
         public HttpResponseMessage UpdateInvitationStatus(TeamMember mem)
         {
+            Initialize();
             logic.UpdateInviteStatus(mem.Id, mem.InviteeStatus);
             if (string.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.OK, "success");
@@ -78,6 +80,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("UpdateAdminAccess")]
         public HttpResponseMessage UpdateAdminAccess(TeamMember mem)
         {
+            Initialize();
             logic.SetAsAdmin(mem.Id, mem.InviteeUserId, mem.IsAdmin);
             if (string.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.OK, "success");

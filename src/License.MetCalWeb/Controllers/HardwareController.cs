@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class HardwareController : BaseController
     {
         public ActionResult HardwareContainer()
