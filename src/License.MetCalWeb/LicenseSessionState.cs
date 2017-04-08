@@ -36,6 +36,7 @@ namespace License.MetCalWeb
 
         public AccessToken CentralizedToken { get; set; }
 
+        public TeamMember TeamMeberDetails { get; set; }
         public IEnumerable<SubscriptionDetails> SubscriptionList { get; set; }
 
     }

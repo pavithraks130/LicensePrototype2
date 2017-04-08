@@ -88,5 +88,18 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        [HttpGet]
+        [Route("GetTeamMemberByUserId/{userId}")]
+        public HttpResponseMessage GetTeamMemberByUser(string userId)
+        {
+            var obj = logic.GetTeamMemberByUserId(userId);
+            if (obj != null)
+                return Request.CreateResponse(HttpStatusCode.OK, obj);
+            else if (obj == null && String.IsNullOrEmpty(logic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.OK, "");
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
     }
 }

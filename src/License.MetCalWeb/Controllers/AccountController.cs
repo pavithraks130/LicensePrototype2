@@ -16,7 +16,6 @@ namespace License.MetCalWeb.Controllers
     [AllowAnonymous]
     public class AccountController : BaseController
     {
-
         ServiceType webAPiType;
         private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
@@ -94,10 +93,8 @@ namespace License.MetCalWeb.Controllers
             string data = null;
             if (ModelState.IsValid)
             {
-
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
                 // and on premises user and admin will be authenticated with on premise DB
-
                 HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
                 var formContent = new FormUrlEncodedContent(new[] {
                     new KeyValuePair<string, string>("grant_type", "password"),
@@ -148,12 +145,24 @@ namespace License.MetCalWeb.Controllers
                     else
                         LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
 
-                    if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
+                    if(!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
                         LicenseSessionState.Instance.IsTeamMember = true;
-                    if (!LicenseSessionState.Instance.IsSuperAdmin)
-                    {
-                        //TeamMemberLogic tmLogic = new TeamMemberLogic();
-                        //LicenseSessionState.Instance.AdminId = tmLogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
+
+                    if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsSuperAdmin)
+                    {                       
+                        client.Dispose();
+                        client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                        response = client.GetAsync("api/TeamMember/GetTeamMemberByUserId/" + LicenseSessionState.Instance.User.UserId).Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var jsonData = response.Content.ReadAsStringAsync().Result;
+                            if (!String.IsNullOrEmpty(jsonData))
+                            {
+                                LicenseSessionState.Instance.TeamMeberDetails = JsonConvert.DeserializeObject<TeamMember>(jsonData);
+                                LicenseSessionState.Instance.AdminId = LicenseSessionState.Instance.TeamMeberDetails.AdminId;
+                            }
+                        }
                     }
                     SignInAsync(user, true);
                     if (LicenseSessionState.Instance.IsSuperAdmin)
@@ -201,9 +210,8 @@ namespace License.MetCalWeb.Controllers
 
 
             foreach (var role in user.Roles)
-            {
                 claims.Add(new System.Security.Claims.Claim(ClaimTypes.Role, role));
-            }
+
             System.Security.Claims.ClaimsIdentity identity = new System.Security.Claims.ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie, ClaimTypes.Name, ClaimTypes.Role);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }

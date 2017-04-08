@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.LicenseMapModel>
+﻿@model List<License.MetCalWeb.Models.SubscriptionDetails>
 @{
     ViewBag.Title = "LicenseRequest";
 }
@@ -47,17 +47,17 @@
                         {
                             <tr style="">
                                 <td>
-                                    @Model[i].SubscriptionName
+                                    @Model[i].Name
                                     <table class="table">
-                                        @for (int j = 0; j < Model[i].ProductList.Count; j++)
+                                        @for (int j = 0; j < Model[i].Products.Count; j++)
                                         {
                                             <tr>
                                                 <td>
                                                     <label class="control-label">
-                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].ProductList[j].ProductId-UserSubId:@Model[i].UserSubscriptionId"  @(Model[i].ProductList[j].IsSelected == true? "disabled='disabled checked=checked'":"")  class="checkbox-inline">
-                                                        @Model[i].ProductList[j].ProductName
+                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId"  @(Model[i].Products[j].IsSelected == true? "disabled='disabled checked=checked'":"")  class="checkbox-inline">
+                                                        @Model[i].Products[j].Name
                                                     </label>
-                                                </td>
+                                               </td>
                                             </tr>
                                         }
 

@@ -48,12 +48,10 @@ namespace License.Logic.DataLogic
             Work.UserInviteRepository.Save();
         }
 
-        public string GetUserAdminDetails(string userId)
+        public DataModel.TeamMember GetTeamMemberByUserId(string userId)
         {
             var obj = Work.UserInviteRepository.GetData(t => t.InviteeUserId == userId).FirstOrDefault();
-            if (obj != null)
-                return obj.AdminId;
-            return string.Empty;
+            return AutoMapper.Mapper.Map<DataModel.TeamMember>(obj);
         }
 
         public void SetAsAdmin(int id, string userId, bool adminStatus)
@@ -76,6 +74,8 @@ namespace License.Logic.DataLogic
                 if (licenseData.Count() > 0)
                     foreach (var dt in licenseData)
                         Work.UserLicenseRepository.Delete(dt);
+                if (teamObj.IsAdmin)
+                    UserManager.RemoveFromRole(teamObj.InviteeUserId, "Admin");
                 var status = Work.UserInviteRepository.Delete(teamObj);
                 Work.UserInviteRepository.Save();
                 return true;

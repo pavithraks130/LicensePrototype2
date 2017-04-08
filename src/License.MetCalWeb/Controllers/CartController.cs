@@ -63,6 +63,7 @@ namespace License.MetCalWeb.Controllers
         {
             PurchaseOrder poOrder = new PurchaseOrder();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsync("api/cart/offlinepayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
             if (response.IsSuccessStatusCode)
             {
