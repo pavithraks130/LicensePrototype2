@@ -172,7 +172,7 @@
                                     }
                                 </td>
                                 <td class="col-md-2">
-                                    @if (LicenseSessionState.Instance.IsAdmin && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
+                                    @if (LicenseSessionState.Instance.IsAdmin && @t.InviteeUserId != t.AdminId && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
                                     {
 
                                         <div class="dropdown">

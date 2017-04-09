@@ -57,9 +57,14 @@ namespace License.Logic.DataLogic
         public void SetAsAdmin(int id, string userId, bool adminStatus)
         {
             Core.Model.TeamMember teamMembers = Work.UserInviteRepository.GetById(id);
-            if (!RoleManager.RoleExists("Admin"))
-                RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
-            UserManager.AddToRole(userId, "Admin");
+            if (adminStatus)
+            {
+                if (!RoleManager.RoleExists("Admin"))
+                    RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
+                UserManager.AddToRole(userId, "Admin");
+            }
+            else
+                UserManager.RemoveFromRole(userId, "Admin");
             teamMembers.IsAdmin = adminStatus;
             Work.UserInviteRepository.Update(teamMembers);
             Work.UserInviteRepository.Save();

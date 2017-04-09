@@ -40,9 +40,13 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var count = JsonConvert.DeserializeObject<int>(data);
-                if (count > 0)
-                    TempData["CartCount"] = "(" + count + ")";
+                var count = JsonConvert.DeserializeObject<string>(data);
+                if (!string.IsNullOrEmpty(count))
+                {
+                    
+                    if (Convert.ToInt32(count) > 0)
+                        TempData["CartCount"] = "(" + count + ")";
+                }
             }
             client.Dispose();
 

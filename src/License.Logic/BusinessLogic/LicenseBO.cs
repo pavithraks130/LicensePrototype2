@@ -96,7 +96,7 @@ namespace License.Logic.BusinessLogic
                             var datakey = splitData[0];
                             var decryptObj = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(datakey, true);
                             var licdataList = decryptObj.Split(new char[] { '^' });
-                            licExpireData = Convert.ToDateTime(licExpireData);
+                            licExpireData = Convert.ToDateTime(licdataList[1]);
                         }
                         ProductDetails prod = new ProductDetails();
                         prod.Id = pro.Id;
