@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model
+namespace License.DataModel
 {
     public class User
     {
@@ -19,5 +19,38 @@ namespace License.Model
         public IList<string> Roles { get; set; }
         public string ServerUserId { get; set; }
         public bool IsActive { get; set; }
+    }
+
+    public class ChangePassword
+    {
+        public string UserId { get; set; }
+        public string Email { get; set; }
+
+        public string CurrentPassword { get; set; }
+
+        public string NewPassword { get; set; }
+    }
+
+    public class ResetPassword
+    {
+        public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
+
+        public string UserId { get; set; }
+
+        public string Token { get; set; }
+    }
+
+    public class ForgotPasswordToken
+    {
+        public string UserId { get; set; }
+
+        public string Token { get; set; }
+    }
+
+    public class ForgotPassword
+    {
+        public string Email { get; set; }
     }
 }

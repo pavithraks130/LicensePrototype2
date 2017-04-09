@@ -14,5 +14,6 @@ namespace LicenseServer.DataModel
         public string PhoneNumber { get; set; }
         public string OrganizationName { get; set; }
         public string Password { get; set; }
+        public string Token { get; set; }
     }
 }

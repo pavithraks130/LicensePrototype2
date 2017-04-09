@@ -3,101 +3,91 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using LicenseServer.Logic;
-using LicenseServer.DataModel;
+using System.Net.Http;
+using License.MetCalWeb.Common;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class CartController : BaseController
     {
 
-        CartLogic logic = null;
-
+        ServiceType webApiType;
         public CartController()
         {
-            logic = new CartLogic();
+            var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+            webApiType = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
         }
 
-        public ActionResult CartItem()
+        public async Task<ActionResult> CartItem()
         {
+            List<CartItem> itemList = new List<CartItem>();
             if (LicenseSessionState.Instance.User == null)
             {
                 return RedirectToAction("LogIn", "Account");
             }
-            var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
-            ViewData["TotalAmount"] = logic.TotalAmount;
-            return View(obj);
+            itemList = await GetCartItems();
+            return View(itemList);
         }
 
-        public ActionResult RemoveItem(int id)
+        public async Task<ActionResult> RemoveItem(int id)
         {
-            logic.DeleteCartItem(id);
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.DeleteAsync("api/cart/Delete/" + id);
+            //if (response.IsSuccessStatusCode)
             return RedirectToAction("CartItem", "Cart");
         }
 
-        public ActionResult PaymentGateway()
+        public ActionResult PaymentGateway(string total)
         {
+            ViewData["Total"] = total;
             return View();
         }
 
         [HttpPost]
-        public ActionResult DoPayment()
+        public async Task<ActionResult> DoPayment()
         {
-            Purchase();
+           await  Purchase();
             return View();
         }
 
-        public void Purchase()
+        public async Task Purchase()
         {
-            var obj = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
-
-            List<UserSubscription> subsList = new List<UserSubscription>();
-            foreach (var item in obj)
-            {
-
-                UserSubscription usersubs = new UserSubscription();
-                usersubs.UserId = LicenseSessionState.Instance.User.ServerUserId;
-                usersubs.SubscriptionTypeId = item.SubscriptionTypeId;
-                usersubs.SubscriptionDate = DateTime.Now.Date;
-                usersubs.Quantity = item.Quantity;
-                subsList.Add(usersubs);
-            }
-            Common.CentralizedSubscriptionLogic.UpdateUserSubscription(subsList);
-            foreach (var item in obj)
-            {
-                item.IsPurchased = true;
-                logic.UpdateCartItem(item);
-            }
+           await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();          
         }
 
-        public ActionResult OfflinePayment()
+        public async Task<ActionResult> OfflinePayment()
         {
             PurchaseOrder poOrder = new PurchaseOrder();
-            var cartItemList = logic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId);
-            if (cartItemList.Count > 0)
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.PostAsync("api/cart/offlinepayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
+            if (response.IsSuccessStatusCode)
             {
-                PurchaseOrderLogic pologic = new PurchaseOrderLogic();
-                POItemLogic itemLogic = new POItemLogic();
-                poOrder.UserId = LicenseSessionState.Instance.User.ServerUserId;
-                poOrder.CreatedDate = DateTime.Now.Date;
-                poOrder = pologic.CreatePurchaseOrder(poOrder);
-                List<PurchaseOrderItem> itemList = new List<PurchaseOrderItem>();
-                foreach (CartItem ci in cartItemList)
-                {
-                    var item = new PurchaseOrderItem();
-                    item.Quantity = ci.Quantity;
-                    item.SubscriptionId = ci.SubscriptionTypeId;
-                    itemList.Add(item);
-                }
-                itemLogic.CreateItem(itemList, poOrder.Id);
-                foreach (CartItem ci in cartItemList)
-                {
-                    ci.IsPurchased = true;
-                    logic.UpdateCartItem(ci);
-                }
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrEmpty(jsonData))
+                    poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
             }
             return View(poOrder);
 
+        }
+
+        private async Task<List<CartItem>> GetCartItems()
+        {
+            List<CartItem> itemList = null;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.GetAsync("api/cart/getItems/" + LicenseSessionState.Instance.User.ServerUserId);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                itemList = JsonConvert.DeserializeObject<List<CartItem>>(jsonData);
+            }
+            return itemList;
         }
 
     }

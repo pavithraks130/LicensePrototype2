@@ -1,4 +1,4 @@
-﻿@model IEnumerable<License.MetCalWeb.Models.UserModel>
+﻿@model IEnumerable<License.MetCalWeb.Models.User>
 
 @{
     ViewBag.Title = "View";
@@ -20,7 +20,7 @@
                     @Html.DisplayNameFor(model => model.Email)
                 </th>
                 <th class="col-md-2">
-                    @Html.DisplayNameFor(model => model.OrganizationName)
+                    @Html.DisplayNameFor(model => model.Organization.Name)
                 </th>
                 <th class="col-md-3`">
                     @Html.DisplayName("Subscription")
@@ -47,7 +47,7 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td class="col-md-2">
-                        @Html.DisplayFor(modelItem => item.OrganizationName)
+                        @Html.DisplayFor(modelItem => item.Organization.Name)
                     </td>
                     <td class="col-md-3">
                         @foreach (var obj in item.SubscriptionList)

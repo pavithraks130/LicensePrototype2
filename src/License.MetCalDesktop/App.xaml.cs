@@ -15,7 +15,7 @@ namespace License.MetCalDesktop
     {
         public App()
         {
-            License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
+           
         }
     }
 }

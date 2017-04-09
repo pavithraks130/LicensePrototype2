@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using License.Core.DBContext;
 using License.Core.Manager;
-using License.Model;
-using License.Logic.ServiceLogic;
+using License.DataModel;
+using License.Logic.DataLogic;
 using Microsoft.AspNet.Identity.EntityFramework;
 namespace License.MetCalWeb.Tests.LicenseLogic
 {
     [TestClass]
     public class LicenseLogicTest
     {
-        License.Logic.ServiceLogic.LicenseLogic licLogic = null;
-        License.Logic.ServiceLogic.UserLogic userLogic = null;
+        License.Logic.DataLogic.LicenseLogic licLogic = null;
+        License.Logic.DataLogic.UserLogic userLogic = null;
         UserSubscriptionLogic useSubLogic = null;
 
         AppUserManager UserManager { get; set; }
@@ -26,7 +26,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         {
             InitializerClass.Initialize();
            
-            licLogic = new Logic.ServiceLogic.LicenseLogic();
+            licLogic = new Logic.DataLogic.LicenseLogic();
             userLogic = new UserLogic();
             useSubLogic = new UserSubscriptionLogic();
            
@@ -40,7 +40,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
         {
             try
             {
-                List<Model.LicenseData> LicenseDataList = new List<LicenseData>();
+                List<DataModel.LicenseData> LicenseDataList = new List<LicenseData>();
                 LicenseData data1 = new LicenseData();
                 data1.LicenseKey = Guid.NewGuid().ToString();
                 data1.ProductId = 1;

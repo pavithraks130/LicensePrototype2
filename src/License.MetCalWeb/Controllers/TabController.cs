@@ -7,13 +7,14 @@ using System.Web.Mvc;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class TabController : Controller
     {
         // GET: Tab
         public ActionResult Home()
         {
-            OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-            return View();
+            var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+            return View(subscriptionDetails);
 
         }
 

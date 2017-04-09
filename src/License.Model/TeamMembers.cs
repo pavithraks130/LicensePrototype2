@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model
+namespace License.DataModel
 {
-    public class TeamMembers
+    public class TeamMember
     {
         public int Id { get; set; }
         public string AdminId { get; set; }
@@ -24,16 +24,27 @@ namespace License.Model
 
     }
 
-    public class UserInviteList
+    public class TeamDetails
     {
         public User AdminUser { get; set; }
-        public List<TeamMembers> PendingInvites { get; set; }
-        public List<TeamMembers> AcceptedInvites { get; set; }
+        public List<TeamMember> PendinigUsers { get; set; }
+        public List<TeamMember> AcceptedUsers { get; set; }
 
-        public UserInviteList()
+        public TeamDetails()
         {
-            PendingInvites = new List<TeamMembers>();
-            AcceptedInvites = new List<TeamMembers>();
+            PendinigUsers = new List<TeamMember>();
+            AcceptedUsers = new List<TeamMember>();
         }
+    }
+
+    public class TeamMemberResponse
+    {
+        public string UserId { get; set; }
+
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
+
+        public int TeamMemberId { get; set; }
     }
 }

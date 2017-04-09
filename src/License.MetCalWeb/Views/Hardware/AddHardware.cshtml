@@ -1,10 +1,7 @@
-﻿@using License.MetCalWeb.Models
-@using License.MetCalWeb.Helper;
-@using License.Model
+﻿@model License.MetCalWeb.Models.TeamAsset
 @{
     Layout = null;
 }
-@model HardwareModel
 <style>
     tr {
         border: none !important;
@@ -66,6 +63,8 @@
 </style>
 @using (Html.BeginForm("AddEditHardware", "Hardware", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
     <div class="modal-dialog">
         <div class="modal-content">
             <div id='myModalContent'>
@@ -80,8 +79,8 @@
                                 <span>Asset Name</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.SelectedAsset.Name, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(model => model.SelectedAsset.Name)
+                                @Html.TextBoxFor(model => model.Name, new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Name)
                             </div>
                             <br />
                         </div>
@@ -92,8 +91,8 @@
                                 <span>Serial Number</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.SelectedAsset.SerialNumber, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(model => model.SelectedAsset.SerialNumber)
+                                @Html.TextBoxFor(model => model.SerialNumber, new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.SerialNumber)
                             </div>
                             <br />
                         </div>
@@ -105,8 +104,8 @@
                                 <span>Model</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.SelectedAsset.Model, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(model => model.SelectedAsset.Model)
+                                @Html.TextBoxFor(model => model.Model, new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Model)
                             </div>
                             <br />
                         </div>
@@ -118,8 +117,20 @@
                                 <span>Description</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.SelectedAsset.Description, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(model => model.SelectedAsset.Description)
+                                @Html.TextBoxFor(model => model.Description, new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Description)
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                    <div>
+                        <div style="padding-top: 15px;padding-bottom: 10px">
+                            <div class="col-md-4">
+                                <span>Type</span>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.Type, new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Type)
                             </div>
                             <br />
                         </div>

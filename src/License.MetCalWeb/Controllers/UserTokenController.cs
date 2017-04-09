@@ -3,23 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using LicenseServer.Logic;
-using LicenseServer.DataModel;
+using System.Net.Http;
+using License.MetCalWeb.Common;
+using License.MetCalWeb.Models;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class UserTokenController : BaseController
     {
-        UserTokenLogic tokenLogic = null;
+        ServiceType webApiType;
 
         public UserTokenController()
         {
-            tokenLogic = new UserTokenLogic();
+            var typeObj = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+            webApiType = (ServiceType)Enum.Parse(typeof(ServiceType), typeObj);
         }
         // GET: UserToken
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var tokenList = tokenLogic.GetUsertokenList();
+            List<UserToken> tokenList = new List<UserToken>();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.GetAsync("api/usertoken/All");
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                tokenList = JsonConvert.DeserializeObject<List<UserToken>>(data);
+            }
             return View(tokenList);
         }
 
@@ -30,35 +43,31 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateToken(UserToken token)
+        public async Task<ActionResult> CreateToken(UserToken token)
         {
             if (ModelState.IsValid)
             {
-                var data = tokenLogic.IsTokenGenerated(token.Email);
-                if (data == null)
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+                var response = await client.PostAsJsonAsync<UserToken>("api/usertoken/create", token);
+                if (response.IsSuccessStatusCode)
                 {
-                    LicenseKey.GenerateKey keyGen = new LicenseKey.GenerateKey();
-                    keyGen.LicenseTemplate = "xxxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx";
-                    keyGen.UseBase10 = false;
-                    keyGen.UseBytes = false;
-                    keyGen.CreateKey();
-                    token.Token = keyGen.GetLicenseKey();
-                    tokenLogic.CreateUserToken(token);
-                    data = token;
+                    var data = response.Content.ReadAsStringAsync().Result;
+                    var tokenObj = JsonConvert.DeserializeObject<UserToken>(data);
+                    string subject = string.Empty;
+                    string body = string.Empty;
+
+                    subject = "Admin Invite to Fluke Calibration";
+
+                    body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/RegistrationToken.html"));
+                    body = body.Replace("{{UserToken}}", tokenObj.Token);
+                    body = body.Replace("{{RegisterUrl}}", String.Concat(Request.Url.ToString().Replace(Request.Url.AbsolutePath, ""), Url.Action("Register", "Account")));
+                    Common.EmailService emailService = new Common.EmailService();
+                    emailService.SendEmail(token.Email, subject, body);
+                    return RedirectToAction("Index");
                 }
-                string subject = string.Empty;
-                string body = string.Empty;
-
-                subject = "Admin Invite to Fluke Calibration";
-
-                body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/RegistrationToken.html"));
-                body = body.Replace("{{UserToken}}", data.Token);
-                body = body.Replace("{{RegisterUrl}}", String.Concat(Request.Url.ToString().Replace(Request.Url.AbsolutePath, ""), Url.Action("Register", "Account")));
-                Common.EmailService emailService = new Common.EmailService();
-
-                emailService.SendEmail(token.Email, subject, body);
-
-                return RedirectToAction("Index");
+                else
+                    ModelState.AddModelError("", response.ReasonPhrase);               
             }
             return View();
         }

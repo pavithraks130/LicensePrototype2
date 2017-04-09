@@ -15,7 +15,7 @@ namespace LicenseServer.DataModel
         public int ActiveDays { get; set; }
         public double Price { get; set; }
 
-        public IEnumerable<SubscriptionDetails> SubDetails { get; set; }
+        public IEnumerable<Product> Products { get; set; }
         
     }
 }

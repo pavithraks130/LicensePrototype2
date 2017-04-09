@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using License.Logic.ServiceLogic;
-using License.Model;
+using License.Logic.DataLogic;
+using License.DataModel;
 using License.Core.DBContext;
 using License.Core.Manager;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -15,7 +15,7 @@ namespace License.MetCalWeb.Tests.LicenseLogic
     public class UserLicenseLogicTest
     {
         UserLicenseLogic userLicLogic = null;
-        License.Logic.ServiceLogic.LicenseLogic licLogic = null;
+        License.Logic.DataLogic.LicenseLogic licLogic = null;
         UserLogic userLogic = null;
         UserSubscriptionLogic subLogic = null;
 

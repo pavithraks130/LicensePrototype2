@@ -2,8 +2,10 @@
 
 <div class="row">
     <div class="form-group">
-        <label class="col-md-12 control-label">@ViewBag.Message</label>
+        <label class="col-md-12 control-label">@ViewBag.Message. @Html.ActionLink("Login", "LogIn", "Account")</label>
         <br/>
-        @Html.ActionLink("Login","LogIn","Account")
+        <label class="col-md-12 control-label">@ViewBag.ErrorMessage</label>
+        <br/>
+       
     </div>
 </div>

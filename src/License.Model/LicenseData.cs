@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model
+namespace License.DataModel
 {
     public class LicenseData
     {
@@ -22,4 +22,12 @@ namespace License.Model
 
         public Product Product { get; set; }
     }
+
+    public class UserLicesneDataMapping
+    {
+        public List<string> UserList { get; set; }
+
+        public List<LicenseData> LicenseDataList { get; set; }
+    }
+    
 }

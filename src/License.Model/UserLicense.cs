@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model
+namespace License.DataModel
 {
     public class UserLicense
     {
@@ -17,5 +17,12 @@ namespace License.Model
         public User User { get; set; }
         
         public LicenseData License { get; set; }
+    }
+
+    public class UserLicenseDetails
+    {
+        public User User { get; set; }
+
+        public List<SubscriptionDetails> SubscriptionDetails { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using License.MetCalDesktop.Common;
-using License.Model;
+using License.MetCalDesktop.Model;
 using System.Windows.Input;
 
 namespace License.MetCalDesktop.ViewModel
@@ -29,7 +29,7 @@ namespace License.MetCalDesktop.ViewModel
             {
                 foreach (var data in AppState.Instance.UserLicenseList)
                 {
-                    foreach (var pro in data.ProductList)
+                    foreach (var pro in data.Products)
                     {
                         foreach (var fet in pro.Features)
                         {

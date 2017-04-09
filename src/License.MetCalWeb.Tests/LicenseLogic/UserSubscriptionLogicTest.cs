@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using License.Core.DBContext;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 using License.Core.Manager;
-using License.Model;
+using License.DataModel;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace License.MetCalWeb.Tests.LicenseLogic

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using License.Logic.ServiceLogic;
+using License.Logic.DataLogic;
 using License.Core.GenericRepository;
 using Moq;
 using License.Core.Manager;

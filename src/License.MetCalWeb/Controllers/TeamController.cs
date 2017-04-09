@@ -3,37 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using License.Logic.Common;
-using License.Logic.ServiceLogic;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using License.Model;
-
-using TeamMembers = License.Model.TeamMembers;
 using System.Collections;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
     public class TeamController : BaseController
     {
-        private TeamMemberLogic logic = null;
-        private UserLogic userLogic = null;
-        private UserSubscriptionLogic subscriptionLogic = null;
-        private UserLicenseRequestLogic userLicenseRequestLogic = null;
-
         public TeamController()
         {
-            logic = new TeamMemberLogic();
-            userLogic = new UserLogic();
-            subscriptionLogic = new UserSubscriptionLogic();
-            userLicenseRequestLogic = new UserLicenseRequestLogic();
         }
         // GET: Team
         public ActionResult TeamContainer()
         {
-            TeamModel model = LoadTeamMember();
+            TeamDetails model = LoadTeamMember();
             return View(model);
         }
 
@@ -44,29 +32,30 @@ namespace License.MetCalWeb.Controllers
 
 
 
-        private TeamModel LoadTeamMember()
+        private TeamDetails LoadTeamMember()
         {
-            License.Model.UserInviteList inviteList = new UserInviteList();
+
             string adminId = string.Empty;
-            TeamModel model = null;
+            TeamDetails model = null;
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 adminId = LicenseSessionState.Instance.User.UserId;
             else
                 adminId = LicenseSessionState.Instance.AdminId;
             if (!String.IsNullOrEmpty(adminId))
             {
-                inviteList = logic.GetUserInviteDetails(adminId);
-                model = new TeamModel();
-                model.AdminUser = inviteList.AdminUser;
-                model.AcceptedUsers = inviteList.AcceptedInvites;
-                model.PendinigUsers = inviteList.PendingInvites;
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                var response = client.GetAsync("api/TeamMember/all/" + adminId).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    model = JsonConvert.DeserializeObject<TeamDetails>(jsonData);
+                }
             }
             if (model == null)
             {
                 return null;
             }
-            if (model.AcceptedUsers.Count <= 0 || LicenseSessionState.Instance.IsTeamMember)
-                return model;
             return model;
         }
 
@@ -77,13 +66,10 @@ namespace License.MetCalWeb.Controllers
 
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
             string adminUserId = string.Empty;
-            if (LicenseSessionState.Instance.IsAdmin)
+            if (LicenseSessionState.Instance.IsSuperAdmin)
                 adminUserId = LicenseSessionState.Instance.User.UserId;
             else
-            {
-                License.Logic.ServiceLogic.TeamMemberLogic teamMemlogic = new TeamMemberLogic();
-                adminUserId = teamMemlogic.GetUserAdminDetails(LicenseSessionState.Instance.User.UserId);
-            }
+                adminUserId = LicenseSessionState.Instance.AdminId;
 
             LicenseSessionState.Instance.SubscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
             return View(LicenseSessionState.Instance.SubscriptionList);
@@ -101,33 +87,25 @@ namespace License.MetCalWeb.Controllers
             bool status = false;
             if (ModelState.IsValid)
             {
-                if (userLogic.GetUserByEmail(model.Email) == null)
-                {
-                    model.Password = (string)System.Configuration.ConfigurationManager.AppSettings.Get("InvitePassword");
-                    status = userLogic.CreateUser(model.RegistratoinModel, "TeamMember");
 
-                }
-                else
-                    status = true;
+                TeamMember invite = new TeamMember();
+                invite.AdminId = LicenseSessionState.Instance.IsSuperAdmin ? LicenseSessionState.Instance.User.UserId : LicenseSessionState.Instance.AdminId;
+                invite.InvitationDate = DateTime.Now.Date;
+                invite.InviteeEmail = model.Email;
+                invite.InviteeStatus = InviteStatus.Pending.ToString();
 
-                if (status)
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                var resposnse = client.PostAsJsonAsync("api/TeamMember/CreateInvite", invite).Result;
+                if (resposnse.IsSuccessStatusCode)
                 {
-                    User user = userLogic.GetUserByEmail(model.Email);
-                    TeamMembers invite = new TeamMembers();
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                        invite.AdminId = LicenseSessionState.Instance.User.UserId;
-                    else
-                        invite.AdminId = LicenseSessionState.Instance.AdminId;
-                    invite.InviteeUserId = user.UserId;
-                    invite.InvitationDate = DateTime.Now.Date;
-                    invite.InviteeEmail = model.Email;
-                    invite.InviteeStatus = InviteStatus.Pending.ToString();
-                    var data = logic.CreateInvite(invite);
-                    if (data.Id > 0)
+                    var jsonData = resposnse.Content.ReadAsStringAsync().Result;
+                    if (!String.IsNullOrEmpty(jsonData))
                     {
+                        var teamMemResObj = JsonConvert.DeserializeObject<TeamMemberResponse>(jsonData);
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString = invite.AdminId + "," + data.Id;
+                        string encryptString = invite.AdminId + "," + teamMemResObj.TeamMemberId;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
 
@@ -144,28 +122,30 @@ namespace License.MetCalWeb.Controllers
                         service.SendEmail(model.Email, "Invite to fluke Calibration", body);
                     }
                 }
-                else
-                {
-                    ModelState.AddModelError("", logic.ErrorMessage);
-                    return View();
-                }
             }
             return RedirectToAction("TeamContainer");
         }
 
         public ActionResult UserConfiguration(int id, string userId, string actionType)
         {
-            TeamMemberLogic logic = new TeamMemberLogic();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            HttpResponseMessage response;
+            TeamMember mem = new TeamMember();
+            mem.Id = id;
+            mem.InviteeUserId = userId;
             switch (actionType)
             {
                 case "Admin":
-                    logic.SetAsAdmin(id, userId, true);
+                    mem.IsAdmin = true;
+                    response = client.PutAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
                     break;
                 case "RemoveAdmin":
-                    logic.SetAsAdmin(id, userId, false);
+                    mem.IsAdmin = false;
+                    response = client.PutAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
                     break;
                 case "Remove":
-                    logic.DeleteTeamMember(id);
+                    response = client.DeleteAsync("api/TeamMember/DeleteInvite/" + id).Result;
                     break;
             }
             return RedirectToAction("TeamContainer");

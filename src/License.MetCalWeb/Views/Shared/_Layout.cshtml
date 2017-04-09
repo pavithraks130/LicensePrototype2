@@ -60,7 +60,6 @@
                         <li>@Html.ActionLink("User Token", "Index", "UserToken")</li>
                         <li>@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
                         <li>@Html.ActionLink("Orders", "Index", "PurchaseOrder")</li>
-                       
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
@@ -74,7 +73,6 @@
                             </ul>
                         </li>
                         <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
-
                     }
                     else if (LicenseSessionState.Instance.IsAdmin)
                     {

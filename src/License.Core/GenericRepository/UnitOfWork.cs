@@ -12,13 +12,13 @@ namespace License.Core.GenericRepository
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
 
-        private LicenseRepository<TeamMembers> _userInviteRepository;
-        public LicenseRepository<TeamMembers> UserInviteRepository
+        private LicenseRepository<TeamMember> _userInviteRepository;
+        public LicenseRepository<TeamMember> UserInviteRepository
         {
             get
             {
                 return _userInviteRepository ??
-                       (_userInviteRepository = new LicenseRepository<TeamMembers>(_dbContext));
+                       (_userInviteRepository = new LicenseRepository<TeamMember>(_dbContext));
             }
         }
 

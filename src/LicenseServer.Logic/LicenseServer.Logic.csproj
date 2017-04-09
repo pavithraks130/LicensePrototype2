@@ -98,31 +98,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServiceLogic\BaseLogic.cs" />
+    <Compile Include="BusinessLogic\CartBO.cs" />
+    <Compile Include="DataLogic\BaseLogic.cs" />
     <Compile Include="Initializer.cs" />
-    <Compile Include="ServiceLogic\CartLogic.cs" />
-    <Compile Include="ServiceLogic\FeaturesLogic.cs" />
-    <Compile Include="ServiceLogic\OrganizationLogic.cs" />
-    <Compile Include="ServiceLogic\ProductLogic.cs" />
+    <Compile Include="DataLogic\CartLogic.cs" />
+    <Compile Include="DataLogic\FeaturesLogic.cs" />
+    <Compile Include="DataLogic\OrganizationLogic.cs" />
+    <Compile Include="DataLogic\ProductLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceLogic\POItemLogic.cs" />
-    <Compile Include="ServiceLogic\PurchaseOrderLogic.cs" />
-    <Compile Include="ServiceLogic\RoleLogic.cs" />
-    <Compile Include="ServiceLogic\SubscriptionDetailLogic.cs" />
-    <Compile Include="ServiceLogic\SubscriptionTypeLogic.cs" />
-    <Compile Include="ServiceLogic\UserLogic.cs" />
-    <Compile Include="ServiceLogic\UserSubscriptionLogic.cs" />
-    <Compile Include="ServiceLogic\UserTokenLogic.cs" />
+    <Compile Include="DataLogic\POItemLogic.cs" />
+    <Compile Include="DataLogic\PurchaseOrderLogic.cs" />
+    <Compile Include="DataLogic\RoleLogic.cs" />
+    <Compile Include="DataLogic\SubscriptionDetailLogic.cs" />
+    <Compile Include="DataLogic\SubscriptionTypeLogic.cs" />
+    <Compile Include="DataLogic\UserLogic.cs" />
+    <Compile Include="DataLogic\UserSubscriptionLogic.cs" />
+    <Compile Include="DataLogic\UserTokenLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\License.Logic\License.Logic.csproj">
-      <Project>{2b6303e7-4f04-4538-83cb-5f3ab977a626}</Project>
-      <Name>License.Logic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
       <Name>LicenseKey</Name>

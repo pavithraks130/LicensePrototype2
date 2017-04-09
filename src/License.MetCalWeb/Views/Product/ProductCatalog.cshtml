@@ -1,9 +1,5 @@
-﻿@model List<LicenseServer.DataModel.SubscriptionType>
+﻿@model List<License.MetCalWeb.Models.SubscriptionType>
 @using License.MetCalWeb.Helper
-@using LicenseServer.Logic
-@{ CartLogic cartLogic = new CartLogic();
-
-    int itemCount = LicenseSessionState.Instance.User == null ? 0 : cartLogic.GetCartItems(LicenseSessionState.Instance.User.ServerUserId).Count();}
 @{
     ViewBag.Title = "Product Catalog";
 }
@@ -53,7 +49,10 @@
                                 @pro.Price.ToString()
                             </td>
                             <td>
-                                <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)</button>
+                                @if (LicenseSessionState.Instance.IsSuperAdmin)
+                                {
+                                    <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)</button>
+                                }
                             </td>
                         </tr>
 
@@ -74,7 +73,7 @@
                             </td>
                             <td>
                                 <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
-                                    <h4>Cart(@itemCount)</h4>
+                                    <h4>Cart @TempData["CartCount"]</h4>
                                 </a>
                             </td>
                         </tr>

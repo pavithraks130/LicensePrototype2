@@ -23,6 +23,18 @@ namespace LicenseServer.Core.Manager
             var usermanager = new LicUserManager(new UserStore<Appuser>(dbcontext));
             var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("LicenseProtoType");
             usermanager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<Appuser>(provider.Create("EmailConfirmation"));
+            usermanager.ClaimsIdentityFactory = new ClaimsIdentityFactory<Appuser>();
+            return usermanager;
+        }
+
+        public static LicUserManager Create(IdentityFactoryOptions<LicUserManager> userManager, IOwinContext context)
+        {
+            var dbContext = context.Get<AppDbContext>();
+            var userStore = new UserStore<Appuser>(dbContext);
+            var usermanager = new LicUserManager(userStore);
+            var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("LicenseProtoType");
+            usermanager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<Appuser>(provider.Create("EmailConfirmation"));
+            usermanager.ClaimsIdentityFactory = new ClaimsIdentityFactory<Appuser>();
             return usermanager;
         }
     }

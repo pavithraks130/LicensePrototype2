@@ -92,7 +92,7 @@
       <Project>{1ED08BE7-861A-4878-8F96-62C7648BDC9B}</Project>
       <Name>License.MetCalWeb.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\License.Model\License.Model.csproj">
+    <ProjectReference Include="..\License.Model\License.DataModel.csproj">
       <Project>{E4B922B6-6723-4E85-9522-C9EB666FD620}</Project>
       <Name>License.Model</Name>
     </ProjectReference>

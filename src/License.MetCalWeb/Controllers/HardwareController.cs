@@ -2,48 +2,84 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using License.Logic.ServiceLogic;
 using System.Web.Mvc;
 using License.MetCalWeb.Models;
+using System.Net.Http;
+using License.MetCalWeb.Common;
+using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
     public class HardwareController : BaseController
     {
-        // GET: Hardware
         public ActionResult HardwareContainer()
         {
-			HardwareModel model = LoadHardware();
-			return View(model);
+            HardwareModel model = LoadHardware();
+            return View(model);
         }
 
-		private HardwareModel LoadHardware()
-		{
-			var hm = new HardwareModel();
-            TeamAssetLogic logic = new TeamAssetLogic();
-            hm.Assets = logic.GetAssets();
-			return hm;
-		}
+        private HardwareModel LoadHardware()
+        {
+            var hm = new HardwareModel();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            var resposne = client.GetAsync("api/asset/GetAll").Result;
+            if (resposne.IsSuccessStatusCode)
+            {
+                var jsonData = resposne.Content.ReadAsStringAsync().Result;
+                if (!String.IsNullOrEmpty(jsonData))
+                    hm.Assets = JsonConvert.DeserializeObject<List<TeamAsset>>(jsonData);
+            }
+            return hm;
+        }
 
         public ActionResult EditHardware(int id)
         {
-            var obj = new Core.Model.TeamAsset { Name = "FC5222A", SerialNumber = "123", Description = "Calibrator" };
-            return PartialView(obj);
+            TeamAsset asset = null;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            var resposne = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
+            if (resposne.IsSuccessStatusCode)
+            {
+                var jsonData = resposne.Content.ReadAsStringAsync().Result;
+                if (!String.IsNullOrEmpty(jsonData))
+                    asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+            }
+            return View(asset);
         }
-		public ActionResult AssetConfiguration(int id, string actionType)
-		{
-			TeamAssetLogic logic = new TeamAssetLogic();
-			switch (actionType)
-			{
-				case "EditAsset":
-					//logic.SetAsAdmin(id, userId, false);
-					break;
-				case "Remove":
-					logic.RemoveAsset(id);
-					break;
-			}
-			return RedirectToAction("HardwareContainer");
-		}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditHardware(TeamAsset asset)
+        {
+            if (ModelState.IsValid)
+            {
+
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                var respsonse = client.PutAsJsonAsync("api/asset/UpdateAsset/" + asset.Id, asset).Result;
+                if (respsonse.IsSuccessStatusCode)
+                    return RedirectToAction("HardwareContainer");
+            }
+            return View(asset);
+        }
+        public ActionResult AssetConfiguration(int id, string actionType)
+        {
+            switch (actionType)
+            {
+                case "Remove":
+                    HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                    var resposne = client.DeleteAsync("api/asset/DeleteAsset/" + id.ToString()).Result;
+                    if (resposne.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("HardwareContainer");
+                    }
+                    break;
+            }
+            return RedirectToAction("HardwareContainer");
+        }
 
         public ActionResult AddHardware()
         {
@@ -52,11 +88,19 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddEditHardware(HardwareModel assetModel)
+        public ActionResult AddEditHardware(TeamAsset assetModel)
         {
-            TeamAssetLogic logic = new TeamAssetLogic();
-            logic.CreateAsset(assetModel.SelectedAsset);
+            TeamAsset asset = null;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            var resposne = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
+            if (resposne.IsSuccessStatusCode)
+            {
+                var jsonData = resposne.Content.ReadAsStringAsync().Result;
+                if (!String.IsNullOrEmpty(jsonData))
+                    asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+            }
             return RedirectToAction("HardwareContainer");
         }
-	}
+    }
 }

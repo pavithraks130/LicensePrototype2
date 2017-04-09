@@ -1,10 +1,7 @@
-﻿@model  LicenseSessionState
+﻿@model  List<License.MetCalWeb.Models.SubscriptionDetails>
 @{
     ViewBag.Title = "Home";
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
 <script>
     var x, y, n = 0, ny = 0, rotINT, rotYINT
     function rotateYDIV() {
@@ -58,7 +55,7 @@
 
     @using (Html.BeginForm())
     {
-        if (LicenseSessionState.Instance.ProductLicense == null || LicenseSessionState.Instance.ProductLicense.Count == 0)
+        if (Model == null || Model.Count == 0)
         {
             <div class="row">
                 No License assigned
@@ -66,13 +63,13 @@
         }
         else
         {
-            foreach (var productLicense in LicenseSessionState.Instance.ProductLicense)
+            foreach (var productLicense in Model)
             {
                 <div class="row div-spacing" style="height:80px;">
                     <h3>
                         Available License Type:
                     </h3>
-                    <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.SubscriptionName</h3></div>
+                    <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.Name</h3></div>
                 </div>
 
                 <div class="row"  style="margin-top:20%">
@@ -80,11 +77,11 @@
 
                     </div>
                 </div>
-                foreach (var product in productLicense.ProductList)
+                foreach (var product in productLicense.Products)
                 {
                     <div class="row" style="margin-top:5%">
                         <div class="col-md-12">
-                            <h4><label>@product.ProductName</label></h4>
+                            <h4><label>@product.Name</label></h4>
                         </div>
                     </div>
                     @*<div class="row" style="margin-top:20%">

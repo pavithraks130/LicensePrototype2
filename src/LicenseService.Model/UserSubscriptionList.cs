@@ -8,48 +8,34 @@ namespace LicenseServer.DataModel
 {
     /// <summary>
     /// class is used for synching the subscription data from LicenseServer to OnPremise Server
-    /// </summary>
-    public class ProductSubscriptionDtls
+    /// </summary>   
+
+    public class SubscriptionList
+    {
+        public string UserId { get; set; }
+
+        public List<Subscription> Subscriptions { get; set; }
+
+        public SubscriptionList()
+        {
+            Subscriptions = new List<Subscription>();
+        }
+    }
+
+    public class Subscription
     {
         public int SubscriptionTypeId { get; set; }
+
         public DateTime SubscriptionDate { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
 
-        public List<ProductDetails> Products { get; set; }
-
         public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
 
-        public ProductSubscriptionDtls()
+        public Subscription()
         {
-            Products = new List<ProductDetails>();
             LicenseKeyProductMapping = new List<DataModel.LicenseKeyProductMapping>();
         }
 
         public int OrderdQuantity { get; set; }
-    }
-
-    public class ProductDetails
-    {
-        public Product Product { get; set; }
-        public int QtyPerSubscription { get; set; }
-
-        public List<Feature> Features { get; set; }
-
-        public ProductDetails()
-        {
-            Features = new List<Feature>();
-        }
-    }
-
-    public class UserSubscriptionList
-    {
-        public string UserId { get; set; }
-
-        public List<ProductSubscriptionDtls> SubscriptionList { get; set; }
-
-        public UserSubscriptionList()
-        {
-            SubscriptionList = new List<ProductSubscriptionDtls>();
-        }
     }
 }
