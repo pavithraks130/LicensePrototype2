@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using OnPremise.WebAPI.Common;
 
 namespace OnPremise.WebAPI
 {
@@ -9,6 +10,7 @@ namespace OnPremise.WebAPI
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Filters.Add(new GlobalExceptionHandling());
             // Web API routes
             config.MapHttpAttributeRoutes();
 
