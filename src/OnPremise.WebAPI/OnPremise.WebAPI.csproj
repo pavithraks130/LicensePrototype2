@@ -147,6 +147,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="Controllers\TeamMemberController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserSubscriptionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

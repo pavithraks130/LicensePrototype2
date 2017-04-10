@@ -4,102 +4,90 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using License.Logic.BusinessLogic;
 using License.Logic.DataLogic;
 using License.DataModel;
-using License.Logic.BusinessLogic;
 
 namespace OnPremise.WebAPI.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/TeamMember")]
+    [RoutePrefix("api/Team")]
     public class TeamController : BaseController
     {
-        private TeamMemberLogic logic = null;
-        TeamBO teamBoObject = null;
+        TeamBO teamBoLogic = null;
+        TeamLogic logic = null;
         public TeamController()
         {
-            logic = new TeamMemberLogic();
-            teamBoObject = new TeamBO();
-        }
-        public void Initialize()
-        {
-            logic.UserManager = UserManager;
-            logic.RoleManager = RoleManager;
-            teamBoObject.UserManager = UserManager;
-            teamBoObject.RoleManager = RoleManager;
+            teamBoLogic = new TeamBO();
+            logic = new TeamLogic();
         }
 
         [HttpGet]
-        [Route("All/{userId}")]
-        public IHttpActionResult GetAll(string userId)
+        [Route("All")]
+        public IHttpActionResult GetAll()
         {
-            Initialize();
-            var userInviteList = teamBoObject.GetUserInviteDetails(userId);
-            return Ok(userInviteList);
+            var lstTeams = logic.GetTeam();
+            return Ok(lstTeams);
+        }
 
+        [HttpGet]
+        [Route("GetById/{id}")]
+        public HttpResponseMessage GetTeamById(int id)
+        {
+            TeamDetails dtls = teamBoLogic.GetteamDetails(id);
+            if (dtls != null)
+                return Request.CreateResponse(HttpStatusCode.OK, dtls);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBoLogic.ErrorMessage);
+        }
+        [HttpGet]
+        [Route("GetTeamsByAdminId/{adminId}")]
+        public IHttpActionResult GetTeamByAdminId(string adminId)
+        {
+            var dtls = logic.GetTeamsByAdmin(adminId);
+            return Ok(dtls);
+        }
+        [HttpGet]
+        [Route("GetTeamsByUserId/{userId}")]
+        public IHttpActionResult GetTeamByUserId(string userId)
+        {
+            var dtls = logic.GetTeamsByUser(userId);
+            return Ok(dtls);
         }
 
         [HttpPost]
-        [Route("CreateInvite")]
-        public HttpResponseMessage CreateInvite(TeamMember member)
+        [Route("Create")]
+        public HttpResponseMessage CreateTeam(Team team)
         {
-            Initialize();
-            var teamMemResponseObj = teamBoObject.CreateTeamMembereInvite(member);
-            if (teamMemResponseObj != null)
-                return Request.CreateResponse(HttpStatusCode.OK, teamMemResponseObj);
+            team = logic.CreateTeam(team);
+            if (team != null)
+                return Request.CreateResponse(HttpStatusCode.OK, team);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBoObject.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpPut]
+        [Route("Update/{id}")]
+        public HttpResponseMessage UpdateTeam(int id, Team team)
+        {
+            team = logic.UpdateTeam(id, team);
+            if (team != null)
+                return Request.CreateResponse(HttpStatusCode.OK, team);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
         [HttpDelete]
-        [Route("DeleteInvite/{id}")]
-        public HttpResponseMessage DeleteTeamMember(int id)
+        [Route("Delete/{id}")]
+        public HttpResponseMessage DeleteTeam(int id)
         {
-            Initialize();
-            var status = logic.DeleteTeamMember(id);
+            var status = logic.DeleteTeam(id);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            else if (String.IsNullOrEmpty(logic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Data NOt found");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
-
-        [HttpPut]
-        [Route("UpdateInvitation")]
-        [AllowAnonymous]
-        public HttpResponseMessage UpdateInvitationStatus(TeamMember mem)
-        {
-            Initialize();
-            logic.UpdateInviteStatus(mem.Id, mem.InviteeStatus);
-            if (string.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateResponse(HttpStatusCode.OK, "success");
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
-        }
-
-        [HttpPut]
-        [Route("UpdateAdminAccess")]
-        public HttpResponseMessage UpdateAdminAccess(TeamMember mem)
-        {
-            Initialize();
-            logic.SetAsAdmin(mem.Id, mem.InviteeUserId, mem.IsAdmin);
-            if (string.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateResponse(HttpStatusCode.OK, "success");
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
-        }
-
-        [HttpGet]
-        [Route("GetTeamMemberByUserId/{userId}")]
-        public HttpResponseMessage GetTeamMemberByUser(string userId)
-        {
-            var obj = logic.GetTeamMemberByUserId(userId);
-            if (obj != null)
-                return Request.CreateResponse(HttpStatusCode.OK, obj);
-            else if (obj == null && String.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateResponse(HttpStatusCode.OK, "");
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
-        }
-
     }
 }

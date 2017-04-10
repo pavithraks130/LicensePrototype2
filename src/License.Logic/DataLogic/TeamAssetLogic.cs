@@ -45,7 +45,7 @@ namespace License.Logic.DataLogic
             try
             {
                 var status = Work.TeamAssetRepository.Delete(id);
-                Work.UserInviteRepository.Save();
+                Work.TeamAssetRepository.Save();
                 return true;
             }
             catch (Exception ex)

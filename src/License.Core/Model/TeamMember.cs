@@ -13,16 +13,15 @@ namespace License.Core.Model
     {
         [Key]
         public int Id { get; set; }
-        public string AdminId { get; set; }
         public int TeamId { get; set; }
         public string InviteeEmail { get; set; }
         public string InviteeUserId { get; set; }
         public string InviteeStatus { get; set; }
         public DateTime InvitationDate { get; set; }
-        [ForeignKey("AdminId")]
-        public virtual AppUser AdminUser { get; set; }
         [ForeignKey("InviteeUserId")]
         public virtual AppUser InviteeUser { get; set; }
+        [ForeignKey("TeamId")]
+        public Team Team { get; set; }
         public bool IsAdmin { get; set; }
     }
 }

@@ -73,7 +73,8 @@ namespace License.Logic.DataLogic
         {
             ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
             var subList = proSubLogic.GetSubscriptionFromFile();
-            var userlist = Work.UserInviteRepository.GetData(f => f.AdminId == adminId).ToList();
+            var team = Work.TeamRepository.GetData(f => f.AdminId == adminId).FirstOrDefault();
+            var userlist = Work.TeamMemberRepository.GetData(f => f.TeamId == team.Id).ToList();
             if (userlist.Count > 0)
             {
                 var idList = userlist.Select(u => u.InviteeUserId).ToList();

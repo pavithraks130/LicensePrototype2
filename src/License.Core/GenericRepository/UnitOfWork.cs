@@ -12,16 +12,15 @@ namespace License.Core.GenericRepository
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
 
-        private LicenseRepository<TeamMember> _userInviteRepository;
-        public LicenseRepository<TeamMember> UserInviteRepository
+        private LicenseRepository<TeamMember> _teamMemberRepository;
+        public LicenseRepository<TeamMember> TeamMemberRepository
         {
             get
             {
-                return _userInviteRepository ??
-                       (_userInviteRepository = new LicenseRepository<TeamMember>(_dbContext));
+                return _teamMemberRepository ??
+                       (_teamMemberRepository = new LicenseRepository<TeamMember>(_dbContext));
             }
         }
-
 
         private LicenseRepository<UserSubscription> _userSubscriptionRepository;
         public LicenseRepository<UserSubscription> UserSubscriptionRepository
@@ -63,6 +62,15 @@ namespace License.Core.GenericRepository
         public LicenseRepository<UserLicenseRequest> UserLicenseRequestRepo
         {
             get { return _userLicenseRequestRepo ?? (_userLicenseRequestRepo = new LicenseRepository<UserLicenseRequest>(_dbContext)); }
+        }
+
+        private LicenseRepository<Team> _teamRepository;
+        public LicenseRepository<Team> TeamRepository
+        {
+            get
+            {
+                return _teamRepository ?? (_teamRepository = new LicenseRepository<Team>(_dbContext));
+            }
         }
 
         private bool disposed = false;
