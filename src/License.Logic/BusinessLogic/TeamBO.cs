@@ -31,46 +31,88 @@ namespace License.Logic.BusinessLogic
             userLogic.RoleManager = RoleManager;
         }
 
-        public TeamDetails GetUserInviteDetails(string adminId)
+        //public TeamDetails GetUserInviteDetails(string adminId)
+        //{
+        //    Initialize();
+        //    User user = userLogic.GetUserById(adminId);
+        //    TeamDetails inviteList = new TeamDetails()
+        //    {
+        //        AdminUser = user
+        //    };
+        //    var teamMembers = logic.GetUserInviteList(adminId);
+        //    if (teamMembers.Count > 0)
+        //    {
+        //        inviteList.PendinigUsers =
+        //            teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
+        //        inviteList.AcceptedUsers =
+        //            teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
+        //        inviteList.AcceptedUsers.Add(new TeamMember()
+        //        {
+        //            AdminId = adminId,
+        //            InviteeEmail = user.Email,
+        //            InviteeStatus = InviteStatus.Accepted.ToString(),
+        //            InviteeUserId = adminId,
+        //            InviteeUser = inviteList.AdminUser,
+        //            IsAdmin = true
+        //        });
+        //    }
+        //    else
+        //    {
+        //        inviteList.AcceptedUsers.Add(new TeamMember()
+        //        {
+        //            AdminId = adminId,
+        //            InviteeEmail = user.Email,
+        //            InviteeStatus = InviteStatus.Accepted.ToString(),
+        //            InviteeUserId = adminId,
+        //            InviteeUser = inviteList.AdminUser,
+        //            IsAdmin = true
+        //        });
+        //    }
+        //    ErrorMessage = logic.ErrorMessage;
+        //    return inviteList;
+        //}
+
+        public TeamDetails GetteamDetails(int id)
         {
-            Initialize();
-            User user = userLogic.GetUserById(adminId);
-            TeamDetails inviteList = new TeamDetails()
+            TeamLogic teamLogic = new TeamLogic();
+            TeamDetails dtls = new TeamDetails();
+            var team = teamLogic.GetTeamById(id);
+            if (team != null)
             {
-                AdminUser = user
-            };
-            var teamMembers = logic.GetUserInviteList(adminId);
-            if (teamMembers.Count > 0)
-            {
-                inviteList.PendinigUsers =
-                    teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
-                inviteList.AcceptedUsers =
-                    teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
-                inviteList.AcceptedUsers.Add(new TeamMember()
+
+                dtls.Team = new Team();
+                dtls.Team.AdminId = team.AdminId;
+                dtls.Team.AdminUser = team.AdminUser;
+                dtls.Team.Id = team.Id;
+                dtls.Team.Name = team.Name;
+                if (team.TeamMembers.Count > 0)
                 {
-                    AdminId = adminId,
-                    InviteeEmail = user.Email,
-                    InviteeStatus = InviteStatus.Accepted.ToString(),
-                    InviteeUserId = adminId,
-                    InviteeUser = inviteList.AdminUser,
-                    IsAdmin = true
-                });
-            }
-            else
-            {
-                inviteList.AcceptedUsers.Add(new TeamMember()
+                    dtls.PendinigUsers =
+                        team.TeamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
+                    dtls.AcceptedUsers =
+                        team.TeamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
+                    dtls.AcceptedUsers.Add(new TeamMember()
+                    {
+                        InviteeEmail = team.AdminUser.Email,
+                        InviteeStatus = InviteStatus.Accepted.ToString(),
+                        InviteeUserId = team.AdminUser.UserId,
+                        IsAdmin = true
+                    });
+                }
+                else
                 {
-                    AdminId = adminId,
-                    InviteeEmail = user.Email,
-                    InviteeStatus = InviteStatus.Accepted.ToString(),
-                    InviteeUserId = adminId,
-                    InviteeUser = inviteList.AdminUser,
-                    IsAdmin = true
-                });
+                    dtls.AcceptedUsers.Add(new TeamMember()
+                    {
+                        InviteeEmail = team.AdminUser.Email,
+                        InviteeStatus = InviteStatus.Accepted.ToString(),
+                        InviteeUserId = team.AdminUser.UserId,
+                        IsAdmin = true
+                    });
+                }
             }
-            ErrorMessage = logic.ErrorMessage;
-            return inviteList;
+            return dtls;
         }
+    
 
         public TeamMemberResponse CreateTeamMembereInvite(TeamMember member)
         {

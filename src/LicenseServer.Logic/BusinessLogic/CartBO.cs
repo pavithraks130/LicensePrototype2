@@ -43,12 +43,12 @@ namespace LicenseServer.Logic.BusinessLogic
                         POItemLogic itemLogic = new POItemLogic();
                         itemLogic.CreateItem(poItemList, obj.Id);
                     }
-                    foreach(var item in items)
+                    foreach (var item in items)
                     {
                         item.IsPurchased = true;
                         cartLogic.UpdateCartItem(item);
                     }
-                    
+
                 }
                 return obj;
             }
@@ -127,6 +127,31 @@ namespace LicenseServer.Logic.BusinessLogic
                 userSsubList.Subscriptions.AddRange(dataList.Subscriptions);
             }
             return userSsubList;
+        }
+
+        public bool CreateSubscriptionAddToCart(CustomSubscriptionType type)
+        {
+            SubscriptionTypeLogic typeLOgic = new SubscriptionTypeLogic();
+            type.SubscriptionType.CreatedBy = type.UserId;
+            SubscriptionType subType = typeLOgic.CreateSubscriptionWithProduct(type.SubscriptionType);
+            if (subType == null && String.IsNullOrEmpty(typeLOgic.ErrorMessage))
+                ErrorMessage = typeLOgic.ErrorMessage;
+            else
+            {
+                CartItem item = new CartItem()
+                {
+                    SubscriptionTypeId = subType.Id,
+                    DateCreated = DateTime.Now.Date,
+                    Quantity = 1,
+                    UserId = type.UserId,
+                    Price = subType.Price
+                };
+                CartLogic logic = new CartLogic();
+                var status = logic.CreateCartItem(item);
+                if (!status)
+                    ErrorMessage = logic.ErrorMessage;
+            }
+            return String.IsNullOrEmpty(ErrorMessage);
         }
     }
 }

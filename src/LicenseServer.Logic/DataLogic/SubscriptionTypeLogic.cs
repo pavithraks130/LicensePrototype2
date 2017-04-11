@@ -29,6 +29,34 @@ namespace LicenseServer.Logic
             return coreSubType.Id > 0;
         }
 
+        /// <summary>
+        /// Function will be used if the Subscription data provided with Product details.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public SubscriptionType CreateSubscriptionWithProduct(SubscriptionType type)
+        {
+            var coreSubscriptionType = AutoMapper.Mapper.Map<Core.Model.SubscriptionType>(type);
+            coreSubscriptionType = Work.SubscriptionRepository.Create(coreSubscriptionType);
+            Work.SubscriptionRepository.Save();
+            if (coreSubscriptionType.Id > 0 && type.Products.Count() > 0)
+            {
+                int i = 0;
+                foreach (var pro in type.Products)
+                {
+                    Core.Model.SubscriptionDetail detail = new Core.Model.SubscriptionDetail();
+                    detail.SubscriptionTypeId = coreSubscriptionType.Id;
+                    detail.ProductId = pro.Id;
+                    detail.Quantity = pro.Quantity;
+                    Work.SubscriptionDetailResitory.Create(detail);
+                    i++;
+                }
+                if (i > 0)
+                    Work.SubscriptionDetailResitory.Save();
+            }
+            return AutoMapper.Mapper.Map<DataModel.SubscriptionType>(coreSubscriptionType);
+        }
+
         public SubscriptionType GetById(int id)
         {
             var data = Work.SubscriptionRepository.GetById(id);

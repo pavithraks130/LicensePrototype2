@@ -26,21 +26,10 @@ namespace License.Logic
             cfg.CreateMap<License.DataModel.User, License.Core.Model.AppUser>();
 
             cfg.CreateMap<License.Core.Model.TeamMember, TeamMember>()
-                .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
             cfg.CreateMap<TeamMember, License.Core.Model.TeamMember>()
-                .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser))
-                .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
-
-            //cfg.CreateMap<Model.Product, Core.Model.Product>();
-            //cfg.CreateMap<Core.Model.Product, Model.Product>();
-
-            //cfg.CreateMap<Model.ProductSubscriptionMapping, Core.Model.ProductSubscriptionMapping>();
-            //cfg.CreateMap<Core.Model.ProductSubscriptionMapping, Model.ProductSubscriptionMapping>();
-
-            //cfg.CreateMap<Model.Subscription, Core.Model.Subscription>();
-            //cfg.CreateMap<Core.Model.Subscription, Model.Subscription>();
+                .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));           
 
             cfg.CreateMap<License.Core.Model.UserSubscription, License.DataModel.UserSubscription>();
             cfg.CreateMap<License.DataModel.UserSubscription, License.Core.Model.UserSubscription>();
@@ -62,6 +51,9 @@ namespace License.Logic
 
             cfg.CreateMap<License.DataModel.TeamAsset, License.Core.Model.TeamAsset>();
             cfg.CreateMap<License.Core.Model.TeamAsset, License.DataModel.TeamAsset>();
+
+            cfg.CreateMap<DataModel.Team, Core.Model.Team>();
+            cfg.CreateMap<Core.Model.Team, DataModel.Team>();
 
         }
 

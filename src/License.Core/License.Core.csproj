@@ -168,10 +168,15 @@
     <Compile Include="Migrations\201704071853579_init482017.Designer.cs">
       <DependentUpon>201704071853579_init482017.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704110642514_ChangesToTeam.cs" />
+    <Compile Include="Migrations\201704110642514_ChangesToTeam.Designer.cs">
+      <DependentUpon>201704110642514_ChangesToTeam.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
     <Compile Include="Model\Role.cs" />
+    <Compile Include="Model\Team.cs" />
     <Compile Include="Model\TeamAsset.cs" />
     <Compile Include="Model\TeamMember.cs" />
     <Compile Include="Model\UserLicense.cs" />
@@ -228,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704071853579_init482017.resx">
       <DependentUpon>201704071853579_init482017.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704110642514_ChangesToTeam.resx">
+      <DependentUpon>201704110642514_ChangesToTeam.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

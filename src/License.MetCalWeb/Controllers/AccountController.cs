@@ -11,12 +11,14 @@ using Microsoft.Owin.Security;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Claims;
+
 namespace License.MetCalWeb.Controllers
 {
     [AllowAnonymous]
     public class AccountController : BaseController
     {
-        ServiceType webAPiType;
+        string ErrorMessage;
+
         private IAuthenticationManager _authManager = null;
         private IAuthenticationManager AuthenticationManager
         {
@@ -28,11 +30,7 @@ namespace License.MetCalWeb.Controllers
             }
         }
 
-        public AccountController()
-        {
-            string serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            webAPiType = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
-        }
+        public AccountController() { }
 
         public ActionResult Register()
         {
@@ -75,7 +73,7 @@ namespace License.MetCalWeb.Controllers
                     }
                 }
                 else
-                    ModelState.AddModelError("", response.ReasonPhrase);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result);
             }
             return View();
         }
@@ -95,106 +93,68 @@ namespace License.MetCalWeb.Controllers
             {
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
                 // and on premises user and admin will be authenticated with on premise DB
-                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                var formContent = new FormUrlEncodedContent(new[] {
-                    new KeyValuePair<string, string>("grant_type", "password"),
-                    new KeyValuePair<string, string>("username", model.Email),
-                    new KeyValuePair<string, string>("password", model.Password)
-                });
-                var response = await client.PostAsync("Authenticate", formContent);
-                if (response.IsSuccessStatusCode)
+                var status = await AuthenticateUser(model, ServiceType.OnPremiseWebApi);
+                if (status)
                 {
-                    data = response.Content.ReadAsStringAsync().Result;
-                    var token = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
-                    switch (webAPiType)
-                    {
-                        case ServiceType.CentralizeWebApi: LicenseSessionState.Instance.CentralizedToken = token; break;
-                        case ServiceType.OnPremiseWebApi: LicenseSessionState.Instance.OnPremiseToken = token; break;
-                    }
-                    client.Dispose();
-                    client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
-                    response = await client.GetAsync("api/user/UserById/" + token.Id);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var userJson = response.Content.ReadAsStringAsync().Result;
-                        client.Dispose();
-                        user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(userJson);
-                        if (user.Roles.Contains("SuperAdmin"))
-                        {
-                            client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-                            formContent = new FormUrlEncodedContent(new[] {
-                    new KeyValuePair<string, string>("grant_type", "password"),
-                    new KeyValuePair<string, string>("username", model.Email),
-                    new KeyValuePair<string, string>("password", model.Password)
-                });
-                            response = await client.PostAsync("Authenticate", formContent);
-                            if (response.IsSuccessStatusCode)
-                            {
-                                data = response.Content.ReadAsStringAsync().Result;
-                                var token1 = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
-                                LicenseSessionState.Instance.CentralizedToken = token1;
-                            }
-                        }
-                    }
-                    LicenseSessionState.Instance.User = user;
-                    LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
-                    LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                        LicenseSessionState.Instance.IsAdmin = true;
-                    else
-                        LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-
-                    if(!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
-                        LicenseSessionState.Instance.IsTeamMember = true;
-
-                    if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsSuperAdmin)
-                    {                       
-                        client.Dispose();
-                        client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-                        response = client.GetAsync("api/TeamMember/GetTeamMemberByUserId/" + LicenseSessionState.Instance.User.UserId).Result;
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var jsonData = response.Content.ReadAsStringAsync().Result;
-                            if (!String.IsNullOrEmpty(jsonData))
-                            {
-                                LicenseSessionState.Instance.TeamMeberDetails = JsonConvert.DeserializeObject<TeamMember>(jsonData);
-                                LicenseSessionState.Instance.AdminId = LicenseSessionState.Instance.TeamMeberDetails.AdminId;
-                            }
-                        }
-                    }
-                    SignInAsync(user, true);
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                        SynchPurchaseOrder();
-                    LicenseSessionState.Instance.IsAuthenticated = true;
-                    if (String.IsNullOrEmpty(user.FirstName))
-                        return RedirectToAction("Profile", "User");
-                    if (LicenseSessionState.Instance.IsGlobalAdmin)
-                        return RedirectToAction("Index", "User");
-                    return RedirectToAction("Home", "Tab");
+                    user = await GetUserData(ServiceType.OnPremiseWebApi);
+                    if (user.Roles.Contains("SuperAdmin"))
+                        status = await AuthenticateUser(model, ServiceType.CentralizeWebApi);
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid Credentials");
+                    status = await AuthenticateUser(model, ServiceType.CentralizeWebApi);
+                    if (status)
+                        user = await GetUserData(ServiceType.CentralizeWebApi);
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid Credentials");
+                        return View();
+                    }
                 }
+                if (user == null)
+                {
+                    ModelState.AddModelError("", ErrorMessage);
+                    return View();
+                }
+                LicenseSessionState.Instance.User = user;
+                LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
+                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    LicenseSessionState.Instance.IsAdmin = true;
+                else
+                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+
+                if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
+                    LicenseSessionState.Instance.IsTeamMember = true;
+
+                if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsSuperAdmin)
+                {
+                    HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                    var response = client.GetAsync("api/TeamMember/GetTeamMemberByUserId/" + LicenseSessionState.Instance.User.UserId).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonData = response.Content.ReadAsStringAsync().Result;
+                        if (!String.IsNullOrEmpty(jsonData))
+                        {
+                            LicenseSessionState.Instance.TeamMeberDetails = JsonConvert.DeserializeObject<TeamMember>(jsonData);
+                            LicenseSessionState.Instance.AdminId = LicenseSessionState.Instance.TeamMeberDetails.AdminId;
+                        }
+                    }
+                }
+                SignInAsync(user, true);
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    SynchPurchaseOrder();
+                LicenseSessionState.Instance.IsAuthenticated = true;
+                if (String.IsNullOrEmpty(user.FirstName))
+                    return RedirectToAction("Profile", "User");
+                if (LicenseSessionState.Instance.IsGlobalAdmin)
+                    return RedirectToAction("Index", "User");
+                return RedirectToAction("Home", "Tab");
             }
+            else
+                ModelState.AddModelError("", "Invalid Credentials");
             return View();
-        }
-
-        public async Task SynchPurchaseOrder()
-        {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.PostAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId, null).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
-                if (obj.Subscriptions.Count > 0)
-                    CentralizedSubscriptionLogic.UpdateSubscriptionOnpremise(obj);
-            }
-
         }
 
         private void SignInAsync(User user, bool isPersistent)
@@ -228,17 +188,18 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                var response = client.PostAsJsonAsync("api/user/GetResetToken", model).Result;
-                if (response.IsSuccessStatusCode)
+                var tokenModel = GetForgotPasswordToken(model, ServiceType.OnPremiseWebApi);
+                if (tokenModel == null)
+                    tokenModel = GetForgotPasswordToken(model, ServiceType.CentralizeWebApi);
+                if (tokenModel != null)
                 {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var user = JsonConvert.DeserializeObject<ForgotPasswordToken>(jsonData);
-                    var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = user.UserId, code = user.Token }, protocol: Request.Url.Scheme);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = tokenModel.UserId, code = tokenModel.Token }, protocol: Request.Url.Scheme);
                     EmailService service = new EmailService();
                     service.SendEmail(model.Email, "Reset Password", "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                     ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
                 }
+                else
+                    ModelState.AddModelError("", ErrorMessage);
             }
             return View();
         }
@@ -260,55 +221,38 @@ namespace License.MetCalWeb.Controllers
             {
                 model.Token = code;
                 model.UserId = userId;
-                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                var response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
-                if (response.IsSuccessStatusCode)
+                var user = ResetUserPassword(model, ServiceType.OnPremiseWebApi);
+                if (user != null && !String.IsNullOrEmpty(user.ServerUserId))
                 {
-                    var jsondata = response.Content.ReadAsStringAsync().Result;
-                    var user = JsonConvert.DeserializeObject<User>(jsondata);
-                    if (user != null && !String.IsNullOrEmpty(user.ServerUserId))
-                    {
-                        client.Dispose();
-                        client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-                        model.UserId = user.ServerUserId;
-                        model.Token = string.Empty;
-                        response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            ModelState.AddModelError("", response.ReasonPhrase);
-                            return View();
-                        }
-                    }
-                    ViewBag.Display = "inline";
-                    ViewBag.ResetMessage = "Success";
+                    model.UserId = user.ServerUserId;
+                    model.Token = String.Empty;
+                    user = ResetUserPassword(model, ServiceType.CentralizeWebApi);
+                    ErrorMessage = "Centralized Server : " + ErrorMessage;
                 }
                 else
-                    ModelState.AddModelError("", response.ReasonPhrase);
+                    user = ResetUserPassword(model, ServiceType.CentralizeWebApi);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", ErrorMessage);
+                    return View();
+                }
+                ViewBag.Display = "inline";
+                ViewBag.ResetMessage = "Success";
             }
             return View();
         }
 
         public ActionResult LogOut()
         {
-
-            HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-            User userModel = new User();
-            userModel.UserId = LicenseSessionState.Instance.User.ServerUserId;
-            userModel.IsActive = false;
-            switch (webAPiType)
+            if (LicenseSessionState.Instance.IsGlobalAdmin)
+                UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.CentralizeWebApi);
+            else if (LicenseSessionState.Instance.IsSuperAdmin)
             {
-                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+                UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
+                UpdateLogoutStatus(LicenseSessionState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
             }
-            client.PostAsJsonAsync("api/user/UpdateActiveStatus", userModel);
-
-            if (LicenseSessionState.Instance.IsSuperAdmin)
-            {
-                client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-                userModel.UserId = LicenseSessionState.Instance.User.ServerUserId;
-                client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-                client.PostAsJsonAsync("api/user/UpdateActiveStatus", userModel);
-            }
+            else
+                UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
             return RedirectToAction("LogIn");
@@ -341,6 +285,112 @@ namespace License.MetCalWeb.Controllers
                 ViewBag.ErrorMessage = response.ReasonPhrase;
 
             return View();
+        }
+
+        public User ResetUserPassword(ResetPassword model, ServiceType type)
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            var response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var user = JsonConvert.DeserializeObject<User>(jsondata);
+                return user;
+            }
+            else ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            return null;
+        }
+        public ForgotPasswordToken GetForgotPasswordToken(ForgotPassword model, ServiceType type)
+        {
+            ErrorMessage = string.Empty;
+            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            var response = client.PostAsJsonAsync("api/user/GetResetToken", model).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var passwordtoken = JsonConvert.DeserializeObject<ForgotPasswordToken>(jsonData);
+                return passwordtoken;
+            }
+            else ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            return null;
+        }
+
+        public void UpdateLogoutStatus(string userId, ServiceType type)
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            User userModel = new User();
+            userModel.UserId = userId;
+            userModel.IsActive = false;
+            switch (type)
+            {
+                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
+                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+            }
+            client.PostAsJsonAsync("api/user/UpdateActiveStatus", userModel);
+        }
+
+        public async Task<User> GetUserData(ServiceType webApiType)
+        {
+            ErrorMessage = string.Empty;
+            AccessToken token = null;
+            switch (webApiType)
+            {
+                case ServiceType.CentralizeWebApi: token = LicenseSessionState.Instance.CentralizedToken; break;
+                case ServiceType.OnPremiseWebApi: token = LicenseSessionState.Instance.OnPremiseToken; break;
+            }
+            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
+            var response = await client.GetAsync("api/user/UserById/" + token.Id);
+            if (response.IsSuccessStatusCode)
+            {
+                var userJson = response.Content.ReadAsStringAsync().Result;
+                client.Dispose();
+                var user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(userJson);
+                return user;
+            }
+            else
+                ErrorMessage = response.ReasonPhrase + " " + response.Content.ReadAsStringAsync().Result;
+            return null;
+        }
+
+        public async Task<bool> AuthenticateUser(LoginViewModel model, ServiceType webApiType)
+        {
+            ErrorMessage = string.Empty;
+            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            var formContent = new FormUrlEncodedContent(new[] {
+                                new KeyValuePair<string, string>("grant_type", "password"),
+                                new KeyValuePair<string, string>("username", model.Email),
+                                new KeyValuePair<string, string>("password", model.Password)
+                            });
+            var response = await client.PostAsync("Authenticate", formContent);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var token = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessToken>(data);
+                switch (webApiType)
+                {
+                    case ServiceType.CentralizeWebApi: LicenseSessionState.Instance.CentralizedToken = token; break;
+                    case ServiceType.OnPremiseWebApi: LicenseSessionState.Instance.OnPremiseToken = token; break;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public async Task SynchPurchaseOrder()
+        {
+            ErrorMessage = string.Empty;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = client.PostAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId, null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
+                if (obj.Subscriptions.Count > 0)
+                    CentralizedSubscriptionLogic.UpdateSubscriptionOnpremise(obj);
+            }
+
         }
     }
 }

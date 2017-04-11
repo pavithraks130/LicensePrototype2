@@ -97,5 +97,18 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);
 
         }
+
+        [HttpPost]
+        [Route("CreateSubscriptionAddToCart")]
+        public HttpResponseMessage CreateSubscriptionAddTpoCart(CustomSubscriptionType subscriptionType)
+        {
+            bool status = cartBOLogic.CreateSubscriptionAddToCart(subscriptionType);
+            if (status)
+                return Request.CreateResponse(HttpStatusCode.Created, "success");
+            else if (String.IsNullOrEmpty(cartBOLogic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Due to internal issue the subscription can not be created");
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);
+        }
     }
 }

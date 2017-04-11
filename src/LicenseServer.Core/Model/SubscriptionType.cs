@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace LicenseServer.Core.Model
 {
     public class SubscriptionType
@@ -17,6 +18,10 @@ namespace LicenseServer.Core.Model
 
         public double Price { get; set; }
 
+        public string CreatedBy { get; set; }
+
+        [ForeignKey("CreatedBy")]
+        public Appuser CreatedUser { get; set; }
         public virtual IEnumerable<SubscriptionDetail> SubDetails { get; set; }
     }
 }
