@@ -15,11 +15,10 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        ServiceType webAPiType;
+        string ErrorMessage;
         public UserController()
         {
-            var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            webAPiType = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
+
         }
 
         // GET: User
@@ -50,27 +49,22 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Profile(User usermodel, string userId)
         {
+            bool status = false;
             if (ModelState.IsValid)
             {
-
-                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                switch (webAPiType)
+                if (LicenseSessionState.Instance.IsGlobalAdmin )
+                    status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
+                else if(LicenseSessionState.Instance.IsSuperAdmin)
                 {
-                    case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                    case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+                    status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                    if(status)
+                        status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
                 }
-
-                var response = await client.PutAsJsonAsync("/api/user/update/" + LicenseSessionState.Instance.User.UserId, usermodel);
-
-                if (response.IsSuccessStatusCode)
+                else
+                    status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
+                
+                if (status)
                 {
-                    client.Dispose();
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                    {
-                        client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-                        response = await client.PutAsJsonAsync("/api/user/update/" + LicenseSessionState.Instance.User.ServerUserId, usermodel);
-                    }
                     LicenseSessionState.Instance.User.FirstName = usermodel.FirstName;
                     LicenseSessionState.Instance.User.LastName = usermodel.LastName;
                     LicenseSessionState.Instance.User.PhoneNumber = usermodel.PhoneNumber;
@@ -79,7 +73,7 @@ namespace License.MetCalWeb.Controllers
                     else
                         return RedirectToAction("Home", "Tab");
                 }
-                ModelState.AddModelError("", response.ReasonPhrase);
+                ModelState.AddModelError("", ErrorMessage);
             }
             return View(usermodel);
         }
@@ -95,35 +89,62 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePassword model)
         {
+            bool status = false;
             if (ModelState.IsValid)
             {
-
-                HttpClient client = WebApiServiceLogic.CreateClient(webAPiType.ToString());
-                switch (webAPiType)
+                if (LicenseSessionState.Instance.IsGlobalAdmin)
+                    status = await ChangePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
+                else if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
-                    case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                    case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+                    status = await ChangePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                    if (status)
+                        status = await ChangePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
                 }
-
-                var response = await client.PutAsJsonAsync("api/user/UpdatePassword/" + LicenseSessionState.Instance.User.UserId, model);
-
-                if (response.IsSuccessStatusCode)
+                else
+                    status = await ChangePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                if (status)
                 {
-                    client.Dispose();
-                    if (LicenseSessionState.Instance.IsSuperAdmin)
-                    {
-                        client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
-                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-                        response = await client.PutAsJsonAsync("api/user/UpdatePassword/" + LicenseSessionState.Instance.User.ServerUserId, model);
-                    }
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                         return RedirectToAction("Index", "User");
                     else
                         return RedirectToAction("Home", "Tab");
                 }
-                ModelState.AddModelError("", response.ReasonPhrase);
+                else
+                    ModelState.AddModelError("", ErrorMessage);
+
             }
             return View(model);
+        }
+
+        public async Task<bool> UpdateProfile(User model, ServiceType type, string userId)
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            switch (type)
+            {
+                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
+                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+            }
+
+            var response = await client.PutAsJsonAsync("/api/user/update/" + userId, model);
+            if (response.IsSuccessStatusCode)
+                return true;
+            ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            return false;
+        }
+
+        public async Task<bool> ChangePassword(ChangePassword model, ServiceType type, string userId)
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            switch (type)
+            {
+                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
+                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+            }
+            var response = await client.PutAsJsonAsync("api/user/UpdatePassword/" + userId, model);
+            if (response.IsSuccessStatusCode)
+                return true;
+            ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            return false;
         }
     }
 }

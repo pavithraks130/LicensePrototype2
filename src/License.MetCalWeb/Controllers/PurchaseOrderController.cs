@@ -15,12 +15,11 @@ namespace License.MetCalWeb.Controllers
     public class PurchaseOrderController : Controller
     {
 
-        ServiceType webApitype;
+        
 
         public PurchaseOrderController()
         {
-            var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            webApitype = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
+          
         }
 
         // GET: PurchaseOrder

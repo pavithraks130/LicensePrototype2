@@ -15,11 +15,11 @@ namespace License.MetCalWeb.Controllers
     public class CartController : BaseController
     {
 
-        ServiceType webApiType;
+        
         public CartController()
         {
-            var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            webApiType = (ServiceType)Enum.Parse(typeof(ServiceType), serviceType);
+            
+            
         }
 
         public async Task<ActionResult> CartItem()

@@ -130,6 +130,7 @@
     <Compile Include="Common\GlobalExceptionHandling.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />

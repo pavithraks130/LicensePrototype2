@@ -14,12 +14,10 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     public class UserTokenController : BaseController
     {
-        ServiceType webApiType;
-
+      
         public UserTokenController()
         {
-            var typeObj = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            webApiType = (ServiceType)Enum.Parse(typeof(ServiceType), typeObj);
+           
         }
         // GET: UserToken
         public async Task<ActionResult> Index()

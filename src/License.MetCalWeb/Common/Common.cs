@@ -5,7 +5,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Common
 {
-    enum ServiceType
+    public enum ServiceType
     {
         OnPremiseWebApi,
         CentralizeWebApi

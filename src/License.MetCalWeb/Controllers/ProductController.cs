@@ -14,11 +14,11 @@ namespace License.MetCalWeb.Controllers
     [Authorize(Roles = "SuperAdmin,BackendAdmin")]
     public class ProductController : BaseController
     {
-        ServiceType webApiType;
+       
         public ProductController()
         {
-            var typeObj = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
-            webApiType = (ServiceType)Enum.Parse(typeof(ServiceType), typeObj);
+           
+           
         }
 
         public async Task<ActionResult> ProductCatalog()

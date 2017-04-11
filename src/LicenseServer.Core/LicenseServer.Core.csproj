@@ -112,6 +112,10 @@
     <Compile Include="Migrations\201704011444382_AddedCommentColumnToPOTable.Designer.cs">
       <DependentUpon>201704011444382_AddedCommentColumnToPOTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704110654374_changesToSubscription.cs" />
+    <Compile Include="Migrations\201704110654374_changesToSubscription.Designer.cs">
+      <DependentUpon>201704110654374_changesToSubscription.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -145,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704011444382_AddedCommentColumnToPOTable.resx">
       <DependentUpon>201704011444382_AddedCommentColumnToPOTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704110654374_changesToSubscription.resx">
+      <DependentUpon>201704110654374_changesToSubscription.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
