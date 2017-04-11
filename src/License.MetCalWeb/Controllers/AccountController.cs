@@ -102,9 +102,9 @@ namespace License.MetCalWeb.Controllers
                 }
                 else
                 {
-                    status = await AuthenticateUser(model, ServiceType.OnPremiseWebApi);
+                    status = await AuthenticateUser(model, ServiceType.CentralizeWebApi);
                     if (status)
-                        user = await GetUserData(ServiceType.OnPremiseWebApi);
+                        user = await GetUserData(ServiceType.CentralizeWebApi);
                     else
                     {
                         ModelState.AddModelError("", "Invalid Credentials");
@@ -246,7 +246,7 @@ namespace License.MetCalWeb.Controllers
         {
             if (LicenseSessionState.Instance.IsGlobalAdmin)
                 UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.CentralizeWebApi);
-            if (LicenseSessionState.Instance.IsSuperAdmin)
+            else if (LicenseSessionState.Instance.IsSuperAdmin)
             {
                 UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
                 UpdateLogoutStatus(LicenseSessionState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
