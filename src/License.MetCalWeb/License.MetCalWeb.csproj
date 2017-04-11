@@ -208,6 +208,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Drag-and-drop-container.css" />
     <Content Include="Content\MenuDropdown.css" />
+    <Content Include="Content\ProductCatalogDetails.css" />
     <Content Include="Content\Site.css" />
     <Content Include="EmailTemplate\EmailTemImages\colorschememapping.xml" />
     <Content Include="EmailTemplate\EmailTemImages\filelist.xml" />
@@ -350,7 +351,7 @@
     <Content Include="Views\Cart\DoPayment.cshtml" />
     <Content Include="Views\Dashboard\CartDetails.cshtml" />
     <Content Include="Views\Product\CartDetails.cshtml" />
-    <Content Include="Views\Product\ProductCatalog.cshtml" />
+    <Content Include="Views\Product\SubscriptionCatalog.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
     <Content Include="Views\License\MapLicense.cshtml" />
     <Content Include="Views\License\RevokeLicense.cshtml" />
@@ -373,6 +374,8 @@
     <Content Include="Views\License\LicenseApproval.cshtml" />
     <Content Include="Views\Hardware\EditHardware.cshtml" />
     <Content Include="Views\Hardware\AddHardware.cshtml" />
+    <Content Include="Views\Product\CreateSubscription.cshtml" />
+    <Content Include="Views\Product\CreateAndUpdateProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

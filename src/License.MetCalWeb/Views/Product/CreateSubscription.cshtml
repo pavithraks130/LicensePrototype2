@@ -1,0 +1,82 @@
+﻿@model IList<License.MetCalWeb.Models.SubscriptionDetails>
+@{
+    ViewBag.Title = "CreateSubscription";
+}
+<link href="~/Content/ProductCatalogDetails.css" rel=" stylesheet" type="text/css" />
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            return isPostEnabled;
+        });
+    });
+</script>
+
+<h3>Create Subscription</h3>
+<br />
+<br />
+@if (LicenseSessionState.Instance.IsAdmin)
+{
+    using (Html.BeginForm("CreateSubscription", "Product", FormMethod.Post))
+    {
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-4">Product Name</div>
+                    <div class="col-md-4">Quantity</div>
+                    <div class="col-md-4">Price(USD)</div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+               <div class="form-group">
+                   <div class="col-md-4"><input type="checkbox" name="selectedProduct" /></div>
+                   <div class="col-md-4"><input type="text" class="txt-qty" name="selectedItemQuantity" /></div>
+                   <div class="col-md-4">$200</div>
+               </div>
+            </div>
+        </div>
+        <div id="row2" class="col-md-12">
+            Choose your maintainanse period
+        </div>
+        <div id="row3" class="col-md-12">
+            <select id="monthList">
+                <option value="0">12 month included</option>
+                <option value="1">24 month</option>
+                <option value="2">36 month</option>
+            </select>
+        </div>
+        <div id="row4" class="col-md-12" align="right">
+            @*<button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = 1 }, null)</button>*@
+            <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
+        </div>
+        <div id="row5" class="col-md-12" align="right">
+            SubTotal(UAD)<br />
+            $500
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label id="lblError" style="display:none;">
+                    No products are selected
+                </label>
+            </div>
+        </div>
+    }
+}
+
+
