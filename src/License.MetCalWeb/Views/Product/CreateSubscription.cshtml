@@ -23,6 +23,11 @@
             return isPostEnabled;
         });
     });
+      //function AssignButtonClicked() {
+      // var x= $('.txt-qty').data();
+      //  alert(x);
+      //  return false;
+    }
 </script>
 
 <h3>Create Subscription</h3>
@@ -48,33 +53,33 @@
                     <div class="col-md-4">Quantity</div>
                     <div class="col-md-4">Price(USD)</div>
                 </div>
-                
+
             </div>
         </div>
-        foreach(var product in Model)
+        foreach (var product in Model)
         {
-        <div class="row">
-            <div class="col-md-12">
-               <div class="form-group">
-                   <div class="col-md-4"><input type="checkbox" name="selectedProduct" value="@product.Id"  /> &nbsp; @product.Name</div>
-                   <div class="col-md-4"><input type="text" class="txt-qty" name="qty" value="@product.Quantity" /></div>
-                   <div class="col-md-4">$200</div>
-               </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="col-md-4"><input type="checkbox" name="selectedProduct" value="@product.Id" /> &nbsp; @product.Name</div>
+                        @*onchange="AssignButtonClicked();"*@ 
+                        <div class="col-md-4"><input type="text" class="txt-qty" name="qty" id="textQTYid+@product.Id" value="@product.Quantity"/></div>
+                        <div class="col-md-4"><label id="lblSelectedProductPrice">$@product.Price</label></div>
+                    </div>
+                </div>
             </div>
-        </div>
         }
         <div id="row2" class="col-md-12">
             Choose your maintainanse period
         </div>
         <div id="row3" class="col-md-12">
-            <select id="monthList">
+            <select name="activeDays">
                 <option value="0">12 month included</option>
                 <option value="1">24 month</option>
                 <option value="2">36 month</option>
             </select>
         </div>
         <div id="row4" class="col-md-12" align="right">
-            @*<button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = 1 }, null)</button>*@
             <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
         </div>
         <div id="row5" class="col-md-12" align="right">

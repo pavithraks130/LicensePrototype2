@@ -64,24 +64,43 @@ namespace License.MetCalWeb.Controllers
                 var jsondata = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsondata))
                     productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
+                TempData["productList"] = productList;
             }
             return View(productList);
         }
 
         [HttpPost]
-        public ActionResult CreateSubscription(string subscriptionName, string[] qty, params string[] selectedProduct)
+        public async Task<ActionResult> CreateSubscription(string subscriptionName, int[] qty, int activeDays, params string[] selectedProduct)
         {
-
-            //Product p = new Product();
-            //return View();
-            if (ModelState.IsValid)
+            IList<Product> productCollection = new List<Product>();
+            double totalPrice = 0;
+            for (int index = 0; index < selectedProduct.Length; index++)
             {
-                return View("Index");
+                Product p = new Product();
+                if (TempData["productList"] != null)
+                {
+                    p = (TempData["productList"] as List<Product>).Where(x => x.Id == int.Parse(selectedProduct[index])).FirstOrDefault();
+                    totalPrice += p.Price * qty[index];
+                }
+                productCollection.Add(p);
             }
-            // display error 
-            return View();
+            SubscriptionType subscriptionType = new SubscriptionType();
+            subscriptionType.Name = subscriptionName;
+            subscriptionType.Price = totalPrice;
+            subscriptionType.Products = productCollection.AsEnumerable();
+            switch (activeDays)
+            {
+                case 0: subscriptionType.ActiveDays = 365; break;
+                case 1: subscriptionType.ActiveDays = 365 * 2; break;
+                case 2: subscriptionType.ActiveDays = 365 * 3; break;
+            }
 
-            //database update 
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("SubscriptionCatalog", "Product");
+            return null;
         }
 
         [HttpGet]
