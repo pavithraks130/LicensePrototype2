@@ -14,11 +14,11 @@ namespace License.MetCalWeb.Controllers
     [Authorize(Roles = "SuperAdmin,BackendAdmin")]
     public class ProductController : BaseController
     {
-       
+
         public ProductController()
         {
-           
-           
+
+
         }
 
         public async Task<ActionResult> SubscriptionCatalog()
@@ -65,15 +65,20 @@ namespace License.MetCalWeb.Controllers
                 if (!String.IsNullOrEmpty(jsondata))
                     productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
             }
-            return View();
-            //return View(productList);
+            return View(productList);
         }
 
         [HttpPost]
-        public ActionResult CreateSubscription(SubscriptionType subscriptionType)
+        public ActionResult CreateSubscription(string subscriptionName, string[] qty, params string[] selectedProduct)
         {
 
-            Product p = new Product();
+            //Product p = new Product();
+            //return View();
+            if (ModelState.IsValid)
+            {
+                return View("Index");
+            }
+            // display error 
             return View();
 
             //database update 
