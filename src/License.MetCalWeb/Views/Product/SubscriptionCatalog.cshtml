@@ -33,25 +33,25 @@
                         </td>
                         <td></td>
                     </tr>
-                    @foreach (var pro in Model)
+                    @foreach (var subscription in Model)
                 {
                         <tr>
                             <td>
-                                @Html.Image(String.Concat("../ProductImages/", pro.ImagePath), pro.Name, "35", "100", "img-responsive")
+                                @Html.Image(String.Concat("../ProductImages/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
                             </td>
                             <td>
-                                @pro.Name
+                                @subscription.Name
                             </td>
                             <td>
-                                @pro.ActiveDays
+                                @subscription.ActiveDays
                             </td>
                             <td>
-                                @pro.Price.ToString()
+                                @subscription.Price.ToString()
                             </td>
                             <td>
                                 @if (LicenseSessionState.Instance.IsSuperAdmin)
                                 {
-                                    <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @pro.Id }, null)</button>
+                                    <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Product", new { Id = @subscription.Id }, null)</button>
                                 }
                             </td>
                         </tr>

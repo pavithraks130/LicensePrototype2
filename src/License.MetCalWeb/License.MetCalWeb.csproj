@@ -376,6 +376,7 @@
     <Content Include="Views\Hardware\AddHardware.cshtml" />
     <Content Include="Views\Product\CreateSubscription.cshtml" />
     <Content Include="Views\Product\CreateAndUpdateProduct.cshtml" />
+    <Content Include="Views\Product\AddProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

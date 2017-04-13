@@ -70,17 +70,23 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateSubscription(string subscriptionName, int[] qty, int activeDays, params string[] selectedProduct)
+        public async Task<ActionResult> CreateSubscription(string subscriptionName, int[] qty, int activeDays, params string[] selectedIndexAndProductIdList)
         {
             IList<Product> productCollection = new List<Product>();
             double totalPrice = 0;
-            for (int index = 0; index < selectedProduct.Length; index++)
+
+            for (int index = 0; index < selectedIndexAndProductIdList.Length; index++)
             {
+
+                var splitValue = selectedIndexAndProductIdList[index].Split(new char[] { ' ' });
+                int indexValue = int.Parse(splitValue[0].Split(new char[] { ':' })[1]);
+                int productId = int.Parse(splitValue[1].Split(new char[] { ':' })[1]);
                 Product p = new Product();
                 if (TempData["productList"] != null)
                 {
-                    p = (TempData["productList"] as List<Product>).Where(x => x.Id == int.Parse(selectedProduct[index])).FirstOrDefault();
-                    totalPrice += p.Price * qty[index];
+                    p = (TempData["productList"] as List<Product>).Where(x => x.Id == productId).FirstOrDefault();
+                    totalPrice += p.Price * qty[indexValue];
+                    p.Quantity = qty[indexValue];
                 }
                 productCollection.Add(p);
             }
@@ -88,6 +94,7 @@ namespace License.MetCalWeb.Controllers
             subscriptionType.Name = subscriptionName;
             subscriptionType.Price = totalPrice;
             subscriptionType.Products = productCollection.AsEnumerable();
+            subscriptionType.ImagePath = "B5.png";
             switch (activeDays)
             {
                 case 0: subscriptionType.ActiveDays = 365; break;
@@ -119,6 +126,11 @@ namespace License.MetCalWeb.Controllers
             return View(productList);
         }
 
+        [HttpGet]
+        public ActionResult AddProduct()
+        {
+            return View();
+        }
         [HttpPost]
         public ActionResult AddProduct(Product productDetails)
         {

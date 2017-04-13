@@ -56,14 +56,18 @@
 
             </div>
         </div>
+
+        int index = -1;
+
         foreach (var product in Model)
         {
+            index += 1;
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <div class="col-md-4"><input type="checkbox" name="selectedProduct" value="@product.Id" /> &nbsp; @product.Name</div>
-                        @*onchange="AssignButtonClicked();"*@ 
-                        <div class="col-md-4"><input type="text" class="txt-qty" name="qty" id="textQTYid+@product.Id" value="@product.Quantity"/></div>
+                        <div class="col-md-4"><input type="checkbox" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp; @product.Name</div>
+                        @*onchange="AssignButtonClicked();"*@
+                        <div class="col-md-4"><input type="text" class="txt-qty" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" /></div>
                         <div class="col-md-4"><label id="lblSelectedProductPrice">$@product.Price</label></div>
                     </div>
                 </div>
@@ -83,7 +87,7 @@
             <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
         </div>
         <div id="row5" class="col-md-12" align="right">
-            SubTotal(UAD)<br />
+            SubTotal(USD)<br />
             $500
         </div>
         <div class="row">
