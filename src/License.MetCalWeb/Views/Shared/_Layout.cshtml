@@ -22,7 +22,8 @@
         tr {
             border: none !important;
         }
-        label{
+
+        label {
             font-weight: normal !important;
         }
     </style>
@@ -40,10 +41,10 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("Home", "Tab")">
+                <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("Home", "Dashboard")">
                     <img src="~/Resources/logo.png" />
                 </a>
-                <p class="image-centre-place-center" style="color: #3D1400" href="@Url.Action("Home", "Tab")">
+                <p class="image-centre-place-center" style="color: #3D1400" href="@Url.Action("Home", "Dashboard")">
                     <img src="~/Resources/fcal-tagline-321x66.gif" />
                 </p>
 
@@ -51,7 +52,6 @@
 
 
             <ul id="menu" class="nav navbar-nav navbar-right">
-
                 @if (LicenseSessionState.Instance.IsAuthenticated)
                 {
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
@@ -63,33 +63,33 @@
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                        <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
+                        <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
                         <li>@Html.ActionLink("Products", "ProductCatalog", "Product")</li>
                         <li class="dropdown">
-                            @Html.ActionLink("Team", "TeamContainer", "Team")
+                           @Html.ActionLink("Teams", "TeamList", "Team")
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
-                                <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li> 
+                                <li>@Html.ActionLink("Team Details", "TeamContainer", "TeamManagement")</li>                               
                             </ul>
                         </li>
                         <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
                     }
-                    else if (LicenseSessionState.Instance.IsAdmin)
+                    @*else if (LicenseSessionState.Instance.IsAdmin)
                     {
-                        <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
+                        <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
                         <li class="dropdown">
-                            @Html.ActionLink("Team", "TeamContainer", "Team")
+                            @Html.ActionLink("Team", "TeamContainer", "TeamManagement")
                             <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Team Details", "TeamContainer", "TeamManagement")</li>
                                 <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
                                 <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
                             </ul>
                         </li>
                         <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
-                    }
+                    }*@
                     else
                     {
-                        <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
-                        <li>@Html.ActionLink("Team", "TeamContainer", "Team")</li>
+                        <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
+                        <li>@Html.ActionLink("Team", "TeamContainer", "TeamManagement")</li>
                     }
                 }
                 else

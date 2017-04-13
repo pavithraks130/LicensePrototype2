@@ -17,16 +17,12 @@ namespace License.MetCalWeb
                 return System.Web.HttpContext.Current.Session["LicenseWebInstance"] as LicenseSessionState;
             }
         }
-
-        public string AdminId { get; set; }
-
+        
         public User User { get; set; }
 
         public bool IsAuthenticated { get; set; }
 
         public bool IsSuperAdmin { get; set; }
-
-        public bool IsAdmin { get; set; }
 
         public bool IsGlobalAdmin { get; set; }
 
@@ -37,7 +33,10 @@ namespace License.MetCalWeb
         public AccessToken CentralizedToken { get; set; }
 
         public TeamMember TeamMeberDetails { get; set; }
-        public IEnumerable<SubscriptionDetails> SubscriptionList { get; set; }
 
+        public List<Team> TeamList { get; set; }
+
+        public Team SelectedTeam { get; set; }
+       
     }
 }

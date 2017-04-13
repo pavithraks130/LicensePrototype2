@@ -1,0 +1,89 @@
+﻿@model List<License.MetCalWeb.Models.UserLicenseRequest>
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            return isPostEnabled;
+        });
+    });
+</script>
+<br />
+<br />
+@if(Model != null)
+{
+    using (Html.BeginForm("LicenseApproval", "License", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table" style="border: none">
+                    <tr>
+                        <th class="col-md-1"></th>
+                        <th class="col-md-3">Email</th>
+                        <th class="col-md-4">Subscription Type</th>
+                        <th class="col-md-4">Product Name</th>
+                    </tr>
+                    @foreach (var userLicenseRequest in Model)
+                    {
+                    <tr>
+                        <td class="col-md-1"><input type="checkbox" name="selectLicenseRequest" value="@userLicenseRequest.Id" /></td>
+                        <td class="col-md-3">@userLicenseRequest.User.UserName</td>
+                        <td class="col-md-4">@userLicenseRequest.UserSubscripption.Subscription.Name</td>
+                        <td class="col-md-4">@userLicenseRequest.Product.Name</td>
+                    </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="col-md-4"> Comment/Feedback </label>
+                        @Html.TextArea("comment", new { @class = "col-md-4" })
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <input type="submit"  name="status" value="Approve" class="btn btn-default btn-custom btn-save" />
+                </div>
+                <div class="col-md-6">
+                    <input type="submit"  name="status" value="Reject" class="btn btn-default btn-custom btn-save" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label id="lblError" style="display:none;">
+                    No Request are selected
+                </label>
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <label>No Liense Request found</label>
+        </div>
+    </div>
+}

@@ -5,8 +5,9 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class UserLicesneDataMapping
+    public class UserLicenseDataMapping
     {
+        public int TeamId { get; set; }
         public List<string> UserList { get; set; }
 
         public List<LicenseData> LicenseDataList { get; set; }
@@ -39,6 +40,7 @@ namespace License.MetCalWeb.Models
         public UserSubscription UserSubscripption { get; set; }
         public Product Product { get; set; }
         public String Comment { get; set; }
+        public int TeamId { get; set; }
     }
 
     public class UserSubscription
@@ -67,6 +69,7 @@ namespace License.MetCalWeb.Models
         public string UserId { get; set; }
 
         public int LicenseId { get; set; }
+        public int TeamId { get; set; }
 
         public User User { get; set; }
 
@@ -78,5 +81,12 @@ namespace License.MetCalWeb.Models
         public User User { get; set; }
 
         public List<SubscriptionDetails> SubscriptionDetails { get; set; }
+    }
+
+    public class FetchUserSubscription
+    {
+        public int TeamId { get; set; }
+        public string UserId { get; set; }
+        public bool IsFeatureRequired { get; set; }
     }
 }

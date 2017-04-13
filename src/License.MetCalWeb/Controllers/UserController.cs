@@ -61,7 +61,7 @@ namespace License.MetCalWeb.Controllers
                         status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
                 }
                 else
-                    status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
+                    status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
                 
                 if (status)
                 {
@@ -71,7 +71,7 @@ namespace License.MetCalWeb.Controllers
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                         return RedirectToAction("Index", "User");
                     else
-                        return RedirectToAction("Home", "Tab");
+                        return RedirectToAction("Home", "Dashboard");
                 }
                 ModelState.AddModelError("", ErrorMessage);
             }
@@ -107,7 +107,7 @@ namespace License.MetCalWeb.Controllers
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                         return RedirectToAction("Index", "User");
                     else
-                        return RedirectToAction("Home", "Tab");
+                        return RedirectToAction("Home", "Dashboard");
                 }
                 else
                     ModelState.AddModelError("", ErrorMessage);
@@ -140,7 +140,7 @@ namespace License.MetCalWeb.Controllers
                 case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
                 case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
             }
-            var response = await client.PutAsJsonAsync("api/user/UpdatePassword/" + userId, model);
+            var response = await client.PutAsJsonAsync("api/user/ChangePassword/" + userId, model);
             if (response.IsSuccessStatusCode)
                 return true;
             ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;

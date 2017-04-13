@@ -20,6 +20,10 @@ namespace Centralized.WebAPI.Controllers
             logic = new SubscriptionTypeLogic();
         }
 
+        /// <summary>
+        /// GET Method. To get all the Subscriptions
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetAllSubscription()
@@ -28,6 +32,12 @@ namespace Centralized.WebAPI.Controllers
             return Ok(subList);
         }
 
+
+        /// <summary>
+        /// POST method. Creates the Subscriptioon
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateSubscription")]
         public HttpResponseMessage CreateSubscription(SubscriptionType type)

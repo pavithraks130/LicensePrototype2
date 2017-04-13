@@ -48,77 +48,17 @@ namespace License.MetCalWeb.Common
             var licenseMapModelList = new UserLicenseDetails();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var response = client.GetAsync("api/License/GetSubscriptionLicense/" + userId + "/" + isFeatureRequired).Result;
+            FetchUserSubscription subs = new FetchUserSubscription();
+            if (LicenseSessionState.Instance.SelectedTeam != null)
+                subs.TeamId = LicenseSessionState.Instance.SelectedTeam.Id;
+            subs.UserId = userId;
+            subs.IsFeatureRequired = isFeatureRequired;
+            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeam", subs).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 licenseMapModelList = JsonConvert.DeserializeObject<UserLicenseDetails>(jsonData);
             }
-
-            //UserLicenseLogic logic = new UserLicenseLogic();
-            //var data = logic.GetUserLicense(userId);
-            //ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
-            //var dataList = proSubLogic.GetSubscriptionFromFile();
-            //if (data.Count > 0)
-            //{
-            //    var subIdList = data.Select(ul => ul.License.UserSubscriptionId);
-            //    UserSubscriptionLogic subscriptionLogic = new UserSubscriptionLogic();
-            //    var userSubscriptionList = subscriptionLogic.GetSubscriptionByIDList(subIdList.ToList());
-            //    var subscriptionIdList = userSubscriptionList.Select(s => s.SubscriptionId);
-            //    var subscriptionList = dataList.Where(s => subscriptionIdList.Contains(s.Id)).ToList();
-            //    foreach (var subs in subscriptionList)
-            //    {
-            //        var userLicLicst = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
-            //        var proList = userLicLicst.Select(u => u.License.ProductId).ToList();
-            //        LicenseMapModel mapModel = new LicenseMapModel();
-            //        mapModel.SubscriptionName = subs.SubscriptionName;
-            //        mapModel.UserSubscriptionId = userSubscriptionList.FirstOrDefault(us => us.SubscriptionId == subs.Id).Id;
-            //        DateTime licExpireData = DateTime.MinValue;
-
-            //        foreach (var pro in subs.Product.Where(p => proList.Contains(p.Id)))
-            //        {
-
-            //            var objLic = userLicLicst.FirstOrDefault(f => f.License.ProductId == pro.Id);
-            //            if (objLic != null)
-            //            {
-            //                string licenseKeydata = String.Empty;
-            //                licenseKeydata = objLic.License.LicenseKey;
-            //                var splitData = licenseKeydata.Split(new char[] { '-' });
-            //                var datakey = splitData[0];
-            //                var decryptObj = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(datakey, true);
-            //                var licdataList = decryptObj.Split(new char[] { '^' });
-            //                licExpireData = Convert.ToDateTime(licdataList[1]);
-
-            //            }
-            //            SubscriptionProduct prod = new SubscriptionProduct();
-            //            prod.ProductId = pro.Id;
-            //            prod.ProductName = pro.Name;
-            //            prod.ExpireDate = licExpireData;
-
-            //            if (!isFeatureRequired)
-            //            {
-            //                var tempsub = LicenseSessionState.Instance.SubscriptionList?.FirstOrDefault(s => s.SubscriptionId == subs.Id);
-            //                var tempPro = tempsub == null ? null : tempsub.ProductDtls.FirstOrDefault(p => p.ProductId == prod.ProductId);
-            //                if (tempPro != null)
-            //                    prod.IsDisabled = tempPro.AvailableCount == 0;
-            //            }
-            //            else
-            //            {
-            //                foreach (var fet in pro.Features)
-            //                {
-            //                    var feature = new Feature();
-            //                    feature.Id = fet.Id;
-            //                    feature.Name = fet.Name;
-            //                    feature.Description = fet.Description;
-            //                    feature.Version = fet.Version;
-            //                    prod.Features.Add(feature);
-            //                }
-            //            }
-            //            mapModel.ProductList.Add(prod);
-            //        }
-            //        licenseMapModelList.Add(mapModel);
-            //    }
-            //}
             return licenseMapModelList;
         }
 
@@ -174,6 +114,30 @@ namespace License.MetCalWeb.Common
             //    }
             //}
             //return licenseMapModelList;
+        }
+
+        public static void GetTeamList()
+        {
+            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
+            {
+                List<Team> teamlst = new List<Team>();
+                HttpResponseMessage response;
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    response = client.GetAsync("api/Team/GetTeamsByAdminId/" + LicenseSessionState.Instance.User.UserId).Result;
+                else
+                    response = client.GetAsync("api/Team/GetTeamsByUserId/" + LicenseSessionState.Instance.User.UserId).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    teamlst = JsonConvert.DeserializeObject<List<Team>>(jsonData);
+                }
+
+                LicenseSessionState.Instance.TeamList = teamlst;
+            }
+
+
         }
 
     }

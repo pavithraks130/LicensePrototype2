@@ -54,8 +54,17 @@ namespace License.Logic.DataLogic
 
                 if (!UserManager.IsInRole(userId, roleName))
                     result = UserManager.AddToRole(userId, roleName);
-                else
+                else 
                     result = new IdentityResult(new string[] { });
+                if (roleName == "SuperAdmin" && !String.IsNullOrEmpty(userId))
+                {
+                    TeamLogic teamLogic = new TeamLogic();
+                    DataModel.Team team = new DataModel.Team();
+                    team.AdminId = userId;
+                    team.IsDefaultTeam = true;
+                    team.Name = "Default Team";
+                    teamLogic.CreateTeam(team);
+                }
             }
             catch (Exception ex)
             {
@@ -65,6 +74,7 @@ namespace License.Logic.DataLogic
             if (!result.Succeeded)
                 foreach (string str in result.Errors)
                     ErrorMessage += str;
+
             return result.Succeeded;
         }
 
@@ -147,7 +157,7 @@ namespace License.Logic.DataLogic
             }
             return null;
         }
-        
+
         public void UpdateLogOutStatus(string userid, bool status)
         {
             var user = UserManager.FindById(userid);

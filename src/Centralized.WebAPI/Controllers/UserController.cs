@@ -24,8 +24,6 @@ namespace Centralized.WebAPI.Controllers
             logic = new UserLogic();
         }
 
-       
-
         public void Initialize()
         {
             if (logic.UserManager == null)
@@ -34,6 +32,11 @@ namespace Centralized.WebAPI.Controllers
                 logic.RoleManager = RoleManager;
         }
 
+        /// <summary>
+        /// POST Method. Create User record with Super Admin Role 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
         [AllowAnonymous]
@@ -47,6 +50,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// POST Method. Gets Reset Token for the Forgot Password Functionality
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetResetToken")]
         [AllowAnonymous]
@@ -60,6 +68,11 @@ namespace Centralized.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, passwordToken);
         }
 
+        /// <summary>
+        /// POST Method. Reset the Password with New password based on validating the Reset Token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ResetPassword")]
         [AllowAnonymous]
@@ -79,6 +92,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
         }
 
+        /// <summary>
+        /// Put Method. Updating the User Status once user logIn or Log Out
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateActiveStatus")]
         public HttpResponseMessage UpdateActiveStatus(User model)
@@ -91,6 +109,10 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, "updated");
         }
 
+        /// <summary>
+        /// Get Method. Get all the Users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetUsers()
@@ -100,6 +122,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(userList);
         }
 
+        /// <summary>
+        /// GET Method. Get User by  user Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UserById/{id}")]
         public IHttpActionResult GetUserById(string id)
@@ -109,6 +136,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// GET Method. To Get User By EMail
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UserByEmail/{email}")]
         public IHttpActionResult GetUserByEMail(string email)
@@ -118,6 +150,12 @@ namespace Centralized.WebAPI.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// PUT Method. Update the User Data based on the User Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("Update/{id}")]
         public HttpResponseMessage UpdateUser(string id, User user)
@@ -130,6 +168,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Delete Method. Delete User by User ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteUser(string id)
@@ -142,8 +185,15 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// PUT Method. Change Password of the user based on the User ID and Previous Password Validation
+        /// which is sent in the CHangePassword Object
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
-        [Route("UpdatePassword/{userId}")]
+        [Route("ChangePassword/{userId}")]
         public HttpResponseMessage UpdatePassword(string userId, ChangePassword model)
         {
             Initialize();

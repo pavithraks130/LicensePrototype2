@@ -38,6 +38,11 @@ namespace OnPremise.WebAPI.Controllers
         //    return Ok(userInviteList);
         //}
 
+        /// <summary>
+        /// POST Method. To create the User Invite Request to the Team
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateInvite")]
         public HttpResponseMessage CreateInvite(TeamMember member)
@@ -50,6 +55,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBoObject.ErrorMessage);
         }
 
+        /// <summary>
+        /// Delete Method. To Remove the Team Member from the Team. but the teama member will be updated to the Default team
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteInvite/{id}")]
         public HttpResponseMessage DeleteTeamMember(int id)
@@ -62,6 +72,12 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+
+        /// <summary>
+        /// PUT method. To update the Team Meember for User Invitation Request Status can be updated
+        /// </summary>
+        /// <param name="mem"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateInvitation")]
         [AllowAnonymous]
@@ -75,6 +91,12 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+
+        /// <summary>
+        /// Put Method. To Update the admin access to the Team Member 
+        /// </summary>
+        /// <param name="mem"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateAdminAccess")]
         public HttpResponseMessage UpdateAdminAccess(TeamMember mem)
@@ -87,6 +109,29 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Get Method. To fetch all the Team Member details based on the Team Id.
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetTeamMemberByTeamId/{teamId}")]
+        public HttpResponseMessage GetTeamMemberByUser(int teamId)
+        {
+            var obj = logic.GetTeamMembers(teamId);
+            if (obj != null)
+                return Request.CreateResponse(HttpStatusCode.OK, obj);
+            else if (obj == null && String.IsNullOrEmpty(logic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.OK, "");
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        /// <summary>
+        /// Get Method. To get the User Invitation / Team Member record based on the UserId.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetTeamMemberByUserId/{userId}")]
         public HttpResponseMessage GetTeamMemberByUser(string userId)

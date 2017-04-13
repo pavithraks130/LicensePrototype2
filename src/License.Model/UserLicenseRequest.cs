@@ -20,5 +20,6 @@ namespace License.DataModel
         public UserSubscription UserSubscripption { get; set; }
         public Product Product { get; set; }
         public String Comment { get; set; }
+        public int TeamId { get; set; }
     }
 }

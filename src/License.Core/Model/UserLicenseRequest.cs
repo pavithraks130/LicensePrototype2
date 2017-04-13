@@ -24,5 +24,6 @@ namespace License.Core.Model
         [ForeignKey("UserSubscriptionId")]
         public virtual UserSubscription UserSubscripption { get; set; }
         public String Comment { get; set; }
+        public int TeamId { get; set; }
     }
 }

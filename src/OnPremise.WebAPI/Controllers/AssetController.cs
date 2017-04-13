@@ -19,6 +19,11 @@ namespace OnPremise.WebAPI.Controllers
             logic = new TeamAssetLogic();
         }
 
+        // Get api/Asset/GetAll
+        /// <summary>
+        /// Get Method to list all the Hardware assets
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAll")]
         public IHttpActionResult GetAssetes()
@@ -27,6 +32,13 @@ namespace OnPremise.WebAPI.Controllers
             return Ok(listAsset);
         }
 
+
+        // POST api/Asset/CreateAsset
+        /// <summary>
+        /// Post Method to create the Asset
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateAsset")]
         public HttpResponseMessage CreateAsset(TeamAsset model)
@@ -38,6 +50,14 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+
+        // GET api/Asset/GetAssetByID/{id}
+        /// <summary>
+        /// Get Method to get the asset/Hardware details based on Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// 
         [HttpGet]
         [Route("GetAssetById/{id}")]
         public HttpResponseMessage GetAssetById(int id)
@@ -49,6 +69,12 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Put Method to Update the asset changes based on the Asset Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateAsset/{id}")]
         public HttpResponseMessage UpdateAsset(int id, TeamAsset model)
@@ -60,6 +86,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Delete Method. Delete the asset by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteAsset/{id}")]
         public HttpResponseMessage DeleteAsset(int id)

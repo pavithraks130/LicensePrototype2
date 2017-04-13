@@ -13,7 +13,9 @@ namespace License.DataModel
         public string UserId { get; set; }
 
         public int LicenseId { get; set; }
-        
+
+        public int TeamId { get; set; }
+
         public User User { get; set; }
         
         public LicenseData License { get; set; }

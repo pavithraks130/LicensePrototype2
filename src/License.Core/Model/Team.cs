@@ -12,6 +12,7 @@ namespace License.Core.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool IsDefaultTeam { get; set; }
         public string AdminId { get; set; }
         [ForeignKey("AdminId")]
         public virtual AppUser AdminUser { get; set; }

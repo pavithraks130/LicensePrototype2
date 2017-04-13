@@ -1,0 +1,36 @@
+﻿@model License.MetCalWeb.Models.UserInviteModel
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("Invite", "TeamManagement",new { teamId = ViewBag.TeamId } ,FormMethod.Post))
+{
+    <div class="modal-dialog " style="position: static!important">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button><h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div style="padding-top: 15px;padding-bottom: 10px">
+                    <div class="col-md-4">
+                        <span>Invitee Email</span>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <br />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <input type="submit" class="btn" data-dismis="model" value="Invite" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

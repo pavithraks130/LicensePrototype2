@@ -1,0 +1,123 @@
+﻿@model  List<License.MetCalWeb.Models.SubscriptionDetails>
+@{
+    ViewBag.Title = "Home";
+}
+<script>
+    var x, y, n = 0, ny = 0, rotINT, rotYINT
+    function rotateYDIV() {
+        y = document.getElementById("rotate3D")
+        clearInterval(rotYINT)
+        rotYINT = setInterval("startYRotate()", 10)
+    }
+    function startRotate() {
+        n = n + 1
+        x.style.transform = "rotate(" + n + "deg)"
+        x.style.webkitTransform = "rotate(" + n + "deg)"
+        x.style.OTransform = "rotate(" + n + "deg)"
+        x.style.MozTransform = "rotate(" + n + "deg)"
+        if (n == 45) {
+            clearInterval(rotINT)
+            if (n == 45) { n = 0 }
+        }
+    }
+    function startYRotate() {
+        ny = ny + 1
+        y.style.transform = "rotateY(" + ny + "deg)"
+        y.style.webkitTransform = "rotateY(" + ny + "deg)"
+        y.style.OTransform = "rotateY(" + ny + "deg)"
+        y.style.MozTransform = "rotateY(" + ny + "deg)"
+        if (ny == 45) {
+            clearInterval(rotYINT)
+            if (ny >= 45) { ny = 0 }
+        }
+    }
+</script>
+<link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
+<style>
+    .span-font {
+        font-size: 16px !important;
+    }
+
+    .div-spacing {
+        padding-top: 20px !important;
+    }
+
+    label {
+        font-weight: normal !important;
+        font-family: Arial;
+    }
+</style>
+
+
+<div class="row">
+
+    @using (Html.BeginForm())
+    {
+        if (Model == null || Model.Count == 0)
+        {
+            <div class="row">
+                No License assigned
+            </div>
+        }
+        else
+        {
+            foreach (var productLicense in Model)
+            {
+                <div class="row div-spacing" style="height:80px;">
+                    <h3>
+                        Available License Type:
+                    </h3>
+                    <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.Name</h3></div>
+                </div>
+
+                <div class="row"  style="margin-top:20%">
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+                foreach (var product in productLicense.Products)
+                {
+                    <div class="row" style="margin-top:5%">
+                        <div class="col-md-12">
+                            <h4><label>@product.Name</label></h4>
+                        </div>
+                    </div>                   
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Expire Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label>@product.ExpireDate.Date.ToString("D")</label>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:1%">
+                        <div class="animated_div"><label>Feature</label></div>
+                        <div class="animated_div"><label>Version</label></div>
+                        <div class="animated_div"><label>Info</label></div>
+                    </div>
+                    for (int i = 0; i < product.Features.Count; i++)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>@product.Features[i].Name</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>@product.Features[i].Version</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>@product.Features[i].Description</label>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <hr />
+
+            }
+
+        }
+
+
+    }
+</div>

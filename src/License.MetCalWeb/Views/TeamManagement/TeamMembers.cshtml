@@ -1,0 +1,168 @@
+﻿@{
+    Layout = null;
+}
+@using License.MetCalWeb.Models
+@using License.MetCalWeb.Helper
+@model TeamDetails
+
+<div class="row">
+    <div class="form-group">
+        <label style="font-size:18px;">Team Admin : @Model.Team.AdminUser.Name </label>
+        @if (Convert.ToBoolean(ViewBag.IsAdmin) || LicenseSessionState.Instance.IsSuperAdmin)
+        {
+
+            <div class="dropdown  float-right" style="margin-right:20px;">
+                <button class="btn btn-default dropdown-toggle float-left" type="button" id="menu1" data-toggle="dropdown">
+                    License
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
+                    <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
+                </ul>
+            </div>
+            <input type="button" class="btn btn-primary btnInvite float-right" value="Invite Team Member" />
+        }
+        else
+        {
+            @Html.ActionLink("Request License", "LicenseRequest", "License", null, new { @class = "btn btn-primary btn-lg btn-custom btn-request float-right" })
+        }
+
+
+    </div>
+</div>
+<div class="row">
+    <div class="form-group">
+        @if (Model.PendinigUsers.Count > 0)
+        {
+            <h4>Pending Users</h4>
+            <div class="col-md-12">
+                <table class="table" style="border: none">
+                    @foreach (TeamMember t in Model.PendinigUsers)
+                    {
+                        <tr>
+                            <td class="col-md-2">
+                                @if (t.InviteeUser.IsActive)
+                                {
+                                    <div style="background-color:green;width:10px;height:10px" class="img-circle"></div>
+                                }
+                                else
+                                {
+                                    <div style="background-color:grey;width:10px;height:10px" class="img-circle"></div>
+                                }
+
+                            </td>
+
+                            <td class="col-md-6">
+                                @if (t.InviteeUser != null)
+                                {
+                                    <div>@t.InviteeUser.Name</div>
+                                    <div>@t.InviteeUser.Email</div>
+                                }
+                                else
+                                {
+                                    <div>@t.InviteeEmail</div>
+                                }
+                            </td>
+                            <td class="col-md-4">
+                                <div>@t.InvitationDate.Date.ToString("d")</div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="form-group">
+        @if (Model.AcceptedUsers.Count > 0)
+        {
+            <h4>Active Users</h4>
+            <div class="col-md-11">
+                <table class="table" style="border: none">
+                    @foreach (TeamMember t in Model.AcceptedUsers)
+                    {
+                        <tr>
+                            <td class="col-md-2">
+                                @if (t.InviteeUser.IsActive)
+                                {
+                                    <div style="background-color:green;width:10px;height:10px" class="img-circle"></div>
+                                }
+                                else
+                                {
+                                    <div style="background-color:grey;width:10px;height:10px" class="img-circle"></div>
+                                }
+
+                            </td>
+                            <td class="col-md-4">
+                                @if (t.InviteeUser != null)
+                                {
+                                    <div>@t.InviteeUser.Name</div>
+                                    <div>@t.InviteeUser.Email</div>
+                                }
+                                else
+                                {
+                                    <div>@t.InviteeEmail</div>
+                                }
+                            </td>
+                            <td class="col-md-2">
+                                @if (t.IsAdmin)
+                                {
+                                    <div id="photos">
+                                        <img src="/Images/admin.png" />
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div id="photos">
+                                        <img src="/Images/Users-icon.png" />
+                                    </div>
+                                }
+                            </td>
+                            <td class="col-md-4">
+                                @if (ViewBag.IsAdmin == true || LicenseSessionState.Instance.IsSuperAdmin)
+                                {
+
+                                    <button class="alert-success">
+                                        @Html.ActionLink("Add License", "MapLicense", "License", new { userId = @t.InviteeUserId, bulkLicenseAdd = false }, null)
+                                    </button>
+                                    <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "License", new { userId = @t.InviteeUserId }, null)</button>
+
+                                }
+                            </td>
+                            <td class="col-md-1">
+                                @if ((ViewBag.IsAdmin == true || LicenseSessionState.Instance.IsSuperAdmin) && @t.InviteeUserId != t.AdminId && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
+                                {
+
+                                    <div class="dropdown">
+                                        <button class="dropbtn">
+                                            <span>
+                                                @Html.Image("/Images/down-arrow.png", "Admin", "33", "33", null)
+                                            </span>
+                                        </button>
+                                        <div class="dropdown-content">
+                                            @if (!t.IsAdmin)
+                                            {
+                                                @Html.ActionLink("Set As Admin", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Admin" }, null)
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("Remove Admin Access", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "RemoveAdmin" }, null)
+                                            }
+                                            @Html.ActionLink("Remove From Team", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Remove" }, null)
+                                        </div>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+

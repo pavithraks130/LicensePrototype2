@@ -53,24 +53,27 @@ namespace License.Logic.DataLogic
         /// <param name="licList"></param>
         /// <param name="userIdList"></param>
         /// <returns></returns>
-        public bool CreateMultiUserLicense(List<LicenseData> licList, List<string> userIdList)
+        public bool CreateMultiUserLicense(UserLicenseDataMapping model)
         {
             LicenseLogic licLogic = new LicenseLogic();
             int i = 0;
 
-            foreach (var userId in userIdList)
+            foreach (var userId in model.UserList)
             {
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == userId).ToList();
-                foreach (var lic in licList)
+                foreach (var lic in model.LicenseDataList)
                 {
                     var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.ProductId && l.UserSubscriptionId == lic.UserSubscriptionId).ToList().Select(l => l.Id);
                     var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == userId);
                     if (obj == null)
                     {
                         i++;
-                        UserLicense ul = new UserLicense();
-                        ul.UserId = userId;
-                        ul.LicenseId = licLogic.GetUnassignedLicense(lic.UserSubscriptionId, lic.ProductId).Id;
+                        UserLicense ul = new UserLicense()
+                        {
+                            UserId = userId,
+                            LicenseId = licLogic.GetUnassignedLicense(lic.UserSubscriptionId, lic.ProductId).Id,
+                            TeamId = model.TeamId
+                        };
                         CreateUserLicense(ul);
                     }
                     userLicList.Remove(obj);
@@ -91,16 +94,16 @@ namespace License.Logic.DataLogic
             return obj1 != null;
         }
 
-        public bool RevokeUserLicense(List<LicenseData> licList, List<string> userList)
+        public bool RevokeUserLicense(UserLicenseDataMapping model)
         {
             int i = 0;
             LicenseLogic licLogic = new LicenseLogic();
-            foreach (var userId in userList)
+            foreach (var userId in model.UserList)
             {
                 var licdata = GetUserLicense(userId);
-                foreach (var lic in licList)
+                foreach (var lic in model.LicenseDataList)
                 {
-                    var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId);
+                    var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId && l.TeamId == model.TeamId);
                     RevokeUserLicense(obj);
                     i++;
                 }
@@ -124,6 +127,13 @@ namespace License.Logic.DataLogic
                 licenses.Add(AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(data));
             return licenses;
         }
-
+        public List<UserLicense> GetUserLicense(string userId, int teamId)
+        {
+            List<UserLicense> licenses = new List<UserLicense>();
+            var datas = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.TeamId == teamId);
+            foreach (var data in datas)
+                licenses.Add(AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(data));
+            return licenses;
+        }
     }
 }

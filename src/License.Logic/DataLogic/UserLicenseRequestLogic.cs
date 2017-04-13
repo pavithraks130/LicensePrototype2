@@ -9,6 +9,8 @@ namespace License.Logic.DataLogic
 {
     public class UserLicenseRequestLogic : BaseLogic
     {
+
+        List<SubscriptionType> subList = null;
         /// <summary>
         /// Creating the single object  to DB
         /// </summary>
@@ -69,16 +71,34 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="adminId"></param>
         /// <returns></returns>
-        public List<UserLicenseRequest> GetRequestList(string adminId)
+        public List<UserLicenseRequest> GetAllRequestList(string adminId)
         {
+            List<UserLicenseRequest> requestList = new List<UserLicenseRequest>();
             ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
-            var subList = proSubLogic.GetSubscriptionFromFile();
-            var team = Work.TeamRepository.GetData(f => f.AdminId == adminId).FirstOrDefault();
-            var userlist = Work.TeamMemberRepository.GetData(f => f.TeamId == team.Id).ToList();
+            subList = proSubLogic.GetSubscriptionFromFile();
+            var teamList = Work.TeamRepository.GetData(f => f.AdminId == adminId);
+            foreach (var team in teamList)
+            {
+                var dataList = GetRequestListByTeam(team.Id);
+                requestList.AddRange(dataList);
+            }
+            if (requestList.Count > 0)
+                return requestList;
+            return null;
+        }
+
+        public List<UserLicenseRequest> GetRequestListByTeam(int teamId)
+        {
+            if(subList == null)
+            {
+                ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+                subList = proSubLogic.GetSubscriptionFromFile();
+            }
+            var userlist = Work.TeamMemberRepository.GetData(f => f.TeamId == teamId).ToList();
             if (userlist.Count > 0)
             {
                 var idList = userlist.Select(u => u.InviteeUserId).ToList();
-                var licReqList = Work.UserLicenseRequestRepo.GetData(f => idList.Contains(f.Requested_UserId) && String.IsNullOrEmpty(f.ApprovedBy)).ToList();
+                var licReqList = Work.UserLicenseRequestRepo.GetData(f => idList.Contains(f.Requested_UserId) && String.IsNullOrEmpty(f.ApprovedBy) && f.TeamId == teamId).ToList();
                 if (licReqList.Count > 0)
                 {
                     List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();

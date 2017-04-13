@@ -20,6 +20,10 @@ namespace Centralized.WebAPI.Controllers
             logic = new UserTokenLogic();
         }
 
+        /// <summary>
+        /// GET Method. Get List of all User Token.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetAll()
@@ -28,6 +32,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(listToken);
         }
 
+        /// <summary>
+        /// POST Method. Create User Token for the specified Email
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
         public HttpResponseMessage CreateUserToken(UserToken t)
@@ -39,6 +48,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// POST Method. Verify the User Token with Email  during User Registration
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("VerifyToken")]
         [AllowAnonymous]

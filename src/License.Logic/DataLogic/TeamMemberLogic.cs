@@ -59,6 +59,8 @@ namespace License.Logic.DataLogic
             Work.TeamMemberRepository.Save();
         }
 
+    
+
         public DataModel.TeamMember GetTeamMemberByUserId(string userId)
         {
             var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId).FirstOrDefault();
@@ -68,14 +70,14 @@ namespace License.Logic.DataLogic
         public void SetAsAdmin(int id, string userId, bool adminStatus)
         {
             Core.Model.TeamMember teamMembers = Work.TeamMemberRepository.GetById(id);
-            if (adminStatus)
-            {
-                if (!RoleManager.RoleExists("Admin"))
-                    RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
-                UserManager.AddToRole(userId, "Admin");
-            }
-            else
-                UserManager.RemoveFromRole(userId, "Admin");
+            //if (adminStatus)
+            //{
+            //    if (!RoleManager.RoleExists("Admin"))
+            //        RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
+            //    UserManager.AddToRole(userId, "Admin");
+            //}
+            //else
+            //    UserManager.RemoveFromRole(userId, "Admin");
             teamMembers.IsAdmin = adminStatus;
             Work.TeamMemberRepository.Update(teamMembers);
             Work.TeamMemberRepository.Save();

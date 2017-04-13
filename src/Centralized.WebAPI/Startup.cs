@@ -9,6 +9,7 @@ using LicenseServer.Core.Manager;
 using LicenseServer.Core.DbContext;
 using Microsoft.Owin.Security.OAuth;
 using Centralized.WebAPI.Common;
+using System.Web.Mvc;
 
 [assembly: OwinStartup(typeof(Centralized.WebAPI.Startup))]
 namespace Centralized.WebAPI
@@ -17,8 +18,7 @@ namespace Centralized.WebAPI
     {
         public void Configuration(IAppBuilder app)
         {
-            HttpConfiguration config = new HttpConfiguration();
-           
+            HttpConfiguration config = new HttpConfiguration();           
             app.CreatePerOwinContext(AppDbContext.Create);
             app.CreatePerOwinContext<LicUserManager>(LicUserManager.Create);
             app.CreatePerOwinContext<LicRoleManager>(LicRoleManager.Create);

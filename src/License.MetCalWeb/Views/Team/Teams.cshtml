@@ -1,0 +1,95 @@
+﻿@model List<License.MetCalWeb.Models.Team>
+@{
+    ViewBag.Title = "Teams";
+}
+
+<script>
+    $(function () {
+
+        $(".teamEdit").click(function () {
+            var id = $(this).attr('data-id');
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "/Team/EditTeam",
+                contentType: "application/json; charset=utf-8",
+                data: { "id": id },
+                datatype: "json",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $(".btnCreate").click(function () {
+
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "/Team/CreateTeam",
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $("#closbtn").click(function () {
+            $('#myModal').html("");
+            $('#myModal').modal('hide');
+        });
+    });
+</script>
+<h2>Teams</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-mod-8">
+            <div class="container">
+                <div class="form-group">
+                    <button class="btn btn-primary btn-lg btn-custom btnCreate">Create Team</button>
+                </div>
+                <table class="table" style="table-layout:fixed;">
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Admin</th>
+                        <th>Action</th>
+                    </tr>
+                    @foreach (var obj in Model)
+                {
+                        <tr>
+                            <td>@obj.Name</td>
+                            <td>@obj.AdminUser.Name</td>
+                            <td>
+                                @if (!obj.IsDefaultTeam)
+                            {
+                                    <a href="javascript:void(0);" class="teamEdit" data-id="@obj.Id">Edit</a> <label>|</label>
+                                    @Html.ActionLink("Delete", "DeleteTeam", "Team", new { id = obj.Id }, null)
+                            }
+                            </td>
+                        </tr>
+                }
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4">
+            @{ Html.RenderAction("Subscriptions"); }
+        </div>
+    </div>
+
+
+</div>
+<div id='myModal' class='modal'>
+</div>

@@ -7,6 +7,7 @@ using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Security.OAuth;
 using OnPremise.WebAPI.Common;
+using System.Web.Mvc;
 
 [assembly: OwinStartup(typeof(OnPremise.WebAPI.StartupAuth))]
 
@@ -16,6 +17,7 @@ namespace OnPremise.WebAPI
     {
         public void Configuration(IAppBuilder app)
         {
+            
             HttpConfiguration httpConfig = new HttpConfiguration();
             //creating the User manager and Role manager instance globally
             app.CreatePerOwinContext(ApplicationDbContext.Create);

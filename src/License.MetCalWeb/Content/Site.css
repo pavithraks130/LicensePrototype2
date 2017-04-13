@@ -833,5 +833,6 @@ ul.dropdown-menu li a{
 
 ul.dropdown-menu li a:hover{
     color : #000000 !important;
+    background-color: transparent;
 
 }

@@ -17,6 +17,9 @@ namespace License.Core.Model
 
         public int LicenseId { get; set; }
 
+        public int TeamId { get; set; }
+
+
         [ForeignKey("UserId")]
         public AppUser User { get; set; }
 

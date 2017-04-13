@@ -32,6 +32,10 @@ namespace OnPremise.WebAPI.Controllers
                 logic.RoleManager = RoleManager;
         }
 
+        /// <summary>
+        /// Get method. To Get all the User 
+        /// </summary>
+        /// <returns></returns>
         [Route("All")]
         [HttpGet]
         public IHttpActionResult GetUsers()
@@ -40,6 +44,12 @@ namespace OnPremise.WebAPI.Controllers
             return Ok(logic.GetUsers());
         }
 
+
+        /// <summary>
+        /// POST method. To create User 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
         [AllowAnonymous]
@@ -53,6 +63,12 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Put Method. To Update the User Details based on the UserId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("Update/{id}")]
         public HttpResponseMessage UpdateRole(string id, User user)
@@ -65,6 +81,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Get Method. Get the user By Userid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UserById/{id}")]
         public IHttpActionResult GetUserById(string id)
@@ -74,6 +95,11 @@ namespace OnPremise.WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get Method. Get the user by EMail
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UserByEmail/{email}")]
         public IHttpActionResult GetUserByEMail(string email)
@@ -83,6 +109,11 @@ namespace OnPremise.WebAPI.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Delete Method. Delete user by User Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteUser(string id)
@@ -95,6 +126,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Post Method. Get Password Reset Token  for reseting password.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetResetToken")]
         [AllowAnonymous]
@@ -108,6 +144,11 @@ namespace OnPremise.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, passwordToken);
         }
 
+        /// <summary>
+        /// POST method. Update/Reset the password.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ResetPassword")]
         [AllowAnonymous]
@@ -127,6 +168,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
         }
 
+        /// <summary>
+        /// PUT method. To update the User Status when User is Online or Offline
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdateActiveStatus")]
         public HttpResponseMessage UpdateActiveStatus(User model)
@@ -139,8 +185,14 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, "updated");
         }
 
+        /// <summary>
+        /// Pot method. ChangePassword the Password
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
-        [Route("UpdatePassword/{userId}")]
+        [Route("ChangePassword/{userId}")]
         public HttpResponseMessage UpdatePassword(string userId, ChangePassword model)
         {
             Initialize();

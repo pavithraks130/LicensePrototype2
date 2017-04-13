@@ -1,5 +1,5 @@
 ﻿@using License.MetCalWeb.Models
-@model TeamDetails
+@model IEnumerable<License.MetCalWeb.Models.TeamMember>
 @{
     ViewBag.Title = "SelectListOfUser";
 }
@@ -27,7 +27,7 @@
 @using (Html.BeginForm("SelectedUsers", "License",FormMethod.Post))
 {
     <table class="table">
-        @foreach (var user in Model.AcceptedUsers)
+        @foreach (var user in Model)
         {
             <tr>
                 <td>

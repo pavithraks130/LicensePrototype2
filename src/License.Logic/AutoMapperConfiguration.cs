@@ -29,7 +29,7 @@ namespace License.Logic
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
             cfg.CreateMap<TeamMember, License.Core.Model.TeamMember>()
-                .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));           
+                .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
             cfg.CreateMap<License.Core.Model.UserSubscription, License.DataModel.UserSubscription>();
             cfg.CreateMap<License.DataModel.UserSubscription, License.Core.Model.UserSubscription>();
@@ -53,7 +53,8 @@ namespace License.Logic
             cfg.CreateMap<License.Core.Model.TeamAsset, License.DataModel.TeamAsset>();
 
             cfg.CreateMap<DataModel.Team, Core.Model.Team>();
-            cfg.CreateMap<Core.Model.Team, DataModel.Team>();
+            cfg.CreateMap<Core.Model.Team, DataModel.Team>().MaxDepth(3)
+                .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser));
 
         }
 

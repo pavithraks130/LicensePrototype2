@@ -23,11 +23,18 @@ namespace License.DataModel
         public Product Product { get; set; }
     }
 
-    public class UserLicesneDataMapping
+    public class UserLicenseDataMapping
     {
+        public int TeamId { get; set; }
         public List<string> UserList { get; set; }
 
         public List<LicenseData> LicenseDataList { get; set; }
     }
     
+    public class FetchUserSubscription
+    {
+        public int TeamId { get; set; }
+        public string UserId { get; set; }
+        public bool IsFeatureRequired { get; set; }
+    }
 }

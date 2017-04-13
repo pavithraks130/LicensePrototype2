@@ -58,7 +58,7 @@ namespace License.Logic.BusinessLogic
             }
         }
 
-        public UserLicenseDetails GetUserLicenseSubscriptionDetails(string userId, bool isFeatureRequired)
+        public UserLicenseDetails GetUserLicenseSubscriptionDetails(FetchUserSubscription model)
         {
             UserLicenseDetails licDetails = new UserLicenseDetails();
             var licenseMapModelList = new List<SubscriptionDetails>();
@@ -67,8 +67,13 @@ namespace License.Logic.BusinessLogic
             userLogic.UserManager = UserManager;
             userLogic.RoleManager = RoleManager;
 
-            licDetails.User = userLogic.GetUserById(userId);
-            var data = logic.GetUserLicense(userId);
+            licDetails.User = userLogic.GetUserById(model.UserId);
+
+            List<UserLicense> data = null;
+            if (model.TeamId == 0)
+                data = logic.GetUserLicense(model.UserId);
+            else
+                data = logic.GetUserLicense(model.UserId, model.TeamId);
 
             var dataList = proSubLogic.GetSubscriptionFromFile();
 
@@ -79,7 +84,6 @@ namespace License.Logic.BusinessLogic
                 DateTime licExpireData = DateTime.MinValue;
                 foreach (var subs in subscriptionList)
                 {
-
                     var userLicLicst = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
                     var proList = userLicLicst.Select(u => u.License.ProductId).ToList();
                     SubscriptionDetails mapModel = new SubscriptionDetails();
@@ -98,18 +102,25 @@ namespace License.Logic.BusinessLogic
                             var licdataList = decryptObj.Split(new char[] { '^' });
                             licExpireData = Convert.ToDateTime(licdataList[1]);
                         }
-                        ProductDetails prod = new ProductDetails();
-                        prod.Id = pro.Id;
-                        prod.Name = pro.Name;
-                        prod.ExpireDate = licExpireData;
-                        foreach (var fet in pro.AssociatedFeatures)
+                        ProductDetails prod = new ProductDetails()
                         {
-                            var feature = new Feature();
-                            feature.Id = fet.Id;
-                            feature.Name = fet.Name;
-                            feature.Description = fet.Description;
-                            feature.Version = fet.Version;
-                            prod.Features.Add(feature);
+                            Id = pro.Id,
+                            Name = pro.Name,
+                            ExpireDate = licExpireData
+                        };
+                        if (model.IsFeatureRequired)
+                        {
+                            foreach (var fet in pro.AssociatedFeatures)
+                            {
+                                var feature = new Feature()
+                                {
+                                    Id = fet.Id,
+                                    Name = fet.Name,
+                                    Description = fet.Description,
+                                    Version = fet.Version
+                                };
+                                prod.Features.Add(feature);
+                            }
                         }
                         mapModel.Products.Add(prod);
                     }

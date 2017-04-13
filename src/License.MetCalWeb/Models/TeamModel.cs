@@ -4,9 +4,19 @@ using System.Linq;
 using System.Web;
 namespace License.MetCalWeb.Models
 {
+    public class Team
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string AdminId { get; set; }
+        public User AdminUser { get; set; }
+        public bool IsDefaultTeam { get; set; }
+        public ICollection<TeamMember> TeamMembers { get; set; }
+    }
+
     public class TeamDetails
     {
-        public User AdminUser { get; set; }
+        public Team Team { get; set; }
         public List<TeamMember> PendinigUsers { get; set; }
         public List<TeamMember> AcceptedUsers { get; set; }
 

@@ -45,7 +45,7 @@ namespace License.Logic.DataLogic
             List<DataModel.Team> teamList = new List<DataModel.Team>();
             foreach (var obj in objList)
             {
-                var data = AutoMapper.Mapper.Map<DataModel.Team>(obj);
+                var data = AutoMapper.Mapper.Map<Core.Model.Team, DataModel.Team>(obj);
                 teamList.Add(data);
             }
             return teamList;
@@ -54,7 +54,7 @@ namespace License.Logic.DataLogic
         public DataModel.Team GetTeamById(int id)
         {
             TeamMemberLogic memLogic = new TeamMemberLogic();
-            var obj = Work.TeamRepository.GetData(r => r.Id == id, null, "TeamMember").FirstOrDefault();
+            var obj = Work.TeamRepository.GetData(r => r.Id == id).FirstOrDefault();
             DataModel.Team teamObj = AutoMapper.Mapper.Map<DataModel.Team>(obj);
             teamObj.TeamMembers = memLogic.GetTeamMembers(id);
             return teamObj;
@@ -66,7 +66,12 @@ namespace License.Logic.DataLogic
             obj = Work.TeamRepository.Create(obj);
             Work.TeamRepository.Save();
             if (obj.Id > 0)
+            {
                 model = AutoMapper.Mapper.Map<DataModel.Team>(obj);
+                UserLogic userLogic = new UserLogic();
+                userLogic.UserManager = UserManager;
+                model.AdminUser = userLogic.GetUserById(model.AdminId);
+            }
             return model;
         }
 
@@ -81,13 +86,20 @@ namespace License.Logic.DataLogic
 
         public bool DeleteTeam(int id)
         {
+            var tempObj = Work.TeamRepository.GetById(id);
             var data = Work.TeamMemberRepository.GetData(tm => tm.TeamId == id).ToList();
+            var team = Work.TeamRepository.GetData(t => t.IsDefaultTeam == true && t.AdminId == tempObj.AdminId).FirstOrDefault();
             if (data.Count > 0)
             {
                 int i = 0;
                 foreach (var mem in data)
                 {
-                    Work.TeamMemberRepository.Delete(mem);
+                    int existingcount = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == mem.InviteeUserId && t.TeamId == team.Id).Count();
+                    if (existingcount == 0)
+                    {
+                        mem.TeamId = team.Id;
+                        Work.TeamMemberRepository.Update(mem);
+                    }
                     i++;
                 }
                 if (i > 0)

@@ -14,7 +14,8 @@ namespace License.Core.DBContext
     {
         public ApplicationDbContext() : base("DBConnectionString")
         {
-
+            Configuration.ProxyCreationEnabled = true;
+            Configuration.AutoDetectChangesEnabled = true;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

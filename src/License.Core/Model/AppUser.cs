@@ -58,17 +58,6 @@ namespace License.Core.Model
             }
         }
 
-        [NotMapped]
-        public string Name
-        {
-            get
-            {
-                FirstName = String.IsNullOrEmpty(FirstName) ? "" : FirstName;
-                LastName = String.IsNullOrEmpty(LastName) ? "" : LastName;
-                return FirstName.Trim() + " " + LastName.Trim();
-            }
-        }
-
         public string ServerUserId { get; set; }
 
         public bool IsActive { get; set; }

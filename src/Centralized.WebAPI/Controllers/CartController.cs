@@ -29,6 +29,12 @@ namespace Centralized.WebAPI.Controllers
             cartBOLogic.RoleManager = RoleManager;
         }
 
+
+        /// <summary>
+        /// Post Method. Create Item Record in the cart for the Subscription which is added
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
         public HttpResponseMessage CreateCart(CartItem item)
@@ -42,6 +48,11 @@ namespace Centralized.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Get Method. Get the Cart Item Cout based on the UserId.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetCartItemCount/{userId}")]
         public HttpResponseMessage GetCartItemCount(string userId)
@@ -53,6 +64,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, count);
         }
 
+        /// <summary>
+        /// GET method. Get the Cart Items based on the UserId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetItems/{userId}")]
         public IHttpActionResult GetCartItems(string userId)
@@ -61,6 +77,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(itemList);
         }
 
+        /// <summary>
+        /// DELETE Method. Delete Item from the Cart
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteCartItem(int id)
@@ -72,6 +93,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// POST Method. Service for the Offline Payment Which creates the Purchase Order and moves the Cart for the
+        /// Approval from Global Admin and returns the Purchase Order Number to the user for the further Tracking
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OfflinePayment/{userId}")]
         public HttpResponseMessage OfflinePayment(string userId)
@@ -85,6 +112,12 @@ namespace Centralized.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// POST Method. Once the payment is done the User Subscription details will be updated and returns
+        /// Subscription with product Details which was  purchased to sync the data to On Premise DB.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OnlinePayment/{userId}")]
         public HttpResponseMessage OnlinePayment(string userId)
@@ -97,10 +130,15 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartBOLogic.ErrorMessage);
 
         }
-
+        
+        /// <summary>
+        /// POST Method. Create the Custom Subscription 
+        /// </summary>
+        /// <param name="subscriptionType"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateSubscriptionAddToCart")]
-        public HttpResponseMessage CreateSubscriptionAddTpoCart(CustomSubscriptionType subscriptionType)
+        public HttpResponseMessage CreateSubscriptionAddToCart(CustomSubscriptionType subscriptionType)
         {
             bool status = cartBOLogic.CreateSubscriptionAddToCart(subscriptionType);
             if (status)

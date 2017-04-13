@@ -96,6 +96,7 @@ namespace License.Logic.BusinessLogic
                         InviteeEmail = team.AdminUser.Email,
                         InviteeStatus = InviteStatus.Accepted.ToString(),
                         InviteeUserId = team.AdminUser.UserId,
+                        InviteeUser= team.AdminUser,
                         IsAdmin = true
                     });
                 }
@@ -106,6 +107,7 @@ namespace License.Logic.BusinessLogic
                         InviteeEmail = team.AdminUser.Email,
                         InviteeStatus = InviteStatus.Accepted.ToString(),
                         InviteeUserId = team.AdminUser.UserId,
+                        InviteeUser = team.AdminUser,
                         IsAdmin = true
                     });
                 }

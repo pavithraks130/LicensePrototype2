@@ -119,29 +119,10 @@ namespace License.MetCalWeb.Controllers
                 LicenseSessionState.Instance.User = user;
                 LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
                 LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                    LicenseSessionState.Instance.IsAdmin = true;
-                else
-                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
-
-                if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
-                    LicenseSessionState.Instance.IsTeamMember = true;
 
                 if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsSuperAdmin)
-                {
-                    HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-                    var response = client.GetAsync("api/TeamMember/GetTeamMemberByUserId/" + LicenseSessionState.Instance.User.UserId).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonData = response.Content.ReadAsStringAsync().Result;
-                        if (!String.IsNullOrEmpty(jsonData))
-                        {
-                            LicenseSessionState.Instance.TeamMeberDetails = JsonConvert.DeserializeObject<TeamMember>(jsonData);
-                            LicenseSessionState.Instance.AdminId = LicenseSessionState.Instance.TeamMeberDetails.AdminId;
-                        }
-                    }
-                }
+                    LicenseSessionState.Instance.IsTeamMember = true;
+                
                 SignInAsync(user, true);
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                     SynchPurchaseOrder();
@@ -150,7 +131,7 @@ namespace License.MetCalWeb.Controllers
                     return RedirectToAction("Profile", "User");
                 if (LicenseSessionState.Instance.IsGlobalAdmin)
                     return RedirectToAction("Index", "User");
-                return RedirectToAction("Home", "Tab");
+                return RedirectToAction("Home", "Dashboard");
             }
             else
                 ModelState.AddModelError("", "Invalid Credentials");

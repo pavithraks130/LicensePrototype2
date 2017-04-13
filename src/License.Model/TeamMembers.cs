@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace License.DataModel
 {
@@ -12,6 +13,8 @@ namespace License.DataModel
         public string Name { get; set; }
         public string AdminId { get; set; }
         public User AdminUser { get; set; }
+        public bool IsDefaultTeam { get; set; }
+
         public ICollection<TeamMember> TeamMembers { get; set; }
     }
 
@@ -27,6 +30,7 @@ namespace License.DataModel
         public bool IsAdmin { get; set; }
         public bool IsSelected { get; set; }
         public bool IsActive { get; set; }
+        [JsonIgnore]
         public Team Team { get; set; }
     }
 

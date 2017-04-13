@@ -1,43 +1,31 @@
-﻿using System;
+﻿using License.MetCalWeb.Common;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Net.Http;
+using License.MetCalWeb.Models;
+using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
-    public class DashboardController : BaseController
+    public class DashboardController : Controller
     {
-
-        public DashboardController()
+        // GET: Tab
+        public ActionResult Home()
         {
+            var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+            return View(subscriptionDetails);
         }
 
-        // GET: Dashboard
-        public ActionResult Index()
-        {
-            //var model = new List<Models.ProductModel>();
-            //var product = new Models.ProductModel();
-            //product.ImagePath = "../Catalog/Images/Thumbs/f-3510-fc_01a_h-708x490.png";
-            //product.ProductName = "Calibrator";
-            //model.Add(product);
-
-            //var product1 = new Models.ProductModel();
-            //product1.ImagePath = "../Catalog/Images/Thumbs/f-1730-4402_01a_s.png";
-            //product1.ProductName = "f-1730-4402_01a_s";
-            //model.Add(product1);
-
-            //var product3 = new Models.ProductModel();
-            //product3.ImagePath = "../Catalog/Images/Thumbs/f-cxt1000_02a_h.png";
-            //product3.ProductName = "f-cxt1000_02a_h";
-            //model.Add(product3);
-
-            return View();
-        }
-       
-        public ActionResult CartDetails()
+        // GET: Tab
+        public ActionResult About()
         {
             return View();
+
         }
-       
+
     }
 }

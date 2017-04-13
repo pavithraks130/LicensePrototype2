@@ -25,6 +25,10 @@ namespace Centralized.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        ///Get Method.  Get All the Purchase Order
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetPurchaseOrder()
@@ -33,6 +37,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(orderList);
         }
 
+        /// <summary>
+        /// GET Method. Get the Purchase Order List based on the UserId
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("OrderByUser/{userid}")]
         public IHttpActionResult GetPurchaseOrderByUser(string userid)
@@ -41,6 +50,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(orderList);
         }
 
+        /// <summary>
+        /// GET Method. Gets the Purchase Order Details based on the Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("OrderById/{id}")]
         public HttpResponseMessage GetOrderDetails(int id)
@@ -52,6 +66,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Delete Method. Delete Purchase Order Based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage DeletePurchaseOrder(int id)
@@ -63,6 +82,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// PUT Method. Update Purchase Order details  based on id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("update/{id}")]
         public HttpResponseMessage UpdatePurchaseOrder(int id, PurchaseOrder order)
@@ -74,6 +99,11 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// PUT Method. Multiple Purchase Orders can be updated in single Call which is Bulk status Update
+        /// </summary>
+        /// <param name="orders"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("UpdataMuliplePO")]
         public HttpResponseMessage UpdateMultiplePurchaseOrder(List<PurchaseOrder> orders)
@@ -84,7 +114,11 @@ namespace Centralized.WebAPI.Controllers
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
-
+        /// <summary>
+        /// POST Method. Create Purchase Order with Details.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("create")]
         public HttpResponseMessage CreatePurchaseOrder(PurchaseOrder order)
@@ -96,6 +130,13 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// POST Method. Once the purchase Order are approved by Global Admin  based on the User Id user Subscription
+        /// Records will be created for the purchase Order and Subscription and Product details will be provided
+        /// to sync the Data to OnPremise DB.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SyncPO/{userId}")]
         public HttpResponseMessage SyncPurchaseOrder(string userId)

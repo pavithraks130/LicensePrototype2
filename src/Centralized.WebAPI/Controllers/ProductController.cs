@@ -19,6 +19,10 @@ namespace Centralized.WebAPI.Controllers
             logic = new ProductLogic();
         }
 
+        /// <summary>
+        /// GET Method. Gets all the Products
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("All")]
         public IHttpActionResult GetAllProducts()
@@ -27,6 +31,11 @@ namespace Centralized.WebAPI.Controllers
             return Ok(proList);
         }
 
+        /// <summary>
+        /// POST Method. Create Product Data
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
         public HttpResponseMessage CreateProduct(Product model)
@@ -38,6 +47,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to create Product due to internal error");
         }
 
+        /// <summary>
+        /// Put Method. Update the Product details based on the Product ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("update/{id}")]
         public HttpResponseMessage CreateProduct(int id, Product model)
@@ -49,6 +64,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to Update Product due to internal error");
         }
 
+
+        /// <summary>
+        /// Delete Method. Delete Product based on the Product ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage CreateProduct(int id)
