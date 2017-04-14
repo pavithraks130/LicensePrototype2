@@ -33,7 +33,7 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public ActionResult CreateTeam(Team model)
         {
             if (ModelState.IsValid)
@@ -55,9 +55,13 @@ namespace License.MetCalWeb.Controllers
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
                     ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                   
                 }
             }
-            return View("Create", model);
+            var _message = string.Join(Environment.NewLine, ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+            return Json(new { success = false, message = _message });// PartialView("Create", model);
         }
 
         public ActionResult EditTeam(int id)

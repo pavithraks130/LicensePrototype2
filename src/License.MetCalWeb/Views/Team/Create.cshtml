@@ -3,12 +3,39 @@
     ViewBag.Title = "Create";
 }
 
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),  // post
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+        });
+    });
+</script>
+
 <h2>Create</h2>
-@using (Html.BeginForm("CreateTeam", "Team", FormMethod.Post))
-{
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'>
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div id='myModalContent'>
+            @using (Html.BeginForm("CreateTeam", "Team", FormMethod.Post))
+            {
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Team</h4>
@@ -16,8 +43,10 @@
                 <div class="modal-body">
                     <div class="row">
                         @Html.AntiForgeryToken()
-                        @Html.ValidationSummary()
                         <div class="col-md-12">
+                            <div class="form-group">
+                                <label id = "error" class="message-error"></label>
+                            </div>
                             <div class="form-group">
                                 @Html.LabelFor(t => t.Name, new { @class = "col-md-4" })
                                 <div class="col-md-8">
@@ -32,7 +61,8 @@
                     <input type="submit" class="btn" data-dismis="model" value="Create" />
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                 </div>
-            </div>
+            }
         </div>
     </div>
+</div>
 }

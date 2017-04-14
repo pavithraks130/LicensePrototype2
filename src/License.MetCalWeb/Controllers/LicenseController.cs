@@ -74,7 +74,7 @@ namespace License.MetCalWeb.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LicenseApproval(string comment, string status, params string[] selectLicenseRequest)
+        public ActionResult LicenseApprovalByTeam(string comment, string status, params string[] selectLicenseRequest)
         {
             List<UserLicenseRequest> licReqList = new List<UserLicenseRequest>();
             foreach (var id in selectLicenseRequest)

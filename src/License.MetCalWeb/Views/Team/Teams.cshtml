@@ -26,6 +26,7 @@
                 }
             });
         });
+       
 
         $(".btnCreate").click(function () {
 
@@ -39,7 +40,6 @@
                     $('#myModal').html(data);
                     $('#myModal').modal(options);
                     $('#myModal').modal('show');
-
                 },
                 error: function () {
                     alert("Dynamic content load failed.");

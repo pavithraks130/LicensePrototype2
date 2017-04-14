@@ -13,9 +13,7 @@ namespace License.MetCalWeb.Controllers
 {
     [Authorize]
     public class CartController : BaseController
-    {
-
-        
+    {        
         public CartController()
         {
             
