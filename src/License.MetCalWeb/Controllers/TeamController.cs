@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
+    [SessionExpire]
     public class TeamController : BaseController
     {
         public TeamController()

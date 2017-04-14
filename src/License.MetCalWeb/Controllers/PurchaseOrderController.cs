@@ -12,6 +12,7 @@ using License.MetCalWeb.Models;
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
+    [SessionExpire]
     public class PurchaseOrderController : Controller
     {
 

@@ -7,12 +7,12 @@ using License.MetCalWeb.Models;
 using System.Threading.Tasks;
 using System.Net.Http;
 using License.MetCalWeb.Common;
-using License.MetCalWeb.Models;
 using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
+    [SessionExpire]
     public class UserController : BaseController
     {
         string ErrorMessage;

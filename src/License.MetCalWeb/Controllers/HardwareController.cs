@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 namespace License.MetCalWeb.Controllers
 {
     [Authorize]
+    [SessionExpire]
     public class HardwareController : BaseController
     {
         public ActionResult HardwareContainer()

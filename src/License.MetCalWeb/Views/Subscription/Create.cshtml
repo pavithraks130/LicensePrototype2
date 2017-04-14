@@ -8,64 +8,61 @@
 
 <h3>Create Subscription</h3>
 <br />
-<br />
-
-@using (Html.BeginForm("Create", "Subscription", FormMethod.Post))
+@using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <div class="col-md-4">Subscription Name</div>
-                <div class="col-md-4"><input type="text" class="txt-sub" name="subscriptionName" /></div>
-                <div class="col-md-4"></div>
+                <div class="col-md-3"><label>Subscription Name</label></div>
+                <div class="col-md-9"><input type="text" class="txt-sub form-control" name="subscriptionName" /></div>
+               
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <div class="col-md-4">Product Name</div>
-                <div class="col-md-4">Quantity</div>
+                <div class="col-md-5">Product Name</div>
+                <div class="col-md-3">Quantity</div>
                 <div class="col-md-4">Price(USD)</div>
             </div>
 
         </div>
     </div>
-
     int index = -1;
-
     foreach (var product in Model)
     {
         index += 1;
-        double price = @product.Price * @product.Quantity;
-
+        double price = product.Price * product.Quantity;
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <div class="col-md-4 proName"><input type="checkbox" class="checkbox enableQty" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp; @product.Name</div>
-                    <div class="col-md-4 proQty"><input type="text" class="txt-qty" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
-                    <div class="col-md-4 proPrice"><input type="text" class="price_val" id="lblSelectedProductPrice" disabled="disabled" /></div>
+                    <div class="col-md-5 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
+                    <div class="col-md-3 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
+                    <div class="col-md-4 proPrice"><label class="price_val" id="lblSelectedProductPrice">@price</label></div>
                 </div>
             </div>
         </div>
     }
-    <div id="row2" class="col-md-12">
-        Choose your maintainanse period
+    <div class="row">
+        <div class="col-md-12">
+            <label class="col-md-4">Choose your maintainanse period</label>
+            <select name="activeDays col-md-8 form-control ">
+                <option value="0">12 month included</option>
+                <option value="1">24 month</option>
+                <option value="2">36 month</option>
+            </select>
+        </div>
+        <div class="col-md-12" align="right">
+            <label class="col-md-9 float-right">SubTotal(USD) </label>
+            <label type="text" class="total col-md-3" />
+        </div>
+        <div class="col-md-12" align="right">
+            <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
+        </div>
     </div>
-    <div id="row3" class="col-md-12">
-        <select name="activeDays">
-            <option value="0">12 month included</option>
-            <option value="1">24 month</option>
-            <option value="2">36 month</option>
-        </select>
-    </div>
-    <div id="row4" class="col-md-12" align="right">
-        <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
-    </div>
-    <div id="row5" class="col-md-12" align="right">
-        SubTotal(USD)<br />
-        <input type="text" class="total" id="lblSelectedProductPrice" disabled="disabled" />
-    </div>
+
+    
     <div class="row">
         <div class="col-md-12">
             <label id="lblError" style="display:none;">
@@ -100,15 +97,15 @@
             var data = $(this).is(':checked');
             var qtyObj = $(this).parent().parent();
             var txtQty = $(qtyObj).find('.proQty').find('.txt-qty');
-            var price = $(qtyObj).find('.proPrice').find('#lblSelectedProductPrice');
+            var price = $(qtyObj).find('.proPrice').find('.price_val');
             var amount = $('.total').val();
-            var selectedProdQTY = $(price).val();
+            var selectedProdQTY = $(price).text();
             if (data == true) {
                 $(txtQty).removeAttr('disabled');
             }
             else {
                 $(txtQty).attr('disabled', 'disabled');
-                $(selectedProdQTY).val('');
+                $(price).text('');
                 $(txtQty).val('');
                 if (amount == "")
                     amount = 0;
@@ -124,9 +121,9 @@
             var qty = $(this).val();
             var selectedProdQTY = qty * price;
             console.log($(parentObj));
-            var lblObj = $(parentObj).find('.proPrice').find('#lblSelectedProductPrice');
+            var lblObj = $(parentObj).find('.proPrice').find('.price_val');
             console.log(lblObj);
-            $(parentObj).find('.proPrice').find('#lblSelectedProductPrice').val(selectedProdQTY);
+            $(parentObj).find('.proPrice').find('#lblSelectedProductPrice').text(selectedProdQTY);
 
             var amount = $('.total').val();
             if (amount == "")

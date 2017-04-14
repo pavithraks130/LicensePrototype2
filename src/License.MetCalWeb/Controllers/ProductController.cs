@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 namespace License.MetCalWeb.Controllers
 {
     [Authorize(Roles = "SuperAdmin,BackendAdmin")]
+    [SessionExpire]
     public class ProductController : BaseController
     {
 

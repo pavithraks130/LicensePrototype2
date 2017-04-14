@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    [Authorize]
+    [SessionExpire]
     public class SubscriptionController : Controller
     {
 
