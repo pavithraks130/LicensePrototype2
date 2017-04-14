@@ -4,145 +4,68 @@
     ViewBag.Title = "AddProduct";
 }
 
-<style>
-    tr {
-        border: none !important;
-    }
+<div class="row">
+    <h3>Create Product</h3>
+    <hr />
+    <div class="col-md-12">
+        <section>
+            @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label>Product Name</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(pro => pro.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(pro => pro.Name)
+                    </div>
+                </div>
 
-    .dropbtn {
-        background-color: #FFFFFF;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label>Price in USD</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(pro => pro.Price, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(pro => pro.Price)
+                    </div>
+                </div>
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label>Product Code</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(pro => pro.ProductCode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(pro => pro.ProductCode)
+                    </div>
+                </div>
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-    }
+                <div class="form-group">
+                    <label class="col-md-2">Description</label>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(pro => pro.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(pro => pro.Description)
+                    </div>
+                </div>
 
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
+                <div class="form-group">
+                    <label class="col-md-2">Assosiated Features</label>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(pro => pro.AssociatedFeatures, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(pro => pro.AssociatedFeatures)
+                    </div>
+                </div>
 
-            .dropdown-content a:hover {
-                background-color: #f1f1f1;
+                <div class="form-group">
+                    <input type="submit" class="btn btn-default" data-dismis="model" value="Add Product" />
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+                </div>
+
+
             }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-    .dropdown:hover .dropbtn {
-        background-color: #FFFFFF;
-    }
-
-    #photos img {
-        width: 33px;
-        height: 33px;
-        transition: width 500ms, height 500ms, transform 500ms;
-        -moz-transition: width 500ms, height 500ms, -moz-transform 500ms;
-        -webkit-transition: width 500ms, height 500ms, -webkit-transform 500ms;
-        -o-transition: width 500ms, height 500ms,-o-transform 500ms;
-    }
-
-        #photos img:hover {
-            width: 100%;
-            height: 100%;
-        }
-</style>
-@using (Html.BeginForm("AddProduct", "Product", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'>
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Product</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <div style="padding-top: 15px;padding-bottom: 10px">
-                            <div class="col-md-4">
-                                <span>Product Name</span>
-                            </div>
-                            <div class="col-md-8">
-                                @Html.TextBoxFor(pro => pro.Name, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(pro => pro.Name)
-                            </div>
-                            <br />
-                        </div>
-                    </div>
-                    <div>
-                        <div style="padding-top: 15px;padding-bottom: 10px">
-                            <div class="col-md-4">
-                                <span>Price in USD</span>
-                            </div>
-                            <div class="col-md-8">
-                                @Html.TextBoxFor(pro => pro.Price, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(pro => pro.Price)
-                            </div>
-                            <br />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div style="padding-top: 15px;padding-bottom: 10px">
-                            <div class="col-md-4">
-                                <span>Product Code</span>
-                            </div>
-                            <div class="col-md-8">
-                                @Html.TextBoxFor(pro => pro.ProductCode, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(pro => pro.ProductCode)
-                            </div>
-                            <br />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div style="padding-top: 15px;padding-bottom: 10px">
-                            <div class="col-md-4">
-                                <span>Description</span>
-                            </div>
-                            <div class="col-md-8">
-                                @Html.TextBoxFor(pro => pro.Description, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(pro => pro.Description)
-                            </div>
-                            <br />
-                        </div>
-                    </div>
-                    <div>
-                        <div style="padding-top: 15px;padding-bottom: 10px">
-                            <div class="col-md-4">
-                                <span>Assosiated Features</span>
-                            </div>
-                            <div class="col-md-8">
-                                @Html.TextBoxFor(pro => pro.AssociatedFeatures, new { @class = "text-danger" })
-                                @Html.ValidationMessageFor(pro => pro.AssociatedFeatures)
-                            </div>
-                            <br />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" class="btn" data-dismis="model" value="Add Product" />
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
-}
+</div>

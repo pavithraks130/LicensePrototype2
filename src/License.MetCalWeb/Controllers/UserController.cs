@@ -35,6 +35,12 @@ namespace License.MetCalWeb.Controllers
                 var obj = users.FirstOrDefault(u => u.Email == LicenseSessionState.Instance.User.Email);
                 users.Remove(obj);
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return View(users);
         }
 
@@ -52,17 +58,17 @@ namespace License.MetCalWeb.Controllers
             bool status = false;
             if (ModelState.IsValid)
             {
-                if (LicenseSessionState.Instance.IsGlobalAdmin )
+                if (LicenseSessionState.Instance.IsGlobalAdmin)
                     status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
-                else if(LicenseSessionState.Instance.IsSuperAdmin)
+                else if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
                     status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
-                    if(status)
+                    if (status)
                         status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
                 }
                 else
                     status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
-                
+
                 if (status)
                 {
                     LicenseSessionState.Instance.User.FirstName = usermodel.FirstName;
@@ -128,7 +134,12 @@ namespace License.MetCalWeb.Controllers
             var response = await client.PutAsJsonAsync("/api/user/update/" + userId, model);
             if (response.IsSuccessStatusCode)
                 return true;
-            ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
             return false;
         }
 
@@ -143,6 +154,12 @@ namespace License.MetCalWeb.Controllers
             var response = await client.PutAsJsonAsync("api/user/ChangePassword/" + userId, model);
             if (response.IsSuccessStatusCode)
                 return true;
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
             return false;
         }

@@ -64,6 +64,12 @@ namespace License.MetCalWeb.Controllers
                 if (!String.IsNullOrEmpty(jsonData))
                     requestList = JsonConvert.DeserializeObject<List<UserLicenseRequest>>(jsonData);
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return View(requestList);
         }
         [HttpPost]
@@ -95,6 +101,12 @@ namespace License.MetCalWeb.Controllers
                     ModelState.AddModelError("", response.ReasonPhrase);
                     GetTeamList();
                     return View();
+                }
+                else
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                 }
             }
             return RedirectToAction("TeamContainer", "TeamManagement");
@@ -204,7 +216,12 @@ namespace License.MetCalWeb.Controllers
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/CreateUserLicence", mapping).Result;
-            if (!response.IsSuccessStatusCode) return response.ReasonPhrase;
+            if (!response.IsSuccessStatusCode)  
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                return response.ReasonPhrase + " - " + obj.Message;
+            };
             return String.Empty;
         }
 
@@ -228,7 +245,12 @@ namespace License.MetCalWeb.Controllers
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RevokeUserLicence", mapping).Result;
-            if (!response.IsSuccessStatusCode) return response.ReasonPhrase;
+            if (!response.IsSuccessStatusCode)  
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                return response.ReasonPhrase + " - " + obj.Message;
+            }
             return String.Empty;
         }
 
@@ -267,8 +289,11 @@ namespace License.MetCalWeb.Controllers
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RequestLicense", licReqList).Result;
             if (!response.IsSuccessStatusCode)
-            {
-                ModelState.AddModelError("", response.ReasonPhrase);
+            { 
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                
                 return View();
             }
             return RedirectToAction("TeamContainer", "TeamManagement");
@@ -285,6 +310,12 @@ namespace License.MetCalWeb.Controllers
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
                     listlic = JsonConvert.DeserializeObject<List<UserLicenseRequest>>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View(listlic);
         }

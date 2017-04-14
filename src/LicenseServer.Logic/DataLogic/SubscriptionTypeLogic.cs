@@ -9,10 +9,11 @@ namespace LicenseServer.Logic
 {
     public class SubscriptionTypeLogic : BaseLogic
     {
-        public List<SubscriptionType> GetSubscriptionType()
+        public List<SubscriptionType> GetSubscriptionType(string userId = "")
         {
             List<SubscriptionType> subscriptionTypes = new List<SubscriptionType>();
-            var listSubscription = Work.SubscriptionRepository.GetData();
+            List<Core.Model.SubscriptionType> listSubscription = null;
+            listSubscription = Work.SubscriptionRepository.GetData(s => String.IsNullOrEmpty(s.CreatedBy) == true || s.CreatedBy == userId).ToList();
             foreach (var obj in listSubscription)
             {
                 subscriptionTypes.Add(AutoMapper.Mapper.Map<Core.Model.SubscriptionType, DataModel.SubscriptionType>(obj));

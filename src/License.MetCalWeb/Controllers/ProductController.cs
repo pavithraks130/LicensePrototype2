@@ -34,6 +34,12 @@ namespace License.MetCalWeb.Controllers
                 if (!String.IsNullOrEmpty(jsondata))
                     productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return View(productList);
         }
 

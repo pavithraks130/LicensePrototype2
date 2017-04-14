@@ -624,6 +624,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Centralized.WebAPI.Controllers.SubscriptionController.GetAllSubscription(System.String)">
+            <summary>
+            Get List of Subscriptions Both Default and Custom Subscriptions
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Centralized.WebAPI.Controllers.SubscriptionController.CreateSubscription(LicenseServer.DataModel.SubscriptionType)">
             <summary>
             POST method. Creates the Subscriptioon

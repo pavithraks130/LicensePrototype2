@@ -8,35 +8,35 @@
 <div class="row">
     <div class="form-group">
         <label style="font-size:18px;">Team Admin : @Model.Team.AdminUser.Name </label>
-        @if (Convert.ToBoolean(ViewBag.IsAdmin) || LicenseSessionState.Instance.IsSuperAdmin)
+        @if (Convert.ToBoolean(TempData["IsAdmin"]) || LicenseSessionState.Instance.IsSuperAdmin)
         {
 
-            <div class="dropdown  float-right" style="margin-right:20px;">
-                <button class="btn btn-default dropdown-toggle float-left" type="button" id="menu1" data-toggle="dropdown">
-                    License
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
-                    <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
-                </ul>
-            </div>
-            <input type="button" class="btn btn-primary btnInvite float-right" value="Invite Team Member" />
+        <div class="dropdown  float-right" style="margin-right:20px;">
+            <button class="btn btn-default dropdown-toggle float-left" type="button" id="menu1" data-toggle="dropdown">
+                License
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
+                <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
+            </ul>
+        </div>
+        <input type="button" class="btn btn-primary btnInvite float-right" value="Invite Team Member" />
         }
         else
         {
-            @Html.ActionLink("Request License", "LicenseRequest", "License", null, new { @class = "btn btn-primary btn-lg btn-custom btn-request float-right" })
+        @Html.ActionLink("Request License", "LicenseRequest", "License", null, new { @class = "btn btn-primary btn-lg btn-custom btn-request float-right" })
         }
 
 
     </div>
 </div>
 <div class="row">
-    <div class="form-group">
-        @if (Model.PendinigUsers.Count > 0)
-        {
-            <h4>Pending Users</h4>
-            <div class="col-md-12">
+    <div class="col-md-8">
+        <div class="form-group">
+            @if (Model.PendinigUsers.Count > 0)
+            {
+                <h4>Pending Users</h4>
                 <table class="table" style="border: none">
                     @foreach (TeamMember t in Model.PendinigUsers)
                     {
@@ -70,17 +70,15 @@
                         </tr>
                     }
                 </table>
-            </div>
-        }
-    </div>
-</div>
-<br />
-<div class="row">
-    <div class="form-group">
-        @if (Model.AcceptedUsers.Count > 0)
-        {
-            <h4>Active Users</h4>
-            <div class="col-md-11">
+                <br />
+                <br />
+            }
+        </div>
+
+        <div class="form-group">
+            @if (Model.AcceptedUsers.Count > 0)
+            {
+                <h4>Active Users</h4>
                 <table class="table" style="border: none">
                     @foreach (TeamMember t in Model.AcceptedUsers)
                     {
@@ -123,7 +121,7 @@
                                 }
                             </td>
                             <td class="col-md-4">
-                                @if (ViewBag.IsAdmin == true || LicenseSessionState.Instance.IsSuperAdmin)
+                                @if (Convert.ToBoolean(TempData["IsAdmin"]) == true || LicenseSessionState.Instance.IsSuperAdmin)
                                 {
 
                                     <button class="alert-success">
@@ -134,7 +132,7 @@
                                 }
                             </td>
                             <td class="col-md-1">
-                                @if ((ViewBag.IsAdmin == true || LicenseSessionState.Instance.IsSuperAdmin) && @t.InviteeUserId != t.AdminId && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
+                                @if ((Convert.ToBoolean(TempData["IsAdmin"]) == true || LicenseSessionState.Instance.IsSuperAdmin) && @t.InviteeUserId != t.AdminId && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
                                 {
 
                                     <div class="dropdown">
@@ -160,8 +158,11 @@
                         </tr>
                     }
                 </table>
-            </div>
-        }
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        @{ Html.RenderAction("Subscriptions"); }
     </div>
 </div>
 

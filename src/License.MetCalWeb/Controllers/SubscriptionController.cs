@@ -13,18 +13,28 @@ namespace License.MetCalWeb.Controllers
 {
     public class SubscriptionController : Controller
     {
-      
+
         public async Task<ActionResult> Index()
         {
             TempData["CartCount"] = "";
             List<SubscriptionType> typeList = new List<SubscriptionType>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.GetAsync("api/subscription/All");
+            HttpResponseMessage response;
+            if (LicenseSessionState.Instance.IsGlobalAdmin)
+                response = await client.GetAsync("api/subscription/All");
+            else
+                response = await client.GetAsync("api/subscription/All/" + LicenseSessionState.Instance.User.ServerUserId);
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
                 typeList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             client.Dispose();
             client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
@@ -40,6 +50,12 @@ namespace License.MetCalWeb.Controllers
                     if (Convert.ToInt32(count) > 0)
                         TempData["CartCount"] = "(" + count + ")";
                 }
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             client.Dispose();
 
@@ -58,6 +74,12 @@ namespace License.MetCalWeb.Controllers
                 if (!String.IsNullOrEmpty(jsondata))
                     productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
                 TempData["productList"] = productList;
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View(productList);
         }
@@ -87,6 +109,9 @@ namespace License.MetCalWeb.Controllers
             subscriptionType.Name = subscriptionName;
             subscriptionType.Price = totalPrice;
             subscriptionType.Products = productCollection.AsEnumerable();
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                subscriptionType.CreatedBy = LicenseSessionState.Instance.User.ServerUserId;
+
             subscriptionType.ImagePath = "B5.png";
             switch (activeDays)
             {
@@ -99,7 +124,13 @@ namespace License.MetCalWeb.Controllers
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
             if (response.IsSuccessStatusCode)
-                return RedirectToAction("SubscriptionCatalog", "Product");
+                return RedirectToAction("Index", "Subscription");
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return null;
         }
 

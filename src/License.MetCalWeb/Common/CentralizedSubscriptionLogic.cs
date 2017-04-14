@@ -27,6 +27,7 @@ namespace License.MetCalWeb.Common
                     UpdateSubscriptionOnpremise(userSubscriptionList);
                 }
             }
+
         }
 
         public static void UpdateSubscriptionOnpremise(SubscriptionList subs)

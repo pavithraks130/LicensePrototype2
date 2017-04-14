@@ -36,7 +36,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult TeamMembers(int id)
         {
             TeamDetails model = LoadTeamMember(Convert.ToInt32(id));
-            ViewBag.IsAdmin = model.AcceptedUsers.FirstOrDefault(f => f.InviteeUserId == LicenseSessionState.Instance.User.UserId).IsAdmin;
+            TempData["IsAdmin"] = model.AcceptedUsers.FirstOrDefault(f => f.InviteeUserId == LicenseSessionState.Instance.User.UserId).IsAdmin;
             return View(model);
         }
 
@@ -57,6 +57,12 @@ namespace License.MetCalWeb.Controllers
                 SelectedTeam.TeamMembers = model.AcceptedUsers;
                 LicenseSessionState.Instance.SelectedTeam = SelectedTeam;
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return model;
         }
 
@@ -74,7 +80,7 @@ namespace License.MetCalWeb.Controllers
             bool status = false;
             if (ModelState.IsValid)
             {
-               
+
                 TeamMember invite = new TeamMember();
                 invite.AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId;
                 invite.InvitationDate = DateTime.Now.Date;
@@ -84,10 +90,10 @@ namespace License.MetCalWeb.Controllers
 
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-                var resposnse = client.PostAsJsonAsync("api/TeamMember/CreateInvite", invite).Result;
-                if (resposnse.IsSuccessStatusCode)
+                var response = client.PostAsJsonAsync("api/TeamMember/CreateInvite", invite).Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    var jsonData = resposnse.Content.ReadAsStringAsync().Result;
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
                     if (!String.IsNullOrEmpty(jsonData))
                     {
                         var teamMemResObj = JsonConvert.DeserializeObject<TeamMemberResponse>(jsonData);
@@ -109,6 +115,12 @@ namespace License.MetCalWeb.Controllers
                         EmailService service = new EmailService();
                         service.SendEmail(model.Email, "Invite to fluke Calibration", body);
                     }
+                }
+                else
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                 }
             }
             return RedirectToAction("TeamContainer");
@@ -140,5 +152,20 @@ namespace License.MetCalWeb.Controllers
             }
             return RedirectToAction("TeamContainer");
         }
+
+        public ActionResult Subscriptions()
+        {
+            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
+            string adminUserId = string.Empty;
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                adminUserId = LicenseSessionState.Instance.User.UserId;
+            else
+            {
+                adminUserId = LicenseSessionState.Instance.SelectedTeam.AdminId;
+            }
+            var subscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
+            return View(subscriptionList);
+        }
+
     }
 }

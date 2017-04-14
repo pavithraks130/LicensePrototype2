@@ -63,7 +63,7 @@ namespace License.Logic.DataLogic
         public DataModel.Team CreateTeam(DataModel.Team model)
         {
             var obj = AutoMapper.Mapper.Map<Core.Model.Team>(model);
-            var objTemp = Work.TeamRepository.GetData(t => t.Name.Trim() == obj.Name.Trim()).FirstOrDefault();
+            var objTemp = Work.TeamRepository.GetData(t => t.Name.Trim() == obj.Name.Trim() && t.AdminId == model.AdminId).FirstOrDefault();
             if (objTemp == null)
             {
                 obj = Work.TeamRepository.Create(obj);

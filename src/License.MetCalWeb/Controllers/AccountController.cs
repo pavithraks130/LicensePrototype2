@@ -73,7 +73,12 @@ namespace License.MetCalWeb.Controllers
                     }
                 }
                 else
-                    ModelState.AddModelError("", response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result);
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                }
             }
             return View();
         }
@@ -122,7 +127,7 @@ namespace License.MetCalWeb.Controllers
 
                 if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsSuperAdmin)
                     LicenseSessionState.Instance.IsTeamMember = true;
-                
+
                 SignInAsync(user, true);
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                     SynchPurchaseOrder();
@@ -263,7 +268,11 @@ namespace License.MetCalWeb.Controllers
                     ViewBag.Message = "You have accepted the invitation. Click below to Login with credentials which was shared through Mail";
             }
             else
-                ViewBag.ErrorMessage = response.ReasonPhrase;
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ViewBag.ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
 
             return View();
         }
@@ -278,7 +287,12 @@ namespace License.MetCalWeb.Controllers
                 var user = JsonConvert.DeserializeObject<User>(jsondata);
                 return user;
             }
-            else ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
             return null;
         }
         public ForgotPasswordToken GetForgotPasswordToken(ForgotPassword model, ServiceType type)
@@ -292,7 +306,12 @@ namespace License.MetCalWeb.Controllers
                 var passwordtoken = JsonConvert.DeserializeObject<ForgotPasswordToken>(jsonData);
                 return passwordtoken;
             }
-            else ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
             return null;
         }
 
@@ -330,7 +349,11 @@ namespace License.MetCalWeb.Controllers
                 return user;
             }
             else
-                ErrorMessage = response.ReasonPhrase + " " + response.Content.ReadAsStringAsync().Result;
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
             return null;
         }
 
@@ -355,6 +378,12 @@ namespace License.MetCalWeb.Controllers
                 }
                 return true;
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
             return false;
         }
 
@@ -370,6 +399,12 @@ namespace License.MetCalWeb.Controllers
                 var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
                 if (obj.Subscriptions.Count > 0)
                     CentralizedSubscriptionLogic.UpdateSubscriptionOnpremise(obj);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
             }
 
         }

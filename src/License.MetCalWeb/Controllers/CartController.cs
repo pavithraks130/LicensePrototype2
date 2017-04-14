@@ -72,6 +72,12 @@ namespace License.MetCalWeb.Controllers
                 if (!string.IsNullOrEmpty(jsonData))
                     poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("",response.ReasonPhrase + " - " + obj.Message);
+            }
             return View(poOrder);
 
         }
@@ -86,6 +92,12 @@ namespace License.MetCalWeb.Controllers
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 itemList = JsonConvert.DeserializeObject<List<CartItem>>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return itemList;
         }
@@ -103,6 +115,12 @@ namespace License.MetCalWeb.Controllers
             var response = await client.PostAsJsonAsync("api/Cart/Create", item);
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", "Subscription");
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return null;
         }
 

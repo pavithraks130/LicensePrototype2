@@ -24,12 +24,18 @@ namespace License.MetCalWeb.Controllers
             var hm = new HardwareModel();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var resposne = client.GetAsync("api/asset/GetAll").Result;
-            if (resposne.IsSuccessStatusCode)
+            var response = client.GetAsync("api/asset/GetAll").Result;
+            if (response.IsSuccessStatusCode)
             {
-                var jsonData = resposne.Content.ReadAsStringAsync().Result;
+                var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
                     hm.Assets = JsonConvert.DeserializeObject<List<TeamAsset>>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return hm;
         }
@@ -39,12 +45,18 @@ namespace License.MetCalWeb.Controllers
             TeamAsset asset = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var resposne = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
-            if (resposne.IsSuccessStatusCode)
+            var response = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
+            if (response.IsSuccessStatusCode)
             {
-                var jsonData = resposne.Content.ReadAsStringAsync().Result;
+                var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
                     asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View(asset);
         }
@@ -58,9 +70,15 @@ namespace License.MetCalWeb.Controllers
 
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-                var respsonse = client.PutAsJsonAsync("api/asset/UpdateAsset/" + asset.Id, asset).Result;
-                if (respsonse.IsSuccessStatusCode)
+                var response = client.PutAsJsonAsync("api/asset/UpdateAsset/" + asset.Id, asset).Result;
+                if (response.IsSuccessStatusCode)
                     return RedirectToAction("HardwareContainer");
+                else
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                }
             }
             return View(asset);
         }
@@ -71,10 +89,16 @@ namespace License.MetCalWeb.Controllers
                 case "Remove":
                     HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                     client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-                    var resposne = client.DeleteAsync("api/asset/DeleteAsset/" + id.ToString()).Result;
-                    if (resposne.IsSuccessStatusCode)
+                    var response = client.DeleteAsync("api/asset/DeleteAsset/" + id.ToString()).Result;
+                    if (response.IsSuccessStatusCode)
                     {
                         return RedirectToAction("HardwareContainer");
+                    }
+                    else
+                    {
+                        var jsonData = response.Content.ReadAsStringAsync().Result;
+                        var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                        ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                     }
                     break;
             }
@@ -93,12 +117,18 @@ namespace License.MetCalWeb.Controllers
             TeamAsset asset = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var resposne = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
-            if (resposne.IsSuccessStatusCode)
+            var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
+            if (response.IsSuccessStatusCode)
             {
-                var jsonData = resposne.Content.ReadAsStringAsync().Result;
+                var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
                     asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return RedirectToAction("HardwareContainer");
         }

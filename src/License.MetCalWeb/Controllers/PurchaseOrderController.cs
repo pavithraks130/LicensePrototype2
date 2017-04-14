@@ -28,11 +28,17 @@ namespace License.MetCalWeb.Controllers
             List<PurchaseOrder> orderList = new List<PurchaseOrder>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var result = await client.GetAsync("api/purchaseorder/All");
-            if (result.IsSuccessStatusCode)
+            var response = await client.GetAsync("api/purchaseorder/All");
+            if (response.IsSuccessStatusCode)
             {
-                var data = result.Content.ReadAsStringAsync().Result;
+                var data = response.Content.ReadAsStringAsync().Result;
                 orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View(orderList);
         }
@@ -63,12 +69,14 @@ namespace License.MetCalWeb.Controllers
             }
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var result = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
-            if (result.IsSuccessStatusCode)
+            var response = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", "User");
             else
             {
-                ModelState.AddModelError("", result.ReasonPhrase);
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View();
         }
@@ -84,6 +92,12 @@ namespace License.MetCalWeb.Controllers
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 poList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(jsonData);
             }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
             return View(poList);
         }
 
@@ -97,6 +111,12 @@ namespace License.MetCalWeb.Controllers
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 order = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View(order);
         }

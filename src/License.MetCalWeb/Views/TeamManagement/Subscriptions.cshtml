@@ -4,7 +4,7 @@
 }
 <h4>Subscription</h4>
 <table class="table" style="border:ridge">
-    @if (Convert.ToBoolean(LicenseSessionState.Instance.IsTeamMember))
+    @if (Convert.ToBoolean(LicenseSessionState.Instance.IsTeamMember) && !Convert.ToBoolean(TempData["IsAdmin"]))
     {
         <tr>
             <td>

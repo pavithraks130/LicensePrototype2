@@ -52,8 +52,9 @@ namespace License.MetCalWeb.Controllers
                 }
                 else
                 {
-                    var message = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
-                    ModelState.AddModelError("", message);
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                 }
             }
             return View("Create", model);
@@ -82,8 +83,9 @@ namespace License.MetCalWeb.Controllers
             }
             else
             {
-                var message = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
-                ModelState.AddModelError("", message);
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             model.Id = id;
             return View("Edit", model);
@@ -102,20 +104,12 @@ namespace License.MetCalWeb.Controllers
             }
             else
             {
-                var message = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
-                ModelState.AddModelError("", message);
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View();
         }
 
-        public ActionResult Subscriptions()
-        {
-            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
-            string adminUserId = string.Empty;
-            if (LicenseSessionState.Instance.IsSuperAdmin)
-                adminUserId = LicenseSessionState.Instance.User.UserId;
-            var subscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
-            return View(subscriptionList);
-        }
     }
 }

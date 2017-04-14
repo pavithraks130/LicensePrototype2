@@ -32,6 +32,17 @@ namespace Centralized.WebAPI.Controllers
             return Ok(subList);
         }
 
+        /// <summary>
+        /// Get List of Subscriptions Both Default and Custom Subscriptions
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("All/{userId}")]
+        public IHttpActionResult GetAllSubscription(string userId)
+        {
+            var subList = logic.GetSubscriptionType(userId);
+            return Ok(subList);
+        }
 
         /// <summary>
         /// POST method. Creates the Subscriptioon
