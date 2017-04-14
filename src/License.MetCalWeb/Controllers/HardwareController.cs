@@ -80,7 +80,10 @@ namespace License.MetCalWeb.Controllers
                     ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                 }
             }
-            return View(asset);
+            var _message = string.Join(Environment.NewLine, ModelState.Values
+                                      .SelectMany(x => x.Errors)
+                                      .Select(x => x.ErrorMessage));
+            return Json(new { success = false, message = _message });
         }
         public ActionResult AssetConfiguration(int id, string actionType)
         {
@@ -112,25 +115,33 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddEditHardware(TeamAsset assetModel)
+        public ActionResult AddHardware(TeamAsset assetModel)
         {
-            TeamAsset asset = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
-            if (response.IsSuccessStatusCode)
+            if (ModelState.IsValid)
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                if (!String.IsNullOrEmpty(jsonData))
-                    asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+                TeamAsset asset = null;
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    if (!String.IsNullOrEmpty(jsonData))
+                        asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+                    return RedirectToAction("HardwareContainer");
+                }
+                else
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                }
             }
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
-            return RedirectToAction("HardwareContainer");
+            var _message = string.Join(Environment.NewLine, ModelState.Values
+                                      .SelectMany(x => x.Errors)
+                                      .Select(x => x.ErrorMessage));
+            return Json(new { success = false, message = _message });
+
         }
     }
 }

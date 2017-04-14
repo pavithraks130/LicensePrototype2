@@ -114,6 +114,8 @@ namespace License.MetCalWeb.Controllers
                         body = body.Replace("{{Password}}", model.Password);
                         EmailService service = new EmailService();
                         service.SendEmail(model.Email, "Invite to fluke Calibration", body);
+
+                        return RedirectToAction("TeamContainer");
                     }
                 }
                 else
@@ -122,8 +124,14 @@ namespace License.MetCalWeb.Controllers
                     var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
                     ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                 }
+
             }
-            return RedirectToAction("TeamContainer");
+            var _message = string.Join(Environment.NewLine, ModelState.Values
+                                     .SelectMany(x => x.Errors)
+                                     .Select(x => x.ErrorMessage));
+            return Json(new { success = false, message = _message });
+
+
         }
 
         public ActionResult UserConfiguration(int id, string userId, string actionType)

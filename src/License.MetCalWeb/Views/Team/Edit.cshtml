@@ -3,6 +3,31 @@
     ViewBag.Title = "Edit";
 }
 
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),  
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>
+
 <h2>Create</h2>
 @using (Html.BeginForm("EditTeam", "Team", new { id = Model.Id }, FormMethod.Post))
 {
@@ -16,8 +41,8 @@
                 <div class="modal-body">
                     <div class="row">
                         @Html.AntiForgeryToken()
-                        @Html.ValidationSummary()
                         <div class="col-md-12">
+                            <label id="error" class="message-error"></label>
                             <div class="form-group">
                                 @Html.LabelFor(t => t.Name, new { @class = "col-md-4" })
                                 <div class="col-md-8">

@@ -2,6 +2,30 @@
 @{
     Layout = null;
 }
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>
 <style>
     tr {
         border: none !important;
@@ -61,7 +85,7 @@
             height: 100%;
         }
 </style>
-@using (Html.BeginForm("AddEditHardware", "Hardware", FormMethod.Post))
+@using (Html.BeginForm("AddHardware", "Hardware", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
@@ -73,6 +97,8 @@
                     <h4 class="modal-title">Add Hardware</h4>
                 </div>
                 <div class="modal-body">
+
+                    <label id="error" class="message-error"></label>
                     <div>
                         <div style="padding-top: 15px;padding-bottom: 10px">
                             <div class="col-md-4">

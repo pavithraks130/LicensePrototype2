@@ -3,6 +3,30 @@
     Layout = null;
 }
 
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>
 @using (Html.BeginForm("EditHardware", "Hardware",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -16,6 +40,8 @@
                     <h4 class="modal-title">Edit</h4>
                 </div>
                 <div class="modal-body">
+
+                    <label id="error" class="message-error"></label>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">

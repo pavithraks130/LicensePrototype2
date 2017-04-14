@@ -4,16 +4,28 @@
     Layout = null;
 }
 <script type="text/javascript">
-    function onSuccess(data) {
-        if(data.success == "false")
-        {
-            $('#error').val(data.message);
-            return;
-        }
-        else {
-            location.Href = "@Url.Action("Index", "UserToken")";
-        }
-    }
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
 </script>
 <div class="modal-dialog " style="position: static!important">
     <div class="modal-content">
@@ -21,19 +33,14 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button><h4 class="modal-title">User Token Generate</h4>
-        </div>
-
-        <div id="error">
-            @using (Html.BeginForm())
-            {
-                @Html.ValidationSummary()
-            }
-        </div>
-        @using (Ajax.BeginForm("CreateToken", "UserToken", new AjaxOptions { UpdateTargetId = "Error", InsertionMode = InsertionMode.Replace, OnSuccess = "onSuccess(data)" }))
+        </div>       
+        @using (Html.BeginForm("CreateToken", "UserToken", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
-
             <div>
+                <div class="col-md-12">
+                    <label id="error" class="message-error"></label>
+                </div>
                 <div style="padding-top: 15px;padding-bottom: 10px">
                     <div class="col-md-4">
                         <span>User Email</span>

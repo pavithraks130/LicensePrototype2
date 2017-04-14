@@ -2,6 +2,31 @@
 @{
     Layout = null;
 }
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>
+
 @using (Html.BeginForm("Invite", "TeamManagement",new { teamId = ViewBag.TeamId } ,FormMethod.Post))
 {
     <div class="modal-dialog " style="position: static!important">
@@ -13,7 +38,8 @@
             </div>
             <div class="modal-body">
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary()
+
+                <label id="error" class="message-error"></label>
                 <div style="padding-top: 15px;padding-bottom: 10px">
                     <div class="col-md-4">
                         <span>Invitee Email</span>

@@ -94,21 +94,19 @@
                                 <div>@t.Description</div>
                             </td>
                             <td class="col-md-2">
-                                @if (LicenseSessionState.Instance.IsAdmin)
-                                {
 
-                                    <div class="dropdown">
-                                        <button class="dropbtn">
-                                            <span>
-                                                @Html.Image("/Images/down-arrow.png", "Admin", "33", "33", null)
-                                            </span>
-                                        </button>
-                                        <div class="dropdown-content">                                          
-                                            <a href="javascript:void(0);" class="anchorDetail" data-id="@t.Id">Edit</a>                                            
-                                            @Html.ActionLink("Remove Asset", "AssetConfiguration", "Hardware", new { id = @t.Id, actionType = "Remove" }, null)
-                                        </div>
+
+                                <div class="dropdown">
+                                    <button class="dropbtn">
+                                        <span>
+                                            @Html.Image("/Images/down-arrow.png", "Admin", "33", "33", null)
+                                        </span>
+                                    </button>
+                                    <div class="dropdown-content">
+                                        <a href="javascript:void(0);" class="anchorDetail" data-id="@t.Id">Edit</a>
+                                        @Html.ActionLink("Remove Asset", "AssetConfiguration", "Hardware", new { id = @t.Id, actionType = "Remove" }, null)
                                     </div>
-                                }
+                                </div>
                             </td>
                         </tr>
                     }
@@ -117,5 +115,5 @@
     </div>
 </div>
 @*<div class="modal" id="addModel">
-    @{ Html.RenderAction("AddHardware"); }
-</div>*@
+        @{ Html.RenderAction("AddHardware"); }
+    </div>*@

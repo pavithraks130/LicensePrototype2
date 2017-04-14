@@ -77,7 +77,11 @@ namespace License.MetCalWeb.Controllers
                     ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
                 }
             }
-            return View();
+            var _message = string.Join(Environment.NewLine, ModelState.Values
+                                     .SelectMany(x => x.Errors)
+                                     .Select(x => x.ErrorMessage));
+            return Json(new { success = false, message = _message });
+
         }
     }
 }
