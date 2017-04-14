@@ -7,8 +7,6 @@ namespace License.Core.Migrations
     {
         public override void Up()
         {
-            DropForeignKey("dbo.TeamMember", "AdminId", "dbo.AspNetUsers");
-            DropIndex("dbo.TeamMember", new[] { "AdminId" });
             CreateTable(
                 "dbo.Team",
                 c => new
@@ -23,19 +21,15 @@ namespace License.Core.Migrations
             
             CreateIndex("dbo.TeamMember", "TeamId");
             AddForeignKey("dbo.TeamMember", "TeamId", "dbo.Team", "Id", cascadeDelete: true);
-            DropColumn("dbo.TeamMember", "AdminId");
         }
         
         public override void Down()
         {
-            AddColumn("dbo.TeamMember", "AdminId", c => c.String(maxLength: 128));
             DropForeignKey("dbo.TeamMember", "TeamId", "dbo.Team");
             DropForeignKey("dbo.Team", "AdminId", "dbo.AspNetUsers");
             DropIndex("dbo.Team", new[] { "AdminId" });
             DropIndex("dbo.TeamMember", new[] { "TeamId" });
             DropTable("dbo.Team");
-            CreateIndex("dbo.TeamMember", "AdminId");
-            AddForeignKey("dbo.TeamMember", "AdminId", "dbo.AspNetUsers", "Id");
         }
     }
 }

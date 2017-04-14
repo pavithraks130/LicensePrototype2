@@ -90,5 +90,21 @@ namespace License.MetCalWeb.Controllers
             return itemList;
         }
 
+
+        public async Task<ActionResult> AddProductToCart(int? Id)
+        {
+            CartItem item = new CartItem();
+            item.SubscriptionTypeId = Convert.ToInt32(Id);
+            item.Quantity = 2;
+            item.DateCreated = DateTime.Now;
+            item.UserId = LicenseSessionState.Instance.User.ServerUserId;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = await client.PostAsJsonAsync("api/Cart/Create", item);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", "Subscription");
+            return null;
+        }
+
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="Common\PasswordHelper.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\AccessToken.cs" />
+    <Compile Include="Model\Team.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserLicense.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />

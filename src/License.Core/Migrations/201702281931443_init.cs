@@ -36,7 +36,6 @@ namespace License.Core.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        AdminId = c.String(maxLength: 128),
                         TeamId = c.Int(nullable: false),
                         InviteeEmail = c.String(),
                         InviteeUserId = c.String(maxLength: 128),
@@ -45,9 +44,7 @@ namespace License.Core.Migrations
                         IsAdmin = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.AdminId)
                 .ForeignKey("dbo.AspNetUsers", t => t.InviteeUserId)
-                .Index(t => t.AdminId)
                 .Index(t => t.InviteeUserId);
             
             CreateTable(
@@ -103,7 +100,6 @@ namespace License.Core.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.TeamMembers", "InviteeUserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.TeamMembers", "AdminId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
@@ -112,7 +108,6 @@ namespace License.Core.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.TeamMembers", new[] { "InviteeUserId" });
-            DropIndex("dbo.TeamMembers", new[] { "AdminId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");

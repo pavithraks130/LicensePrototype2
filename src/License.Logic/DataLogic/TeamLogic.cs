@@ -63,11 +63,21 @@ namespace License.Logic.DataLogic
         public DataModel.Team CreateTeam(DataModel.Team model)
         {
             var obj = AutoMapper.Mapper.Map<Core.Model.Team>(model);
-            obj = Work.TeamRepository.Create(obj);
-            Work.TeamRepository.Save();
+            var objTemp = Work.TeamRepository.GetData(t => t.Name.Trim() == obj.Name.Trim()).FirstOrDefault();
+            if (objTemp == null)
+            {
+                obj = Work.TeamRepository.Create(obj);
+                Work.TeamRepository.Save();
+            }
+            else
+            {
+                ErrorMessage = "Team Name already Exist";
+                return null;
+            }
             if (obj.Id > 0)
             {
                 model = AutoMapper.Mapper.Map<DataModel.Team>(obj);
+
                 UserLogic userLogic = new UserLogic();
                 userLogic.UserManager = UserManager;
                 model.AdminUser = userLogic.GetUserById(model.AdminId);

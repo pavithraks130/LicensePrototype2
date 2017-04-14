@@ -34,10 +34,10 @@ namespace LicenseServer.Core.Migrations
                 string roleName = "BackendAdmin";
 
                 user.FirstName = "admin";
-                user.Email = "flukeidc@gmail.com";
+                user.Email = System.Configuration.ConfigurationSettings.AppSettings.Get("AdminUserName");
                 user.UserName = user.Email;
                 user.OrganizationId = org.Id;
-                var result = usermanager.Create(user, "Test@1234");
+                var result = usermanager.Create(user, System.Configuration.ConfigurationSettings.AppSettings.Get("AdminPassword"));
 
                 if (roleManager.FindByName(roleName) == null)
                     roleManager.Create(new AppRole() { Name = roleName });

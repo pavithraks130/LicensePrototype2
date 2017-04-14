@@ -59,6 +59,7 @@ namespace License.Logic.DataLogic
                 if (roleName == "SuperAdmin" && !String.IsNullOrEmpty(userId))
                 {
                     TeamLogic teamLogic = new TeamLogic();
+                    teamLogic.UserManager = UserManager;
                     DataModel.Team team = new DataModel.Team();
                     team.AdminId = userId;
                     team.IsDefaultTeam = true;

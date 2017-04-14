@@ -26,6 +26,12 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult LicenseApproval()
         {
+            GetTeamList();
+            return View();
+        }
+
+        public void GetTeamList()
+        {
             ViewBag.SelectedTeamId = LicenseSessionState.Instance.SelectedTeam.Id;
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 ViewBag.TeamList = LicenseSessionState.Instance.TeamList;
@@ -39,7 +45,6 @@ namespace License.MetCalWeb.Controllers
                 }
                 ViewBag.TeamList = teamList;
             }
-            return View();
         }
 
         public ActionResult LicenseApprovalByTeam(int teamId)
@@ -85,9 +90,10 @@ namespace License.MetCalWeb.Controllers
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PostAsJsonAsync("api/license/ApproveRejectLicense", licReqList).Result;
-                if (!!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     ModelState.AddModelError("", response.ReasonPhrase);
+                    GetTeamList();
                     return View();
                 }
             }

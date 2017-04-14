@@ -27,6 +27,10 @@ namespace License.MetCalDesktop.Common
 
         public AccessToken CentralizedToken { get; set; }
 
+        public List<Team> TeamList { get; set; }
+
+        public Team SelectedTeam { get; set; }
+
         public static HttpClient CreateClient(string serviceType)
         {
             string url = string.Empty;
