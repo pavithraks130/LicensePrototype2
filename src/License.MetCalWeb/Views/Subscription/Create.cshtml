@@ -15,7 +15,7 @@
             <div class="form-group">
                 <div class="col-md-3"><label>Subscription Name</label></div>
                 <div class="col-md-9"><input type="text" class="txt-sub form-control" name="subscriptionName" /></div>
-               
+
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <div class="col-md-4">Product Name</div>
-				<div class="col-md-3">Price (Per Unit in USD)</div>
+                <div class="col-md-3">Price (Per Unit in USD)</div>
                 <div class="col-md-2">Quantity</div>
                 <div class="col-md-3">Total Price(USD)</div>
             </div>
@@ -39,9 +39,9 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <div class="col-md-4 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
-					<div class="col-md-3 proCost"><label id="lblSelectedProductCost">@product.Price</label></div>
+                    <div class="col-md-3 proCost"><label class="lblSelectedProductCost">@product.Price</label></div>
                     <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
-                    <div class="col-md-3 proPrice"><label class="price_val" id="lblSelectedProductPrice">@price</label></div>
+                    <div class="col-md-3 proPrice"><label class="price_val">@price</label></div>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    
+
     <div class="row">
         <div class="col-md-12">
             <label id="lblError" style="display:none;">
@@ -98,22 +98,21 @@
         $('.enableQty').on('click', function () {
             var data = $(this).is(':checked');
             var qtyObj = $(this).parent().parent();
+            var prodPrice = $(qtyObj).find('.proCost').find('.lblSelectedProductCost').text();
             var txtQty = $(qtyObj).find('.proQty').find('.txt-qty');
             var price = $(qtyObj).find('.proPrice').find('.price_val');
-            var amount = $('.total').val();
-            var selectedProdQTY = $(price).text();
             if (data == true) {
                 $(txtQty).removeAttr('disabled');
+                var qty = parseInt($(txtQty).val());
+                var pricePerUnit = parseInt(prodPrice)
+                var amount = pricePerUnit * qty;
+                $(price).text(amount);
             }
             else {
                 $(txtQty).attr('disabled', 'disabled');
                 $(price).text('0');
-                $(txtQty).val('0');
-                if (amount == "")
-                    amount = 0;
-                amount = parseInt(amount) - parseInt(selectedProdQTY);
-                $('.total').val(amount);
             }
+            calculateTotal();
         });
 
 
@@ -121,25 +120,31 @@
             var price = 5;
             var parentObj = $(this).parent().parent();
             var qty = $(this).val();
-            console.log($(parentObj));
-			var lblObj = $(parentObj).find('.proPrice').find('.price_val');
-			var costObj = $(parentObj).find('.proCost').find('#lblSelectedProductCost').text();
-			var selectedProdQTY = qty * parseInt(costObj);
-            console.log(lblObj);
-            $(parentObj).find('.proPrice').find('#lblSelectedProductPrice').text(selectedProdQTY);
-
-            var amount = $('.total').val();
-            if (amount == "")
-                amount = 0;
-            amount = parseInt(amount) + selectedProdQTY;
-            $('.total').val(amount);
+            var lblObj = $(parentObj).find('.proPrice').find('.price_val');
+            var costObj = $(parentObj).find('.proCost').find('.lblSelectedProductCost').text();
+            var selectedProdQTY = qty * parseInt(costObj);
+            $(parentObj).find('.proPrice').find('.price_val').text(selectedProdQTY);
+            calculateTotal();
         });
 
+        function calculateTotal() {
+            var priceList = $('.price_val').toArray();
+            var i = 0;
+            priceList.forEach(function (e) {
+                var status = $(e).parent().parent().find('.proName').find('.checkbox').is(':checked');
+                if (status == true) {
+                    var total = 0;
+                    if (i > 0)
+                        total = $('.total').text()
+                    var amount = parseInt(total);
+                    amount += parseInt($(e).text());
+                    $('.total').text(amount);
+                    i++;
+                }
+            });
+        }
     });
 
 
 
 </script>
-
-
-
