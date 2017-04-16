@@ -22,9 +22,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <div class="col-md-5">Product Name</div>
-                <div class="col-md-3">Quantity</div>
-                <div class="col-md-4">Price(USD)</div>
+                <div class="col-md-4">Product Name</div>
+				<div class="col-md-3">Price (Per Unit in USD)</div>
+                <div class="col-md-2">Quantity</div>
+                <div class="col-md-3">Total Price(USD)</div>
             </div>
 
         </div>
@@ -37,9 +38,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <div class="col-md-5 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
-                    <div class="col-md-3 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
-                    <div class="col-md-4 proPrice"><label class="price_val" id="lblSelectedProductPrice">@price</label></div>
+                    <div class="col-md-4 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
+					<div class="col-md-3 proCost"><label id="lblSelectedProductCost">@product.Price</label></div>
+                    <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
+                    <div class="col-md-3 proPrice"><label class="price_val" id="lblSelectedProductPrice">@price</label></div>
                 </div>
             </div>
         </div>
@@ -55,7 +57,7 @@
         </div>
         <div class="col-md-12" align="right">
             <label class="col-md-9 float-right">SubTotal(USD) </label>
-            <label type="text" class="total col-md-3" />
+            <label type="text" class="total col-md-3">0</label>
         </div>
         <div class="col-md-12" align="right">
             <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
@@ -105,8 +107,8 @@
             }
             else {
                 $(txtQty).attr('disabled', 'disabled');
-                $(price).text('');
-                $(txtQty).val('');
+                $(price).text('0');
+                $(txtQty).val('0');
                 if (amount == "")
                     amount = 0;
                 amount = parseInt(amount) - parseInt(selectedProdQTY);
@@ -119,9 +121,10 @@
             var price = 5;
             var parentObj = $(this).parent().parent();
             var qty = $(this).val();
-            var selectedProdQTY = qty * price;
             console.log($(parentObj));
-            var lblObj = $(parentObj).find('.proPrice').find('.price_val');
+			var lblObj = $(parentObj).find('.proPrice').find('.price_val');
+			var costObj = $(parentObj).find('.proCost').find('#lblSelectedProductCost').text();
+			var selectedProdQTY = qty * parseInt(costObj);
             console.log(lblObj);
             $(parentObj).find('.proPrice').find('#lblSelectedProductPrice').text(selectedProdQTY);
 
