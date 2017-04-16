@@ -196,17 +196,8 @@ namespace License.MetCalDesktop.ViewModel
                         AppState.Instance.User = user;
                         AppState.Instance.IsUserLoggedIn = true;
 
-                        client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                        client.DefaultRequestHeaders.Add("authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-                        response = client.GetAsync("api/License/GetSubscriptionLicense/" + user.UserId + "/true").Result;
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var jsonData = response.Content.ReadAsStringAsync().Result;
-                            var details = JsonConvert.DeserializeObject<UserLicenseDetails>(jsonData);
-                            AppState.Instance.UserLicenseList = details.SubscriptionDetails;
-                            NavigateNextPage?.Invoke("Dashboard", null);
-                            IsEnableLogin = true;
-                        }
+                        NavigateNextPage?.Invoke("Dashboard", null);
+                        IsEnableLogin = true;
                     }
                 }
                 else

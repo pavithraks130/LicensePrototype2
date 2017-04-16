@@ -42,4 +42,10 @@ namespace License.MetCalDesktop.Model
         public string Description { get; set; }
         public string Version { get; set; }
     }
+    public class FetchUserSubscription
+    {
+        public int TeamId { get; set; }
+        public string UserId { get; set; }
+        public bool IsFeatureRequired { get; set; }
+    }
 }

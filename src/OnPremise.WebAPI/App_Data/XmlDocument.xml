@@ -582,7 +582,7 @@
             Post Method. Used to fetch the User Subscribed License List based on the Team Id and User Id.
             Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
             which contains UserId, TeamId and IsFeatureRequired Property.
-            This request can be used to fetch the User License details based on the Teama Id.
+            This request can be used to fetch the User License details based on the Teama Id ad User Id.
             </summary>
             <param name="model"></param>
             <returns></returns>
