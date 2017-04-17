@@ -17,7 +17,7 @@ namespace License.MetCalWeb
                 return System.Web.HttpContext.Current.Session["LicenseWebInstance"] as LicenseSessionState;
             }
         }
-        
+
         public User User { get; set; }
 
         public bool IsAuthenticated { get; set; }
@@ -37,6 +37,12 @@ namespace License.MetCalWeb
         public List<Team> TeamList { get; set; }
 
         public Team SelectedTeam { get; set; }
-       
+
+        public List<dynamic> SubscriptionMonth = new List<dynamic>() {
+            new { Value = 1, Name="12 Months" },
+            new {Value =2 ,Name="24 Months"},
+            new {Value =3 , Name="36 Months" }
+        };
+
     }
 }
