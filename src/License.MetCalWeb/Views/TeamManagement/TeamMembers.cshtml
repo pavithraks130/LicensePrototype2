@@ -150,7 +150,9 @@
                                             {
                                                 @Html.ActionLink("Remove Admin Access", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "RemoveAdmin" }, null)
                                             }
-                                            @Html.ActionLink("Remove From Team", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Remove" }, null)
+											@Html.ActionLink("Assign to Team", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "AssignTeam" }, null)
+											@Html.ActionLink("Remove From Team", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "RemoveTeam" }, null)
+											@Html.ActionLink("Remove User", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Remove" }, null)
                                         </div>
                                     </div>
                                 }
