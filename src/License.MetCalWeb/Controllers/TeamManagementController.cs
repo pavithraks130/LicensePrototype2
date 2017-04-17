@@ -159,8 +159,21 @@ namespace License.MetCalWeb.Controllers
                 case "Remove":
                     response = client.DeleteAsync("api/TeamMember/DeleteInvite/" + id).Result;
                     break;
+                case "AssignTeam":
+                    return RedirectToAction("AssignToTeam",new { userId = userId });
+                    break;
+                case "RemoveTeam":
+                    return RedirectToAction("AssignToTeam");
+                    break;
             }
             return RedirectToAction("TeamContainer");
+        }
+
+        public ActionResult AssignToTeam(string  routeValues)
+        {
+            //TODO: Replace the following line by actual Team List for the User
+            var tempModel = new List<License.MetCalWeb.Models.Team> { new Team { Name = "Team A" }, new Team { Name = "Team B" } };
+            return View("AssignTeamMember", tempModel);
         }
 
         public ActionResult Subscriptions()
