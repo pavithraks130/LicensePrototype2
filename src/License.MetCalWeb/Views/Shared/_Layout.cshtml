@@ -56,13 +56,14 @@
                 {
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                     {
-                        <li>@Html.ActionLink("Users", "Index", "User")</li>
+                        <li>@Html.ActionLink("Super Users", "Index", "User")</li>
                         <li>@Html.ActionLink("Products", "Index","Product")</li>
                         <li>@Html.ActionLink("User Token", "Index", "UserToken")</li>
                         <li class="dropdown">
-                            @Html.ActionLink("Subscription", "Index", "Subscription")
+                           
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Custom Subscription", "Create", "Subscription")</li>
+								<li>@Html.ActionLink("View Subscriptions", "Index", "Subscription")</li>
+                                <li>@Html.ActionLink("Create Subscription", "Create", "Subscription")</li>
                             </ul>
                         </li>
 
@@ -71,25 +72,28 @@
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                        <li>@Html.ActionLink("Dashboard", "Home", "Tab")</li>
-                        <li class="dropdown">
-                            @Html.ActionLink("Subscription", "Index", "Subscription")
+                        <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
+						<li class="dropdown">
+						@Html.ActionLink("Purchases", "", "")
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Custom Subscription", "Create", "Subscription")</li>
+                                <li>@Html.ActionLink("Create Custom Subscription", "Create", "Subscription")</li>
+								<li>@Html.ActionLink("Chose Subscription", "Index", "Subscription")</li>
+								<li>@Html.ActionLink("Order Status", "OrderStatus", "PurchaseOrder")</li>
                             </ul>
                         </li>
 
                         <li class="dropdown">
                            @Html.ActionLink("Teams", "TeamList", "Team")
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Team Details", "TeamContainer", "TeamManagement")</li>                               
-                            </ul>
                         </li>
+						<li class="dropdown">
+								@Html.ActionLink("Users", "TeamContainer", "TeamManagement")
+						</li>
                         <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
                     }
                     else
                     {
                         <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
+						<li>@Html.ActionLink("License Request Status", "RequestStatus", "License")</li>
                         <li>@Html.ActionLink("Team", "TeamContainer", "TeamManagement")</li>
                     }
                 }
