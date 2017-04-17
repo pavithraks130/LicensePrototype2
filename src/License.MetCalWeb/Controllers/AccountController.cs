@@ -93,7 +93,6 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> LogIn(LoginViewModel model)
         {
             User user = null;
-            string data = null;
             if (ModelState.IsValid)
             {
                 // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
@@ -252,13 +251,13 @@ namespace License.MetCalWeb.Controllers
             ViewBag.ErrorMessage = string.Empty;
             ViewBag.Message = string.Empty;
 
-            string adminId = details[0];
+            string teamId = details[0];
             string inviteId = details[1];
 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             TeamMember mem = new TeamMember();
             mem.Id = Convert.ToInt32(inviteId);
-            mem.AdminId = adminId;
+            mem.TeamId = Convert.ToInt32(teamId);
             mem.InviteeStatus = status;
             var response = client.PutAsJsonAsync("api/TeamMember/UpdateInvitation", mem).Result;
             if (response.IsSuccessStatusCode)

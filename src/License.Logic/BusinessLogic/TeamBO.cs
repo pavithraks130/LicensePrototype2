@@ -154,9 +154,12 @@ namespace License.Logic.BusinessLogic
 
         public bool AddTeamMembers(List<TeamMember> teamMemberList)
         {
+            Initialize();
+            User user = null;
             foreach (var mem in teamMemberList)
             {
-                var user = userLogic.GetUserById(mem.InviteeUserId);
+                if (user == null || user.UserId != mem.InviteeUserId)
+                    user = userLogic.GetUserById(mem.InviteeUserId);
                 mem.InviteeEmail = user.Email;
                 mem.InvitationDate = DateTime.Now.Date;
                 logic.CreateInvite(mem);

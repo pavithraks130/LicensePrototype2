@@ -32,17 +32,28 @@ namespace License.MetCalWeb
 
         public AccessToken CentralizedToken { get; set; }
 
-        public TeamMember TeamMeberDetails { get; set; }
-
         public List<Team> TeamList { get; set; }
 
+        /// <summary>
+        /// Used in the License and Team manaement modules.
+        /// </summary>
         public Team SelectedTeam { get; set; }
+
+        /// <summary>
+        /// Used to set the Team Context at global level which will provide the fetaures
+        /// which are enables.
+        /// </summary>
+        public Team AppTeamContext { get; set; }
+
+        public List<SubscriptionDetails> UserSubscriptionList { get; set; }
 
         public List<dynamic> SubscriptionMonth = new List<dynamic>() {
             new { Value = 1, Name="12 Months" },
             new {Value =2 ,Name="24 Months"},
             new {Value =3 , Name="36 Months" }
         };
+
+
 
     }
 }

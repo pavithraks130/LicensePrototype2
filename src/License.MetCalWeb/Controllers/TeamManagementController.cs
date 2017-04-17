@@ -90,7 +90,6 @@ namespace License.MetCalWeb.Controllers
             {
 
                 TeamMember invite = new TeamMember();
-                invite.AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId;
                 invite.InvitationDate = DateTime.Now.Date;
                 invite.InviteeEmail = model.Email;
                 invite.TeamId = LicenseSessionState.Instance.SelectedTeam.Id;
@@ -107,7 +106,7 @@ namespace License.MetCalWeb.Controllers
                         var teamMemResObj = JsonConvert.DeserializeObject<TeamMemberResponse>(jsonData);
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString = invite.AdminId + "," + teamMemResObj.TeamMemberId;
+                        string encryptString = invite.TeamId + "," + teamMemResObj.TeamMemberId;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
 
@@ -165,21 +164,27 @@ namespace License.MetCalWeb.Controllers
                 case "Remove":
                     response = client.DeleteAsync("api/TeamMember/DeleteInvite/" + id).Result;
                     break;
-                case "AssignTeam":
-                    return RedirectToAction("AssignToTeam",new { userId = userId });
-                    break;
-                case "RemoveTeam":
-                    return RedirectToAction("AssignToTeam");
-                    break;
+
             }
             return RedirectToAction("TeamContainer");
         }
 
-        public ActionResult AssignToTeam(string  routeValues)
+        public ActionResult AssignRevokeTeam(string userId, string actionType)
         {
-            //TODO: Replace the following line by actual Team List for the User
-            var tempModel = new List<License.MetCalWeb.Models.Team> { new Team { Name = "Team A" }, new Team { Name = "Team B" } };
-            return View("AssignTeamMember", tempModel);
+            var teamModel = LoadTeamsByUserId(userId, actionType);
+            ViewData["UserId"] = userId;
+            ViewData["actionType"] = actionType;
+            return View("AssignRevokeTeam", teamModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssignRevokeTeam(string userId, string actionType, params string[] selectedTeams)
+        {
+            var status = UpdateOrRevokeTeam(selectedTeams, userId, actionType);
+            if (status)
+                return RedirectToAction("TeamContainer");
+            return View();
         }
 
         public ActionResult Subscriptions()
@@ -200,21 +205,21 @@ namespace License.MetCalWeb.Controllers
         {
             List<Team> teamList = null;
             var mappedTeams = OnPremiseSubscriptionLogic.GetTeamList(userId);
-            if (actiontype == "Add")
-                teamList = LicenseSessionState.Instance.TeamList.Where(t => teamList.Contains(t) == false).ToList();
+            var existingTeamIdList = mappedTeams.Select(t => t.Id).ToList();
+            if (actiontype == "AssignTeam")
+                teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id)).ToList();
             else
                 teamList = mappedTeams;
             return teamList;
         }
 
-        public bool UpdateOrRevokeTeam(String[] teamIds, string userId)
+        public bool UpdateOrRevokeTeam(String[] teamIds, string userId, string actionType)
         {
             List<TeamMember> teamMembers = new List<TeamMember>();
             foreach (string teamId in teamIds)
             {
                 TeamMember mem = new TeamMember()
                 {
-                    AdminId = LicenseSessionState.Instance.User.UserId,
                     InviteeStatus = Common.InviteStatus.Accepted.ToString(),
                     TeamId = Convert.ToInt32(teamId),
                     InviteeUserId = userId
@@ -224,7 +229,12 @@ namespace License.MetCalWeb.Controllers
 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-            var response = client.PostAsJsonAsync("", teamMembers).Result;
+            string url;
+            if (actionType == "AssignTeam")
+                url = "api/TeamMember/CreateTeamMember";
+            else
+                url = "api/TeamMember/RemoveTeamMember";
+            var response = client.PostAsJsonAsync(url, teamMembers).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
