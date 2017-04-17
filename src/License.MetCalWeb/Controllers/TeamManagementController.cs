@@ -17,12 +17,18 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class TeamManagementController : Controller
     {
-
-
         // GET: Team
         public ActionResult TeamContainer()
         {
-            OnPremiseSubscriptionLogic.GetTeamList();
+            string userId = string.Empty;
+            List<Team> teamList = null;
+            if (!LicenseSessionState.Instance.IsSuperAdmin)
+                userId = LicenseSessionState.Instance.User.UserId;
+            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
+            {
+                teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+                LicenseSessionState.Instance.TeamList = teamList;
+            }
             if (LicenseSessionState.Instance.SelectedTeam == null)
             {
                 var teamObj = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.IsDefaultTeam == true);
@@ -175,6 +181,45 @@ namespace License.MetCalWeb.Controllers
             }
             var subscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
             return View(subscriptionList);
+        }
+
+        public List<Team> LoadTeamsByUserId(string userId, string actiontype)
+        {
+            List<Team> teamList = null;
+            var mappedTeams = OnPremiseSubscriptionLogic.GetTeamList(userId);
+            if (actiontype == "Add")
+                teamList = LicenseSessionState.Instance.TeamList.Where(t => teamList.Contains(t) == false).ToList();
+            else
+                teamList = mappedTeams;
+            return teamList;
+        }
+
+        public bool UpdateOrRevokeTeam(String[] teamIds, string userId)
+        {
+            List<TeamMember> teamMembers = new List<TeamMember>();
+            foreach (string teamId in teamIds)
+            {
+                TeamMember mem = new TeamMember()
+                {
+                    AdminId = LicenseSessionState.Instance.User.UserId,
+                    InviteeStatus = Common.InviteStatus.Accepted.ToString(),
+                    TeamId = Convert.ToInt32(teamId),
+                    InviteeUserId = userId
+                };
+                teamMembers.Add(mem);
+            }
+
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            var response = client.PostAsJsonAsync("", teamMembers).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var data = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + data.Message);
+                return false;
+            }
+            return true;
         }
 
     }

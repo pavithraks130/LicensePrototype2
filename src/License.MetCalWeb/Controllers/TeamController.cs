@@ -24,7 +24,11 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult TeamList()
         {
-            OnPremiseSubscriptionLogic.GetTeamList();
+            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
+            {
+                var teamList = OnPremiseSubscriptionLogic.GetTeamList();
+                LicenseSessionState.Instance.TeamList = teamList;
+            }
             return View("Teams", LicenseSessionState.Instance.TeamList);
         }
 
@@ -45,7 +49,6 @@ namespace License.MetCalWeb.Controllers
                 var response = client.PostAsJsonAsync("api/Team/Create", model).Result;
                 if (response.IsSuccessStatusCode)
                 {
-
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     var data = JsonConvert.DeserializeObject<Team>(jsonData);
                     LicenseSessionState.Instance.TeamList.Add(data);

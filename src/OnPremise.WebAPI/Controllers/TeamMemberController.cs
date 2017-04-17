@@ -21,6 +21,7 @@ namespace OnPremise.WebAPI.Controllers
             logic = new TeamMemberLogic();
             teamBoObject = new TeamBO();
         }
+
         public void Initialize()
         {
             logic.UserManager = UserManager;
@@ -29,14 +30,6 @@ namespace OnPremise.WebAPI.Controllers
             teamBoObject.RoleManager = RoleManager;
         }
 
-        //[HttpGet]
-        //[Route("All/{userId}")]
-        //public IHttpActionResult GetAll(string userId)
-        //{
-        //    Initialize();
-        //    var userInviteList = teamBoObject.GetUserInviteDetails(userId);
-        //    return Ok(userInviteList);
-        //}
 
         /// <summary>
         /// POST Method. To create the User Invite Request to the Team
@@ -53,6 +46,24 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, teamMemResponseObj);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBoObject.ErrorMessage);
+        }
+
+        [HttpPost]
+        [Route("CreateTeamMember")]
+        public HttpResponseMessage CreateTeamMembers(List<TeamMember> teamMemList)
+        {
+            Initialize();
+            var status = teamBoObject.AddTeamMembers(teamMemList);
+            return Request.CreateResponse(HttpStatusCode.Created, "Success");
+        }
+
+        [HttpPost]
+        [Route("RemoveTeamMember")]
+        public HttpResponseMessage RemoveTeamMembers(List<TeamMember> teamMemList)
+        {
+            Initialize();
+            var status = teamBoObject.RemoveTeamMembers(teamMemList);
+            return Request.CreateResponse(HttpStatusCode.OK, "Success");
         }
 
         /// <summary>
