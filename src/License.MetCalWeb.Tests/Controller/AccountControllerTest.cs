@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using License.MetCalWeb;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
 using License.MetCalWeb.Controllers;
 
@@ -15,6 +9,7 @@ namespace License.MetCalWeb.Tests.Controller
     {
 
         AccountController accountController = null;
+
         #region Initialization
         /// <summary>
         /// Test Initializations
@@ -46,14 +41,9 @@ namespace License.MetCalWeb.Tests.Controller
         {
             var result = accountController.LogIn() as ViewResult;
             Assert.AreEqual(string.Empty,result.ViewName);
+            Assert.IsNotNull(result);
         }
 
-
-        [TestMethod]
-        public void LogOut_Test()
-        {
-            var result = accountController.LogOut() as ViewResult;
-        }
         #endregion Test Methods
 
         #region Class CleanUp

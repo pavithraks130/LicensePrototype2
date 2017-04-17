@@ -15,9 +15,6 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class PurchaseOrderController : Controller
     {
-
-        
-
         public PurchaseOrderController()
         {
           
