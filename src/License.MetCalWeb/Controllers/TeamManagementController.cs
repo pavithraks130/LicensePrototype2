@@ -49,7 +49,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult TeamMembers(int id)
         {
             TeamDetails model = LoadTeamMember(Convert.ToInt32(id));
-            //TempData["IsAdmin"] = model.AcceptedUsers.FirstOrDefault(f => f.InviteeUserId == LicenseSessionState.Instance.User.UserId).IsAdmin;
             return View(model);
         }
 

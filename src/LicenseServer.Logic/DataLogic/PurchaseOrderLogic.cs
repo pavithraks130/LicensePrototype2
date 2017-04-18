@@ -115,7 +115,7 @@ namespace LicenseServer.Logic
                 var POId = listData[listData.Count - 1].PurchaseOrderNo;
                 var dt = POId.Split(new char[] { '-' });
                 int data = Convert.ToInt32(dt[2]) + 1;
-                return "PO-SUB-" + data.ToString();
+                return "PO-SUB-" + data.ToString().PadLeft(5,'0');
             }
             else
                 return "PO-SUB-00001";

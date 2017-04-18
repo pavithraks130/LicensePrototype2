@@ -113,6 +113,8 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 LicenseSessionState.Instance.TeamList.RemoveAll(t => t.Id == id);
+                if (LicenseSessionState.Instance.SelectedTeam.Id == id)
+                    LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.FirstOrDefault(s => s.IsDefaultTeam = true);
                 return RedirectToAction("TeamList");
             }
             else
