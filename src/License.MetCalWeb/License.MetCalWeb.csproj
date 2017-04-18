@@ -406,6 +406,10 @@
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
       <Name>LicenseKey</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LicenseService.Model\LicenseServer.DataModel.csproj">
+      <Project>{E0418F45-1461-4539-A760-6A6E4A66D4B8}</Project>
+      <Name>LicenseServer.DataModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
