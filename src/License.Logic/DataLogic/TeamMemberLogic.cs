@@ -16,7 +16,7 @@ namespace License.Logic.DataLogic
         public DataModelTeamMember CreateInvite(DataModelTeamMember invit)
         {
             License.Core.Model.TeamMember userinvit = AutoMapper.Mapper.Map<DataModel.TeamMember, License.Core.Model.TeamMember>(invit);
-            var obj = Work.TeamMemberRepository.GetData(f => f.TeamId == invit.TeamId && f.InviteeEmail == invit.InviteeEmail && f.TeamId == invit.TeamId).FirstOrDefault();
+            var obj = Work.TeamMemberRepository.GetData(f => f.TeamId == invit.TeamId && f.InviteeEmail == invit.InviteeEmail).FirstOrDefault();
             if (obj == null)
             {
                 obj = Work.TeamMemberRepository.Create(userinvit);
@@ -58,19 +58,36 @@ namespace License.Logic.DataLogic
             Core.Model.TeamMember ember = Work.TeamMemberRepository.Update(invite);
             Work.TeamMemberRepository.Save();
         }
-        
-        public DataModel.TeamMember GetTeamMemberByUserId(string userId)
+
+        public List<DataModel.TeamMember> GetTeamMemberDetailsByUserId(string userId)
         {
-            var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId).FirstOrDefault();
-            return AutoMapper.Mapper.Map<DataModel.TeamMember>(obj);
+            var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId).ToList();
+            return AutoMapper.Mapper.Map<List<DataModel.TeamMember>>(obj);
         }
 
         public void SetAsAdmin(int id, string userId, bool adminStatus)
         {
-            Core.Model.TeamMember teamMembers = Work.TeamMemberRepository.GetById(id);
-            teamMembers.IsAdmin = adminStatus;
-            Work.TeamMemberRepository.Update(teamMembers);
-            Work.TeamMemberRepository.Save();
+
+            Core.Model.TeamMember teamMember = Work.TeamMemberRepository.GetById(id);
+            var team = Work.TeamRepository.GetById(teamMember.TeamId);
+            var teamMemberList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId && t.Team.AdminId == team.AdminId).ToList();
+            if (adminStatus)
+            {
+                if (!RoleManager.RoleExists("Admin"))
+                    RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
+                UserManager.AddToRole(userId, "Admin");
+            }
+            else
+                UserManager.RemoveFromRole(userId, "Admin");
+            int count = 0;
+            foreach (var teamMembers in teamMemberList)
+            {
+                teamMembers.IsAdmin = adminStatus;
+                Work.TeamMemberRepository.Update(teamMembers);
+                count++;
+            }
+            if (count > 0)
+                Work.TeamMemberRepository.Save();
         }
 
         public bool DeleteTeamMember(DataModelTeamMember teamMember)

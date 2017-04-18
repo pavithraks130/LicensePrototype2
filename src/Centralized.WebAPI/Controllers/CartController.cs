@@ -138,7 +138,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateSubscriptionAddToCart")]
-        public HttpResponseMessage CreateSubscriptionAddToCart(CustomSubscriptionType subscriptionType)
+        public HttpResponseMessage CreateSubscriptionAddToCart(SubscriptionType subscriptionType)
         {
             bool status = cartBOLogic.CreateSubscriptionAddToCart(subscriptionType);
             if (status)

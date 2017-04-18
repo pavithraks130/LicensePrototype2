@@ -65,7 +65,7 @@ namespace LicenseServer.Logic
         public List<PurchaseOrder> GetAllPendingPurchaseOrder()
         {
             List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
-            var listItem = Work.PurchaseOrderRepository.GetData(f => f.IsApproved == false);
+            var listItem = Work.PurchaseOrderRepository.GetData(f => f.IsApproved == false && string.IsNullOrEmpty(f.ApprovedBy));
             foreach (var item in listItem)
             {
                 var obj = AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(item);

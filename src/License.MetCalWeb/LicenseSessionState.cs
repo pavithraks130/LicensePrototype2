@@ -26,6 +26,8 @@ namespace License.MetCalWeb
 
         public bool IsGlobalAdmin { get; set; }
 
+        public bool IsAdmin { get; set; }
+
         public bool IsTeamMember { get; set; }
 
         public AccessToken OnPremiseToken { get; set; }

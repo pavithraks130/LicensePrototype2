@@ -99,15 +99,11 @@ namespace License.MetCalWeb.Controllers
                 var response = client.PostAsJsonAsync("api/license/ApproveRejectLicense", licReqList).Result;
                 if (!response.IsSuccessStatusCode)
                 {
-                    ModelState.AddModelError("", response.ReasonPhrase);
-                    GetTeamList();
-                    return View();
-                }
-                else
-                {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
                     ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                    GetTeamList();
+                    return View();
                 }
             }
             return RedirectToAction("TeamContainer", "TeamManagement");
@@ -154,7 +150,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult RevokeLicense(string userId)
         {
             TempData["UserId"] = userId;
-            UserLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false);
+            UserLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false,false);
             ViewData["TeamMember"] = licDetails.User.Email;
             return View(licDetails.SubscriptionDetails);
         }
@@ -201,6 +197,7 @@ namespace License.MetCalWeb.Controllers
             else
                 userIdList.Add(Convert.ToString(TempData["UserId"]));
 
+
             List<LicenseData> lstLicData = new List<LicenseData>();
             foreach (var data in SelectedSubscription)
             {
@@ -222,7 +219,16 @@ namespace License.MetCalWeb.Controllers
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
                 return response.ReasonPhrase + " - " + obj.Message;
-            };
+            }
+            else
+            {
+                if (userIdList.Contains(LicenseSessionState.Instance.User.UserId))
+                {
+                    var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+                    LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
+                }
+            }
+
             return String.Empty;
         }
 

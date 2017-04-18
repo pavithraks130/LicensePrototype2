@@ -43,14 +43,14 @@ namespace License.MetCalWeb.Common
         /// <param name="userId"></param>
         /// <param name="isFeatureRequired"></param>
         /// <returns></returns>
-        public static UserLicenseDetails GetUserLicenseDetails(string userId, bool isFeatureRequired)
+        public static UserLicenseDetails GetUserLicenseDetails(string userId, bool isFeatureRequired,bool fetchBasedonTeam = true)
         {
             var licenseMapModelList = new UserLicenseDetails();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             FetchUserSubscription subs = new FetchUserSubscription();
-            if (LicenseSessionState.Instance.SelectedTeam != null)
-                subs.TeamId = LicenseSessionState.Instance.SelectedTeam.Id;
+            if (fetchBasedonTeam)
+                subs.TeamId = LicenseSessionState.Instance.AppTeamContext.Id;
             subs.UserId = userId;
             subs.IsFeatureRequired = isFeatureRequired;
             var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeam", subs).Result;
@@ -118,7 +118,6 @@ namespace License.MetCalWeb.Common
 
         public static List<Team> GetTeamList(string userId = "")
         {
-
             List<Team> teamlst = new List<Team>();
             HttpResponseMessage response;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());

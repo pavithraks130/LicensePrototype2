@@ -23,7 +23,7 @@
 <br />
 @if(Model != null)
 {
-    using (Html.BeginForm("LicenseApproval", "License", FormMethod.Post))
+    using (Html.BeginForm("LicenseApprovalByTeam", "License", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()

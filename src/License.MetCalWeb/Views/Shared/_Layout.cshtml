@@ -62,15 +62,16 @@
                         <li>@Html.ActionLink("Products", "Index","Product")</li>
                         <li>@Html.ActionLink("User Token", "Index", "UserToken")</li>
                         <li class="dropdown">
-                           
+                            @Html.ActionLink("Purchases", "", "")
                             <ul class="dropdown-menu">
 								<li>@Html.ActionLink("View Subscriptions", "Index", "Subscription")</li>
                                 <li>@Html.ActionLink("Create Subscription", "Create", "Subscription")</li>
+                                <li>@Html.ActionLink("Orders", "Index", "PurchaseOrder")</li>
                             </ul>
                         </li>
 
 
-                        <li>@Html.ActionLink("Orders", "Index", "PurchaseOrder")</li>
+                       
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
@@ -83,7 +84,6 @@
 								<li>@Html.ActionLink("Order Status", "OrderStatus", "PurchaseOrder")</li>
                             </ul>
                         </li>
-
                         <li class="dropdown">
                            @Html.ActionLink("Teams", "TeamList", "Team")
                         </li>
@@ -92,10 +92,21 @@
 						</li>
                         <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
                     }
+                    else if (LicenseSessionState.Instance.IsAdmin)
+                    {
+                        <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
+                        <li class="dropdown">
+                            @Html.ActionLink("Teams", "TeamList", "Team")
+                        </li>
+                        <li class="dropdown">
+                            @Html.ActionLink("Users", "TeamContainer", "TeamManagement")
+                        </li>
+                        <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
+                    }
                     else
                     {
                         <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
-						<li>@Html.ActionLink("License Request Status", "RequestStatus", "License")</li>
+                        <li>@Html.ActionLink("License Request Status", "RequestStatus", "License")</li>
                         <li>@Html.ActionLink("Team", "TeamContainer", "TeamManagement")</li>
                     }
                 }

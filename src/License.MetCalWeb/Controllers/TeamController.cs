@@ -26,7 +26,10 @@ namespace License.MetCalWeb.Controllers
         {
             if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
             {
-                var teamList = OnPremiseSubscriptionLogic.GetTeamList();
+                string userId = string.Empty;
+                if (LicenseSessionState.Instance.IsAdmin)
+                    userId = LicenseSessionState.Instance.User.UserId;
+                var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
                 LicenseSessionState.Instance.TeamList = teamList;
             }
             return View("Teams", LicenseSessionState.Instance.TeamList);

@@ -114,23 +114,23 @@
 </style>
 <div class="row">
     <div class="col-md-12">
-        @*<div class="col-md-8">*@
         <div class="row">
             <h2> Team Member </h2>
             <br />
             <div class="form-group">
-              
-                <label class="col-md-2">Teams :</label> @Html.DropDownList("TeamList", new SelectList(LicenseSessionState.Instance.TeamList, "Id", "Name"), "Select Team", new { @id = "ddlTeamList", @class="form-control"})
+                @if (LicenseSessionState.Instance.TeamList != null && LicenseSessionState.Instance.TeamList.Count > 0)
+                {
+                    <label class="col-md-2">Teams :</label> @Html.DropDownList("TeamList", new SelectList(LicenseSessionState.Instance.TeamList, "Id", "Name"), "Select Team", new { @id = "ddlTeamList", @class = "form-control" })
+                }
+                else
+                {
+                    <label class="col-md-12">You are not assigned to any Team</label>
+                }
             </div>
         </div>
         <br />
         <div class="dvTeamMember">
         </div>
-
-        @*</div>
-            <div class="col-md-4">*@
-
-
     </div>
 </div>
 <div class="modal" id="myModal">
