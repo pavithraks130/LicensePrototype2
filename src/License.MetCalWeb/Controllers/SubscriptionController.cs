@@ -14,7 +14,7 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     [SessionExpire]
     public class SubscriptionController : Controller
-    {
+    {       
 
         public async Task<ActionResult> Index()
         {
@@ -88,13 +88,13 @@ namespace License.MetCalWeb.Controllers
             TempData["ActivationMonth"] = LicenseSessionState.Instance.SubscriptionMonth;
             return View(subType);
         }
-
+       
         [HttpPost]
-        public async Task<ActionResult> Create(SubscriptionType type, int[] qty, params string[] selectedIndexAndProductIdList)
+        public async Task<ActionResult> Create(SubscriptionType type, string addToCart, int[] qty, params string[] selectedIndexAndProductIdList)
         {
             IList<Product> productCollection = new List<Product>();
 
-
+            HttpResponseMessage response = null;
             for (int index = 0; index < selectedIndexAndProductIdList.Length; index++)
             {
                 var splitValue = selectedIndexAndProductIdList[index];
@@ -122,9 +122,19 @@ namespace License.MetCalWeb.Controllers
 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+            if (bool.Parse(addToCart))
+            {
+                response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
+            }
+            else
+            {
+                response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+            }
+
             if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction("Index", "Subscription");
+            }
             else
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

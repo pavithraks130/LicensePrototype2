@@ -183,8 +183,12 @@ namespace License.MetCalDesktop.ViewModel
                         if (user.Roles.Contains("SuperAdmin"))
                         {
                             client.Dispose();
+                            var formData1 = new FormUrlEncodedContent(new[]{
+                            new KeyValuePair<string, string>("grant_type", "password"),
+                            new KeyValuePair<string, string>("username", Email),
+                            new KeyValuePair<string, string>("password", Password) });
                             client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                            response = client.PostAsync("/Authenticate", formData).Result;
+                            response = client.PostAsync("/Authenticate", formData1).Result;
                             if (response.IsSuccessStatusCode)
                             {
                                 jsondata = response.Content.ReadAsStringAsync().Result;
