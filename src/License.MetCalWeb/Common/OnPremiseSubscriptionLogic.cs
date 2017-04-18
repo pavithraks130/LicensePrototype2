@@ -116,27 +116,23 @@ namespace License.MetCalWeb.Common
             //return licenseMapModelList;
         }
 
-        public static void GetTeamList()
+        public static List<Team> GetTeamList(string userId = "")
         {
-            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
+
+            List<Team> teamlst = new List<Team>();
+            HttpResponseMessage response;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            if (LicenseSessionState.Instance.IsSuperAdmin && string.IsNullOrEmpty(userId))
+                response = client.GetAsync("api/Team/GetTeamsByAdminId/" + LicenseSessionState.Instance.User.UserId).Result;
+            else
+                response = client.GetAsync("api/Team/GetTeamsByUserId/" + userId).Result;
+            if (response.IsSuccessStatusCode)
             {
-                List<Team> teamlst = new List<Team>();
-                HttpResponseMessage response;
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
-                if (LicenseSessionState.Instance.IsSuperAdmin)
-                    response = client.GetAsync("api/Team/GetTeamsByAdminId/" + LicenseSessionState.Instance.User.UserId).Result;
-                else
-                    response = client.GetAsync("api/Team/GetTeamsByUserId/" + LicenseSessionState.Instance.User.UserId).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    teamlst = JsonConvert.DeserializeObject<List<Team>>(jsonData);
-                }
-
-                LicenseSessionState.Instance.TeamList = teamlst;
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                teamlst = JsonConvert.DeserializeObject<List<Team>>(jsonData);
             }
-
+            return teamlst;
 
         }
 

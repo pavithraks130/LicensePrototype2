@@ -79,7 +79,6 @@ namespace License.Logic.BusinessLogic
             var team = teamLogic.GetTeamById(id);
             if (team != null)
             {
-
                 dtls.Team = new Team();
                 dtls.Team.AdminId = team.AdminId;
                 dtls.Team.AdminUser = team.AdminUser;
@@ -96,7 +95,7 @@ namespace License.Logic.BusinessLogic
                         InviteeEmail = team.AdminUser.Email,
                         InviteeStatus = InviteStatus.Accepted.ToString(),
                         InviteeUserId = team.AdminUser.UserId,
-                        InviteeUser= team.AdminUser,
+                        InviteeUser = team.AdminUser,
                         IsAdmin = true
                     });
                 }
@@ -114,7 +113,6 @@ namespace License.Logic.BusinessLogic
             }
             return dtls;
         }
-    
 
         public TeamMemberResponse CreateTeamMembereInvite(TeamMember member)
         {
@@ -153,5 +151,32 @@ namespace License.Logic.BusinessLogic
             return null;
 
         }
+
+        public bool AddTeamMembers(List<TeamMember> teamMemberList)
+        {
+            Initialize();
+            User user = null;
+            foreach (var mem in teamMemberList)
+            {
+                if (user == null || user.UserId != mem.InviteeUserId)
+                    user = userLogic.GetUserById(mem.InviteeUserId);
+                mem.InviteeEmail = user.Email;
+                mem.InvitationDate = DateTime.Now.Date;
+                logic.CreateInvite(mem);
+            }
+            return true;
+        }
+
+
+        public bool RemoveTeamMembers(List<TeamMember> teamMemberList)
+        {
+            bool status = true;
+            foreach (var mem in teamMemberList)
+            {
+                status &= logic.DeleteTeamMember(mem);
+            }
+            return status;
+        }
+
     }
 }

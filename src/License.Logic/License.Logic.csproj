@@ -131,7 +131,7 @@
     </ProjectReference>
     <ProjectReference Include="..\License.Model\License.DataModel.csproj">
       <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
-      <Name>License.Model</Name>
+      <Name>License.DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>

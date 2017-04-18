@@ -132,7 +132,7 @@
                                 }
                             </td>
                             <td class="col-md-1">
-                                @if ((Convert.ToBoolean(TempData["IsAdmin"]) == true || LicenseSessionState.Instance.IsSuperAdmin) && @t.InviteeUserId != t.AdminId && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
+                                @if ((Convert.ToBoolean(TempData["IsAdmin"]) == true || LicenseSessionState.Instance.IsSuperAdmin) && @t.InviteeUserId != Model.Team.AdminId && @t.InviteeUserId != LicenseSessionState.Instance.User.UserId)
                                 {
 
                                     <div class="dropdown">
@@ -150,8 +150,8 @@
                                             {
                                                 @Html.ActionLink("Remove Admin Access", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "RemoveAdmin" }, null)
                                             }
-											@Html.ActionLink("Assign to Team", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "AssignTeam" }, null)
-											@Html.ActionLink("Remove From Team", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "RemoveTeam" }, null)
+											@Html.ActionLink("Assign to Team", "AssignRevokeTeam", "TeamManagement", new { userId = @t.InviteeUserId, actionType = "AssignTeam" }, null)
+											@Html.ActionLink("Remove From Team", "AssignRevokeTeam", "TeamManagement", new { userId = @t.InviteeUserId, actionType = "RemoveTeam" }, null)
 											@Html.ActionLink("Remove User", "UserConfiguration", "TeamManagement", new { id = @t.Id, userId = @t.InviteeUserId, actionType = "Remove" }, null)
                                         </div>
                                     </div>

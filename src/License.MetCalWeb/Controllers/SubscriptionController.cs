@@ -14,7 +14,7 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     [SessionExpire]
     public class SubscriptionController : Controller
-    {
+    {       
 
         public async Task<ActionResult> Index()
         {
@@ -66,6 +66,7 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            SubscriptionType subType = new SubscriptionType();
             List<Product> productList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
@@ -75,7 +76,7 @@ namespace License.MetCalWeb.Controllers
                 var jsondata = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsondata))
                     productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
-                TempData["productList"] = productList;
+                subType.Products = productList;
             }
             else
             {
@@ -83,50 +84,57 @@ namespace License.MetCalWeb.Controllers
                 var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
                 ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
-            return View(productList);
+            subType.ActivationMonth = 1;
+            TempData["ActivationMonth"] = LicenseSessionState.Instance.SubscriptionMonth;
+            return View(subType);
         }
-
+       
         [HttpPost]
-        public async Task<ActionResult> Create(string subscriptionName, int[] qty, int activeDays, params string[] selectedIndexAndProductIdList)
+        public async Task<ActionResult> Create(SubscriptionType type, string addToCart, int[] qty, params string[] selectedIndexAndProductIdList)
         {
             IList<Product> productCollection = new List<Product>();
-            double totalPrice = 0;
 
+            HttpResponseMessage response = null;
             for (int index = 0; index < selectedIndexAndProductIdList.Length; index++)
             {
-
-                var splitValue = selectedIndexAndProductIdList[index].Split(new char[] { ' ' });
-                int indexValue = int.Parse(splitValue[0].Split(new char[] { ':' })[1]);
-                int productId = int.Parse(splitValue[1].Split(new char[] { ':' })[1]);
+                var splitValue = selectedIndexAndProductIdList[index];
+                int productId = int.Parse(splitValue);
                 Product p = new Product();
-                if (TempData["productList"] != null)
-                {
-                    p = (TempData["productList"] as List<Product>).Where(x => x.Id == productId).FirstOrDefault();
-                    totalPrice += p.Price * qty[indexValue];
-                    p.Quantity = qty[indexValue];
-                }
+                p.Id = productId;
+                p.Quantity = qty[index];
                 productCollection.Add(p);
             }
             SubscriptionType subscriptionType = new SubscriptionType();
-            subscriptionType.Name = subscriptionName;
-            subscriptionType.Price = totalPrice;
+            subscriptionType.Name = type.Name;
+            subscriptionType.Price = type.Price;
             subscriptionType.Products = productCollection.AsEnumerable();
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 subscriptionType.CreatedBy = LicenseSessionState.Instance.User.ServerUserId;
 
             subscriptionType.ImagePath = "B5.png";
-            switch (activeDays)
+            int monthType = Convert.ToInt32(type.ActivationMonth);
+            switch (monthType)
             {
-                case 0: subscriptionType.ActiveDays = 365; break;
-                case 1: subscriptionType.ActiveDays = 365 * 2; break;
-                case 2: subscriptionType.ActiveDays = 365 * 3; break;
+                case 1: subscriptionType.ActiveDays = 365; break;
+                case 2: subscriptionType.ActiveDays = 365 * 2; break;
+                case 3: subscriptionType.ActiveDays = 365 * 3; break;
             }
 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+            if (bool.Parse(addToCart))
+            {
+                response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
+            }
+            else
+            {
+                response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+            }
+
             if (response.IsSuccessStatusCode)
+            {
                 return RedirectToAction("Index", "Subscription");
+            }
             else
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

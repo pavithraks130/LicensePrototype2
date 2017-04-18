@@ -53,6 +53,8 @@ namespace License.MetCalWeb.Models
         public string Name { get; set; }
         public string ImagePath { get; set; }
         public int ActiveDays { get; set; }
+
+        public int ActivationMonth { get; set; }
         public double Price { get; set; }
 
         public string CreatedBy { get; set; }

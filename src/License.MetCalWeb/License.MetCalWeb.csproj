@@ -382,7 +382,8 @@
     <Content Include="Views\Subscription\Create.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
-    <Content Include="Views\TeamManagement\AssignTeamMember.cshtml" />
+    <Content Include="Views\TeamManagement\AssignRevokeTeam.cshtml" />
+    <Content Include="Views\Dashboard\GetTeamList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -404,6 +405,10 @@
     <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
       <Name>LicenseKey</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LicenseService.Model\LicenseServer.DataModel.csproj">
+      <Project>{E0418F45-1461-4539-A760-6A6E4A66D4B8}</Project>
+      <Name>LicenseServer.DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

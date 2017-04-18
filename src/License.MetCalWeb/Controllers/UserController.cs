@@ -99,15 +99,15 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 if (LicenseSessionState.Instance.IsGlobalAdmin)
-                    status = await ChangePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
+                    status = await UpdatePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
                 else if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
-                    status = await ChangePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                    status = await UpdatePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
                     if (status)
-                        status = await ChangePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
+                        status = await UpdatePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
                 }
                 else
-                    status = await ChangePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                    status = await UpdatePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
                 if (status)
                 {
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
@@ -143,7 +143,7 @@ namespace License.MetCalWeb.Controllers
             return false;
         }
 
-        public async Task<bool> ChangePassword(ChangePassword model, ServiceType type, string userId)
+        public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
             switch (type)

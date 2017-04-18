@@ -1,5 +1,4 @@
-﻿@model IEnumerable<License.MetCalWeb.Models.Product>
-
+﻿@model License.MetCalWeb.Models.SubscriptionType
 @{
     ViewBag.Title = "CreateSubscription";
 }
@@ -8,72 +7,70 @@
 
 <h3>Create Subscription</h3>
 <br />
-@using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <div class="col-md-3"><label>Subscription Name</label></div>
-                <div class="col-md-9"><input type="text" class="txt-sub form-control" name="subscriptionName" /></div>
-
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <div class="col-md-4">Product Name</div>
-                <div class="col-md-3">Price (Per Unit in USD)</div>
-                <div class="col-md-2">Quantity</div>
-                <div class="col-md-3">Total Price(USD)</div>
-            </div>
-
-        </div>
-    </div>
-    int index = -1;
-    foreach (var product in Model)
+<div class="row">
+    @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
-        index += 1;
-        double price = product.Price * product.Quantity;
-        <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-4"><label>Subscription Name</label></div>
+                @Html.TextBoxFor(m => m.Name, new { @class = "txt-sub form-control col-md-8" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-4">Choose maintainanse period</label>
+                @Html.DropDownListFor(m => m.ActivationMonth, new SelectList(TempData["ActivationMonth"] as IEnumerable<dynamic>, "Value", "Name"), new { @class = "form-control ddlActivationPeriode col-md-8" })
+            </div>
+
+        </div>
+        <br />
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-5"><labl>Product Name</labl></div>
+                <div class="col-md-2"><labl>Price (Per Unit in USD)</labl></div>
+                <div class="col-md-2"><labl>Quantity</labl></div>
+                <div class="col-md-3"><labl>Total Price(USD)</labl></div>
+            </div>
+
+        </div>
+        int index = -1;
+        foreach (var product in Model.Products)
+        {
+            index += 1;
+            double price = product.Price * product.Quantity;
             <div class="col-md-12">
                 <div class="form-group">
-                    <div class="col-md-4 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="index:@index pId:@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
-                    <div class="col-md-3 proCost"><label class="lblSelectedProductCost">@product.Price</label></div>
+                    <div class="col-md-5 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
+                    <div class="col-md-2 proCost"><label class="lblSelectedProductCost">@product.Price</label></div>
                     <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
                     <div class="col-md-3 proPrice"><label class="price_val">@price</label></div>
                 </div>
             </div>
+        }
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-7">
+                </div>
+                @Html.HiddenFor(m => m.Price, new { @id = "hdnPrice", @class = "col-md-7" })
+                <label class="col-md-2 float-right">SubTotal(USD) </label>
+                <label class="total col-md-3">0</label>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label id="lblError" class="col-md-6"></label>
+                <div class="col-md-6">
+                    <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
+                    <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                </div>
+
+
+            </div>
         </div>
     }
-    <div class="row">
-        <div class="col-md-12">
-            <label class="col-md-4">Choose your maintainanse period</label>
-            <select name="activeDays col-md-8 form-control ">
-                <option value="0">12 month included</option>
-                <option value="1">24 month</option>
-                <option value="2">36 month</option>
-            </select>
-        </div>
-        <div class="col-md-12" align="right">
-            <label class="col-md-9 float-right">SubTotal(USD) </label>
-            <label type="text" class="total col-md-3">0</label>
-        </div>
-        <div class="col-md-12" align="right">
-            <input type="submit" name="status" value="Create Subscription" class="btn btn-default btn-custom btn-save" />
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <label id="lblError" style="display:none;">
-                No products are selected
-            </label>
-        </div>
-    </div>
-}
-
+</div>
 <script>
     $(document).ready(function () {
 
@@ -81,16 +78,34 @@
         $('.btn-save').click(function () {
             var isPostEnabled = true;
             i = 0;
-            $('input[type=checkbox]:checked').each(function () {
+            j = 0;
+            $('input[type=checkbox]:checked').each(function (e) {
+                var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
+                var txtQty = $(parentObj).find('.proQty').find('.txt-qty');
+                var qty = $(txtQty).val();
+                if (parseInt(qty) == 0)
+                    j++;
                 i++;
             });
             if (i == 0) {
                 $('#lblError').attr('style', 'display:inline;color:red;');
+                $('#lblError').text("No Products Selected");
+                isPostEnabled = isPostEnabled && false;
+            }
+            else if (j > 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                $('#lblError').text("Quantity not specified for the selected Products");
                 isPostEnabled = isPostEnabled && false;
             }
             else {
                 $('#lblError').attr('style', 'display:none;');
                 isPostEnabled = isPostEnabled && true;
+            }
+
+            if ($('.txt-sub').val() == "") {
+                isPostEnabled = isPostEnabled && false;
+                $('#lblError').text("Subscription Name Not specified");
+                $('#lblError').attr('style', 'display:inline;color:red;');
             }
             return isPostEnabled;
         });
@@ -117,7 +132,6 @@
 
 
         $('.txt-qty').on('change', function () {
-            var price = 5;
             var parentObj = $(this).parent().parent();
             var qty = $(this).val();
             var lblObj = $(parentObj).find('.proPrice').find('.price_val');
@@ -127,24 +141,32 @@
             calculateTotal();
         });
 
+        $('.ddlActivationPeriode').on('change', function () {
+            calculateTotal();
+        });
+
+
         function calculateTotal() {
             var priceList = $('.price_val').toArray();
             var i = 0;
+            var amount = 0;
             priceList.forEach(function (e) {
                 var status = $(e).parent().parent().find('.proName').find('.checkbox').is(':checked');
                 if (status == true) {
-                    var total = 0;
-                    if (i > 0)
-                        total = $('.total').text()
-                    var amount = parseInt(total);
                     amount += parseInt($(e).text());
-                    $('.total').text(amount);
                     i++;
                 }
             });
+            if (i > 0) {
+                var periode = $('.ddlActivationPeriode').val();
+                var total = parseFloat(periode) * parseFloat(amount);
+                $('.total').text(total);
+                $('#hdnPrice').val(total);
+            }
+            else {
+                $('.total').text('0');
+                $('#hdnPrice').val(0);
+            }
         }
     });
-
-
-
 </script>

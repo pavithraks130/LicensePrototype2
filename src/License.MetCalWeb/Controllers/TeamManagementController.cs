@@ -17,12 +17,18 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class TeamManagementController : Controller
     {
-
-
         // GET: Team
         public ActionResult TeamContainer()
         {
-            OnPremiseSubscriptionLogic.GetTeamList();
+            string userId = string.Empty;
+            List<Team> teamList = null;
+            if (!LicenseSessionState.Instance.IsSuperAdmin)
+                userId = LicenseSessionState.Instance.User.UserId;
+            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
+            {
+                teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+                LicenseSessionState.Instance.TeamList = teamList;
+            }
             if (LicenseSessionState.Instance.SelectedTeam == null)
             {
                 var teamObj = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.IsDefaultTeam == true);
@@ -84,7 +90,6 @@ namespace License.MetCalWeb.Controllers
             {
 
                 TeamMember invite = new TeamMember();
-                invite.AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId;
                 invite.InvitationDate = DateTime.Now.Date;
                 invite.InviteeEmail = model.Email;
                 invite.TeamId = LicenseSessionState.Instance.SelectedTeam.Id;
@@ -101,7 +106,7 @@ namespace License.MetCalWeb.Controllers
                         var teamMemResObj = JsonConvert.DeserializeObject<TeamMemberResponse>(jsonData);
                         string body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/Invitation.htm"));
                         body = body.Replace("{{AdminEmail}}", LicenseSessionState.Instance.User.Email);
-                        string encryptString = invite.AdminId + "," + teamMemResObj.TeamMemberId;
+                        string encryptString = invite.TeamId + "," + teamMemResObj.TeamMemberId;
                         string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
                         var dataencrypted = EncryptDecrypt.EncryptString(encryptString, passPhrase);
 
@@ -159,21 +164,27 @@ namespace License.MetCalWeb.Controllers
                 case "Remove":
                     response = client.DeleteAsync("api/TeamMember/DeleteInvite/" + id).Result;
                     break;
-                case "AssignTeam":
-                    return RedirectToAction("AssignToTeam",new { userId = userId });
-                    break;
-                case "RemoveTeam":
-                    return RedirectToAction("AssignToTeam");
-                    break;
+
             }
             return RedirectToAction("TeamContainer");
         }
 
-        public ActionResult AssignToTeam(string  routeValues)
+        public ActionResult AssignRevokeTeam(string userId, string actionType)
         {
-            //TODO: Replace the following line by actual Team List for the User
-            var tempModel = new List<License.MetCalWeb.Models.Team> { new Team { Name = "Team A" }, new Team { Name = "Team B" } };
-            return View("AssignTeamMember", tempModel);
+            var teamModel = LoadTeamsByUserId(userId, actionType);
+            ViewData["UserId"] = userId;
+            ViewData["actionType"] = actionType;
+            return View("AssignRevokeTeam", teamModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssignRevokeTeam(string userId, string actionType, params string[] selectedTeams)
+        {
+            var status = UpdateOrRevokeTeam(selectedTeams, userId, actionType);
+            if (status)
+                return RedirectToAction("TeamContainer");
+            return View();
         }
 
         public ActionResult Subscriptions()
@@ -188,6 +199,50 @@ namespace License.MetCalWeb.Controllers
             }
             var subscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
             return View(subscriptionList);
+        }
+
+        public List<Team> LoadTeamsByUserId(string userId, string actiontype)
+        {
+            List<Team> teamList = null;
+            var mappedTeams = OnPremiseSubscriptionLogic.GetTeamList(userId);
+            var existingTeamIdList = mappedTeams.Select(t => t.Id).ToList();
+            if (actiontype == "AssignTeam")
+                teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id)).ToList();
+            else
+                teamList = mappedTeams;
+            return teamList;
+        }
+
+        public bool UpdateOrRevokeTeam(String[] teamIds, string userId, string actionType)
+        {
+            List<TeamMember> teamMembers = new List<TeamMember>();
+            foreach (string teamId in teamIds)
+            {
+                TeamMember mem = new TeamMember()
+                {
+                    InviteeStatus = Common.InviteStatus.Accepted.ToString(),
+                    TeamId = Convert.ToInt32(teamId),
+                    InviteeUserId = userId
+                };
+                teamMembers.Add(mem);
+            }
+
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+            string url;
+            if (actionType == "AssignTeam")
+                url = "api/TeamMember/CreateTeamMember";
+            else
+                url = "api/TeamMember/RemoveTeamMember";
+            var response = client.PostAsJsonAsync(url, teamMembers).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var data = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + data.Message);
+                return false;
+            }
+            return true;
         }
 
     }

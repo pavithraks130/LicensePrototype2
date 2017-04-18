@@ -106,7 +106,7 @@ namespace License.MetCalWeb.Controllers
         {
             CartItem item = new CartItem();
             item.SubscriptionTypeId = Convert.ToInt32(Id);
-            item.Quantity = 2;
+            item.Quantity = 1;
             item.DateCreated = DateTime.Now;
             item.UserId = LicenseSessionState.Instance.User.ServerUserId;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
