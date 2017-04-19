@@ -54,7 +54,7 @@ namespace License.Logic.DataLogic
 
                 if (!UserManager.IsInRole(userId, roleName))
                     result = UserManager.AddToRole(userId, roleName);
-                else 
+                else
                     result = new IdentityResult(new string[] { });
                 if (roleName == "SuperAdmin" && !String.IsNullOrEmpty(userId))
                 {
@@ -140,6 +140,9 @@ namespace License.Logic.DataLogic
         public bool ChangePassword(string userId, string oldPassword, string newPassword)
         {
             var result = UserManager.ChangePassword(userId, oldPassword, newPassword);
+            if (!result.Succeeded)
+                foreach (string str in result.Errors)
+                    ErrorMessage += str;
             return result.Succeeded;
         }
 
@@ -149,7 +152,13 @@ namespace License.Logic.DataLogic
             if (user != null)
             {
                 user.IsActive = true;
-                UserManager.Update(user);
+                var result = UserManager.Update(user);
+                if (!result.Succeeded)
+                {
+                    foreach (string str in result.Errors)
+                        ErrorMessage += str;
+                    return null;
+                }
                 User userObj = AutoMapper.Mapper.Map<Core.Model.AppUser, User>(user);
                 if (userObj == null) return null;
                 IList<string> roles = UserManager.GetRoles(user.Id);
@@ -163,7 +172,10 @@ namespace License.Logic.DataLogic
         {
             var user = UserManager.FindById(userid);
             user.IsActive = status;
-            UserManager.Update(user);
+            var result = UserManager.Update(user);
+            if (!result.Succeeded)
+                foreach (string str in result.Errors)
+                    ErrorMessage += str;
         }
         public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId, string authType)
         {

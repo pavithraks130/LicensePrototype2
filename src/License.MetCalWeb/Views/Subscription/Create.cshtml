@@ -63,7 +63,10 @@
                 <label id="lblError" class="col-md-6"></label>
                 <div class="col-md-6">
                     <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
-                    <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                    @if (!LicenseSessionState.Instance.IsSuperAdmin)
+                    {
+                        <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                    }
                 </div>
 
 

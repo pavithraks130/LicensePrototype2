@@ -72,7 +72,7 @@
                         <td>@obj.Name</td>
                         <td>@obj.AdminUser.Name</td>
                         <td>
-                            @if (!obj.IsDefaultTeam)
+                            @if (obj.IsDefaultTeam == false && LicenseSessionState.Instance.IsSuperAdmin)
                             {
                                 <a href="javascript:void(0);" class="teamEdit" data-id="@obj.Id">Edit</a> <label>|</label>
                                 @Html.ActionLink("Delete", "DeleteTeam", "Team", new { id = obj.Id }, null)

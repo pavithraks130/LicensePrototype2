@@ -10,20 +10,22 @@ namespace License.MetCalWeb.Common
     public class WebApiServiceLogic
     {
 
-        public static HttpClient CreateClient(string serviceType)
+        public static HttpClient CreateClient(ServiceType serviceType)
         {
             string url = string.Empty;
             switch (serviceType)
             {
-                case "OnPremiseWebApi":
+                case ServiceType.OnPremiseWebApi:
                     url = System.Configuration.ConfigurationManager.AppSettings.Get("OnPremiseWebApi");
                     break;
-                case "CentralizeWebApi":
+                case ServiceType.CentralizeWebApi:
                     url = System.Configuration.ConfigurationManager.AppSettings.Get("CentralizeWebApi");
                     break;
             }
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(url);
+            HttpClient client = new HttpClient()
+            {
+                BaseAddress = new Uri(url)
+            };
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             return client;
         }

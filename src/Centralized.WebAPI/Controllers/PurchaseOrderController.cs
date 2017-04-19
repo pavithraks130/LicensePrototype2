@@ -137,7 +137,7 @@ namespace Centralized.WebAPI.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("SyncPO/{userId}")]
         public HttpResponseMessage SyncPurchaseOrder(string userId)
         {

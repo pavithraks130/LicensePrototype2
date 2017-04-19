@@ -25,6 +25,14 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
         }
 
+        public void UpdateLicenseStatus(int licId, bool status)
+        {
+            var obj = Work.LicenseDataRepository.GetById(licId);
+            obj.IsMapped = status;
+            Work.LicenseDataRepository.Update(obj);
+            Work.LicenseDataRepository.Save();
+        }
+
         private void CreateLicenseData(LicenseData data)
         {
             var obj = AutoMapper.Mapper.Map<LicenseData, License.Core.Model.LicenseData>(data);

@@ -56,7 +56,7 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.SelectedTeam != null)
                 adminId = LicenseSessionState.Instance.SelectedTeam.AdminId;
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/License/GetRequestedLicenseByTeam/" + teamId).Result;
             if (response.IsSuccessStatusCode)
@@ -94,7 +94,7 @@ namespace License.MetCalWeb.Controllers
 
             if (licReqList.Count > 0)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PostAsJsonAsync("api/license/ApproveRejectLicense", licReqList).Result;
                 if (!response.IsSuccessStatusCode)
@@ -205,13 +205,15 @@ namespace License.MetCalWeb.Controllers
                 var prodId = splitValue[0].Split(new char[] { ':' })[1];
                 var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
 
-                LicenseData licData = new LicenseData();
-                licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
-                licData.ProductId = Convert.ToInt32(prodId);
+                LicenseData licData = new LicenseData()
+                {
+                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
+                    ProductId = Convert.ToInt32(prodId)
+                };
                 lstLicData.Add(licData);
             }
             UserLicenseDataMapping mapping = new UserLicenseDataMapping() { TeamId = LicenseSessionState.Instance.SelectedTeam.Id, LicenseDataList = lstLicData, UserList = userIdList };
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/CreateUserLicence", mapping).Result;
             if (!response.IsSuccessStatusCode)  
@@ -243,13 +245,15 @@ namespace License.MetCalWeb.Controllers
                 var prodId = splitValue[0].Split(new char[] { ':' })[1];
                 var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
 
-                LicenseData licData = new LicenseData();
-                licData.UserSubscriptionId = Convert.ToInt32(subscriptionId);
-                licData.ProductId = Convert.ToInt32(prodId);
+                LicenseData licData = new LicenseData()
+                {
+                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
+                    ProductId = Convert.ToInt32(prodId)
+                };
                 lstLicData.Add(licData);
             }
             UserLicenseDataMapping mapping = new UserLicenseDataMapping() { TeamId = LicenseSessionState.Instance.SelectedTeam.Id, LicenseDataList = lstLicData, UserList = userIdList };
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RevokeUserLicence", mapping).Result;
             if (!response.IsSuccessStatusCode)  
@@ -292,7 +296,7 @@ namespace License.MetCalWeb.Controllers
                 licReqList.Add(req);
             }
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RequestLicense", licReqList).Result;
             if (!response.IsSuccessStatusCode)
@@ -309,7 +313,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult RequestStatus()
         {
             List<UserLicenseRequest> listlic = new List<UserLicenseRequest>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/License/GetLicenseRequestStatus/" + LicenseSessionState.Instance.User.UserId).Result;
             if (response.IsSuccessStatusCode)

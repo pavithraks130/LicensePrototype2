@@ -120,6 +120,10 @@
     <Compile Include="Migrations\201704110748046_ProductTableChanges.Designer.cs">
       <DependentUpon>201704110748046_ProductTableChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704191202291_ChangesToPurchaseOrder.cs" />
+    <Compile Include="Migrations\201704191202291_ChangesToPurchaseOrder.Designer.cs">
+      <DependentUpon>201704191202291_ChangesToPurchaseOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -159,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704110748046_ProductTableChanges.resx">
       <DependentUpon>201704110748046_ProductTableChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191202291_ChangesToPurchaseOrder.resx">
+      <DependentUpon>201704191202291_ChangesToPurchaseOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

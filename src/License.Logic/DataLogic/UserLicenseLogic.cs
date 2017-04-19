@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,9 @@ namespace License.Logic.DataLogic
         {
             var obj = AutoMapper.Mapper.Map<UserLicense, Core.Model.UserLicense>(lic);
             obj = Work.UserLicenseRepository.Create(obj);
+            Work.UserLicenseRepository.Save();
+            LicenseLogic licLogic = new LicenseLogic();
+            licLogic.UpdateLicenseStatus(obj.LicenseId, true);
             return obj.Id > 0;
         }
 
@@ -25,7 +29,6 @@ namespace License.Logic.DataLogic
         public bool CreataeUserLicense(List<UserLicense> licList)
         {
             LicenseLogic licLogic = new LicenseLogic();
-            int i = 0;
             foreach (var lic in licList)
             {
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == lic.UserId).ToList();
@@ -33,16 +36,15 @@ namespace License.Logic.DataLogic
                 var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
                 if (obj == null)
                 {
-                    i++;
+                    var licId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
                     UserLicense ul = new UserLicense();
                     ul.UserId = lic.UserId;
-                    ul.LicenseId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
+                    ul.LicenseId = licId;
+                    ul.TeamId = lic.TeamId;
                     CreateUserLicense(ul);
                 }
                 userLicList.Remove(obj);
             }
-            if (i > 0)
-                Work.UserLicenseRepository.Save();
             return true;
         }
 
@@ -56,8 +58,6 @@ namespace License.Logic.DataLogic
         public bool CreateMultiUserLicense(UserLicenseDataMapping model)
         {
             LicenseLogic licLogic = new LicenseLogic();
-            int i = 0;
-
             foreach (var userId in model.UserList)
             {
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == userId).ToList();
@@ -67,11 +67,11 @@ namespace License.Logic.DataLogic
                     var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
                     if (obj == null)
                     {
-                        i++;
+                        var licId = licLogic.GetUnassignedLicense(lic.UserSubscriptionId, lic.ProductId).Id;
                         UserLicense ul = new UserLicense()
                         {
                             UserId = userId,
-                            LicenseId = licLogic.GetUnassignedLicense(lic.UserSubscriptionId, lic.ProductId).Id,
+                            LicenseId = licId,
                             TeamId = model.TeamId
                         };
                         CreateUserLicense(ul);
@@ -79,8 +79,6 @@ namespace License.Logic.DataLogic
                     userLicList.Remove(obj);
                 }
 
-                if (i > 0)
-                    Work.UserLicenseRepository.Save();
             }
             return true;
         }
@@ -91,24 +89,22 @@ namespace License.Logic.DataLogic
             if (obj == null)
                 return false;
             var obj1 = Work.UserLicenseRepository.Delete(obj);
+            Work.UserLicenseRepository.Save();
+            LicenseLogic licLogic = new LicenseLogic();
+            licLogic.UpdateLicenseStatus(obj1.LicenseId, false);
             return obj1 != null;
         }
 
         public bool RevokeUserLicense(UserLicenseDataMapping model)
         {
-            int i = 0;
             LicenseLogic licLogic = new LicenseLogic();
             foreach (var userId in model.UserList)
             {
-                var licdata = Work.UserLicenseRepository.GetData(l => l.UserId == userId);
                 foreach (var lic in model.LicenseDataList)
                 {
-                    var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId && l.TeamId == model.TeamId);
+                    var obj = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId && l.TeamId == model.TeamId).FirstOrDefault();
                     RevokeUserLicense(obj);
-                    i++;
                 }
-                if (i > 0)
-                    Work.UserLicenseRepository.Save();
             }
             return true;
         }

@@ -43,9 +43,11 @@ namespace License.Logic.BusinessLogic
                 {
                     UserLicense lic = new UserLicense();
                     lic.UserId = userlicReq.Requested_UserId;
+                    lic.TeamId = userlicReq.TeamId;
                     lic.License = new LicenseData();
                     lic.License.ProductId = userlicReq.ProductId;
                     lic.License.UserSubscriptionId = userlicReq.UserSubscriptionId;
+
                     userLicenseList.Add(lic);
                 }
             }

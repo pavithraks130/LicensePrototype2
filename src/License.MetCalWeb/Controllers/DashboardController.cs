@@ -43,13 +43,13 @@ namespace License.MetCalWeb.Controllers
 
         }
 
-        public ActionResult GetTeamList()
+        public ActionResult TeamList()
         {
             return View(LicenseSessionState.Instance.TeamList);
         }
 
         [HttpPost]
-        public ActionResult GetTeamList(int teamId)
+        public ActionResult TeamList(int teamId)
         {
             LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.Where(t => t.Id == teamId).FirstOrDefault();
             var message = LoadUserSubscription();

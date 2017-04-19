@@ -117,6 +117,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Product A",
                     Description = "Product A",
                     ImagePath = "P1.png",
+                    Price=50,
                     ProductCode = "ProO1",
                     AssociatedFeatures = new List<Feature> { feature1, feature2 }
                 };
@@ -127,6 +128,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Product A1",
                     Description = "Product A1",
                     ImagePath = "P1.png",
+                    Price = 100,
                     ProductCode = "Pro11",
                     AssociatedFeatures = new List<Feature> { feature5, feature6 }
                 };
@@ -163,6 +165,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Product B",
                     Description = "Product B",
                     ImagePath = "P2.png",
+                    Price = 150,
                     ProductCode = "ProO2",
                     AssociatedFeatures = new List<Feature> { feature1, feature2, feature3 }
 
@@ -192,6 +195,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Product C",
                     Description = "Product C",
                     ImagePath = "P3.png",
+                    Price = 200,
                     ProductCode = "ProO3",
                     AssociatedFeatures = new List<Feature> { feature1, feature2, feature3, feature4 }
                 };
@@ -220,6 +224,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Product D",
                     Description = "Product D",
                     ImagePath = "P4.png",
+                    Price = 250,
                     ProductCode = "ProO4",
                     AssociatedFeatures = new List<Feature> { feature1, feature2, feature3, feature4, feature5 }
                 };

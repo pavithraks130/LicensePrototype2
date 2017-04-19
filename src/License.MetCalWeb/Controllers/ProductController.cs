@@ -26,7 +26,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Index()
         {
             List<Product> productList = new List<Product>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Product/All").Result;
             if (response.IsSuccessStatusCode)
@@ -49,6 +49,7 @@ namespace License.MetCalWeb.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Create(Product productDetails)
         {

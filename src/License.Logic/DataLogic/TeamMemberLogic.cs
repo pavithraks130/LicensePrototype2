@@ -93,12 +93,24 @@ namespace License.Logic.DataLogic
             try
             {
                 var teamObj = Work.TeamMemberRepository.GetById(id);
-                var licenseData = Work.UserLicenseRepository.GetData(u => u.UserId == teamObj.InviteeUserId);
+                var licenseData = Work.UserLicenseRepository.GetData(u => u.UserId == teamObj.InviteeUserId && u.TeamId == teamObj.TeamId);
                 if (licenseData.Count() > 0)
+                {
+                    int i = 0;
                     foreach (var dt in licenseData)
+                    {
+                        i++;
                         Work.UserLicenseRepository.Delete(dt);
+                    }
+                    if (i > 0)
+                        Work.UserLicenseRepository.Save();
 
-                int count = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamObj.InviteeUserId && t.Team.AdminId == teamObj.Team.AdminId && t.Id != teamObj.Id).Count();
+                }
+                var team = Work.TeamRepository.GetById(teamObj.TeamId);
+
+
+                var membList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamObj.InviteeUserId && team.AdminId == teamObj.Team.AdminId).ToList();
+                  int count =   membList.Where(t=> t.Id != teamObj.Id).Count();
                 if (teamObj.IsAdmin && count == 0)
                     UserManager.RemoveFromRole(teamObj.InviteeUserId, "Admin");
                 var status = Work.TeamMemberRepository.Delete(teamObj);
