@@ -272,8 +272,8 @@ namespace License.MetCalDesktop.ViewModel
             DateTime theDate = DateTime.Now;
             DateTime yearInTheFuture = theDate.AddYears(1);
             expDate = "License Expiry Date - " + yearInTheFuture;
-            totalCost = "Total cost - 5000$"; //+ SingletonLicense.Instance.SelectedSubscription.Price + "$";
-            tax = "Tax - 20$"; //+ SingletonLicense.Instance.SelectedSubscription.Price * .05 + "$";
+            totalCost = "Total cost - "+ AppState.Instance.SelectedSubscription.Price + "$";
+            tax = "Tax - "+ AppState.Instance.SelectedSubscription.Price * .05 + "$";
             LoadListOfYears();
             LoadListOfMonths();
             PurchaseCommand = new RelayCommand(OnPurchase);

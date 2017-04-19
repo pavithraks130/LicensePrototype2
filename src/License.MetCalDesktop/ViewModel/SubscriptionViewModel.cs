@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Navigation;
-//using License.MetCalDesktop.Common;
-//using CalLicenseDemo.Logic;
 using License.MetCalDesktop.Model;
 using System.Net.Http;
 using License.MetCalDesktop.Common;
@@ -71,19 +69,20 @@ namespace License.MetCalDesktop.ViewModel
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                _subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
+                var subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
+                foreach (var x in subscriptionList)
+                {
+                    x.ImagePath = @"..\ProductImages\CartItem\" + x.ImagePath;
+                    _subscriptionList.Add(x);
+                }
             }
             else
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                // ModelState.AddModelError("", response.ReasonPhrase + " - " + failureResult.Message);
             }
             client.Dispose();
 
-            //TO-Do
-            //  LicenseLogic logic = new LicenseLogic();
-            // SubscriptionList = logic.GetSubscriptionDetails();
         }
 
         /// <summary>
@@ -93,10 +92,8 @@ namespace License.MetCalDesktop.ViewModel
         private void RedirectToPayment(object param)
         {
             int id = Convert.ToInt32(param);
-           //var typeObj = SubscriptionList.FirstOrDefault(l => l.Id == id);
-            //LicenseLogic logic = new LicenseLogic();
-            // SingletonLicense.Instance.SelectedSubscription = typeObj;
-            //logic.ActivateSubscription();
+            var typeObj = SubscriptionList.FirstOrDefault(l => l.Id == id);
+            AppState.Instance.SelectedSubscription = typeObj;
             if (NavigateNextPage != null)
                 NavigateNextPage(null, null);
         }

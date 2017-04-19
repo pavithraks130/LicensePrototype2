@@ -31,6 +31,7 @@ namespace License.MetCalDesktop.Common
         public List<Team> TeamList { get; set; }
 
         public Team SelectedTeam { get; set; }
+        public SubscriptionType SelectedSubscription { get; set; }
 
         public static HttpClient CreateClient(string serviceType)
         {

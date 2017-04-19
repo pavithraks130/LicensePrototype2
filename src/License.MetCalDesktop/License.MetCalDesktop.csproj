@@ -101,7 +101,6 @@
     <Compile Include="Common\DataValidations.cs" />
     <Compile Include="Common\Enum.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
-    <Compile Include="Common\StringToListConverter.cs" />
     <Compile Include="Model\CardDetails.cs" />
     <Compile Include="Model\LicenseType.cs" />
     <Compile Include="Model\ResponseFailure.cs" />
@@ -115,6 +114,7 @@
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\RedirectToAmountPaymentPageViewModel.cs" />
+    <Compile Include="ViewModel\SubscriptionDetailsViewModel.cs" />
     <Compile Include="ViewModel\SubscriptionViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
     <Compile Include="Views\CreditAndDebitCardDetails.xaml.cs">
@@ -128,6 +128,9 @@
     </Compile>
     <Compile Include="Views\RedirectToAmountPaymentPage.xaml.cs">
       <DependentUpon>RedirectToAmountPaymentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriptionDetails.xaml.cs">
+      <DependentUpon>SubscriptionDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Subscriptions.xaml.cs">
       <DependentUpon>Subscriptions.xaml</DependentUpon>
@@ -164,6 +167,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RedirectToAmountPaymentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriptionDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

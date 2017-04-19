@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:converter="clr-namespace:License.MetCalDesktop.Common"
       xmlns:local="clr-namespace:License.MetCalDesktop.Views"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
@@ -13,7 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,../Styles/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converter:StringToListConverter x:Key="StringToListConverter" ></converter:StringToListConverter>
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
@@ -40,20 +38,16 @@
                                 <RowDefinition Height="0.2*" />
                                 <RowDefinition Height="0.2*" />
                             </Grid.RowDefinitions>
-                            <Image Source="{Binding ImageUrl}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                            <Image Source="{Binding ImagePath}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="150"/>
                             <TextBlock Text="subscription Type" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"
                                    Grid.Column="0" Margin="10" />
-                            <TextBlock Text="{Binding TypeName}" Style="{StaticResource DefaultTextBlockStyle}"
+                            <TextBlock Text="{Binding Name}" Style="{StaticResource DefaultTextBlockStyle}"
                                    Grid.Row="1" Grid.Column="1" Margin="10" />
-                            <TextBlock Text="Features" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"
-                                   Grid.Column="0" Margin="10"/>
-                            <TextBlock Text="{Binding FeatureList,Converter= {StaticResource StringToListConverter}}" Style="{StaticResource DefaultTextBlockStyle}"
-                                   Grid.Row="2" Grid.Column="1" Margin="10"/>
                             <TextBlock Text="Price" Grid.Row="3" Style="{StaticResource DefaultTextBlockStyle}"
                                    Grid.Column="0" Margin="10" />
                             <TextBlock Text="{Binding Price}" Style="{StaticResource DefaultTextBlockStyle}" Grid.Row="3"
                                    Grid.Column="1" Margin="10" />
-                            <Button Content="BuyNow" Style="{StaticResource DefaultButtonStyle}" Command="{Binding DataContext.BuyCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ItemsControl}}}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" CommandParameter="{Binding TypeId}"></Button>
+                            <Button Content="BuyNow" Style="{StaticResource DefaultButtonStyle}" Command="{Binding DataContext.BuyCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ItemsControl}}}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" CommandParameter="{Binding Id}"></Button>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
