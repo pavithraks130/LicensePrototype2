@@ -35,6 +35,7 @@ namespace License.MetCalDesktop.Model
             Features = new List<Feature>();
         }
     }
+
     public class Feature
     {
         public int Id { get; set; }
@@ -47,5 +48,29 @@ namespace License.MetCalDesktop.Model
         public int TeamId { get; set; }
         public string UserId { get; set; }
         public bool IsFeatureRequired { get; set; }
+    }
+    public class SubscriptionType
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string ImagePath { get; set; }
+        public int ActiveDays { get; set; }
+
+        public int ActivationMonth { get; set; }
+        public double Price { get; set; }
+
+        public string CreatedBy { get; set; }
+        public IEnumerable<Product> Products { get; set; }
+    }
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ProductCode { get; set; }
+        public int Quantity { get; set; }
+        public double Price { get; set; }
+        public ICollection<Feature> AssociatedFeatures { get; set; }
+
     }
 }
