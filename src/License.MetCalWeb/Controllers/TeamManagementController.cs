@@ -29,6 +29,11 @@ namespace License.MetCalWeb.Controllers
                 teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
                 LicenseSessionState.Instance.TeamList = teamList;
             }
+            if(LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
+            {
+                ViewBag.SelectedTeamId = "";
+                return View();
+            }
             if (LicenseSessionState.Instance.SelectedTeam == null)
             {
                 var teamObj = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.IsDefaultTeam == true);
@@ -44,7 +49,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult TeamMembers(int id)
         {
             TeamDetails model = LoadTeamMember(Convert.ToInt32(id));
-            TempData["IsAdmin"] = model.AcceptedUsers.FirstOrDefault(f => f.InviteeUserId == LicenseSessionState.Instance.User.UserId).IsAdmin;
             return View(model);
         }
 
@@ -117,8 +121,8 @@ namespace License.MetCalWeb.Controllers
 
                         body = body.Replace("{{JoinUrl}}", joinUrl);
                         body = body.Replace("{{DeclineUrl}}", declineUrl);
-                        body = body.Replace("{{UserName}}", model.Email);
-                        body = body.Replace("{{Password}}", model.Password);
+                        body = body.Replace("{{UserName}}", teamMemResObj.UserName);
+                        body = body.Replace("{{Password}}", teamMemResObj.Password);
                         EmailService service = new EmailService();
                         service.SendEmail(model.Email, "Invite to fluke Calibration", body);
 
@@ -174,6 +178,7 @@ namespace License.MetCalWeb.Controllers
             var teamModel = LoadTeamsByUserId(userId, actionType);
             ViewData["UserId"] = userId;
             ViewData["actionType"] = actionType;
+            ViewData["UserEmail"] = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail;
             return View("AssignRevokeTeam", teamModel);
         }
 
@@ -207,9 +212,9 @@ namespace License.MetCalWeb.Controllers
             var mappedTeams = OnPremiseSubscriptionLogic.GetTeamList(userId);
             var existingTeamIdList = mappedTeams.Select(t => t.Id).ToList();
             if (actiontype == "AssignTeam")
-                teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id)).ToList();
-            else
-                teamList = mappedTeams;
+                teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id) && t.AdminId == LicenseSessionState.Instance.SelectedTeam.AdminId).ToList();
+            else 
+                teamList = mappedTeams.Where(t=>t.IsDefaultTeam == false).ToList();
             return teamList;
         }
 
@@ -222,7 +227,9 @@ namespace License.MetCalWeb.Controllers
                 {
                     InviteeStatus = Common.InviteStatus.Accepted.ToString(),
                     TeamId = Convert.ToInt32(teamId),
-                    InviteeUserId = userId
+                    InviteeUserId = userId,
+                    InviteeEmail = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail                    
+
                 };
                 teamMembers.Add(mem);
             }

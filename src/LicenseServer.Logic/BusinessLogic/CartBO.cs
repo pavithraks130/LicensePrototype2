@@ -129,11 +129,10 @@ namespace LicenseServer.Logic.BusinessLogic
             return userSsubList;
         }
 
-        public bool CreateSubscriptionAddToCart(CustomSubscriptionType type)
+        public bool CreateSubscriptionAddToCart(SubscriptionType type)
         {
             SubscriptionTypeLogic typeLOgic = new SubscriptionTypeLogic();
-            type.SubscriptionType.CreatedBy = type.UserId;
-            SubscriptionType subType = typeLOgic.CreateSubscriptionWithProduct(type.SubscriptionType);
+            SubscriptionType subType = typeLOgic.CreateSubscriptionWithProduct(type);
             if (subType == null && String.IsNullOrEmpty(typeLOgic.ErrorMessage))
                 ErrorMessage = typeLOgic.ErrorMessage;
             else
@@ -143,7 +142,7 @@ namespace LicenseServer.Logic.BusinessLogic
                     SubscriptionTypeId = subType.Id,
                     DateCreated = DateTime.Now.Date,
                     Quantity = 1,
-                    UserId = type.UserId,
+                    UserId = type.CreatedBy,
                     Price = subType.Price
                 };
                 CartLogic logic = new CartLogic();

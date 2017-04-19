@@ -13,6 +13,7 @@ namespace License.Logic.BusinessLogic
     {
         UserLogic userLogic = null;
         TeamMemberLogic logic = null;
+        TeamLogic teamLogic = null;
 
         public string ErrorMessage { get; set; }
 
@@ -23,6 +24,7 @@ namespace License.Logic.BusinessLogic
         {
             userLogic = new UserLogic();
             logic = new TeamMemberLogic();
+            teamLogic = new TeamLogic();
         }
 
         public void Initialize()
@@ -174,6 +176,11 @@ namespace License.Logic.BusinessLogic
             foreach (var mem in teamMemberList)
             {
                 status &= logic.DeleteTeamMember(mem);
+                var adminId = teamLogic.GetTeamById(mem.TeamId).AdminId;
+                var team = teamLogic.GetTeamsByAdmin(adminId).FirstOrDefault(t => t.IsDefaultTeam);
+                var memberlist = logic.GetTeamMemberDetailsByUserId(mem.InviteeUserId);
+                if (memberlist.Count == 0)
+                    logic.CreateInvite(new TeamMember() { InvitationDate = DateTime.Now.Date, TeamId = team.Id, InviteeEmail = mem.InviteeEmail, InviteeUserId = mem.InviteeUserId, InviteeStatus = License.Logic.Common.InviteStatus.Accepted.ToString() });
             }
             return status;
         }

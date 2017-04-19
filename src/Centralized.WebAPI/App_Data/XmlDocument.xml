@@ -525,7 +525,7 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateSubscriptionAddToCart(LicenseServer.DataModel.CustomSubscriptionType)">
+        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateSubscriptionAddToCart(LicenseServer.DataModel.SubscriptionType)">
             <summary>
             POST Method. Create the Custom Subscription 
             </summary>

@@ -124,13 +124,19 @@ namespace License.MetCalWeb.Controllers
                 LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
                 LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
 
-                if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsSuperAdmin)
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    LicenseSessionState.Instance.IsAdmin = true;
+                else
+                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+
+                if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
                     LicenseSessionState.Instance.IsTeamMember = true;
 
                 SignInAsync(user, true);
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                     SynchPurchaseOrder();
                 LicenseSessionState.Instance.IsAuthenticated = true;
+
                 if (String.IsNullOrEmpty(user.FirstName))
                     return RedirectToAction("Profile", "User");
                 if (LicenseSessionState.Instance.IsGlobalAdmin)
@@ -322,10 +328,10 @@ namespace License.MetCalWeb.Controllers
             userModel.IsActive = false;
             switch (type)
             {
-                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorize", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
+                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
+                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
             }
-            client.PostAsJsonAsync("api/user/UpdateActiveStatus", userModel);
+            client.PutAsJsonAsync("api/user/UpdateActiveStatus", userModel);
         }
 
         public async Task<User> GetUserData(ServiceType webApiType)
