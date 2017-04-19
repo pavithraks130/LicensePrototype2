@@ -27,6 +27,7 @@ namespace License.MetCalDesktop.Views
             var viewModel = new DashboardViewModel();
             viewModel.NavigateNextPage += NavigateNextPage;
             this.DataContext = viewModel;
+            wbSample.Navigate("http://localhost:62061/Subscription");
         }
 
         public void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)

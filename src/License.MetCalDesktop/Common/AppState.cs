@@ -20,6 +20,7 @@ namespace License.MetCalDesktop.Common
         public List<SubscriptionDetails> UserLicenseList { get; set; }
 
         public bool IsUserLoggedIn { get; set; }
+        public bool IsSuperAdmin { get; set; }
 
         public User User { get; set; }
 
