@@ -40,7 +40,7 @@
         </Grid>
         <Grid Grid.Row="1" Grid.RowSpan="2" Background="Black" >
 
-            <TabControl>
+            <TabControl SelectionChanged="TabControl_SelectionChanged">
                 <TabItem Header="Home">
                     <ListBox Name="lstFeatureList" ItemsSource="{Binding FeataureList}">
                         <ListBox.ItemTemplate>
@@ -57,9 +57,8 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </TabItem>
-                <TabItem Header="Subscription" IsEnabled="{Binding IsSuperAdmin}">
+                <TabItem Header="Subscription" IsEnabled="{Binding IsSuperAdmin}" >
                     <!--<local:Subscriptions/>-->
-                    <!--<WebBrowser Name="wbSample" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.ColumnSpan="2"/>-->
                 </TabItem>
             </TabControl>
         </Grid>

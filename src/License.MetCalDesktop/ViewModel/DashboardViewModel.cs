@@ -8,6 +8,7 @@ using License.MetCalDesktop.Model;
 using System.Windows.Input;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace License.MetCalDesktop.ViewModel
 {

@@ -39,5 +39,9 @@ namespace License.MetCalDesktop.Views
                     break;
             }
         }
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Subscriptions());
+        }
     }
 }

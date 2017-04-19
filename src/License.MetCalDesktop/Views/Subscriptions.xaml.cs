@@ -26,7 +26,7 @@ namespace License.MetCalDesktop.Views
             InitializeComponent();
             //Navigation Service is an inbuilt prperty of page
             var viewmodel = new SubscriptionViewModel();
-           // viewmodel.NavigateNextPage += (string screenName, Dictionary<string, string> additionalInfo) => { this.NavigationService.Navigate(new CreditAndDebitCardDetails()); };
+            viewmodel.NavigateNextPage += (string screenName, Dictionary<string, string> additionalInfo) => { this.NavigationService.Navigate(new CreditAndDebitCardDetails()); };
             DataContext = viewmodel;
         }
     }

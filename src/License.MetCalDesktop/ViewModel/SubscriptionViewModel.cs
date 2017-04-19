@@ -6,6 +6,9 @@ using System.Windows.Navigation;
 //using License.MetCalDesktop.Common;
 //using CalLicenseDemo.Logic;
 using License.MetCalDesktop.Model;
+using System.Net.Http;
+using License.MetCalDesktop.Common;
+using Newtonsoft.Json;
 
 namespace License.MetCalDesktop.ViewModel
 {
@@ -14,6 +17,7 @@ namespace License.MetCalDesktop.ViewModel
     /// </summary>
     class SubscriptionViewModel : BaseEntity
     {
+        private List<SubscriptionType> _subscriptionList = new List<SubscriptionType>();
         /// <summary>
         ///performing the license purchase  action
         /// </summary>
@@ -21,7 +25,17 @@ namespace License.MetCalDesktop.ViewModel
         /// <summary>
         /// SubscriptionList collection
         /// </summary>
-        public List<LicenseType> SubscriptionList { get; set; }
+        public List<SubscriptionType> SubscriptionList
+        {
+            get
+            {
+                return _subscriptionList;
+            }
+            set
+            {
+                _subscriptionList = value;
+            }
+        }
 
         /// <summary>
         /// navigation service action
@@ -42,9 +56,34 @@ namespace License.MetCalDesktop.ViewModel
         /// </summary>
         private void LoadSubscriptionList()
         {
+
+            HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+            HttpResponseMessage response;
+            if (AppState.Instance.IsSuperAdmin)
+            {
+                response = client.GetAsync("api/subscription/All").Result;
+            }
+            else
+            {
+                response = client.GetAsync("api/subscription/All/" + AppState.Instance.User.ServerUserId).Result;
+            }
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                _subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                // ModelState.AddModelError("", response.ReasonPhrase + " - " + failureResult.Message);
+            }
+            client.Dispose();
+
             //TO-Do
-          //  LicenseLogic logic = new LicenseLogic();
-           // SubscriptionList = logic.GetSubscriptionDetails();
+            //  LicenseLogic logic = new LicenseLogic();
+            // SubscriptionList = logic.GetSubscriptionDetails();
         }
 
         /// <summary>
@@ -53,13 +92,13 @@ namespace License.MetCalDesktop.ViewModel
         /// <param name="param">param</param>
         private void RedirectToPayment(object param)
         {
-            //int id = Convert.ToInt32(param);
-            //LicenseType typeObj = SubscriptionList.FirstOrDefault(l => l.TypeId == id);
-            ////LicenseLogic logic = new LicenseLogic();
-            //SingletonLicense.Instance.SelectedSubscription = typeObj;
-            ////logic.ActivateSubscription();
-            //if (NavigateNextPage != null)
-            //    NavigateNextPage(null, null);
+            int id = Convert.ToInt32(param);
+           //var typeObj = SubscriptionList.FirstOrDefault(l => l.Id == id);
+            //LicenseLogic logic = new LicenseLogic();
+            // SingletonLicense.Instance.SelectedSubscription = typeObj;
+            //logic.ActivateSubscription();
+            if (NavigateNextPage != null)
+                NavigateNextPage(null, null);
         }
     }
 }

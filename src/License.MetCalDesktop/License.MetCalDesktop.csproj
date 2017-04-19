@@ -99,24 +99,35 @@
     <Compile Include="Common\common.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\DataValidations.cs" />
+    <Compile Include="Common\Enum.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
     <Compile Include="Common\StringToListConverter.cs" />
+    <Compile Include="Model\CardDetails.cs" />
     <Compile Include="Model\LicenseType.cs" />
+    <Compile Include="Model\ResponseFailure.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\AccessToken.cs" />
     <Compile Include="Model\Team.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserLicense.cs" />
     <Compile Include="ViewModel\BaseEntity.cs" />
+    <Compile Include="ViewModel\CreditAndDebitCardDetailsViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\RedirectToAmountPaymentPageViewModel.cs" />
     <Compile Include="ViewModel\SubscriptionViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
+    <Compile Include="Views\CreditAndDebitCardDetails.xaml.cs">
+      <DependentUpon>CreditAndDebitCardDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dashboard.xaml.cs">
       <DependentUpon>Dashboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginUser.xaml.cs">
       <DependentUpon>LoginUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RedirectToAmountPaymentPage.xaml.cs">
+      <DependentUpon>RedirectToAmountPaymentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Subscriptions.xaml.cs">
       <DependentUpon>Subscriptions.xaml</DependentUpon>
@@ -140,11 +151,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\CreditAndDebitCardDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dashboard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoginUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RedirectToAmountPaymentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -185,7 +204,30 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="ProductImages\B1.PNG" />
+    <Resource Include="ProductImages\B2.PNG" />
+    <Resource Include="ProductImages\B3.PNG" />
+    <Resource Include="ProductImages\B4.PNG" />
+    <Resource Include="ProductImages\B5.PNG" />
+    <Resource Include="ProductImages\CartItem\B5.PNG" />
+    <Resource Include="ProductImages\CartItem\P1.PNG" />
+    <Resource Include="ProductImages\CartItem\P2.PNG" />
+    <Resource Include="ProductImages\CartItem\p3.PNG" />
+    <Resource Include="ProductImages\CartItem\P4.PNG" />
+    <Resource Include="ProductImages\CartItem\p5.PNG" />
+    <Resource Include="ProductImages\CartItem\p6.PNG" />
+    <Resource Include="ProductImages\CartItem\p7.PNG" />
+    <Resource Include="ProductImages\CartItem\p8.PNG" />
+    <Resource Include="ProductImages\P1.PNG" />
+    <Resource Include="ProductImages\P2.PNG" />
+    <Resource Include="ProductImages\p3.PNG" />
+    <Resource Include="ProductImages\P4.PNG" />
+    <Resource Include="ProductImages\p5.PNG" />
+    <Resource Include="ProductImages\p6.PNG" />
+    <Resource Include="ProductImages\p7.PNG" />
+    <Resource Include="ProductImages\p8.PNG" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fluke.png" />
     <Resource Include="Resources\FlukeCalibration.ico" />

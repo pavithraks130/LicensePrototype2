@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:License.MetCalDesktop.Views"
       xmlns:converter="clr-namespace:License.MetCalDesktop.Common"
+      xmlns:local="clr-namespace:License.MetCalDesktop.Views"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="Subscriptions">
@@ -13,7 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,../Styles/DefaultStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converter:StringToListConverter  x:Key="StringToListConverter" />
+            <converter:StringToListConverter x:Key="StringToListConverter" ></converter:StringToListConverter>
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
