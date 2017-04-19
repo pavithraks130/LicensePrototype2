@@ -213,8 +213,8 @@ namespace License.MetCalWeb.Controllers
             var existingTeamIdList = mappedTeams.Select(t => t.Id).ToList();
             if (actiontype == "AssignTeam")
                 teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id) && t.AdminId == LicenseSessionState.Instance.SelectedTeam.AdminId).ToList();
-            else
-                teamList = mappedTeams;
+            else 
+                teamList = mappedTeams.Where(t=>t.IsDefaultTeam == false).ToList();
             return teamList;
         }
 
