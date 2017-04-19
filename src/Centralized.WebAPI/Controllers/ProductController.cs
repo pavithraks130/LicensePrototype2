@@ -55,7 +55,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("update/{id}")]
-        public HttpResponseMessage CreateProduct(int id, Product model)
+        public HttpResponseMessage UpdateProduct(int id, Product model)
         {
             var status = logic.UpdateProduct(id, model);
             if (status)
@@ -72,7 +72,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
-        public HttpResponseMessage CreateProduct(int id)
+        public HttpResponseMessage DeleteProduct(int id)
         {
             var status = logic.DeleteProduct(id);
             if (status)

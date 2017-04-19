@@ -8,7 +8,7 @@ namespace LicenseServer.Logic
 {
     public class OrganizationLogic : BaseLogic
     {
-        public List<Organization> GetTeams()
+        public List<Organization> GetOrganizations()
         {
             List<Organization> teams = new List<Organization>();
             var teamlist = Work.OrganizationRepository.GetData();
@@ -19,13 +19,13 @@ namespace LicenseServer.Logic
             return teams;
         }
 
-        public Organization GetTeamById(int id)
+        public Organization GetOrganizationById(int id)
         {
             var obj = Work.OrganizationRepository.GetById( id);
             return AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(obj);
         }
 
-        public Organization GetTeamByName(object name)
+        public Organization GetOrganizationByName(object name)
         {
             var obj =
                 Work.OrganizationRepository.GetData().FirstOrDefault(t => t.Name.ToLower() == name.ToString().ToLower());
@@ -34,7 +34,7 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(obj);
         }
 
-        public Organization CreateTeam(Organization team)
+        public Organization CreateOrganization(Organization team)
         {
             var _team = AutoMapper.Mapper.Map<Organization, LicenseServer.Core.Model.Organization>(team);
             _team = Work.OrganizationRepository.Create(_team);
@@ -43,7 +43,7 @@ namespace LicenseServer.Logic
             return team;
         }
 
-        public Organization UpdateTeam(Organization team)
+        public Organization UpdateOrganization(Organization team)
         {
             var _team = AutoMapper.Mapper.Map<Organization, LicenseServer.Core.Model.Organization>(team);
             _team = Work.OrganizationRepository.Update(_team);
@@ -52,7 +52,7 @@ namespace LicenseServer.Logic
             return team;
         }
 
-        public bool DeleteTeam(object id)
+        public bool DeleteOrganization(object id)
         {
             var status = Work.OrganizationRepository.Delete(id);
             Work.OrganizationRepository.Save();
