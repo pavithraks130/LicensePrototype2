@@ -100,19 +100,26 @@
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\DataValidations.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
+    <Compile Include="Common\StringToListConverter.cs" />
+    <Compile Include="Model\LicenseType.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\AccessToken.cs" />
     <Compile Include="Model\Team.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserLicense.cs" />
+    <Compile Include="ViewModel\BaseEntity.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\SubscriptionViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
     <Compile Include="Views\Dashboard.xaml.cs">
       <DependentUpon>Dashboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginUser.xaml.cs">
       <DependentUpon>LoginUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Subscriptions.xaml.cs">
+      <DependentUpon>Subscriptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Teams.xaml.cs">
       <DependentUpon>Teams.xaml</DependentUpon>
@@ -138,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoginUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Subscriptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,66 @@
+﻿<Page x:Class="License.MetCalDesktop.Views.Subscriptions"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:License.MetCalDesktop.Views"
+      xmlns:converter="clr-namespace:License.MetCalDesktop.Common"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="Subscriptions">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,../Styles/DefaultStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converter:StringToListConverter  x:Key="StringToListConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid>
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" Text="Subscription Type" Style="{StaticResource TextBlockHeaderTextStyle}" />
+            <ListView FlowDirection="LeftToRight" x:Name="lvFeatureList" Focusable="False"  ItemsSource="{Binding SubscriptionList}" Background="Black" Margin="20" Width="Auto">
+
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" FlowDirection="LeftToRight"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.3*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.3*" />
+                                <RowDefinition Height="0.3*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.2*" />
+                                <RowDefinition Height="0.2*" />
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding ImageUrl}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                            <TextBlock Text="subscription Type" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"
+                                   Grid.Column="0" Margin="10" />
+                            <TextBlock Text="{Binding TypeName}" Style="{StaticResource DefaultTextBlockStyle}"
+                                   Grid.Row="1" Grid.Column="1" Margin="10" />
+                            <TextBlock Text="Features" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"
+                                   Grid.Column="0" Margin="10"/>
+                            <TextBlock Text="{Binding FeatureList,Converter= {StaticResource StringToListConverter}}" Style="{StaticResource DefaultTextBlockStyle}"
+                                   Grid.Row="2" Grid.Column="1" Margin="10"/>
+                            <TextBlock Text="Price" Grid.Row="3" Style="{StaticResource DefaultTextBlockStyle}"
+                                   Grid.Column="0" Margin="10" />
+                            <TextBlock Text="{Binding Price}" Style="{StaticResource DefaultTextBlockStyle}" Grid.Row="3"
+                                   Grid.Column="1" Margin="10" />
+                            <Button Content="BuyNow" Style="{StaticResource DefaultButtonStyle}" Command="{Binding DataContext.BuyCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ItemsControl}}}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" CommandParameter="{Binding TypeId}"></Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
+        <!--<Popup x:Name="paymentOption" Placement="Center">
+            <local:PaymentOption />
+        </Popup>-->
+    </Grid>
+</Page>

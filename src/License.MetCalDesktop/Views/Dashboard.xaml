@@ -43,39 +43,25 @@
             <TabControl>
                 <TabItem Header="Home">
                     <ListBox Name="lstFeatureList" ItemsSource="{Binding FeataureList}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Width="150" Height="50" Background="Black">
-                        <Border Background="Transparent" BorderBrush="#FFC20F" CornerRadius="3" BorderThickness="2" VerticalAlignment="Stretch">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
-                                <TextBlock Text="{Binding Description}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="150" Height="50" Background="Black">
+                                    <Border Background="Transparent" BorderBrush="#FFC20F" CornerRadius="3" BorderThickness="2" VerticalAlignment="Stretch">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding Name}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
+                                            <TextBlock Text="{Binding Description}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </TabItem>
                 <TabItem Header="Subscription" IsEnabled="{Binding IsSuperAdmin}">
-                    <WebBrowser Name="wbSample" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.ColumnSpan="2"/> 
+                    <!--<local:Subscriptions/>-->
+                    <!--<WebBrowser Name="wbSample" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.ColumnSpan="2"/>-->
                 </TabItem>
             </TabControl>
         </Grid>
-        <!--<ListBox Name="lstFeatureList" ItemsSource="{Binding FeataureList}" Grid.Row="2" >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Width="150" Height="50" Background="Black">
-                        <Border Background="Transparent" BorderBrush="#FFC20F" CornerRadius="3" BorderThickness="2" VerticalAlignment="Stretch">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
-                                <TextBlock Text="{Binding Description}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
-
     </Grid>
 </Page>
