@@ -25,16 +25,6 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMember, DataModelTeamMember>(obj);
         }
 
-        public List<DataModelTeamMember> GetUserInviteList(string adminId)
-        {
-            List<DataModelTeamMember> teamMembers = new List<DataModelTeamMember>();
-            var team = Work.TeamRepository.GetData(t => t.AdminId == adminId).FirstOrDefault();
-            var listData = Work.TeamMemberRepository.GetData(filter: t => t.TeamId == team.Id);
-            foreach (var data in listData)
-                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMember, DataModel.TeamMember>(data));
-            return teamMembers;
-        }
-
         public List<DataModelTeamMember> GetTeamMembers(int TeamId)
         {
             List<DataModelTeamMember> teamMembers = new List<DataModelTeamMember>();
@@ -107,7 +97,9 @@ namespace License.Logic.DataLogic
                 if (licenseData.Count() > 0)
                     foreach (var dt in licenseData)
                         Work.UserLicenseRepository.Delete(dt);
-                if (teamObj.IsAdmin)
+
+                int count = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamObj.InviteeUserId && t.Team.AdminId == teamObj.Team.AdminId && t.Id != teamObj.Id).Count();
+                if (teamObj.IsAdmin && count == 0)
                     UserManager.RemoveFromRole(teamObj.InviteeUserId, "Admin");
                 var status = Work.TeamMemberRepository.Delete(teamObj);
                 Work.TeamMemberRepository.Save();

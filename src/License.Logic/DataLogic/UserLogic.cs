@@ -168,7 +168,6 @@ namespace License.Logic.DataLogic
         public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId, string authType)
         {
             var obj = UserManager.FindById(userId);
-            //Appuser user = AutoMapper.Mapper.Map<Appuser>(obj);
             return UserManager.CreateIdentity(obj, authType);
 
         }

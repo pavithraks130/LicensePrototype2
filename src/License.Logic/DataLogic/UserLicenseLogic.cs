@@ -30,7 +30,7 @@ namespace License.Logic.DataLogic
             {
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == lic.UserId).ToList();
                 var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
-                var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == lic.UserId);
+                var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
                 if (obj == null)
                 {
                     i++;
@@ -64,7 +64,7 @@ namespace License.Logic.DataLogic
                 foreach (var lic in model.LicenseDataList)
                 {
                     var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.ProductId && l.UserSubscriptionId == lic.UserSubscriptionId).ToList().Select(l => l.Id);
-                    var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId) && ul.UserId == userId);
+                    var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
                     if (obj == null)
                     {
                         i++;
@@ -85,7 +85,7 @@ namespace License.Logic.DataLogic
             return true;
         }
 
-        private bool RevokeUserLicense(UserLicense lic)
+        private bool RevokeUserLicense(Core.Model.UserLicense lic)
         {
             var obj = Work.UserLicenseRepository.GetData(r => r.LicenseId == lic.LicenseId && r.UserId == lic.UserId).FirstOrDefault();
             if (obj == null)
@@ -100,7 +100,7 @@ namespace License.Logic.DataLogic
             LicenseLogic licLogic = new LicenseLogic();
             foreach (var userId in model.UserList)
             {
-                var licdata = GetUserLicense(userId);
+                var licdata = Work.UserLicenseRepository.GetData(l => l.UserId == userId);
                 foreach (var lic in model.LicenseDataList)
                 {
                     var obj = licdata.FirstOrDefault(l => l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId && l.TeamId == model.TeamId);
@@ -127,6 +127,7 @@ namespace License.Logic.DataLogic
                 licenses.Add(AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(data));
             return licenses;
         }
+
         public List<UserLicense> GetUserLicense(string userId, int teamId)
         {
             List<UserLicense> licenses = new List<UserLicense>();
