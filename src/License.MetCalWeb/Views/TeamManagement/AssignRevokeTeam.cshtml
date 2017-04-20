@@ -21,13 +21,14 @@
 </script>
 <div class="row">
     <h2>
-        @if(ViewData["actionType"].ToString() == "RemoveTeam")
+
+        @if (ViewData["actionType"].ToString() == "RemoveTeam")
         {
             <label>Remove From Team</label>
         }
         else
         {
-           <label>Assign to Team</label>
+            <label>Assign to Team</label>
         }
 
     </h2>
@@ -39,7 +40,7 @@
         <div class="form-group">
             <div class="col-md-8">
                 <span>
-                    Team Member Name :   @ViewData["UserEmail"]
+                    Team Member Email :   @ViewData["UserEmail"]
                 </span>
             </div>
         </div>
@@ -70,8 +71,10 @@
                         }
                     </table>
                     <label style="display:none;color:red;" id="lblError">Team  not selected</label>
-                    <input type="submit" value="Assign to Team(s)" class="btn btn-default btn-custom btn-save" />
+                    <input type="submit" value="@(ViewData["actionType"].ToString() == "RemoveTeam" ?"Revoke From Team(s)" :"Assign to Team(s)")" class="btn btn-default btn-custom btn-save" />
+
                 </div>
-            </div> }
+            </div>
+        }
     }
 </div>
