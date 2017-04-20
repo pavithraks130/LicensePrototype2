@@ -545,7 +545,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.ProductController.CreateProduct(System.Int32,LicenseServer.DataModel.Product)">
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.UpdateProduct(System.Int32,LicenseServer.DataModel.Product)">
             <summary>
             Put Method. Update the Product details based on the Product ID.
             </summary>
@@ -553,7 +553,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.ProductController.CreateProduct(System.Int32)">
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.DeleteProduct(System.Int32)">
             <summary>
             Delete Method. Delete Product based on the Product ID.
             </summary>

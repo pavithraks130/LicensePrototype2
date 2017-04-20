@@ -378,13 +378,13 @@
     <Content Include="Views\TeamManagement\TeamMembers.cshtml" />
     <Content Include="Views\Team\Create.cshtml" />
     <Content Include="Views\Team\Edit.cshtml" />
-    <Content Include="Views\Team\Teams.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\License\LicenseApproval.cshtml" />
     <Content Include="Views\Subscription\Create.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\TeamManagement\AssignRevokeTeam.cshtml" />
-    <Content Include="Views\Dashboard\GetTeamList.cshtml" />
+    <Content Include="Views\Dashboard\TeamList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -9,19 +9,14 @@ namespace LicenseServer.Logic
 {
     public class CartLogic : BaseLogic
     {
-        public double TotalAmount { get; set; }
 
 
         public List<CartItem> GetCartItems(string userId)
         {
-            TotalAmount = 0;
             List<CartItem> cartItems = new List<CartItem>();
             var cartItemObj = Work.CartItemLicenseRepository.GetData(src => src.UserId == userId && src.IsPurchased == false);
             foreach (var obj in cartItemObj)
-            {
-                TotalAmount += (obj.Quantity * obj.Price);
                 cartItems.Add(AutoMapper.Mapper.Map<Core.Model.CartItem, CartItem>(obj));
-            }
             return cartItems;
         }
 
@@ -38,7 +33,9 @@ namespace LicenseServer.Logic
         public bool UpdateCartItem(CartItem item)
         {
             Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById(item.Id);
+            cartItem.Quantity = item.Quantity;
             cartItem.IsPurchased = item.IsPurchased;
+            cartItem.Price = item.Price;
             cartItem = Work.CartItemLicenseRepository.Update(cartItem);
             Work.CartItemLicenseRepository.Save();
             return cartItem.Id > 0;

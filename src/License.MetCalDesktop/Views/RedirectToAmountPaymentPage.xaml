@@ -1,0 +1,38 @@
+﻿<Page x:Class="License.MetCalDesktop.Views.RedirectToAmountPaymentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:License.MetCalDesktop.Views"
+             mc:Ignorable="d"
+             Background="Black">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/DefaultStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*"/>
+            <RowDefinition Height="0.25*"/>
+            <RowDefinition Height="0.25*"/>
+            <RowDefinition Height="0.25*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0">
+            <Label Content="Powered by XYZ Payment Gateway" Foreground="White"  />
+        </StackPanel>
+        <ProgressBar  x:Name ="ProgressBarPayment" Margin="10" Height="40"  Grid.Row="1" Grid.Column="0"   Background="LightYellow"/>
+        <Label x:Name="lblProgress" Content=""  Grid.Row="1" Grid.Column="1"  Foreground="White"/>
+        <Label x:Name ="statusBarPayment" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" VerticalAlignment="Center" Background="LimeGreen" >
+            Liecence issued to user, Login with your credentials
+        </Label>
+        <Button Content="Back to Login Page" Margin="10" Style="{StaticResource DefaultButtonStyle}" Grid.Row="3" Command="{Binding BackToLoginCommand}" Grid.ColumnSpan="2" MaxWidth="200"></Button>
+
+    </Grid>
+</Page>

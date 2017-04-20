@@ -20,23 +20,29 @@ else
         <div class="col-md-12">
             <table class="table">
                 <tr>
-                    <th class="col-md-4">
+                    <th class="col-md-2">
                         Purcchase Order No
                     </th>
-                    <th class="col-md-4">
-                        Purchase Order Status
+                    <th class="col-md-2">
+                        Order Status
                     </th>
-                    <th class="col-md-4">
+                    <th class="col-md-2">
+                        Total
+                    </th>
+                    <th class="col-md-3">
                         Approved/Rejected By
+                    </th>
+                    <th class="col-md-3" >
+                        Comment
                     </th>
                 </tr>
                 @for (int i = 0; i < Model.Count; i++)
                 {
                     <tr>
-                        <td class="col-md-4">
+                        <td class="col-md-2">
                             @Html.ActionLink(Model[i].PurchaseOrderNo, "OrderDetail", "PurchaseOrder", new { id = Model[i].Id }, null)
                         </td>
-                        <td class="col-md-4">
+                        <td class="col-md-2">
                             @if (String.IsNullOrEmpty(Model[i].ApprovedBy))
                             {
                                 <label>Pending</label>
@@ -50,8 +56,14 @@ else
                                 <label>Rejected</label>
                             }
                         </td>
-                        <td class="col-md-4">
+                        <td class="col-md-2">
+                            <label>@Model[i].Total</label>
+                        </td>
+                        <td class="col-md-3">
                             @Model[i].ApprovedBy
+                        </td>
+                        <td class="col-md-3">
+                            @Model[i].Comment
                         </td>
                     </tr>
                 }

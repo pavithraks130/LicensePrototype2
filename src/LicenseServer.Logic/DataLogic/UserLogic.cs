@@ -27,7 +27,7 @@ namespace LicenseServer.Logic
             foreach (var u in users)
             {
                 User temp = AutoMapper.Mapper.Map<LicenseServer.Core.Model.Appuser, User>(u);
-                temp.Organization = orgLogic.GetTeamById(temp.OrganizationId);
+                temp.Organization = orgLogic.GetOrganizationById(temp.OrganizationId);
                 temp.SubscriptionList = subscriptionLogic.GetUserSubscription(temp.UserId).Select(s => s.Subtype).ToList();
                 usersList.Add(temp);
             }
@@ -51,9 +51,9 @@ namespace LicenseServer.Logic
             ur.UserName = u.Email;
             var teamName = u.OrganizationName;
             OrganizationLogic logic = new OrganizationLogic();
-            DataModel.Organization t = logic.GetTeamByName(teamName);
+            DataModel.Organization t = logic.GetOrganizationByName(teamName);
             if (t == null)
-                t = logic.CreateTeam(new DataModel.Organization() { Name = teamName });
+                t = logic.CreateOrganization(new DataModel.Organization() { Name = teamName });
             ur.OrganizationId = t.Id;
             LicenseServer.Core.Model.Appuser user = AutoMapper.Mapper.Map<User, LicenseServer.Core.Model.Appuser>(ur);
             IdentityResult result;
@@ -88,7 +88,6 @@ namespace LicenseServer.Logic
             var appuser = UserManager.FindById(id);
             appuser.FirstName = user.FirstName;
             appuser.LastName = user.LastName;
-            appuser.Email = user.Email;
             appuser.PhoneNumber = user.PhoneNumber;
             var result = UserManager.Update(appuser);
             return result.Succeeded;
@@ -163,7 +162,6 @@ namespace LicenseServer.Logic
         public System.Security.Claims.ClaimsIdentity CreateClaimsIdentity(string userId, string authType)
         {
             var obj = UserManager.FindById(userId);
-            //Appuser user = AutoMapper.Mapper.Map<Appuser>(obj);
             return UserManager.CreateIdentity(obj, authType);
 
         }

@@ -55,7 +55,7 @@ namespace License.MetCalWeb.Controllers
         private TeamDetails LoadTeamMember(int teamId)
         {
             TeamDetails model = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/Team/GetById/" + teamId).Result;
             if (response.IsSuccessStatusCode)
@@ -99,7 +99,7 @@ namespace License.MetCalWeb.Controllers
                 invite.TeamId = LicenseSessionState.Instance.SelectedTeam.Id;
                 invite.InviteeStatus = InviteStatus.Pending.ToString();
 
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PostAsJsonAsync("api/TeamMember/CreateInvite", invite).Result;
                 if (response.IsSuccessStatusCode)
@@ -147,7 +147,7 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult UserConfiguration(int id, string userId, string actionType)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             HttpResponseMessage response;
             TeamMember mem = new TeamMember()
@@ -166,7 +166,7 @@ namespace License.MetCalWeb.Controllers
                     response = client.PutAsJsonAsync("api/TeamMember/UpdateAdminAccess", mem).Result;
                     break;
                 case "Remove":
-                    response = client.DeleteAsync("api/TeamMember/DeleteInvite/" + id).Result;
+                    response = client.DeleteAsync("api/TeamMember/DeleteTeamMember/" + id).Result;
                     break;
 
             }
@@ -213,8 +213,8 @@ namespace License.MetCalWeb.Controllers
             var existingTeamIdList = mappedTeams.Select(t => t.Id).ToList();
             if (actiontype == "AssignTeam")
                 teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id) && t.AdminId == LicenseSessionState.Instance.SelectedTeam.AdminId).ToList();
-            else
-                teamList = mappedTeams;
+            else 
+                teamList = mappedTeams.Where(t=>t.IsDefaultTeam == false).ToList();
             return teamList;
         }
 
@@ -234,7 +234,7 @@ namespace License.MetCalWeb.Controllers
                 teamMembers.Add(mem);
             }
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             string url;
             if (actionType == "AssignTeam")

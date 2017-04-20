@@ -43,9 +43,11 @@ namespace License.Logic.BusinessLogic
                 {
                     UserLicense lic = new UserLicense();
                     lic.UserId = userlicReq.Requested_UserId;
+                    lic.TeamId = userlicReq.TeamId;
                     lic.License = new LicenseData();
                     lic.License.ProductId = userlicReq.ProductId;
                     lic.License.UserSubscriptionId = userlicReq.UserSubscriptionId;
+
                     userLicenseList.Add(lic);
                 }
             }
@@ -86,9 +88,11 @@ namespace License.Logic.BusinessLogic
                 {
                     var userLicLicst = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
                     var proList = userLicLicst.Select(u => u.License.ProductId).ToList();
-                    SubscriptionDetails mapModel = new SubscriptionDetails();
-                    mapModel.Name = subs.Name;
-                    mapModel.UserSubscriptionId = data.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId;
+                    SubscriptionDetails mapModel = new SubscriptionDetails()
+                    {
+                        Name = subs.Name,
+                        UserSubscriptionId = data.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
+                    };
                     foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
                     {
                         var objLic = userLicLicst.FirstOrDefault(f => f.License.ProductId == pro.Id);

@@ -20,6 +20,7 @@ namespace License.MetCalDesktop.Common
         public List<SubscriptionDetails> UserLicenseList { get; set; }
 
         public bool IsUserLoggedIn { get; set; }
+        public bool IsSuperAdmin { get; set; }
 
         public User User { get; set; }
 
@@ -30,6 +31,7 @@ namespace License.MetCalDesktop.Common
         public List<Team> TeamList { get; set; }
 
         public Team SelectedTeam { get; set; }
+        public SubscriptionType SelectedSubscription { get; set; }
 
         public static HttpClient CreateClient(string serviceType)
         {

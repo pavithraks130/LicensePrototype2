@@ -22,17 +22,17 @@ namespace License.MetCalWeb.Controllers
         }
 
 
-        public ActionResult TeamList()
+        public ActionResult Index()
         {
             if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
             {
                 string userId = string.Empty;
-                if (LicenseSessionState.Instance.IsAdmin)
+                if (!LicenseSessionState.Instance.IsSuperAdmin)
                     userId = LicenseSessionState.Instance.User.UserId;
                 var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
                 LicenseSessionState.Instance.TeamList = teamList;
             }
-            return View("Teams", LicenseSessionState.Instance.TeamList);
+            return View(LicenseSessionState.Instance.TeamList);
         }
 
         public ActionResult CreateTeam()
@@ -47,7 +47,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 model.AdminId = LicenseSessionState.Instance.User.UserId;
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PostAsJsonAsync("api/Team/Create", model).Result;
                 if (response.IsSuccessStatusCode)
@@ -55,7 +55,7 @@ namespace License.MetCalWeb.Controllers
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     var data = JsonConvert.DeserializeObject<Team>(jsonData);
                     LicenseSessionState.Instance.TeamList.Add(data);
-                    return RedirectToAction("TeamList");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditTeam(int id, Team model)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PutAsJsonAsync("api/team/Update/" + id, model).Result;
             if (response.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace License.MetCalWeb.Controllers
                 var teamObj = JsonConvert.DeserializeObject<Team>(data);
                 LicenseSessionState.Instance.TeamList.RemoveAll(f => f.Id == id);
                 LicenseSessionState.Instance.TeamList.Add(teamObj);
-                return RedirectToAction("TeamList");
+                return RedirectToAction("Index");
             }
             else
             {
@@ -107,15 +107,15 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult DeleteTeam(int id)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.DeleteAsync("api/team/Delete/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 LicenseSessionState.Instance.TeamList.RemoveAll(t => t.Id == id);
-                if (LicenseSessionState.Instance.SelectedTeam.Id == id)
+                if (LicenseSessionState.Instance.SelectedTeam != null && LicenseSessionState.Instance.SelectedTeam.Id == id)
                     LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.FirstOrDefault(s => s.IsDefaultTeam = true);
-                return RedirectToAction("TeamList");
+                return RedirectToAction("Index");
             }
             else
             {

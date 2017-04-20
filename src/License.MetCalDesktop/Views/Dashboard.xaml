@@ -18,6 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Black">
             <Grid.ColumnDefinitions>
@@ -37,19 +38,29 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        <ListBox Name="lstFeatureList" ItemsSource="{Binding FeataureList}" Grid.Row="2" >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Width="150" Height="50" Background="Black">
-                        <Border Background="Transparent" BorderBrush="#FFC20F" CornerRadius="3" BorderThickness="2" VerticalAlignment="Stretch">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
-                                <TextBlock Text="{Binding Description}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
-                            </StackPanel>                            
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid Grid.Row="1" Grid.RowSpan="2" Background="Black" >
+
+            <TabControl SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="Home">
+                    <ListBox Name="lstFeatureList" ItemsSource="{Binding FeataureList}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="150" Height="50" Background="Black">
+                                    <Border Background="Transparent" BorderBrush="#FFC20F" CornerRadius="3" BorderThickness="2" VerticalAlignment="Stretch">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding Name}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
+                                            <TextBlock Text="{Binding Description}" Foreground="#FFC20F" FontWeight="Bold"></TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+                <TabItem Header="Subscription" IsEnabled="{Binding IsSuperAdmin}" >
+                    <!--<local:Subscriptions/>-->
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Page>

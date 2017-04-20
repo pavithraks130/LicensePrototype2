@@ -34,10 +34,12 @@ namespace License.Logic.BusinessLogic
                 List<License.DataModel.LicenseData> licenseDataList = new List<DataModel.LicenseData>();
                 foreach (var lic in data.LicenseKeys)
                 {
-                    License.DataModel.LicenseData licenseData = new DataModel.LicenseData();
-                    licenseData.LicenseKey = lic.LicenseKey;
-                    licenseData.ProductId = lic.ProductId;
-                    licenseData.UserSubscriptionId = userSubscriptionId;
+                    License.DataModel.LicenseData licenseData = new DataModel.LicenseData()
+                    {
+                        LicenseKey = lic.LicenseKey,
+                        ProductId = lic.ProductId,
+                        UserSubscriptionId = userSubscriptionId
+                    };
                     licenseDataList.Add(licenseData);
                 }
                 LicenseLogic licenseLogic = new LicenseLogic();
@@ -56,7 +58,6 @@ namespace License.Logic.BusinessLogic
         {
             List<SubscriptionDetails> lstSsubscriptionDetail = new List<SubscriptionDetails>();
             var usersubList = userSubLogic.GetSubscription(adminId);
-            var subIdList = usersubList.Select(p => p.SubscriptionId).ToList();
             ProductSubscriptionLogic psLogic = new ProductSubscriptionLogic();
             var subList = psLogic.GetSubscriptionFromFile();
             foreach (var userSub in usersubList)
@@ -64,10 +65,12 @@ namespace License.Logic.BusinessLogic
                 var subType = subList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
                 if (subType != null)
                 {
-                    SubscriptionDetails model = new SubscriptionDetails();
-                    model.Id = subType.Id;
-                    model.UserSubscriptionId = userSub.Id;
-                    model.Name = subType.Name;
+                    SubscriptionDetails model = new SubscriptionDetails()
+                    {
+                        Id = subType.Id,
+                        UserSubscriptionId = userSub.Id,
+                        Name = subType.Name
+                    };
                     foreach (var pro in subType.Products)
                     {
                         UserLicenseLogic userLicLogic = new UserLicenseLogic();

@@ -180,6 +180,7 @@ namespace License.MetCalDesktop.ViewModel
                     {
                         jsondata = response.Content.ReadAsStringAsync().Result;
                         var user = JsonConvert.DeserializeObject<User>(jsondata);
+                        AppState.Instance.IsSuperAdmin = false;
                         if (user.Roles.Contains("SuperAdmin"))
                         {
                             client.Dispose();
@@ -195,10 +196,11 @@ namespace License.MetCalDesktop.ViewModel
                                 token = JsonConvert.DeserializeObject<AccessToken>(jsondata);
                                 AppState.Instance.CentralizedToken = token;
                             }
+                            AppState.Instance.IsSuperAdmin = true;
                         }
 
                         AppState.Instance.User = user;
-                        AppState.Instance.IsUserLoggedIn = true;
+                        AppState.Instance.IsUserLoggedIn = true;                   
 
                         NavigateNextPage?.Invoke("Dashboard", null);
                         IsEnableLogin = true;

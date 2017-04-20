@@ -77,7 +77,6 @@ namespace License.Logic.DataLogic
             if (obj.Id > 0)
             {
                 model = AutoMapper.Mapper.Map<DataModel.Team>(obj);
-
                 UserLogic userLogic = new UserLogic();
                 userLogic.UserManager = UserManager;
                 model.AdminUser = userLogic.GetUserById(model.AdminId);
@@ -88,6 +87,12 @@ namespace License.Logic.DataLogic
         public DataModel.Team UpdateTeam(int id, DataModel.Team model)
         {
             var obj = Work.TeamRepository.GetById(id);
+            var objTemp = Work.TeamRepository.GetData(t => t.Name.Trim() == model.Name.Trim() && t.AdminId == obj.AdminId && t.Id != id).FirstOrDefault();
+            if (objTemp != null && objTemp.Id != obj.Id)
+            {
+                ErrorMessage = "Team Name already Exist";
+                return null;
+            }
             obj.Name = model.Name;
             obj = Work.TeamRepository.Update(obj);
             Work.TeamRepository.Save();

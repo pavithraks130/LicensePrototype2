@@ -19,6 +19,7 @@ namespace LicenseServer.DataModel
         public User User { get; set; }
         public string Comment { get; set; }
         public ICollection<PurchaseOrderItem> OrderItems { get; set; }
+        public double Total { get; set; }
 
         public PurchaseOrder()
         {

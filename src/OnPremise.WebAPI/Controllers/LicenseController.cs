@@ -147,7 +147,7 @@ namespace OnPremise.WebAPI.Controllers
             LicenseBO licBOLogic = new LicenseBO();
             licBOLogic.UserManager = UserManager;
             licBOLogic.RoleManager = RoleManager;
-            FetchUserSubscription model = new FetchUserSubscription() { UserId = userId, IsFeatureRequired = isFeatureRequired };
+            FetchUserSubscription model = new FetchUserSubscription() { UserId = userId, IsFeatureRequired = isFeatureRequired};
             var data = licBOLogic.GetUserLicenseSubscriptionDetails(model);
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }

@@ -1,0 +1,95 @@
+﻿<Page x:Class="License.MetCalDesktop.Views.CreditAndDebitCardDetails"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:License.MetCalDesktop.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="CreditAndDebitCardDetails" Background="Black">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/DefaultStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ControlTemplate x:Key="ErrorTemplate">
+                <Border BorderBrush="Red" BorderThickness="1">
+                    <AdornedElementPlaceholder />
+                </Border>
+            </ControlTemplate>
+            <Style TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="true">
+                        <Setter Property="ToolTip"
+                                 Value="{Binding RelativeSource={x:Static RelativeSource.Self},Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="ComboBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="true">
+                        <Setter Property="ToolTip"
+                                 Value="{Binding RelativeSource={x:Static RelativeSource.Self},Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="auto"/>
+            
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBox}" >
+                <Setter Property="Margin" Value="20"></Setter>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}" >
+                <Setter Property="Margin" Value="20"></Setter>
+            </Style>
+        </Grid.Resources>
+        <DockPanel Grid.Row="0">
+            <Button  Style="{StaticResource DefaultButtonStyle}" Command="{Binding PayOfflineCommand}"  Margin="-200,5,5,5"  Name="btnHome" Content="Pay Offline" Width="120" Height="30"></Button>
+        </DockPanel>
+        <DockPanel Grid.Row="1">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width ="Auto"/>
+                <ColumnDefinition Width ="Auto" />
+                <ColumnDefinition  Width ="Auto"/>
+                <ColumnDefinition  Width ="Auto"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition  />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+                <Label x:Name="labelCardNumber" Content="16 digit card number" FontWeight="Bold"  Foreground="White" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,102.333,0"/>
+                <TextBox x:Name="textBoxCardNumber" TextWrapping="Wrap" Text="{Binding CardNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True,  NotifyOnValidationError=True, ValidatesOnExceptions=True}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20.333,20,19,20"/>
+                <Label x:Name="lblExpiryDate" Content="Expiry Date"  FontWeight="Bold" Foreground="White" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,102.333,0" />
+                <ComboBox x:Name="listofMonths"  Grid.Row="1" Grid.Column="1" SelectedIndex="0" SelectedItem="{Binding SelectedMonth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True,  NotifyOnValidationError=True, ValidatesOnExceptions=True}" ItemsSource="{Binding CardValidityMonth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="20.333,20" />
+                <ComboBox x:Name="listOfYears" IsSynchronizedWithCurrentItem="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" SelectedItem="{Binding SelectedYear, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True,ValidatesOnDataErrors=True,ValidatesOnNotifyDataErrors=True,ValidatesOnExceptions=True}" ItemsSource="{Binding CardValidityYear, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="19.667,20,20,20"/>
+                <Label x:Name="lblCVV" Content="CVV"  FontWeight="Bold" Grid.Row="2" Foreground="White" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,102.333,0" />
+                <TextBox  x:Name="txtCVV"  Grid.Row="2" Grid.Column="1" Text="{Binding CardCVV, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True,ValidatesOnDataErrors=True,ValidatesOnNotifyDataErrors=True,ValidatesOnExceptions=True}" Margin="20.333,20,19.333,20" />
+                <Label Content="Name on the card" FontWeight="Bold"  FontStyle="Oblique" Foreground="White" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,102.333,0"/>
+                <TextBox  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  Text="{Binding CardName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True,ValidatesOnDataErrors=True,ValidatesOnNotifyDataErrors=True,ValidatesOnExceptions=True}" Margin="20.333,20,19,20" />
+                <Button Style="{StaticResource DefaultButtonStyle}" x:Name="button" Content="PURCHASE" Background="LightBlue" Command="{Binding PurchaseCommand}" Grid.ColumnSpan="3"  Grid.Row="4" Margin="0,0,0,0.333"  />
+                <GridSplitter Grid.Column="3"  Grid.Row="0" Grid.RowSpan="5" Width="3" HorizontalAlignment="Stretch"  Margin="0,0,0,0"  />
+                <Label x:Name="labelOrderDetails" Style="{StaticResource LabelDefaultStyle}" Content="Order Details:" Foreground="White" Grid.Row="0" Grid.Column="4" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <ListBox Grid.Row="1"   Grid.Column="4" Grid.RowSpan="3" MinWidth="200" Foreground="White" Background="Black" Margin="0,10,25,0" Padding="0,0,0,0">
+                    <ListBoxItem Content="{Binding Tax , Mode= TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="White"></ListBoxItem>
+                    <ListBoxItem Content="{Binding TotalCost, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="White"></ListBoxItem>
+                </ListBox>
+            </Grid>
+        </DockPanel>
+        
+
+    </Grid>
+</Page>

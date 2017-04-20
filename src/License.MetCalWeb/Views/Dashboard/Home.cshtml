@@ -41,7 +41,7 @@
         function UpdateTeamContext() {
             $.ajax({
                 type: "GET",
-                url: "/Dashboard/GetTeamList",
+                url: "/Dashboard/TeamList",
                 success: function (data) {
                     $('#myModal').html(data);
                     $('#myModal').modal('show');

@@ -53,14 +53,17 @@ namespace LicenseServer.Logic
 
         public SubscriptionList CreateUserSubscriptionList(List<UserSubscription> subsList, string userId)
         {
-            UserLogic logic = new UserLogic();
-            logic.UserManager = UserManager;
-            logic.RoleManager = RoleManager;
+            UserLogic logic = new UserLogic()
+            {
+                UserManager = UserManager,
+                RoleManager = RoleManager
+            };
             User userObj = logic.GetUserById(userId);
 
-            SubscriptionList userSubscriptionList = new SubscriptionList();
-
-            userSubscriptionList.UserId = userId;
+            SubscriptionList userSubscriptionList = new SubscriptionList()
+            {
+                UserId = userId
+            };
             int teamId = userObj.OrganizationId;
             foreach (var subObj in subsList)
             {

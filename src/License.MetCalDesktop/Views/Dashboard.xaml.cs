@@ -27,6 +27,7 @@ namespace License.MetCalDesktop.Views
             var viewModel = new DashboardViewModel();
             viewModel.NavigateNextPage += NavigateNextPage;
             this.DataContext = viewModel;
+            //wbSample.Navigate("http://localhost:62061/Subscription");
         }
 
         public void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
@@ -37,6 +38,10 @@ namespace License.MetCalDesktop.Views
                     this.NavigationService.Navigate(new LoginUser());
                     break;
             }
+        }
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Subscriptions());
         }
     }
 }
