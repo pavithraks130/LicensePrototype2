@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using License.MetCalDesktop.ViewModel;
+using License.MetCalDesktop.Common;
 
 namespace License.MetCalDesktop.Views
 {
@@ -27,7 +28,6 @@ namespace License.MetCalDesktop.Views
             var viewModel = new DashboardViewModel();
             viewModel.NavigateNextPage += NavigateNextPage;
             this.DataContext = viewModel;
-            //wbSample.Navigate("http://localhost:62061/Subscription");
         }
 
         public void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
@@ -41,6 +41,7 @@ namespace License.MetCalDesktop.Views
         }
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if((sender as TabControl).SelectedIndex ==(int)Tab.Subscription)
             this.NavigationService.Navigate(new Subscriptions());
         }
     }

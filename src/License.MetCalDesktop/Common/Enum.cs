@@ -25,4 +25,10 @@ namespace License.MetCalDesktop.Common
         November,
         December
     }
+
+    public enum Tab
+    {
+        Home,
+        Subscription
+    }
 }

@@ -196,10 +196,15 @@ namespace License.MetCalDesktop.ViewModel
                                 token = JsonConvert.DeserializeObject<AccessToken>(jsondata);
                                 AppState.Instance.CentralizedToken = token;
                             }
+                           
                             AppState.Instance.IsSuperAdmin = true;
                         }
 
                         AppState.Instance.User = user;
+                        if (AppState.Instance.IsSuperAdmin)
+                        {
+                            SynchPurchaseOrder();
+                        }
                         AppState.Instance.IsUserLoggedIn = true;                   
 
                         NavigateNextPage?.Invoke("Dashboard", null);
@@ -212,6 +217,49 @@ namespace License.MetCalDesktop.ViewModel
                     IsEnableLogin = true;
                 }
             }
+        }
+
+        private void SynchPurchaseOrder()
+        {
+            string errorMessage = string.Empty;
+            HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+            var response = client.GetAsync("api/purchaseorder/syncpo/" + AppState.Instance.User.ServerUserId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
+                if (obj.Subscriptions.Count > 0)
+                  UpdateSubscriptionOnpremise(obj);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                errorMessage = response.ReasonPhrase + " - " + obj.Message;
+            }
+        }
+
+        private void UpdateSubscriptionOnpremise(SubscriptionList subs)
+        {
+            string userId = string.Empty;
+            userId = AppState.Instance.User.UserId;
+            List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
+            foreach (var subDtls in subs.Subscriptions)
+            {
+                //Code to save the user Subscription details to Database.
+                UserSubscriptionData userSubscription = new UserSubscriptionData();
+                userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
+                userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
+                userSubscription.UserId = userId;
+                userSubscription.Quantity = subDtls.OrderdQuantity;
+                userSubscription.Subscription = subDtls;
+                userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
+                subscriptionData.Add(userSubscription);
+            }
+            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
         }
     }
 }

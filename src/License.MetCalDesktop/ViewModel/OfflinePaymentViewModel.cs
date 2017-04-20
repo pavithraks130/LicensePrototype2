@@ -1,4 +1,5 @@
-﻿using System;
+﻿using License.MetCalDesktop.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,12 @@ namespace License.MetCalDesktop.ViewModel
     public class OfflinePaymentViewModel : BaseEntity
     {
         public ICommand RedirectToHomeCommand { get; set; }
-
+        
+        private string _purchaseOrderId = string.Empty;
         public OfflinePaymentViewModel()
         {
             RedirectToHomeCommand = new RelayCommand(RedirectToHome);
+            _purchaseOrderId = AppState.Instance.purchaseOrder.PurchaseOrderNo;
         }
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace License.MetCalDesktop.ViewModel
         /// navigation service action
         /// </summary>
         public NavigationService Service { get; set; }
-
+        public string PurchaseOrderId { get => _purchaseOrderId; set => _purchaseOrderId =value; }
     }
 }
 

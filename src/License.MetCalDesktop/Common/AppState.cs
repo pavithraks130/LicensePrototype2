@@ -21,6 +21,7 @@ namespace License.MetCalDesktop.Common
 
         public bool IsUserLoggedIn { get; set; }
         public bool IsSuperAdmin { get; set; }
+        public PurchaseOrder purchaseOrder { get; set; }
 
         public User User { get; set; }
 
