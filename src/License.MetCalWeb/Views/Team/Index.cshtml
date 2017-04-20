@@ -1,6 +1,6 @@
 ﻿@model List<License.MetCalWeb.Models.Team>
 @{
-    ViewBag.Title = "Teams";
+    ViewBag.Title = "Teams Listing";
 }
 
 <script>
@@ -53,7 +53,7 @@
         });
     });
 </script>
-<h2>Teams</h2>
+<h2>Teams Listing</h2>
 <div class="row">
     <div class="col-md-8">
         <div class="container">
@@ -63,7 +63,7 @@
             <table class="table" style="table-layout:fixed;">
                 <tr>
                     <th>Team Name</th>
-                    <th>Team Member Count</th>
+                    <th>Team Size</th>
                     <th>Action</th>
                 </tr>
                 @foreach (var obj in Model)
