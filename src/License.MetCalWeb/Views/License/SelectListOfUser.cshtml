@@ -23,27 +23,32 @@
         });
     });
 </script>
-<h2>Select User</h2>
-@using (Html.BeginForm("SelectedUsers", "License",FormMethod.Post))
-{
-    <table class="table">
-        @foreach (var user in Model)
+<div class="row">
+    <div class="col-md-12">
+
+
+        <h2>Select User</h2>
+        @using (Html.BeginForm("SelectedUsers", "License", FormMethod.Post))
         {
-            <tr>
-                <td>
-                    <label class="control-label">
-                        <input type="checkbox" name="SelectedUser" value="@user.InviteeUserId" checked="@user.IsSelected" class="checkbox-inline">
-                        @user.InviteeEmail
-                    </label>
-                </td>
-            </tr>
+            <table class="table">
+                @foreach (var user in Model)
+        {
+        <tr>
+            <td>
+                <label class="control-label">
+                    <input type="checkbox" name="SelectedUser" value="@user.InviteeUserId" checked="@user.IsSelected" class="checkbox-inline">
+                    @user.InviteeEmail
+                </label>
+            </td>
+        </tr>
         }
 
-    </table>
-    <div class="form-group">
-        <div class="col-md-8">
-            <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
-        </div>
+            </table>
+            <div class="form-group">
+                <div class="col-md-8">
+                    <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+                </div>
+            </div>
+        }
     </div>
-}
-
+</div>

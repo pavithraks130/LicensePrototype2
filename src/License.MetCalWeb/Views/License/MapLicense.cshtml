@@ -19,76 +19,78 @@
         });
     });
 </script>
+<h2>
+    License Mapping To User
+</h2>
+<br />
 <div class="row">
-    <h2>
-        License Mapping To User
-    </h2>
-    <br />
-   @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
-    @using (Html.BeginForm(user, "License",   FormMethod.Post))
-    {
-        @Html.ValidationSummary()
-        @Html.AntiForgeryToken()
-        <div class="form-group">
-            <div class="col-md-8">
-                <span>
-                    Team Member Name :  @ViewData["TeamMember"]
-                </span>
-            </div>
-        </div>
-        if (Model == null || Model.Count == 0)
+    <div class="col-md-12">
+        @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
+        @using (Html.BeginForm(user, "License", FormMethod.Post))
         {
+            @Html.ValidationSummary()
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <div class="col-md-8">
-                    <span>No Subscriptions exist  </span>
+                    <span>
+                        Team Member Name :  @ViewData["TeamMember"]
+                    </span>
                 </div>
             </div>
-        }
-        else
-        {
-            <div class="form-group">
-                <div class="col-md-8">
-                    <table class="table" style="border: none">
-                        @for (int i = 0; i < Model.Count; i++)
+            if (Model == null || Model.Count == 0)
+            {
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <span>No Subscriptions exist  </span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <table class="table" style="border: none">
+                            @for (int i = 0; i < Model.Count; i++)
                         {
-                            <tr style="">
-                                <td>
-                                    @Model[i].Name
-                                    <table class="table">
-                                        @for (int j = 0; j < Model[i].Products.Count; j++)
+                        <tr style="">
+                            <td>
+                                @Model[i].Name
+                                <table class="table">
+                                    @for (int j = 0; j < Model[i].Products.Count; j++)
                                         {
-                                            <tr>
-                                                <td>
-                                                    <label class="control-label">
-                                                        <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline">
-                                                        @Model[i].Products[j].Name
-                                                    </label>
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td>
+                                                <label class="control-label">
+                                                    <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline">
+                                                    @Model[i].Products[j].Name
+                                                </label>
+                                            </td>
+                                        </tr>
                                         }
 
-                                    </table>
-                                </td>
-                            </tr>
+                                </table>
+                            </td>
+                        </tr>
                         }
-                    </table>
-                    <label style="display:none;color:red;" id="lblError">License  not selected</label>
-                </div>
-            </div>
-            <div class="form-group">
-                @if (!(bool)TempData["CanAddBulk"])
-                {
-                    <div class="col-md-8">
-                        <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+                        </table>
+                        <label style="display:none;color:red;" id="lblError">License  not selected</label>
                     </div>
+                </div>
+                <div class="form-group">
+                    @if (!(bool)TempData["CanAddBulk"])
+                {
+                <div class="col-md-8">
+                    <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+                </div>
                 }
                 else
                 {
-                    <div class="col-md-8">
-                        <input type="submit" value="Select Team Members" class="btn btn-default btn-custom btn-save" />
-                    </div>
+                <div class="col-md-8">
+                    <input type="submit" value="Select Team Members" class="btn btn-default btn-custom btn-save" />
+                </div>
                 }
-            </div>
+                </div>
+            }
         }
-    }
+    </div>
 </div>

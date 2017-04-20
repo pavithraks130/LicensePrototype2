@@ -2,103 +2,107 @@
 @{
     ViewBag.Title = "Purchase Order Request For Approval";
 }
+<div class="row">
+    <div class="col-md-12">
 
-<h3>Purchase Order Approval</h3>
-<br />
-<br />
-@if (Model == null || Model.Count == 0)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <br /><br />
-            <label>No Order exist for Approval</label>
-        </div>
-    </div>
-}
-else
-{
-    using (Html.BeginForm("Index", "PurchaseOrder", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
 
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table" style="border:none!important;">
-                    <tr>
-                        <th class="col-md-1">
+        <h3>Purchase Order Approval</h3>
+        <br />
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <br /><br />
+                    <label>No Order exist for Approval</label>
+                </div>
+            </div>
+        }
+        else
+        {
+            using (Html.BeginForm("Index", "PurchaseOrder", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
 
-                        </th>
-                        <th class="col-md-3">
-                            User
-                        </th>
-                        <th class="col-md-2">
-                            Purchase Order
-                        </th>
-                        <th class="col-md-2">
-                            Price
-                        </th>
-                        <th>
-                            Subscription
-                        </th>
-                    </tr>
-                    @for (int i = 0; i < Model.Count; i++)
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" style="border:none!important;">
+                            <tr>
+                                <th class="col-md-1">
+
+                                </th>
+                                <th class="col-md-3">
+                                    User
+                                </th>
+                                <th class="col-md-2">
+                                    Purchase Order
+                                </th>
+                                <th class="col-md-2">
+                                    Price
+                                </th>
+                                <th>
+                                    Subscription
+                                </th>
+                            </tr>
+                            @for (int i = 0; i < Model.Count; i++)
                     {
-                        <tr>
-                            <td class="col-md-1">
-                                <input type="checkbox" name="selectedPurchaseOrder" value="@Model[i].Id" class="checkbox" />
-                            </td>
-                            <td class="col-md-3">
-                                @Model[i].User.Name
-                            </td>
-                            <td class="col-md-2">
-                                @Model[i].PurchaseOrderNo
-                            </td>
-                            <td class="col-md-2">
-                                @Model[i].Total
-                            </td>
-                            <td>
-                                <div class="row">
-                                    @foreach (var item in Model[i].OrderItems)
-                                    {
-                                        <label>@item.Subscription.Name</label>
-                                        <br />
-                                    }
-                                </div>
+                                <tr>
+                                    <td class="col-md-1">
+                                        <input type="checkbox" name="selectedPurchaseOrder" value="@Model[i].Id" class="checkbox" />
+                                    </td>
+                                    <td class="col-md-3">
+                                        @Model[i].User.Name
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Model[i].PurchaseOrderNo
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Model[i].Total
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            @foreach (var item in Model[i].OrderItems)
+                                            {
+                                                <label>@item.Subscription.Name</label>
+                                                <br />
+                                            }
+                                        </div>
 
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="col-md-4"> Comment/Feedback </label>
-                    @Html.TextArea("comment", new { @class = "col-md-8 float-left" })
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <br />
-        <br />
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-4"> Comment/Feedback </label>
+                            @Html.TextArea("comment", new { @class = "col-md-8 float-left" })
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save float-left" />
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <input type="submit" name="button" value="Approve" class="btn btn-default btn-custom btn-save float-right" />
+                        </div>
+                        <div class="col-md-6">
+                            <input type="submit" name="button" value="Reject" class="btn btn-default btn-custom btn-save float-left" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label id="lblError" style="display:none">No purchase Order selected for the approval/Reject.</label>
-            </div>
-        </div>
-    }
-}
+                <div class="row">
+                    <div class="col-md-12">
+                        <label id="lblError" style="display:none">No purchase Order selected for the approval/Reject.</label>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {

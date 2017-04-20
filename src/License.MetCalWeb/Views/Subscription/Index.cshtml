@@ -4,75 +4,77 @@
     ViewBag.Title = "Product Catalog";
 }
 <div class="row">
-
-    <div class="col-md-9">
-        <h3 class="login-header-new">Fluke Calibration Store</h3>
-    </div>
-    @using (Html.BeginForm())
-    {
+    <div class="col-md-12">
         <div class="form-group">
-            <div class="col-md-10">
-                <table class="table-hover" style="border: none">
-                    <tr>
-                        <td></td>
-                        <td>
-                            <span style="font-weight:bold">Subscription Name</span>
-                        </td>
-                        <td>
-                            <span style="font-weight:bold">Dutration</span>
-                        </td>
-                        <td>
-                            <span style="font-weight:bold">Price</span>
-                        </td>
-                        <td></td>
-                    </tr>
-                    @foreach (var subscription in Model)
+            <h3 class="login-header-new">Fluke Calibration Store</h3>
+        </div>
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <div class="col-md-10">
+                    <table class="table-hover" style="border: none">
+                        <tr>
+                            <td></td>
+                            <td>
+                                <span style="font-weight:bold">Subscription Name</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:bold">Dutration</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:bold">Price</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        @foreach (var subscription in Model)
                 {
-                        <tr>
-                            <td>
-                                @Html.Image(String.Concat("../ProductImages/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
-                            </td>
-                            <td>
-                                @subscription.Name
-                            </td>
-                            <td>
-                                @subscription.ActiveDays
-                            </td>
-                            <td>
-                                @subscription.Price.ToString()
-                            </td>
-                            <td>
-                                @if (LicenseSessionState.Instance.IsSuperAdmin)
-                                {
-                                    <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { Id = @subscription.Id }, null)</button>
-                                }
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.Image(String.Concat("../ProductImages/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
+                                </td>
+                                <td>
+                                    @subscription.Name
+                                </td>
+                                <td>
+                                    @subscription.ActiveDays
+                                </td>
+                                <td>
+                                    @subscription.Price.ToString()
+                                </td>
+                                <td>
+                                    @if (LicenseSessionState.Instance.IsSuperAdmin)
+                                    {
+                                        <button class="alert-success"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { Id = @subscription.Id }, null)</button>
+                                    }
+                                </td>
+                            </tr>
 
-                    }
-                </table>
-            </div>
-            @if (LicenseSessionState.Instance.IsSuperAdmin)
-            {
-                <div class="col-md-2">
-                    <table class="table-hover success">
-                        <tr>
-                            <td>
-                                <div class="navbar-header">
-                                    <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
-                                        <img src="~/Resources/Cart-Menu.png" />
-                                    </a>
-                                </div>
-                            </td>
-                            <td>
-                                <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
-                                    <h4>Cart @TempData["CartCount"]</h4>
-                                </a>
-                            </td>
-                        </tr>
+                        }
                     </table>
                 </div>
-            }
-        </div>
-    }
+                @if (LicenseSessionState.Instance.IsSuperAdmin)
+                {
+                    <div class="col-md-2">
+                        <table class="table-hover success">
+                            <tr>
+                                <td>
+                                    <div class="navbar-header">
+                                        <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
+                                            <img src="~/Resources/Cart-Menu.png" />
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
+                                        <h4>Cart @TempData["CartCount"]</h4>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+   
 </div>

@@ -1,88 +1,87 @@
 ﻿@model List<License.MetCalWeb.Models.CartItem>
 <link href="~/Content/Site.css" rel="stylesheet" />
 <div class="row">
-
-    <h2>Cart</h2>
-    @using (Html.BeginForm())
-    {
-        <div class="form-group">
-            <div class="col-md-8">
-                @if (Model != null && Model.Count > 0)
+    <div class="col-md-12">
+        <h2>Cart</h2>
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <div class="col-md-8">
+                    @if (Model != null && Model.Count > 0)
                 {
                     double totalamount = 0;
-                    <table class="table" style="border: none">
-                        <tr>
-                            <th>
-                                <span style="font-weight:bold">Subscription Name</span>
-                            </th>
-                            <th>
-                                <span style="font-weight:bold">Price</span>
-                            </th>
-                            <th>
-                                <span style="font-weight:bold">
-                                    Quantity
-                                </span>
-                            </th>
-                            <th>
-                                <span style="font-weight:bold">
-                                    Amount
-                                </span>
-                            </th>
-                            <th></th>
-                        </tr>
+                <table class="table" style="border: none">
+                    <tr>
+                        <th>
+                            <span style="font-weight:bold">Subscription Name</span>
+                        </th>
+                        <th>
+                            <span style="font-weight:bold">Price</span>
+                        </th>
+                        <th>
+                            <span style="font-weight:bold">
+                                Quantity
+                            </span>
+                        </th>
+                        <th>
+                            <span style="font-weight:bold">
+                                Amount
+                            </span>
+                        </th>
+                        <th></th>
+                    </tr>
 
-                        @for (var i = 0; i < Model.Count; i++)
+                    @for (var i = 0; i < Model.Count; i++)
                         {
-                            <tr>
-                                <td>
-                                    @Model[i].SubType.Name
-                                </td>
-                                <td>
-                                    @Model[i].SubType.Price
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(p => p[i].Quantity,  new { @name = "cartQty" })
-                                </td>
-                                <td>
-                                    <label>@Model[i].TotalPrice</label>
-                                </td>
-                                <td>
-                                    <button id="delete-item" class="alert-warning" type="button" onclick="location.href='@Url.Action("RemoveItem", "Cart", new { Id =  @Model[i].Id}, null)'">
-                                        <img src="~/Resources/Delete Icon.png" />
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Model[i].SubType.Name
+                            </td>
+                            <td>
+                                @Model[i].SubType.Price
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(p => p[i].Quantity,  new { @name = "cartQty" })
+                            </td>
+                            <td>
+                                <label>@Model[i].TotalPrice</label>
+                            </td>
+                            <td>
+                                <button id="delete-item" class="alert-warning" type="button" onclick="location.href='@Url.Action("RemoveItem", "Cart", new { Id =  @Model[i].Id}, null)'">
+                                    <img src="~/Resources/Delete Icon.png" />
+                                </button>
+                            </td>
+                        </tr>
                             totalamount += Model[i].TotalPrice;
                         }
-                        <tr></tr>
-                        <tr>
-                            <td colspan="2">
+                    <tr></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td><h2>Total</h2></td>
+                        <td>
+                            <h2>
+                                @totalamount
+                            </h2>
+                        </td>
+                        <td></td>
+                    </tr>
 
-                            </td>
-                            <td><h2>Total</h2></td>
-                            <td>
-                                <h2>
-                                    @totalamount
-                                </h2>
-                            </td>
-                            <td></td>
-                        </tr>
-
-                    </table>
-                    <div class="float-right">
-                        <button class="alert-success"> @Html.ActionLink("Offline Payment", "OfflinePayment", "Cart", new { @class = "btnOffline" })</button>
-                        <button class="alert-success"> @Html.ActionLink("Online Payment", "PaymentGateway", "Cart", new { total = totalamount }, new { @class = "btnOnline" })</button>
-                    </div>
+                </table>
+                <div class="float-right">
+                    <button class="alert-success"> @Html.ActionLink("Offline Payment", "OfflinePayment", "Cart", new { @class = "btnOffline" })</button>
+                    <button class="alert-success"> @Html.ActionLink("Online Payment", "PaymentGateway", "Cart", new { total = totalamount }, new { @class = "btnOnline" })</button>
+                </div>
                 }
                 else
                 {
-                    <div>
-                        <span style="font-size: 14px; font-weight:bold">No items added to Cart</span>
-                    </div>
+                <div>
+                    <span style="font-size: 14px; font-weight:bold">No items added to Cart</span>
+                </div>
                 }
-            </div>
-            <br />
+                </div>
+                <br />
 
-        </div>
-    }
+            </div>
+        }
+    </div>
 </div>
