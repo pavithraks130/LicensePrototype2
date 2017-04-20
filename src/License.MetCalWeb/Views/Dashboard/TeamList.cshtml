@@ -40,7 +40,7 @@
                         @Html.AntiForgeryToken()
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="col-md-4">Chose Team</label>
+                                <label class="col-md-4">Choose Team</label>
                                 @Html.DropDownList("TeamList", new SelectList(LicenseSessionState.Instance.TeamList, "Id", "Name"), "-- Select Team --", new {@id="ddlTeam", @class = "col-md-8 form-control" })
                             </div>
                         </div>
@@ -48,7 +48,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" class="btn" data-dismis="model" value="Update" />
+                    <input type="submit" class="btn" data-dismis="model" value="Choose" />
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                 </div>
             }
