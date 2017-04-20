@@ -309,6 +309,7 @@ namespace License.MetCalDesktop.ViewModel
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsonData))
                     poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+                AppState.Instance.purchaseOrder = poOrder;
             }
             else
             {

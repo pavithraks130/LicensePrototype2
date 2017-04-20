@@ -21,11 +21,11 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
-            <TextBlock DockPanel.Dock="Top" Text="Order has been placed,pending for approval. " Style="{StaticResource LabelTextStyle}" />
-            <TextBlock DockPanel.Dock="Top" Text="Purcahse order Id " Style="{StaticResource LabelTextStyle}" />
+            <TextBlock DockPanel.Dock="Top" Text="Order has been placed,pending for approval, status will be updated, once approved.Below is the PO Id: " Style="{StaticResource LabelTextStyle}" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding PurchaseOrderId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LabelTextStyle}" />
         </DockPanel>
         <DockPanel Grid.Row="1">
-            <Button  Style="{StaticResource DefaultButtonStyle}" Command="{Binding RedirectToHomeCommand}"  Margin="-200,0,5,5"  Name="btnHome" Content="Home" Width="80" Height="30"></Button>
+            <Button DockPanel.Dock="Left"  Style="{StaticResource DefaultButtonStyle}" Command="{Binding RedirectToHomeCommand}"  Margin="-1200,0,5,5"  Name="btnHome" Content="Home" Width="80" Height="30"></Button>
         </DockPanel>
     </Grid>
 </Page>
