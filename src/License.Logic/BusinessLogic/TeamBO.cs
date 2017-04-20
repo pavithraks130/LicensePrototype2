@@ -33,47 +33,6 @@ namespace License.Logic.BusinessLogic
             userLogic.RoleManager = RoleManager;
         }
 
-        //public TeamDetails GetUserInviteDetails(string adminId)
-        //{
-        //    Initialize();
-        //    User user = userLogic.GetUserById(adminId);
-        //    TeamDetails inviteList = new TeamDetails()
-        //    {
-        //        AdminUser = user
-        //    };
-        //    var teamMembers = logic.GetUserInviteList(adminId);
-        //    if (teamMembers.Count > 0)
-        //    {
-        //        inviteList.PendinigUsers =
-        //            teamMembers.Where(s => s.InviteeStatus == InviteStatus.Pending.ToString()).ToList();
-        //        inviteList.AcceptedUsers =
-        //            teamMembers.Where(s => s.InviteeStatus == InviteStatus.Accepted.ToString()).ToList();
-        //        inviteList.AcceptedUsers.Add(new TeamMember()
-        //        {
-        //            AdminId = adminId,
-        //            InviteeEmail = user.Email,
-        //            InviteeStatus = InviteStatus.Accepted.ToString(),
-        //            InviteeUserId = adminId,
-        //            InviteeUser = inviteList.AdminUser,
-        //            IsAdmin = true
-        //        });
-        //    }
-        //    else
-        //    {
-        //        inviteList.AcceptedUsers.Add(new TeamMember()
-        //        {
-        //            AdminId = adminId,
-        //            InviteeEmail = user.Email,
-        //            InviteeStatus = InviteStatus.Accepted.ToString(),
-        //            InviteeUserId = adminId,
-        //            InviteeUser = inviteList.AdminUser,
-        //            IsAdmin = true
-        //        });
-        //    }
-        //    ErrorMessage = logic.ErrorMessage;
-        //    return inviteList;
-        //}
-
         public TeamDetails GetteamDetails(int id)
         {
             TeamLogic teamLogic = new TeamLogic();
@@ -121,12 +80,14 @@ namespace License.Logic.BusinessLogic
             Initialize();
             var user = userLogic.GetUserByEmail(member.InviteeEmail);
             TeamMemberResponse teamMemResObj = new TeamMemberResponse();
-            string password = System.Configuration.ConfigurationSettings.AppSettings.Get("TeamMemberDefaultPassword");
+            string password = System.Configuration.ConfigurationManager.AppSettings.Get("TeamMemberDefaultPassword");
             if (user == null)
             {
-                Registration reg = new Registration();
-                reg.Email = member.InviteeEmail;
-                reg.Password = password;
+                Registration reg = new Registration()
+                {
+                    Email = member.InviteeEmail,
+                    Password = password
+                };
                 var status = userLogic.CreateUser(reg, "TeamMember");
                 if (status)
                     user = userLogic.GetUserByEmail(member.InviteeEmail);

@@ -17,6 +17,7 @@ namespace License.MetCalWeb.Models
         public string ApprovedBy { get; set; }
         public User User { get; set; }
         public string Comment { get; set; }
+        public double Total { get; set; }
         public ICollection<PurchaseOrderItem> OrderItems { get; set; }
 
         public PurchaseOrder()

@@ -47,7 +47,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
 
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = await client.PostAsJsonAsync("api/user/create", model);
                 if (response.IsSuccessStatusCode)
                 {
@@ -56,7 +56,7 @@ namespace License.MetCalWeb.Controllers
 
                     client.Dispose();
                     model.ServerUserId = datamodel.UserId;
-                    client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                     response = await client.PostAsJsonAsync("api/user/create", model);
                     if (response.IsSuccessStatusCode)
                     {
@@ -153,8 +153,8 @@ namespace License.MetCalWeb.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>();
 
-            claims.Add(new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", String.IsNullOrEmpty(user.Name) ? user.UserName : user.Name)); //user.Name from my database
-            claims.Add(new System.Security.Claims.Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.UserId)); //user.Id from my database
+            claims.Add(new System.Security.Claims.Claim(ClaimTypes.Name, String.IsNullOrEmpty(user.Name) ? user.UserName : user.Name)); //user.Name from my database
+            claims.Add(new System.Security.Claims.Claim(ClaimTypes.NameIdentifier, user.UserId)); //user.Id from my database
             claims.Add(new System.Security.Claims.Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "MyApplication"));
             if (!String.IsNullOrEmpty(user.FirstName))
                 claims.Add(new System.Security.Claims.Claim("FirstName", user.FirstName)); //user.FirstName from my database
@@ -213,15 +213,16 @@ namespace License.MetCalWeb.Controllers
                 model.Token = code;
                 model.UserId = userId;
                 var user = ResetUserPassword(model, ServiceType.OnPremiseWebApi);
-                if (user != null && !String.IsNullOrEmpty(user.ServerUserId))
+                if (user == null)
+                    user = ResetUserPassword(model, ServiceType.CentralizeWebApi);
+                else if (!String.IsNullOrEmpty(user.ServerUserId))
                 {
                     model.UserId = user.ServerUserId;
                     model.Token = String.Empty;
                     user = ResetUserPassword(model, ServiceType.CentralizeWebApi);
                     ErrorMessage = "Centralized Server : " + ErrorMessage;
                 }
-                else
-                    user = ResetUserPassword(model, ServiceType.CentralizeWebApi);
+
                 if (user == null)
                 {
                     ModelState.AddModelError("", ErrorMessage);
@@ -260,7 +261,7 @@ namespace License.MetCalWeb.Controllers
             string teamId = details[0];
             string inviteId = details[1];
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             TeamMember mem = new TeamMember();
             mem.Id = Convert.ToInt32(inviteId);
             mem.TeamId = Convert.ToInt32(teamId);
@@ -284,7 +285,7 @@ namespace License.MetCalWeb.Controllers
 
         public User ResetUserPassword(ResetPassword model, ServiceType type)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(type);
             var response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -303,7 +304,7 @@ namespace License.MetCalWeb.Controllers
         public ForgotPasswordToken GetForgotPasswordToken(ForgotPassword model, ServiceType type)
         {
             ErrorMessage = string.Empty;
-            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(type);
             var response = client.PostAsJsonAsync("api/user/GetResetToken", model).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -322,7 +323,7 @@ namespace License.MetCalWeb.Controllers
 
         public void UpdateLogoutStatus(string userId, ServiceType type)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(type);
             User userModel = new User();
             userModel.UserId = userId;
             userModel.IsActive = false;
@@ -343,7 +344,7 @@ namespace License.MetCalWeb.Controllers
                 case ServiceType.CentralizeWebApi: token = LicenseSessionState.Instance.CentralizedToken; break;
                 case ServiceType.OnPremiseWebApi: token = LicenseSessionState.Instance.OnPremiseToken; break;
             }
-            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(webApiType);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
             var response = await client.GetAsync("api/user/UserById/" + token.Id);
             if (response.IsSuccessStatusCode)
@@ -365,7 +366,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<bool> AuthenticateUser(LoginViewModel model, ServiceType webApiType)
         {
             ErrorMessage = string.Empty;
-            HttpClient client = WebApiServiceLogic.CreateClient(webApiType.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(webApiType);
             var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "password"),
                                 new KeyValuePair<string, string>("username", model.Email),
@@ -395,9 +396,9 @@ namespace License.MetCalWeb.Controllers
         public async Task SynchPurchaseOrder()
         {
             ErrorMessage = string.Empty;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.PostAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId, null).Result;
+            var response = client.GetAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

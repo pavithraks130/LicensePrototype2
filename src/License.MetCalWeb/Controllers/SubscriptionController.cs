@@ -20,7 +20,7 @@ namespace License.MetCalWeb.Controllers
         {
             TempData["CartCount"] = "";
             List<SubscriptionType> typeList = new List<SubscriptionType>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             HttpResponseMessage response;
             if (LicenseSessionState.Instance.IsGlobalAdmin)
@@ -39,7 +39,7 @@ namespace License.MetCalWeb.Controllers
                 ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             client.Dispose();
-            client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             response = await client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId);
             if (response.IsSuccessStatusCode)
@@ -68,7 +68,7 @@ namespace License.MetCalWeb.Controllers
         {
             SubscriptionType subType = new SubscriptionType();
             List<Product> productList = new List<Product>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Product/All").Result;
             if (response.IsSuccessStatusCode)
@@ -99,15 +99,19 @@ namespace License.MetCalWeb.Controllers
             {
                 var splitValue = selectedIndexAndProductIdList[index];
                 int productId = int.Parse(splitValue);
-                Product p = new Product();
-                p.Id = productId;
-                p.Quantity = qty[index];
+                Product p = new Product()
+                {
+                    Id = productId,
+                    Quantity = qty[index]
+                };
                 productCollection.Add(p);
             }
-            SubscriptionType subscriptionType = new SubscriptionType();
-            subscriptionType.Name = type.Name;
-            subscriptionType.Price = type.Price;
-            subscriptionType.Products = productCollection.AsEnumerable();
+            SubscriptionType subscriptionType = new SubscriptionType()
+            {
+                Name = type.Name,
+                Price = type.Price,
+                Products = productCollection.AsEnumerable()
+            };
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 subscriptionType.CreatedBy = LicenseSessionState.Instance.User.ServerUserId;
 
@@ -120,21 +124,15 @@ namespace License.MetCalWeb.Controllers
                 case 3: subscriptionType.ActiveDays = 365 * 3; break;
             }
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             if (bool.Parse(addToCart))
-            {
                 response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
-            }
             else
-            {
                 response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
-            }
 
             if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Subscription");
-            }
+                return RedirectToAction("Index");
             else
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

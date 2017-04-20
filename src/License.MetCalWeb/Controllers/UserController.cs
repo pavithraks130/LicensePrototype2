@@ -25,7 +25,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<User> users = new List<User>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/user/All");
             if (response.IsSuccessStatusCode)
@@ -124,7 +124,7 @@ namespace License.MetCalWeb.Controllers
 
         public async Task<bool> UpdateProfile(User model, ServiceType type, string userId)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(type);
             switch (type)
             {
                 case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
@@ -145,7 +145,7 @@ namespace License.MetCalWeb.Controllers
 
         public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(type.ToString());
+            HttpClient client = WebApiServiceLogic.CreateClient(type);
             switch (type)
             {
                 case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;

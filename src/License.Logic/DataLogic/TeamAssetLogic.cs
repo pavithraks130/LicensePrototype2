@@ -18,8 +18,12 @@ namespace License.Logic.DataLogic
             {
                 obj = Work.TeamAssetRepository.Create(convertedTeamAsset);
                 Work.TeamAssetRepository.Save();
+                return AutoMapper.Mapper.Map<TeamAsset, TeamAssetModel>(obj);
             }
-            return AutoMapper.Mapper.Map<TeamAsset, TeamAssetModel>(obj);
+            else
+                ErrorMessage = "Serial number is already  assigned to asset.";
+            return null;
+           
         }
 
         public List<TeamAssetModel> GetAssets()

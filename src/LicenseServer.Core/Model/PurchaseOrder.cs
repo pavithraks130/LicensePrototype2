@@ -20,6 +20,7 @@ namespace LicenseServer.Core.Model
         [ForeignKey("UserId")]
         public virtual Appuser User { get; set; }
         public string Comment { get; set; }
+        public double Total { get; set; }
         public virtual ICollection<PurchaseOrderItem> OrderItems { get; set; }
         public PurchaseOrder()
         {

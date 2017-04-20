@@ -32,8 +32,11 @@ else
                         <th class="col-md-3">
                             User
                         </th>
-                        <th class="col-md-3">
+                        <th class="col-md-2">
                             Purchase Order
+                        </th>
+                        <th class="col-md-2">
+                            Price
                         </th>
                         <th>
                             Subscription
@@ -48,8 +51,11 @@ else
                             <td class="col-md-3">
                                 @Model[i].User.Name
                             </td>
-                            <td class="col-md-3">
+                            <td class="col-md-2">
                                 @Model[i].PurchaseOrderNo
+                            </td>
+                            <td class="col-md-2">
+                                @Model[i].Total
                             </td>
                             <td>
                                 <div class="row">

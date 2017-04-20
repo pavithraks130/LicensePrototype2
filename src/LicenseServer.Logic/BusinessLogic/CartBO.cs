@@ -26,29 +26,30 @@ namespace LicenseServer.Logic.BusinessLogic
                 order.UserId = userId;
                 order.CreatedDate = DateTime.Now.Date;
                 order.PurchaseOrderNo = orderLogic.CreatePONumber();
-                var obj = orderLogic.CreatePurchaseOrder(order);
-
-                if (obj != null)
+                List<PurchaseOrderItem> poItemList = new List<PurchaseOrderItem>();
+                var total = 0.0;
+                foreach (var item in items)
                 {
-                    List<PurchaseOrderItem> poItemList = new List<PurchaseOrderItem>();
-                    foreach (var item in items)
+                    PurchaseOrderItem poItem = new PurchaseOrderItem()
                     {
-                        PurchaseOrderItem poItem = new PurchaseOrderItem();
-                        poItem.Quantity = item.Quantity;
-                        poItem.SubscriptionId = item.SubscriptionTypeId;
-                        poItemList.Add(poItem);
-                    }
-                    if (poItemList.Count > 0)
-                    {
-                        POItemLogic itemLogic = new POItemLogic();
-                        itemLogic.CreateItem(poItemList, obj.Id);
-                    }
+                        Quantity = item.Quantity,
+                        SubscriptionId = item.SubscriptionTypeId
+                    };
+                    poItemList.Add(poItem);
+                    total += item.Price;
+                }
+                order.Total = total;
+                var obj = orderLogic.CreatePurchaseOrder(order);
+                if (obj != null && poItemList.Count > 0)
+                {
+                    POItemLogic itemLogic = new POItemLogic();
+                    itemLogic.CreateItem(poItemList, obj.Id);
+
                     foreach (var item in items)
                     {
                         item.IsPurchased = true;
                         cartLogic.UpdateCartItem(item);
                     }
-
                 }
                 return obj;
             }
@@ -62,22 +63,28 @@ namespace LicenseServer.Logic.BusinessLogic
         public SubscriptionList OnlinePayment(string userId)
         {
             List<UserSubscription> subsList = new List<UserSubscription>();
-            CartLogic cartLogic = new CartLogic();
-            cartLogic.UserManager = UserManager;
-            cartLogic.RoleManager = RoleManager;
-            UserSubscriptionLogic userSubLogic = new UserSubscriptionLogic();
-            userSubLogic.UserManager = UserManager;
-            userSubLogic.RoleManager = RoleManager;
+            CartLogic cartLogic = new CartLogic()
+            {
+                UserManager = UserManager,
+                RoleManager = RoleManager
+            };
+            UserSubscriptionLogic userSubLogic = new UserSubscriptionLogic()
+            {
+                UserManager = UserManager,
+                RoleManager = RoleManager
+            };
             var cartItems = cartLogic.GetCartItems(userId);
             if (cartItems.Count > 0)
             {
                 foreach (CartItem item in cartItems)
                 {
-                    UserSubscription usersubs = new UserSubscription();
-                    usersubs.UserId = userId;
-                    usersubs.SubscriptionTypeId = item.SubscriptionTypeId;
-                    usersubs.SubscriptionDate = DateTime.Now.Date;
-                    usersubs.Quantity = item.Quantity;
+                    UserSubscription usersubs = new UserSubscription()
+                    {
+                        UserId = userId,
+                        SubscriptionTypeId = item.SubscriptionTypeId,
+                        SubscriptionDate = DateTime.Now.Date,
+                        Quantity = item.Quantity
+                    };
                     subsList.Add(usersubs);
                 }
                 var dataList = userSubLogic.CreateUserSubscriptionList(subsList, userId);

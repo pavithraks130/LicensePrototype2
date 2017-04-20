@@ -72,7 +72,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("DeleteInvite/{id}")]
+        [Route("DeleteTeamMember/{id}")]
         public HttpResponseMessage DeleteTeamMember(int id)
         {
             Initialize();

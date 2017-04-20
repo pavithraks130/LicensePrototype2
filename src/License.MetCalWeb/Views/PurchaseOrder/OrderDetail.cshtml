@@ -10,9 +10,9 @@
     <div class="col-md-8">
         <div class="form-group">
             @Html.LabelFor(m => m.PurchaseOrderNo, new { @class = "col-md-4" })
-          <div class="col-md-4">
-              <label>@Model.PurchaseOrderNo</label>
-          </div>
+            <div class="col-md-4">
+                <label>@Model.PurchaseOrderNo</label>
+            </div>
         </div>
 
     </div>
@@ -27,19 +27,18 @@
             <div class="col-md-4">
                 @if (String.IsNullOrEmpty(Model.ApprovedBy))
                 {
-                    <label>Pending</label>
+                <label>Pending</label>
                 }
                 else if (Model.IsApproved)
                 {
-                    <label>Approved</label>
+                <label>Approved</label>
                 }
                 else
                 {
-                    <label>Rejected</label>
+                <label>Rejected</label>
                 }
             </div>
         </div>
-
     </div>
 </div>
 <br />
@@ -47,15 +46,14 @@
     <div class="col-md-8">
         <div class="form-group">
             <div class="col-md-4">
-                <label>Approved By</label>
+                <label>Price</label>
             </div>
-            <div class="col-md-4 float-left">
-                <label>@Model.ApprovedBy</label>
+            <div class="col-md-4">
+                <label>@Model.Total</label>
             </div>
         </div>
     </div>
 </div>
-<br />
 <br />
 <div class="row">
     <div class="col-md-12">
