@@ -54,6 +54,16 @@
         <Setter Property="Foreground" Value="#FFC20F" />
     </Style>
 
+
+    <Style x:Key="LabelTextStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="#FFC20F" />
+    </Style>
+
     <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
         <StackPanel Margin="-20,0,0,0" Background="White"/>
     </ItemsPanelTemplate>

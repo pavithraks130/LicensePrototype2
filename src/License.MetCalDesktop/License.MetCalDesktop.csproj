@@ -101,8 +101,11 @@
     <Compile Include="Common\DataValidations.cs" />
     <Compile Include="Common\Enum.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
+    <Compile Include="Common\StringToListConverter.cs" />
     <Compile Include="Model\CardDetails.cs" />
+    <Compile Include="Model\CartItems.cs" />
     <Compile Include="Model\LicenseType.cs" />
+    <Compile Include="Model\PurchaseOrder.cs" />
     <Compile Include="Model\ResponseFailure.cs" />
     <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\AccessToken.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="ViewModel\CreditAndDebitCardDetailsViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\OfflinePaymentViewModel.cs" />
     <Compile Include="ViewModel\RedirectToAmountPaymentPageViewModel.cs" />
     <Compile Include="ViewModel\SubscriptionDetailsViewModel.cs" />
     <Compile Include="ViewModel\SubscriptionViewModel.cs" />
@@ -125,6 +129,9 @@
     </Compile>
     <Compile Include="Views\LoginUser.xaml.cs">
       <DependentUpon>LoginUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OfflinePayment.xaml.cs">
+      <DependentUpon>OfflinePayment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RedirectToAmountPaymentPage.xaml.cs">
       <DependentUpon>RedirectToAmountPaymentPage.xaml</DependentUpon>
@@ -163,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoginUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OfflinePayment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -217,15 +228,6 @@
     <Resource Include="ProductImages\B3.PNG" />
     <Resource Include="ProductImages\B4.PNG" />
     <Resource Include="ProductImages\B5.PNG" />
-    <Resource Include="ProductImages\CartItem\B5.PNG" />
-    <Resource Include="ProductImages\CartItem\P1.PNG" />
-    <Resource Include="ProductImages\CartItem\P2.PNG" />
-    <Resource Include="ProductImages\CartItem\p3.PNG" />
-    <Resource Include="ProductImages\CartItem\P4.PNG" />
-    <Resource Include="ProductImages\CartItem\p5.PNG" />
-    <Resource Include="ProductImages\CartItem\p6.PNG" />
-    <Resource Include="ProductImages\CartItem\p7.PNG" />
-    <Resource Include="ProductImages\CartItem\p8.PNG" />
     <Resource Include="ProductImages\P1.PNG" />
     <Resource Include="ProductImages\P2.PNG" />
     <Resource Include="ProductImages\p3.PNG" />

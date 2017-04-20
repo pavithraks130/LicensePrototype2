@@ -1,4 +1,5 @@
-﻿using System;
+﻿using License.MetCalDesktop.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,9 @@ namespace License.MetCalDesktop.Views
         public SubscriptionDetails()
         {
             InitializeComponent();
+            var viewModel = new SubscriptionDetailsViewModel();
+            viewModel.NavigateNextPage += delegate (string screenName, Dictionary<string, string> additionalInfo) { this.NavigationService.Navigate(new Dashboard()); };
+            DataContext = viewModel;
         }
     }
 }

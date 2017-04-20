@@ -7,7 +7,6 @@ using License.MetCalDesktop.Model;
 using System.Net.Http;
 using License.MetCalDesktop.Common;
 using Newtonsoft.Json;
-
 namespace License.MetCalDesktop.ViewModel
 {
     /// <summary>
@@ -15,11 +14,13 @@ namespace License.MetCalDesktop.ViewModel
     /// </summary>
     class SubscriptionViewModel : BaseEntity
     {
+
         private List<SubscriptionType> _subscriptionList = new List<SubscriptionType>();
         /// <summary>
         ///performing the license purchase  action
         /// </summary>
         public ICommand BuyCommand { get; set; }
+        public ICommand RedirectToSubscriptionDetailsCommand { get; set; }
         /// <summary>
         /// SubscriptionList collection
         /// </summary>
@@ -46,7 +47,14 @@ namespace License.MetCalDesktop.ViewModel
         public SubscriptionViewModel()
         {
             BuyCommand = new RelayCommand(RedirectToPayment);
+            RedirectToSubscriptionDetailsCommand = new RelayCommand(RedirectToSubscriptionDetails);
             LoadSubscriptionList();
+        }
+
+        private void RedirectToSubscriptionDetails(object obj)
+        {
+            if (NavigateNextPage != null)
+                NavigateNextPage("SubscriptionDetails", null);
         }
 
         /// <summary>
@@ -72,7 +80,7 @@ namespace License.MetCalDesktop.ViewModel
                 var subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
                 foreach (var x in subscriptionList)
                 {
-                    x.ImagePath = @"..\ProductImages\CartItem\" + x.ImagePath;
+                    x.ImagePath = @"..\ProductImages\" + x.ImagePath;
                     _subscriptionList.Add(x);
                 }
             }
@@ -94,8 +102,12 @@ namespace License.MetCalDesktop.ViewModel
             int id = Convert.ToInt32(param);
             var typeObj = SubscriptionList.FirstOrDefault(l => l.Id == id);
             AppState.Instance.SelectedSubscription = typeObj;
+
+
+           
+
             if (NavigateNextPage != null)
-                NavigateNextPage(null, null);
+                NavigateNextPage("CreditAndDebitCardDetails", null);
         }
     }
 }
