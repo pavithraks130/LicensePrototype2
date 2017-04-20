@@ -39,7 +39,14 @@ namespace License.MetCalDesktop.Views
         /// <param name="additionalInfo">additionalInfo</param>
         private void OnNavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
         {
-            this.NavigationService.Navigate(new RedirectToAmountPaymentPage());
+            if (screenName == "RedirectToAmountPaymentPage")
+            {
+                this.NavigationService.Navigate(new RedirectToAmountPaymentPage());
+            }
+            if (screenName == "OfflinePayment")
+            {
+                this.NavigationService.Navigate(new OfflinePayment());
+            }
         }
 
     }

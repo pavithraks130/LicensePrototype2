@@ -5,6 +5,9 @@ using System.Linq;
 using License.MetCalDesktop.Model;
 using License.MetCalDesktop.Common;
 using System.ComponentModel;
+using System.Windows.Input;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace License.MetCalDesktop.ViewModel
 {
@@ -138,6 +141,7 @@ namespace License.MetCalDesktop.ViewModel
         /// Purchase action
         /// </summary>
         public RelayCommand PurchaseCommand { get; private set; }
+         public ICommand PayOfflineCommand { get; set; }
 
         #region Order Details Summary
         /// <summary>
@@ -277,7 +281,42 @@ namespace License.MetCalDesktop.ViewModel
             LoadListOfYears();
             LoadListOfMonths();
             PurchaseCommand = new RelayCommand(OnPurchase);
+            PayOfflineCommand = new RelayCommand(PayOffline);
 
+        }
+
+        private void PayOffline(object obj)
+        {
+            //Add to cart
+            CartItems item = new CartItems();
+            item.SubscriptionTypeId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
+            item.Quantity = 1;
+            item.DateCreated = DateTime.Now;
+            item.UserId = AppState.Instance.User.ServerUserId;
+            HttpClient client0 = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client0.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+            var response = client0.PostAsJsonAsync("api/Cart/Create", item).Result;
+            client0.Dispose();
+
+            //=========================================
+
+            PurchaseOrder poOrder = new PurchaseOrder();
+            HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+             response =  client.PostAsync("api/cart/offlinepayment/" + AppState.Instance.User.ServerUserId, null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrEmpty(jsonData))
+                    poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                //var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            }
+            NavigateNextPage("OfflinePayment", null);
         }
 
         /// <summary>
@@ -312,9 +351,54 @@ namespace License.MetCalDesktop.ViewModel
             if (!string.IsNullOrEmpty(CardName) && !string.IsNullOrEmpty(CardNumber) && !string.IsNullOrEmpty(SelectedMonth)
                 && !string.IsNullOrEmpty(SelectedYear.ToString()) && !string.IsNullOrEmpty(CardCVV.ToString()))
             {
+                //Add to cart
+                CartItems item = new CartItems();
+                item.SubscriptionTypeId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
+                item.Quantity = 1;
+                item.DateCreated = DateTime.Now;
+                item.UserId = AppState.Instance.User.ServerUserId;
+                HttpClient client0 = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                client0.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+                var response = client0.PostAsJsonAsync("api/Cart/Create", item).Result;
+                client0.Dispose();
+                // ===================
+                
+                SubscriptionList userSubscriptionList = null;
+                var serviceType = System.Configuration.ConfigurationManager.AppSettings.Get("ServiceType");
+                HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+                response = client.PostAsync("api/cart/OnlinePayment/" + AppState.Instance.User.ServerUserId, null).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsondata = response.Content.ReadAsStringAsync().Result;
+                    if (!string.IsNullOrEmpty(jsondata))
+                    {
+                        userSubscriptionList = JsonConvert.DeserializeObject<SubscriptionList>(jsondata);
+                        string userId = string.Empty;
+                        userId = AppState.Instance.User.UserId;
+                        List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
+                        foreach (var subDtls in userSubscriptionList.Subscriptions)
+                        {
+                            //Code to save the user Subscription details to Database.
+                            UserSubscriptionData userSubscription = new UserSubscriptionData();
+                            userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
+                            userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
+                            userSubscription.UserId = userId;
+                            userSubscription.Quantity = subDtls.OrderdQuantity;
+                            userSubscription.Subscription = subDtls;
+                            userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
+                            subscriptionData.Add(userSubscription);
+                        }
+                        client.Dispose();
+                        HttpClient client1 = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                        client1.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                        var response1 = client1.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
+                        client1.Dispose();
+                    }
+                }
                 var kvp = new Dictionary<string, string>();
-                kvp.Add("Amount", "750");
-                NavigateNextPage("PurchasePage", kvp);
+                kvp.Add("Amount", AppState.Instance.SelectedSubscription.Price.ToString());
+                NavigateNextPage("RedirectToAmountPaymentPage", kvp);
             }
         }
     }

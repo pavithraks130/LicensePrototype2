@@ -5,6 +5,55 @@ using System.Web;
 
 namespace License.MetCalDesktop.Model
 {
+    public class SubscriptionList
+    {
+        public string UserId { get; set; }
+
+        public List<Subscription> Subscriptions { get; set; }
+
+        public SubscriptionList()
+        {
+            Subscriptions = new List<Subscription>();
+        }
+    }
+    public class Subscription
+    {
+        public int SubscriptionTypeId { get; set; }
+
+        public DateTime SubscriptionDate { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
+
+        public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
+
+        public Subscription()
+        {
+            LicenseKeyProductMapping = new List<LicenseKeyProductMapping>();
+        }
+
+        public int OrderdQuantity { get; set; }
+    }
+    public class LicenseKeyProductMapping
+    {
+        public string LicenseKey { get; set; }
+        public int ProductId { get; set; }
+
+    }
+
+    public class UserSubscriptionData
+    {
+
+        public string UserId { get; set; }
+
+        public int SubscriptionId { get; set; }
+
+        public DateTime SubscriptionDate { get; set; }
+
+        public Subscription Subscription { get; set; }
+
+        public int Quantity { get; set; }
+
+        public List<LicenseKeyProductMapping> LicenseKeys { get; set; }
+    }
     public class SubscriptionDetails
     {
         public int Id { get; set; }

@@ -15,7 +15,11 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
-        <DockPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".7*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
             <TextBlock DockPanel.Dock="Top" Text="Subscription Type" Style="{StaticResource TextBlockHeaderTextStyle}" />
             <ListView FlowDirection="LeftToRight" x:Name="lvFeatureList" Focusable="False"  ItemsSource="{Binding SubscriptionList}" Background="Black" Margin="20" Width="Auto">
 
@@ -53,8 +57,8 @@
                 </ListView.ItemTemplate>
             </ListView>
         </DockPanel>
-        <!--<Popup x:Name="paymentOption" Placement="Center">
-            <local:PaymentOption />
-        </Popup>-->
+        <DockPanel Grid.Row="1">
+            <Button Style="{StaticResource DefaultButtonStyle}" Command="{Binding RedirectToSubscriptionDetailsCommand}"  Margin="-300,5,5,5"  Grid.Row="1" Name="btnsubscription" Width="180" Content="Subscription Details"  Height="30"></Button>
+        </DockPanel>
     </Grid>
 </Page>

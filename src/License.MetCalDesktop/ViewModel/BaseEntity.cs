@@ -36,6 +36,7 @@ namespace License.MetCalDesktop.ViewModel
     {
        
         private readonly Action<object> _action;
+        private Action redirectToPayment;
 
         /// <summary>
         /// used to perform button click action.
@@ -44,6 +45,11 @@ namespace License.MetCalDesktop.ViewModel
         public RelayCommand(Action<object> action)
         {
             _action = action;
+        }
+
+        public RelayCommand(Action redirectToPayment)
+        {
+            this.redirectToPayment = redirectToPayment;
         }
 
         /// <summary>

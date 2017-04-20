@@ -1,4 +1,5 @@
-﻿using License.MetCalDesktop.ViewModel;
+﻿using License.MetCalDesktop.Common;
+using License.MetCalDesktop.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,7 +33,7 @@ namespace License.MetCalDesktop.Views
         {
             InitializeComponent();
             var viewModel = new RedirectToAmountPaymentPageViewModel();
-            viewModel.NavigateNextPage += delegate (string screenName, Dictionary<string, string> additionalInfo) { this.NavigationService.Navigate(new LoginUser()); };
+            viewModel.NavigateNextPage +=  delegate(string screenName, Dictionary<string, string> additionalInfo) { this.NavigationService.Navigate(new LoginUser()); };
             DataContext = viewModel;
             m_oWorker = new BackgroundWorker();
             m_oWorker.DoWork += new DoWorkEventHandler(m_oWorker_DoWork);
@@ -70,8 +71,8 @@ namespace License.MetCalDesktop.Views
             }
             statusBarPayment.Visibility = Visibility.Visible;
             System.Threading.Thread.Sleep(1000);
-         //   if (SingletonLicense.Instance.IsUserLoggedIn)
-                this.NavigationService.Navigate(new Dashboard());
+            if (AppState.Instance.IsUserLoggedIn)
+                this.NavigationService.Navigate(new SubscriptionDetails());
 
         }
 

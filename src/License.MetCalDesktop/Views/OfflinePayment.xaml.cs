@@ -17,28 +17,23 @@ using System.Windows.Shapes;
 namespace License.MetCalDesktop.Views
 {
     /// <summary>
-    /// Interaction logic for Subscriptions.xaml
+    /// Interaction logic for OfflinePayment.xaml
     /// </summary>
-    public partial class Subscriptions : Page
+    public partial class OfflinePayment : Page
     {
-        public Subscriptions()
+        public OfflinePayment()
         {
             InitializeComponent();
-            //Navigation Service is an inbuilt prperty of page
-            var viewmodel = new SubscriptionViewModel();
+            var viewmodel = new OfflinePaymentViewModel();
             viewmodel.NavigateNextPage += NavigateNextPage;
             DataContext = viewmodel;
         }
 
         private void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
         {
-            if (screenName == "CreditAndDebitCardDetails")
+            if (screenName == "Dashboard")
             {
-                this.NavigationService.Navigate(new CreditAndDebitCardDetails());
-            }
-            if (screenName == "SubscriptionDetails")
-            {
-                this.NavigationService.Navigate(new SubscriptionDetails());
+                this.NavigationService.Navigate(new Dashboard());
             }
         }
     }
