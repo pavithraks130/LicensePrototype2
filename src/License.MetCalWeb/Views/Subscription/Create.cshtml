@@ -8,47 +8,38 @@
 <h3>Create Subscription</h3>
 <br />
 <div class="row">
-    @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
+    <div class="col-md-12">
+        @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
 
-        <div class="col-md-12">
+
             <div class="form-group">
                 <div class="col-md-4"><label>Subscription Name</label></div>
                 @Html.TextBoxFor(m => m.Name, new { @class = "txt-sub form-control col-md-8" })
             </div>
-        </div>
-        <div class="col-md-12">
             <div class="form-group">
                 <label class="col-md-4">Choose maintainanse period</label>
                 @Html.DropDownListFor(m => m.ActivationMonth, new SelectList(TempData["ActivationMonth"] as IEnumerable<dynamic>, "Value", "Name"), new { @class = "form-control ddlActivationPeriode col-md-8" })
             </div>
-
-        </div>
-        <br />
-        <div class="col-md-12">
+            <br />
             <div class="form-group">
                 <div class="col-md-5"><labl>Product Name</labl></div>
                 <div class="col-md-2"><labl>Price (Per Unit in USD)</labl></div>
                 <div class="col-md-2"><labl>Quantity</labl></div>
                 <div class="col-md-3"><labl>Total Price(USD)</labl></div>
             </div>
-
-        </div>
-        int index = -1;
-        foreach (var product in Model.Products)
-        {
-            index += 1;
-            double price = product.Price * product.Quantity;
-            <div class="col-md-12">
+            int index = -1;
+            foreach (var product in Model.Products)
+            {
+                index += 1;
+                double price = product.Price * product.Quantity;
                 <div class="form-group">
                     <div class="col-md-5 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
                     <div class="col-md-2 proCost"><label class="lblSelectedProductCost">@product.Price</label></div>
                     <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
                     <div class="col-md-3 proPrice"><label class="price_val">@price</label></div>
                 </div>
-            </div>
-        }
-        <div class="col-md-12">
+            }
             <div class="form-group">
                 <div class="col-md-7">
                 </div>
@@ -57,22 +48,18 @@
                 <label class="total col-md-3">0</label>
 
             </div>
-        </div>
-        <div class="col-md-12">
             <div class="form-group">
                 <label id="lblError" class="col-md-6"></label>
                 <div class="col-md-6">
                     <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
-                    @if (!LicenseSessionState.Instance.IsSuperAdmin)
+                    @if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
                         <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
                     }
                 </div>
-
-
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
 <script>
     $(document).ready(function () {

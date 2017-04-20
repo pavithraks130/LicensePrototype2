@@ -21,22 +21,26 @@
 </script>
 <br />
 <br />
-@if(Model != null)
-{
-    using (Html.BeginForm("LicenseApprovalByTeam", "License", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table" style="border: none">
-                    <tr>
-                        <th class="col-md-1"></th>
-                        <th class="col-md-3">Email</th>
-                        <th class="col-md-4">Subscription Type</th>
-                        <th class="col-md-4">Product Name</th>
-                    </tr>
-                    @foreach (var userLicenseRequest in Model)
+<div class="row">
+    <div class="col-md-12">
+
+
+        @if (Model != null)
+        {
+            using (Html.BeginForm("LicenseApprovalByTeam", "License", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" style="border: none">
+                            <tr>
+                                <th class="col-md-1"></th>
+                                <th class="col-md-3">Email</th>
+                                <th class="col-md-4">Subscription Type</th>
+                                <th class="col-md-4">Product Name</th>
+                            </tr>
+                            @foreach (var userLicenseRequest in Model)
                     {
                     <tr>
                         <td class="col-md-1"><input type="checkbox" name="selectLicenseRequest" value="@userLicenseRequest.Id" /></td>
@@ -45,45 +49,49 @@
                         <td class="col-md-4">@userLicenseRequest.Product.Name</td>
                     </tr>
                     }
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <label class="col-md-4"> Comment/Feedback </label>
-                        @Html.TextArea("comment", new { @class = "col-md-4" })
-
+                        </table>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <input type="submit"  name="status" value="Approve" class="btn btn-default btn-custom btn-save" />
-                </div>
-                <div class="col-md-6">
-                    <input type="submit"  name="status" value="Reject" class="btn btn-default btn-custom btn-save" />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label id="lblError" style="display:none;">
-                    No Request are selected
-                </label>
-            </div>
-        </div>
-    }
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="col-md-4"> Comment/Feedback </label>
+                                @Html.TextArea("comment", new { @class = "col-md-4" })
 
-}
-else
-{
-    <div class="row">
-        <div class="col-md-12">
-            <label>No Liense Request found</label>
-        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <input type="submit" name="status" value="Approve" class="btn btn-default btn-custom btn-save" />
+                        </div>
+                        <div class="col-md-6">
+                            <input type="submit" name="status" value="Reject" class="btn btn-default btn-custom btn-save" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label id="lblError" style="display:none;" class="float-left">
+                            No Request are selected
+                        </label>
+                    </div>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <label>No Liense Request found</label>
+                </div>
+            </div>
+        }
     </div>
-}
+</div>
