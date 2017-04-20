@@ -55,7 +55,7 @@
 </script>
 <h2>Teams</h2>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         <div class="container">
             <div class="form-group">
                 <button class="btn btn-primary btn-lg btn-custom btnCreate">Create Team</button>
@@ -63,14 +63,14 @@
             <table class="table" style="table-layout:fixed;">
                 <tr>
                     <th>Team Name</th>
-                    <th>Admin</th>
+                    <th>Team Member Count</th>
                     <th>Action</th>
                 </tr>
                 @foreach (var obj in Model)
                 {
                     <tr>
                         <td>@obj.Name</td>
-                        <td>@obj.AdminUser.Name</td>
+                        <td>@(obj.TeamMembers == null ? 0 : obj.TeamMembers.Count)</td>
                         <td>
                             @if (obj.IsDefaultTeam == false && LicenseSessionState.Instance.IsSuperAdmin)
                             {

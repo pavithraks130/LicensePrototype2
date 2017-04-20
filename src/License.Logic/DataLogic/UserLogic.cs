@@ -63,7 +63,7 @@ namespace License.Logic.DataLogic
                     DataModel.Team team = new DataModel.Team();
                     team.AdminId = userId;
                     team.IsDefaultTeam = true;
-                    team.Name = "Default Team";
+                    team.Name = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultTeamName");
                     teamLogic.CreateTeam(team);
                 }
             }
