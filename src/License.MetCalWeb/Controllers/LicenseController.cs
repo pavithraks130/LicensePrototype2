@@ -111,7 +111,9 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult MapLicense(string userId, bool bulkLicenseAdd)
         {
-
+            ViewData["UserEmail"] = "";
+            if (!bulkLicenseAdd)
+                ViewData["UserEmail"] = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail;
             var listdata = GetLicenseListBySubscription(userId, bulkLicenseAdd);
             return View(listdata);
         }
@@ -150,8 +152,8 @@ namespace License.MetCalWeb.Controllers
         public ActionResult RevokeLicense(string userId)
         {
             TempData["UserId"] = userId;
-            UserLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false,false);
-            ViewData["TeamMember"] = licDetails.User.Email;
+            UserLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false, false);
+            ViewData["UserEmail"] = licDetails.User.Email;
             return View(licDetails.SubscriptionDetails);
         }
 
@@ -216,7 +218,7 @@ namespace License.MetCalWeb.Controllers
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/CreateUserLicence", mapping).Result;
-            if (!response.IsSuccessStatusCode)  
+            if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
@@ -256,7 +258,7 @@ namespace License.MetCalWeb.Controllers
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RevokeUserLicence", mapping).Result;
-            if (!response.IsSuccessStatusCode)  
+            if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
@@ -300,11 +302,11 @@ namespace License.MetCalWeb.Controllers
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/License/RequestLicense", licReqList).Result;
             if (!response.IsSuccessStatusCode)
-            { 
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-                
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+
                 return View();
             }
             return RedirectToAction("TeamContainer", "TeamManagement");
