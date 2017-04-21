@@ -41,7 +41,7 @@
                                 @Model[i].SubType.Price
                             </td>
                             <td>
-                                @Html.TextBoxFor(p => p[i].Quantity,  new { @name = "cartQty" })
+                                @Html.DisplayFor(p => p[i].Quantity,  new { @name = "cartQty" })
                             </td>
                             <td>
                                 <label>@Model[i].TotalPrice</label>
