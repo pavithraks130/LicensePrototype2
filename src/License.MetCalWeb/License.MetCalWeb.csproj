@@ -295,6 +295,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\FeatureController.cs" />
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
@@ -385,6 +386,10 @@
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\TeamManagement\AssignRevokeTeam.cshtml" />
     <Content Include="Views\Dashboard\TeamList.cshtml" />
+    <Content Include="Views\Feature\Create.cshtml" />
+    <Content Include="Views\Feature\Update.cshtml" />
+    <Content Include="Views\Feature\Index.cshtml" />
+    <Content Include="Views\Product\Update.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

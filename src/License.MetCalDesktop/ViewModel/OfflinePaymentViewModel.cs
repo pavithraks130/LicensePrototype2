@@ -33,7 +33,7 @@ namespace License.MetCalDesktop.ViewModel
         /// navigation service action
         /// </summary>
         public NavigationService Service { get; set; }
-        public string PurchaseOrderId { get => _purchaseOrderId; set => _purchaseOrderId =value; }
+        public string PurchaseOrderId { get { return _purchaseOrderId; } set { _purchaseOrderId = value; } }
     }
 }
 

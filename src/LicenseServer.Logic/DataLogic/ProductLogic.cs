@@ -28,6 +28,12 @@ namespace LicenseServer.Logic
         public bool CreateProduct(Product pro)
         {
             Core.Model.Product obj = AutoMapper.Mapper.Map<Product, Core.Model.Product>(pro);
+            obj.AssociatedFeatures = new List<Core.Model.Feature>();
+            foreach (var f in pro.AssociatedFeatures)
+            {
+                var feature = Work.FeaturesRepository.GetById(f.Id);
+                obj.AssociatedFeatures.Add(feature);
+            }
             obj = Work.ProductRepository.Create(obj);
             Work.ProductRepository.Save();
             return obj.Id > 0;
@@ -39,6 +45,12 @@ namespace LicenseServer.Logic
             obj.Name = pro.Name;
             obj.Description = pro.Description;
             obj.Price = pro.Price;
+            obj.AssociatedFeatures = new List<Core.Model.Feature>();
+            foreach (var f in pro.AssociatedFeatures)
+            {
+                var feature = Work.FeaturesRepository.GetById(f.Id);
+                obj.AssociatedFeatures.Add(feature);
+            }
             obj = Work.ProductRepository.Update(obj);
             Work.ProductRepository.Save();
             return obj.Id > 0;

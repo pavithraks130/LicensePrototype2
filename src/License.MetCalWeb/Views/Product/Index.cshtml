@@ -3,7 +3,26 @@
 @{
     ViewBag.Title = "Product List";
 }
+<script>
+    $(function () {
+        $('.ancDelete').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).href,
+                method: "POST",
+                dataType: "application/json",
+                success: function (data) {
+                    if (data.status == false)
+                        alert(data.message);
+                },
+                error: function (data) {
 
+                }
+
+            });
+        });
+    });
+</script>
 <div class="row">
     <div class="col-md-12">
 
@@ -46,9 +65,8 @@
                         @Html.DisplayFor(modelItem => item.Quantity)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })  |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id, @class="ancDelete" })
                     </td>
                 </tr>
             }
