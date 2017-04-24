@@ -350,7 +350,6 @@
     <Content Include="Views\Account\Confirm.cshtml" />
     <Content Include="Views\Cart\PaymentGateway.cshtml" />
     <Content Include="Views\Cart\DoPayment.cshtml" />
-    <Content Include="Views\Product\CartDetails.cshtml" />
     <Content Include="Views\Subscription\Index.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
     <Content Include="Views\License\MapLicense.cshtml" />
