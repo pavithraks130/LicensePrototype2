@@ -47,6 +47,7 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            GetFeatureList();
             return View();
         }
 
@@ -72,6 +73,7 @@ namespace License.MetCalWeb.Controllers
                     ModelState.AddModelError("", errorResponse.Message);
                 }
             }
+            GetFeatureList();
             return View(productDetails);
         }
 
@@ -93,6 +95,7 @@ namespace License.MetCalWeb.Controllers
                 var errorRespoonse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
                 ModelState.AddModelError("", errorRespoonse.Message);
             }
+            GetFeatureList();
             return View(pro);
         }
 
@@ -118,9 +121,26 @@ namespace License.MetCalWeb.Controllers
                     ModelState.AddModelError("", errorResponse.Message);
                 }
             }
+            GetFeatureList();
             return View(productDetails);
         }
 
+
+        public void GetFeatureList()
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = client.GetAsync("api/feature/all").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                ViewBag.FeatureList = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
+            }
+            else
+            {
+                ViewBag.FeatureList = new List<Feature>();
+            }
+        }
         [HttpPost]
         public ActionResult Delete(int id)
         {

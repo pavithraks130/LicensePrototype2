@@ -60,7 +60,7 @@ namespace License.MetCalWeb.Controllers
 
         }
 
-        public ActionResult Update(int id)
+        public ActionResult Edit(int id)
         {
             Feature obj = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -81,7 +81,7 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Update(int id, Feature f)
+        public ActionResult Edit(int id, Feature f)
         {
             if (ModelState.IsValid)
             {
