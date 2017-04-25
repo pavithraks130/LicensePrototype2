@@ -10,15 +10,17 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
-    public class FeatureController : Controller
+    [Authorize]
+    [SessionExpire]
+    public class FeatureController : BaseController
     {
         // GET: Feature
         public ActionResult Index()
         {
             List<Feature> data = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorzation", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var respons = client.GetAsync("api/feature/all").Result;
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var respons = client.GetAsync("api/Feature/All").Result;
             if (respons.IsSuccessStatusCode)
             {
                 var jsonData = respons.Content.ReadAsStringAsync().Result;
@@ -43,7 +45,7 @@ namespace License.MetCalWeb.Controllers
                 var response = client.PostAsJsonAsync("api/Feature/Create", f).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    return Json(new { message = "success", status = true });
+                    return Json(new { message = "success", success = true });
                 }
                 else
                 {
@@ -56,16 +58,16 @@ namespace License.MetCalWeb.Controllers
             var _message = string.Join(Environment.NewLine, ModelState.Values
                                      .SelectMany(x => x.Errors)
                                      .Select(x => x.ErrorMessage));
-            return Json(new { message = _message, status = false });
+            return Json(new { message = _message, success = false });
 
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int Id)
         {
             Feature obj = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.GetAsync("api/feature/GetbyId/" + id).Result;
+            var response = client.GetAsync("api/feature/GetbyId/" + Id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -89,7 +91,7 @@ namespace License.MetCalWeb.Controllers
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PutAsJsonAsync("api/feature/Update/" + id, f).Result;
                 if (response.IsSuccessStatusCode)
-                    return Json(new { message = "success", status = true });
+                    return Json(new { message = "success", success = true });
                 else
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -98,21 +100,21 @@ namespace License.MetCalWeb.Controllers
                 }
             }
             string _message = String.Join(Environment.NewLine, ModelState.Values.SelectMany(s => s.Errors).Select(e => e.ErrorMessage));
-            return Json(new { message = _message, status = false });
+            return Json(new { message = _message, success = false });
         }
 
-        public ActionResult DeleteFeature(int id)
+        public ActionResult Delete(int Id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.DeleteAsync("api/Feature/Delete/" + id).Result;
+            var response = client.DeleteAsync("api/Feature/Delete/" + Id).Result;
             if (response.IsSuccessStatusCode)
-                return Json(new { message = "success", status = true });
+                return Json(new { message = "success", success = true });
             else
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var errorData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                return Json(new { message = errorData.Message, status = false });
+                return Json(new { message = errorData.Message, success = false });
             }
         }
     }

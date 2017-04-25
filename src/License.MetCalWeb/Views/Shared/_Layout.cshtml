@@ -58,8 +58,7 @@
                 {
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                     {
-                        <li>@Html.ActionLink("Super Users", "Index", "User")</li>
-                        <li>@Html.ActionLink("Products", "Index","Product")</li>
+                        <li>@Html.ActionLink("Super Users", "Index", "User")</li>                       
                         <li>@Html.ActionLink("User Token", "Index", "UserToken")</li>
                         <li class="dropdown">
                             @Html.ActionLink("Purchases", "", "")
@@ -69,7 +68,13 @@
                                 <li>@Html.ActionLink("Orders", "Index", "PurchaseOrder")</li>
                             </ul>
                         </li>
-
+                        <li class="dropdown">
+                            @Html.Label("Configuration")
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Products", "Index", "Product")</li>
+                                <li>@Html.ActionLink("Feature", "Index", "Feature")</li>
+                            </ul>
+                        </li>
 
                        
                     }

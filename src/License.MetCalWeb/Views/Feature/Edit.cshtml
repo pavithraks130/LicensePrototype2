@@ -12,8 +12,6 @@
                 method: form.attr("method"),
                 data: form.serialize(),
                 success: function (data) {
-                    console.log(data);
-                    console.log("success");
                     if (data.success == false) {
                         $('#lblError').text(data.message);
                         $('#lblError').attr('style', "display:inline");
@@ -22,25 +20,22 @@
                         window.location.reload();
                     }
                 },
-                error: function (data) {
-
-                    console.log("error");
-                    console.log(data); return false;
-                }
+                error: function () { }
             });
 
         });
     });
 </script>
-@using (Html.BeginForm("Create", "Feature", FormMethod.Post))
-{   
+@using (Html.BeginForm("Edit", "Feature", new { id = Model.Id }, FormMethod.Post))
+{
     @Html.AntiForgeryToken()
     <div class="modal-dialog">
         <div class="modal-content">
             <div id='myModalContent'>
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Create</h4>
+                    <h4 class="modal-title">Edit </h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -72,9 +67,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" class="btn" data-dismis="model" value="Create" />
+                    <input type="submit" class="btn" data-dismis="model" value="Update" />
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                 </div>
+
 
             </div>
         </div>

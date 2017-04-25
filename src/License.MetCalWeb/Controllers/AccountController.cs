@@ -15,7 +15,6 @@ using System.Security.Claims;
 namespace License.MetCalWeb.Controllers
 {
     [AllowAnonymous]
-    [SessionExpire]
     public class AccountController : BaseController
     {
         string ErrorMessage;
