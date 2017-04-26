@@ -133,4 +133,20 @@ namespace License.MetCalWeb.Models
         public string Version { get; set; }
         public bool IsEnabled { get; set; }
     }
+
+
+    public class ProductCategory
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public ICollection<Product> Products { get; set; }
+    }
+
+    public class ProductDependency
+    {
+        public List<ProductCategory> Categories { get; set; }
+
+        public List<Feature> Features { get; set; }
+    }
 }

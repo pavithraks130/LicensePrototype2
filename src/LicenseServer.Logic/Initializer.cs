@@ -26,9 +26,15 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.Appuser, LicenseServer.DataModel.User>();
             cfg.CreateMap<LicenseServer.DataModel.User, LicenseServer.Core.Model.Appuser>();
 
+            cfg.CreateMap<LicenseServer.Core.Model.ProductCategory, LicenseServer.DataModel.ProductCategory>();
+            cfg.CreateMap<LicenseServer.DataModel.ProductCategory, LicenseServer.Core.Model.ProductCategory>();
+
             cfg.CreateMap<LicenseServer.Core.Model.Product, LicenseServer.DataModel.Product>()
+                .ForMember(dest=> dest.Categories, opt=>opt.MapFrom(src=>src.Categories))
                 .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
+
             cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>()
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
 
             cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>();

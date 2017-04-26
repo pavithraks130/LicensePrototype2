@@ -76,6 +76,15 @@ namespace LicenseServer.Core.Infrastructure
 
         }
 
+        private GenericRepository<ProductCategory> _productCategoryRepository;
+        public GenericRepository<ProductCategory> ProductCategoryRepository
+        {
+            get
+            {
+                return _productCategoryRepository ?? (_productCategoryRepository = new GenericRepository<ProductCategory>(_context));
+            }
+        }
+
         private GenericRepository<UserToken> _userTokenRepository;
         public GenericRepository<UserToken> UserTokenRepository
         {

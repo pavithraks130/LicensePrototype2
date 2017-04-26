@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using LicenseServer.Logic;
+using LicenseServer.Logic.BusinessLogic;
 using LicenseServer.DataModel;
 
 namespace Centralized.WebAPI.Controllers
@@ -79,6 +80,18 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.Accepted, "Deleted the Product");
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to Delete Product due to internal error");
+        }
+
+        [HttpGet]
+        [Route("ProductDependency")]
+        public HttpResponseMessage GetProductDependency()
+        {
+            ProductBO productBo = new ProductBO();
+            var obj = productBo.GetDependencyDetails();
+            if (obj != null)
+                return Request.CreateResponse(HttpStatusCode.OK, obj);
+            else
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
     }

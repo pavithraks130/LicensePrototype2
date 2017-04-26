@@ -29,6 +29,8 @@ namespace LicenseServer.Core.DbContext
 
         public DbSet<Feature> Feature { get; set; }
 
+        public DbSet<ProductCategory> ProductCategory { get; set; }
+
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

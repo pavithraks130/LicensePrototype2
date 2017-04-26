@@ -136,6 +136,14 @@
     <Compile Include="Migrations\201704250602288_FeatureTableChanges.Designer.cs">
       <DependentUpon>201704250602288_FeatureTableChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704261048271_AddedProductCategory.cs" />
+    <Compile Include="Migrations\201704261048271_AddedProductCategory.Designer.cs">
+      <DependentUpon>201704261048271_AddedProductCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704261110147_AddedDescToProductcategory.cs" />
+    <Compile Include="Migrations\201704261110147_AddedDescToProductcategory.Designer.cs">
+      <DependentUpon>201704261110147_AddedDescToProductcategory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -181,6 +189,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704250602288_FeatureTableChanges.resx">
       <DependentUpon>201704250602288_FeatureTableChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704261048271_AddedProductCategory.resx">
+      <DependentUpon>201704261048271_AddedProductCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704261110147_AddedDescToProductcategory.resx">
+      <DependentUpon>201704261110147_AddedDescToProductcategory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

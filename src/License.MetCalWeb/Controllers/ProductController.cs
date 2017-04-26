@@ -130,15 +130,18 @@ namespace License.MetCalWeb.Controllers
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.GetAsync("api/feature/all").Result;
+            var response = client.GetAsync("api/Product/ProductDependency").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                ViewBag.FeatureList = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
+                ProductDependency dependencyObj = JsonConvert.DeserializeObject<ProductDependency>(jsonData);
+                ViewBag.Categories = dependencyObj.Categories;
+                ViewBag.Features = dependencyObj.Features;
             }
             else
             {
-                ViewBag.FeatureList = new List<Feature>();
+                ViewBag.Categories = new List<ProductCategory>();
+                ViewBag.Features = new List<Feature>();
             }
         }
         [HttpPost]
