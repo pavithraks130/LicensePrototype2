@@ -11,23 +11,14 @@ namespace LicenseServer.Core.Model
     {
         [Key]
         public int Id { get; set; }
-
         public string Name { get; set; }
-
         public string Description { get; set; }
-
         public string ProductCode { get; set; }
-
         public string ImagePath { get; set; }
-
         public string CreatedDate { get; set; }
-
         public double Price { get; set; }
-
         public ICollection<ProductCategory> Categories { get; set; }
-
-        public virtual ICollection<Feature> AssociatedFeatures { get; set; }
-
+        public ICollection<Feature> AssociatedFeatures { get; set; }
     }
 
     public class ProductCategory

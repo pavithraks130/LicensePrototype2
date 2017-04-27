@@ -60,7 +60,7 @@ namespace Centralized.WebAPI.Controllers
         {
             var status = logic.UpdateProduct(id, model);
             if (status)
-                return Request.CreateResponse(HttpStatusCode.Found, "Updated the Product");
+                return Request.CreateResponse(HttpStatusCode.OK, "Updated the Product");
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to Update Product due to internal error");
         }
@@ -93,6 +93,30 @@ namespace Centralized.WebAPI.Controllers
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
+        
+        [HttpGet]
+        [Route("GetById/{Id}")]
+        public HttpResponseMessage GetProductById(int Id)
+        {
+            var obj = logic.GetProductById(Id);
+            if (obj != null)
+                return Request.CreateResponse(HttpStatusCode.OK, obj);
+            else
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        [HttpGet]
+        [Route("ProductByCategory/{Id}")]
+        public HttpResponseMessage GetProductByCategory(int Id)
+        {
+            var obj = logic.GetProductByCategoryId(Id);
+            if (obj != null)
+                return Request.CreateResponse(HttpStatusCode.OK, obj);
+            else
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+
 
     }
 }

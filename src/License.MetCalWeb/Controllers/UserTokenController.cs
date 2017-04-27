@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
     public class UserTokenController : BaseController
     {

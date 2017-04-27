@@ -11,7 +11,7 @@ namespace LicenseServer.Core.DbContext
         public AppDbContext() : base("LicenseDBConnectionString")
         {
             Configuration.ProxyCreationEnabled = true;
-            Configuration.AutoDetectChangesEnabled = true;
+            Configuration.LazyLoadingEnabled = true;
         }
         public DbSet<Organization> Organization { get; set; }
 

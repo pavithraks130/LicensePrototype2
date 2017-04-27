@@ -16,6 +16,7 @@ namespace LicenseServer.Core.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            
         }
 
         protected override void Seed(LicenseServer.Core.DbContext.AppDbContext context)
@@ -110,7 +111,7 @@ namespace LicenseServer.Core.Migrations
                     Version = "V1.0"
                 };
                 context.Feature.Add(featureList8);
-
+                context.SaveChanges();
 
                 var pro1 = new LicenseServer.Core.Model.Product()
                 {
@@ -134,6 +135,28 @@ namespace LicenseServer.Core.Migrations
                 };
                 context.Product.Add(pro11);
 
+                var pro2 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "Product B",
+                    Description = "Product B",
+                    ImagePath = "P2.png",
+                    Price = 150,
+                    ProductCode = "ProO2",
+                    AssociatedFeatures = new List<Feature> { feature1, feature2, feature3 }
+
+                };
+                context.Product.Add(pro2);
+                var pro3 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "Product C",
+                    Description = "Product C",
+                    ImagePath = "P3.png",
+                    Price = 200,
+                    ProductCode = "ProO3",
+                    AssociatedFeatures = new List<Feature> { feature1, feature2, feature3, feature4 }
+                };
+                context.Product.Add(pro3);
+                context.SaveChanges();
 
                 var sub1 = new LicenseServer.Core.Model.SubscriptionType()
                 {
@@ -160,17 +183,7 @@ namespace LicenseServer.Core.Migrations
                 };
                 context.SubscriptionDetail.Add(subdetails11);
 
-                var pro2 = new LicenseServer.Core.Model.Product()
-                {
-                    Name = "Product B",
-                    Description = "Product B",
-                    ImagePath = "P2.png",
-                    Price = 150,
-                    ProductCode = "ProO2",
-                    AssociatedFeatures = new List<Feature> { feature1, feature2, feature3 }
-
-                };
-                context.Product.Add(pro2);
+                
 
 
                 var sub2 = new LicenseServer.Core.Model.SubscriptionType()
@@ -190,17 +203,7 @@ namespace LicenseServer.Core.Migrations
                 };
                 context.SubscriptionDetail.Add(subdetails2);
 
-                var pro3 = new LicenseServer.Core.Model.Product()
-                {
-                    Name = "Product C",
-                    Description = "Product C",
-                    ImagePath = "P3.png",
-                    Price = 200,
-                    ProductCode = "ProO3",
-                    AssociatedFeatures = new List<Feature> { feature1, feature2, feature3, feature4 }
-                };
-                context.Product.Add(pro3);
-
+               
 
                 var sub3 = new LicenseServer.Core.Model.SubscriptionType()
                 {

@@ -390,7 +390,7 @@
     <Content Include="Views\Feature\Create.cshtml" />
     <Content Include="Views\Feature\Edit.cshtml" />
     <Content Include="Views\Feature\Index.cshtml" />
-    <Content Include="Views\Product\Update.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\ProductCategory\Index.cshtml" />
     <Content Include="Views\ProductCategory\Create.cshtml" />
     <Content Include="Views\ProductCategory\Edit.cshtml" />

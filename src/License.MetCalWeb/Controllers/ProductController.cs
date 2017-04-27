@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,BackendAdmin")]
+    [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
     public class ProductController : BaseController
     {
@@ -52,12 +52,21 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Product productDetails, params string[] featureIdList)
+        public ActionResult Create(Product productDetails, string[] rboCategory, string[] featuresList)
         {
             if (ModelState.IsValid)
             {
+                if (rboCategory.Count() > 0)
+                {
+                    productDetails.Categories = new List<ProductCategory>();
+                    foreach (var categoryIds in rboCategory)
+                    {
+                        productDetails.Categories.Add(new ProductCategory() { Id = Convert.ToInt32(categoryIds) });
+                    }
+                }
                 productDetails.AssociatedFeatures = new List<Feature>();
-                foreach (var featureId in featureIdList)
+
+                foreach (var featureId in featuresList)
                 {
                     productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
                 }
@@ -78,7 +87,7 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpGet]
-        public ActionResult Update(int id)
+        public ActionResult Edit(int id)
         {
             Product pro = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -96,19 +105,44 @@ namespace License.MetCalWeb.Controllers
                 ModelState.AddModelError("", errorRespoonse.Message);
             }
             GetFeatureList();
+            // Updating the data 
+            if (pro.AssociatedFeatures.Count > 0)
+            {
+                foreach (var feature in pro.AssociatedFeatures)
+                {
+                    (ViewBag.Features as List<Feature>).Find(p => p.Id == feature.Id).Selected = true;
+                }
+            }
+
+            var objList = ViewBag.Categories as List<ProductCategory>;
+            if (objList != null)
+            {
+                foreach (var category in pro.Categories)
+                    objList.Find(c => c.Id == category.Id).IsSelected = true;
+                ViewBag.categories = objList;
+            }
             return View(pro);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(int id, Product productDetails, params string[] featureIdList)
+        public ActionResult Edit(int id, Product productDetails, string[] rboCategory, string[] featuresList)
         {
             if (ModelState.IsValid)
             {
-                productDetails.AssociatedFeatures = new List<Feature>();
-                foreach (var featureId in featureIdList)
-                    productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
+                if (rboCategory.Count() > 0)
+                {
+                    productDetails.Categories = new List<ProductCategory>();
+                    foreach (var categoryId in rboCategory)
+                        productDetails.Categories.Add(new ProductCategory() { Id = Convert.ToInt32(categoryId) });
+                }
 
+                if (featuresList.Count() > 0)
+                {
+                    productDetails.AssociatedFeatures = new List<Feature>();
+                    foreach (var featureId in featuresList)
+                        productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
+                }
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PutAsJsonAsync("api/product/update/" + id, productDetails).Result;
@@ -124,7 +158,6 @@ namespace License.MetCalWeb.Controllers
             GetFeatureList();
             return View(productDetails);
         }
-
 
         public void GetFeatureList()
         {

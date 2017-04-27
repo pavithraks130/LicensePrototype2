@@ -10,7 +10,7 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
     public class ProductCategoryController : BaseController
     {
