@@ -36,9 +36,97 @@
             $(this).parents('tr').remove();
         });
 
-        $('form').on('submit', function () {
-        });
+        $('form').on('submit', function (e) {
+            var isPostEnabled = true;
 
+            var name = $('#Name');
+            var price = $('#Price');
+            var productCode = $('#ProductCode');
+            var description = $('#Description');
+
+            if (name.val().trim().length == 0) {
+                $('[data-valmsg-for="Name"]').text("Please enter Product Name");
+                isPostEnabled = false;
+                $('[data-valmsg-for="Name"]').removeClass("field-validation-valid");
+                $('[data-valmsg-for="Name"]').addClass("field-validation-error");
+            }
+            else {
+                $('[data-valmsg-for="Name"]').text("");
+                isPostEnabled = true;
+                $('[data-valmsg-for="Name"]').addClass("field-validation-valid");
+                $('[data-valmsg-for="Name"]').removeClass("field-validation-error");
+            }
+
+            if (price.val().trim().length == 0) {
+                $('[data-valmsg-for="Price"]').text("Please specify price");
+                isPostEnabled = isPostEnabled && false;
+                $('[data-valmsg-for="Price"]').removeClass("field-validation-valid");
+                $('[data-valmsg-for="Price"]').addClass("field-validation-error");
+            }
+            else {
+                $('[data-valmsg-for="Price"]').text("");
+                isPostEnabled = isPostEnabled && true;
+                $('[data-valmsg-for="Price"]').addClass("field-validation-valid");
+                $('[data-valmsg-for="Price"]').removeClass("field-validation-error");
+            }
+
+            if (productCode.val().trim().length == 0) {
+                $('[data-valmsg-for="ProductCode"]').text("Please specify Product code");
+                isPostEnabled = isPostEnabled && false;
+                $('[data-valmsg-for="ProductCode"]').removeClass("field-validation-valid");
+                $('[data-valmsg-for="ProductCode"]').addClass("field-validation-error");
+            }
+            else {
+                $('[data-valmsg-for="ProductCode"]').text("");
+                isPostEnabled = isPostEnabled && true;
+                $('[data-valmsg-for="ProductCode"]').addClass("field-validation-valid");
+                $('[data-valmsg-for="ProductCode"]').removeClass("field-validation-error");
+            }
+
+            if (description.val().trim().length == 0) {
+                $('[data-valmsg-for="Description"]').text("Please specify Product Description");
+                isPostEnabled = isPostEnabled && false;
+                $('[data-valmsg-for="Description"]').removeClass("field-validation-valid");
+                $('[data-valmsg-for="Description"]').addClass("field-validation-error");
+            }
+            else {
+                $('[data-valmsg-for="Description"]').text("");
+                isPostEnabled = isPostEnabled && true;
+                $('[data-valmsg-for="Description"]').addClass("field-validation-valid");
+                $('[data-valmsg-for="Description"]').removeClass("field-validation-error");
+            }
+
+            if ($('input[type=checkbox][name=rboCategory]:checked').length == 0) {
+                isPostEnabled = isPostEnabled && false;
+                $('#lblCategory').removeClass("field-validation-valid");
+                $('#lblCategory').addClass('field-validation-error');
+            }
+            else {
+                $('#lblCategory').addClass("field-validation-valid");
+                $('#lblCategory').removeClass('field-validation-error');
+                isPostEnabled = isPostEnabled && true;
+            }
+            var i = 0;
+            var count = $('select[name=featuresList]').length;
+            for (var i = 0; i < count; i++) {
+                if ($($('select[name=featuresList]')[i]).val().length == 0) {
+                    i++;
+                }
+            }
+
+
+            if (i > 0) {
+                isPostEnabled = isPostEnabled && false;
+                $('#lblFeature').addClass('field-validation-error');
+                $('#lblFeature').removeClass("field-validation-valid");
+            }
+            else {
+                isPostEnabled = isPostEnabled && true;
+                $('#lblFeature').addClass("field-validation-valid");
+                $('#lblFeature').removeClass('field-validation-error');
+            }
+            return isPostEnabled;
+        });
     });
 </script>
 
@@ -92,16 +180,22 @@
                             <div class="col-md-10">
 
                                 @foreach (var cat in (List<ProductCategory>)ViewBag.Categories)
-                                { <div class="form-group">
-                                    <input type="checkbox" class="col-md-1" name="rboCategory" value="@cat.Id" checked="@cat.IsSelected" />
-                                    <label class="col-md-11">@cat.Name</label>
-                                </div>  }
+                                {
+                                    <input type="checkbox" name="rboCategory" value="@cat.Id" checked="@cat.IsSelected" />
+                                    <label>@cat.Name</label>
+                                }
+                                <div class="col-md-2">
 
+                                </div>
+                                <div class="col-sm-10">
+                                    <span id="lblCategory" class="field-validation-valid">Select Category</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2">Features</label>
                             <div class="col-md-10">
+                                <span class="field-validation-valid" id="lblFeature"> Select feature</span>
                                 <table id="table" data-toggle="table table-responsive" data-cache="false" data-height="299">
                                     @if (Model.AssociatedFeatures != null && Model.AssociatedFeatures.Count > 0)
                                     {

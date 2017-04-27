@@ -61,6 +61,7 @@ namespace LicenseServer.Logic
             obj.Name = pro.Name;
             obj.Description = pro.Description;
             obj.Price = pro.Price;
+            obj.ProductCode = pro.ProductCode;
             if (obj.Categories.Count > 0)
             {
                 var idList = obj.Categories.Select(s => s.Id).ToList();
