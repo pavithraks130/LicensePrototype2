@@ -1,0 +1,78 @@
+﻿@model License.MetCalWeb.Models.Feature
+@{
+    Layout = null;
+}
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.success == false) {
+                        $('#lblError').text(data.message);
+                        $('#lblError').attr('style', "display:inline");
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                },
+                error: function () { }
+            });
+
+        });
+    });
+</script>
+@using (Html.BeginForm("Edit", "Feature", new { id = Model.Id }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'>
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div style="padding-top: 15px;padding-bottom: 10px">
+                            @Html.LabelFor(m => m.Name, new { @class = "col-md-4" })
+                            @Html.TextBoxFor(m => m.Name, new { @class = "col-md-8" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div style="padding-top: 15px;padding-bottom: 10px">
+                            @Html.LabelFor(m => m.Description, new { @class = "col-md-4" })
+                            @Html.TextBoxFor(m => m.Description, new { @class = "col-md-8" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div style="padding-top: 15px;padding-bottom: 10px">
+                            @Html.LabelFor(m => m.Version, new { @class = "col-md-4" })
+                            @Html.TextBoxFor(m => m.Version, new { @class = "col-md-8" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div style="padding-top: 15px;padding-bottom: 10px">
+                            <label class="col-md-4">Is Feature Active</label>
+                            @Html.CheckBoxFor(m => m.IsEnabled, new { @class = "col-md-8" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label id="lblError" style="display:none"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn" data-dismis="model" value="Update" />
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}

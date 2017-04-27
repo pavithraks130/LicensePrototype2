@@ -532,6 +532,34 @@
             <param name="subscriptionType"></param>
             <returns></returns>
         </member>
+        <member name="M:Centralized.WebAPI.Controllers.FetaureController.GetAllFeatures">
+            <summary>
+            Get All the Feature List from Db
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.FetaureController.CreataeFeature(LicenseServer.DataModel.Feature)">
+            <summary>
+            Create Feature Record in database
+            </summary>
+            <param name="f"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.FetaureController.UpdateFeature(System.Int32,LicenseServer.DataModel.Feature)">
+            <summary>
+            Update Existing Record  with Changes.
+            </summary>
+            <param name="id"></param>
+            <param name="f"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.FetaureController.DeleteFeature(System.Int32)">
+            <summary>
+            Delete spsecified Id Record
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Centralized.WebAPI.Controllers.ProductController.GetAllProducts">
             <summary>
             GET Method. Gets all the Products

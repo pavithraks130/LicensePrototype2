@@ -265,6 +265,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="EmailTemplate\EmailTemImages\themedata.thmx" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -294,6 +295,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\FeatureController.cs" />
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
@@ -348,7 +350,6 @@
     <Content Include="Views\Account\Confirm.cshtml" />
     <Content Include="Views\Cart\PaymentGateway.cshtml" />
     <Content Include="Views\Cart\DoPayment.cshtml" />
-    <Content Include="Views\Product\CartDetails.cshtml" />
     <Content Include="Views\Subscription\Index.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
     <Content Include="Views\License\MapLicense.cshtml" />
@@ -384,6 +385,10 @@
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\TeamManagement\AssignRevokeTeam.cshtml" />
     <Content Include="Views\Dashboard\TeamList.cshtml" />
+    <Content Include="Views\Feature\Create.cshtml" />
+    <Content Include="Views\Feature\Edit.cshtml" />
+    <Content Include="Views\Feature\Index.cshtml" />
+    <Content Include="Views\Product\Update.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -406,10 +411,6 @@
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
       <Name>LicenseKey</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LicenseService.Model\LicenseServer.DataModel.csproj">
-      <Project>{E0418F45-1461-4539-A760-6A6E4A66D4B8}</Project>
-      <Name>LicenseServer.DataModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -421,6 +422,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -15,6 +15,7 @@ namespace LicenseServer.Core.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public string Version { get; set; }
+        public bool IsEnabled { get; set; }
         public ICollection<Product> AssociatedProduct { get; set; }
 
     }
