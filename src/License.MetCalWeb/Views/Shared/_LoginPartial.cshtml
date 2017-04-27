@@ -2,7 +2,7 @@
 @if (LicenseSessionState.Instance.IsAuthenticated)
 {
     <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello @LicenseSessionState.Instance.User.Name <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" >@LicenseSessionState.Instance.User.Name (Log Out) <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li>@Html.ActionLink("Profile", "Profile", "User")</li>
             <li>@Html.ActionLink("Change Password", "ChangePassword", "User")</li>

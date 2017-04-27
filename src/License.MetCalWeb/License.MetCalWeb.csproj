@@ -257,7 +257,6 @@
     <Content Include="Resources\Cart-Menu.png" />
     <Content Include="Resources\Delete Icon.png" />
     <Content Include="Resources\favicon.ico" />
-    <Content Include="Resources\fcal-tagline-321x66.gif" />
     <Content Include="Resources\logo.png" />
     <Content Include="Resources\Success2.gif" />
     <Content Include="Scripts\bootstrap.js" />
