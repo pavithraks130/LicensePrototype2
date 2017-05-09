@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "SubscriptionContainer";
+}
+<link type="text/css" href="~/Content/StyleSheet1.css" rel="stylesheet" />
+<div ng-if="!isCheckoutComplete()" class="subNav clearfix ng-scope">
+    <nav class="purchase-mode-nav" ng-class="{ invisible: !showModeNav &amp;&amp; !mode.edit}">
+        <!-- ngIf: !mode.edit --><div ng-if="!mode.edit" class="ng-scope">
+            <ul class="wac-buttons">
+                <li><button class="wac-button active" ng-click="setCreditCardMode()" ng-class="{ active: mode.buy }" style=""><span translate=""><span class="ng-scope">ORDER</span></span></button></li>
+                <li><button class="wac-button" ng-click="setQuoteMode()" ng-class="{ active: mode.quote }" style=""><span translate=""><span class="ng-scope">QUOTE</span></span></button></li>
+            </ul>
+        </div><!-- end ngIf: !mode.edit -->
+        <!-- ngIf: mode.edit -->
+    </nav>
+    <nav class="shop-header">
+        <ul>
+            <!-- ngIf: !mode.edit -->
+            <li ng-if-start="!mode.edit" class="ng-scope">
+                <a href="https://purchase/" class="wac-button wac-button-link active" ng-class="{ active: isShop() }" translate=""><span class="ng-scope">Shop</span></a>
+            </li>
+            <li class="ng-scope">
+                <a href="https://billing/quotes" class="wac-button wac-button-link" atl-mac-link="" translate=""><span class="ng-scope">Pay Quote</span></a>
+            </li>
+            <li class="ng-scope">
+                <a href="renew" id="renew" class="wac-button wac-button-link" ng-class="{ active: isRenew() }" translate=""><span class="ng-scope">Renew</span></a>
+            </li>
+            <li class="ng-scope">
+                <a href="upgrade" id="upgrade" class="wac-button wac-button-link" ng-class="{ active: isUpgrade() }" translate=""><span class="ng-scope">Upgrade</span></a>
+            </li>
+            <li ng-if-end="" class="ng-scope">
+                <a href="cart" class="wac-button wac-button-subtle" ng-class="{ active: isCart() }">
+                    <span class="count ng-binding">5</span>
+                    <span translate=""><span class="ng-scope">Cart</span></span>
+                </a>
+            </li><!-- end ngIf: !mode.edit -->
+            <!-- ngIf: mode.edit && !isReview() -->
+        </ul>
+    </nav>
+
+</div>
+

@@ -88,7 +88,30 @@ namespace License.MetCalWeb.Controllers
             TempData["ActivationMonth"] = LicenseSessionState.Instance.SubscriptionMonth;
             return View(subType);
         }
-       
+
+        [HttpGet]
+        public ActionResult SubscriptionContainer()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult PurchaseProduct()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Calibration()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Biomedical()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(SubscriptionType type, string addToCart, int[] qty, params string[] selectedIndexAndProductIdList)
         {
