@@ -1,0 +1,108 @@
+﻿@model IEnumerable<License.MetCalWeb.Models.ProductCategory>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<script>
+    $(function () {
+        $('.btnCreate').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/ProductCategory/Create",
+                method: "GET",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function (data) { }
+            });
+        });
+
+        $('.acnEdit').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+                method: 'GET',
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function (data) { }
+            });
+        });
+        $('.acnDelete').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+                method: 'POST',
+                success: function (data) {
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                },
+                error: function (data) { }
+            });
+        });
+    });
+</script>
+<div class="row">
+    <div class="col-md-12">
+        @if (Model == null || Model.Count() == 0)
+        {
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>No Category exist</label>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-primary btn-custom btnCreate">Create</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="col-md-8">
+                    <table class="table">
+                        <tr>
+                            <th class="col-md-4">
+                                <label>Category</label>
+                            </th>
+                            <th class="col-md-6">
+                                <label>Description</label>
+                            </th>
+                            <th class="col-md-2">
+                                <label>Action</label>
+                            </th>
+                        </tr>
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                        <tr>
+                            <td class="col-md-4">
+                                @Html.DisplayTextFor(m => m.ElementAt(i).Name)
+                            </td>
+                            <td class="col-md-6">
+                                @Html.DisplayTextFor(m => m.ElementAt(i).Description)
+                            </td>
+                            <td class="col-md-2">
+                                @Html.ActionLink("Edit","Edit","ProductCategory",new { id= Model.ElementAt(i).Id } , new { @class="acnEdit"})|
+                                @Html.ActionLink("Delete", "Delete", "ProductCategory", new { id = Model.ElementAt(i).Id }, new { @class = "acnDelete" })
+                            </td>
+                        </tr>
+                        }
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary btn-custom float-right btnCreate">Create</button>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+<div class="modal" id="myModal">
+
+</div>

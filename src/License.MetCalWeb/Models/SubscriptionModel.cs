@@ -70,6 +70,7 @@ namespace License.MetCalWeb.Models
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
+        public ICollection<ProductCategory> Categories { get; set; }
         public ICollection<Feature> AssociatedFeatures { get; set; }
 
     }
@@ -132,5 +133,24 @@ namespace License.MetCalWeb.Models
         public string Description { get; set; }
         public string Version { get; set; }
         public bool IsEnabled { get; set; }
+        public bool Selected { get; set; }
+        
+    }
+
+
+    public class ProductCategory
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsSelected { get; set; }
+        public ICollection<Product> Products { get; set; }
+    }
+
+    public class ProductDependency
+    {
+        public List<ProductCategory> Categories { get; set; }
+
+        public List<Feature> Features { get; set; }
     }
 }

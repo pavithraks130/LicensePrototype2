@@ -107,7 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\CartBO.cs" />
+    <Compile Include="BusinessLogic\ProductBO.cs" />
     <Compile Include="DataLogic\BaseLogic.cs" />
+    <Compile Include="DataLogic\ProductCategoryLogic.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="DataLogic\CartLogic.cs" />
     <Compile Include="DataLogic\FeaturesLogic.cs" />

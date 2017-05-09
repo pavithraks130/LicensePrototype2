@@ -63,8 +63,9 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            @Html.Label("Configuration")
+                           <a href="#">Configuration</a>
                             <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Product Category", "Index", "ProductCategory")</li>
                                 <li>@Html.ActionLink("Products", "Index", "Product")</li>
                                 <li>@Html.ActionLink("Feature", "Index", "Feature")</li>
                             </ul>

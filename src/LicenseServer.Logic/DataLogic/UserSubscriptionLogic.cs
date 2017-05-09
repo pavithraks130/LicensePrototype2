@@ -12,7 +12,7 @@ namespace LicenseServer.Logic
         public List<UserSubscription> GetUserSubscription(string userId)
         {
             List<UserSubscription> subscriptions = new List<UserSubscription>();
-            var subscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == userId);
+            var subscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == userId,null,"SubType");
             foreach (var obj in subscriptionList)
                 subscriptions.Add(AutoMapper.Mapper.Map<LicenseServer.Core.Model.UserSubscription, DataModel.UserSubscription>(obj));
             return subscriptions;

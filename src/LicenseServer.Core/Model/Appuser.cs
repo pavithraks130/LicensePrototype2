@@ -56,7 +56,7 @@ namespace LicenseServer.Core.Model
         public int OrganizationId { get; set; }
 
         [ForeignKey("OrganizationId")]
-        public virtual Organization Organization { get; set; }
+        public Organization Organization { get; set; }
 
         [NotMapped]
         public string Name

@@ -11,7 +11,7 @@ namespace LicenseServer.Core.DbContext
         public AppDbContext() : base("LicenseDBConnectionString")
         {
             Configuration.ProxyCreationEnabled = true;
-            Configuration.AutoDetectChangesEnabled = true;
+            Configuration.LazyLoadingEnabled = true;
         }
         public DbSet<Organization> Organization { get; set; }
 
@@ -28,6 +28,8 @@ namespace LicenseServer.Core.DbContext
         public DbSet<UserToken> UserToken { get; set; }
 
         public DbSet<Feature> Feature { get; set; }
+
+        public DbSet<ProductCategory> ProductCategory { get; set; }
 
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
