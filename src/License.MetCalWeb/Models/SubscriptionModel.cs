@@ -145,6 +145,8 @@ namespace License.MetCalWeb.Models
         public string Description { get; set; }
         public bool IsSelected { get; set; }
         public ICollection<Product> Products { get; set; }
+        public int ActivationMonth { get; set; }
+        public double Price { get; set; }
     }
 
     public class ProductDependency
@@ -153,4 +155,5 @@ namespace License.MetCalWeb.Models
 
         public List<Feature> Features { get; set; }
     }
+
 }

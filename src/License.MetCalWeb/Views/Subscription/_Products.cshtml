@@ -1,0 +1,31 @@
+﻿@model IEnumerable<License.MetCalWeb.Models.ProductCategory>
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<h4>Track and support</h4>
+@using (Html.BeginForm())
+{
+    <table class="table">
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @*<button class="alert-success"> @Html.ActionLink(">", "ProductDetails", "Subscription", new { Id = @item.Id }, null)</button>*@
+                    <button class="alert-success"> @Html.ActionLink(">", "ProductDetails", "Subscription", new { Id = @item.Id }, null)</button>
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}

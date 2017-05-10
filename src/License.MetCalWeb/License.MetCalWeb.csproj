@@ -210,7 +210,7 @@
     <Content Include="Content\MenuDropdown.css" />
     <Content Include="Content\ProductCatalogDetails.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\StyleSheet1.css" />
+    <Content Include="Content\SubscriptionContainerStyle.css" />
     <Content Include="EmailTemplate\EmailTemImages\colorschememapping.xml" />
     <Content Include="EmailTemplate\EmailTemImages\filelist.xml" />
     <Content Include="EmailTemplate\EmailTemImages\image001.jpg" />
@@ -390,11 +390,9 @@
     <Content Include="Views\Feature\Create.cshtml" />
     <Content Include="Views\Feature\Edit.cshtml" />
     <Content Include="Views\Feature\Index.cshtml" />
-  
     <Content Include="Views\Subscription\SubscriptionContainer.cshtml" />
-    <Content Include="Views\Subscription\PurchaseProduct.cshtml" />
-    <Content Include="Views\Subscription\Calibration.cshtml" />
-    <Content Include="Views\Subscription\Biomedical.cshtml" />
+    <Content Include="Views\Subscription\ProductDetails.cshtml" />
+    <Content Include="Views\Subscription\_Products.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

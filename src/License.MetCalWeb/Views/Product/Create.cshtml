@@ -111,10 +111,12 @@
             var i = 0;
             var count = $('select[name=featuresList]').length;
             for (var i =0; i < count; i++) {
-                if ($($('select[name=featuresList]')[i]).val().length == 0) {
+                if ($($('select[name=featuresList]')[i]).value.length == 0) {
                     i++;
                 }
             }
+
+            console.log(i);
 
 
             if (i > 0) {

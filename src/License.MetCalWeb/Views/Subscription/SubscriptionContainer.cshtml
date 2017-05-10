@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "SubscriptionContainer";
 }
-<link type="text/css" href="~/Content/StyleSheet1.css" rel="stylesheet" />
+<link type="text/css" href="~/Content/SubscriptionContainerStyle.css" rel="stylesheet" />
 <div ng-if="!isCheckoutComplete()" class="subNav clearfix ng-scope">
     <nav class="purchase-mode-nav" ng-class="{ invisible: !showModeNav &amp;&amp; !mode.edit}">
         <!-- ngIf: !mode.edit --><div ng-if="!mode.edit" class="ng-scope">
@@ -30,13 +30,20 @@
             </li>
             <li ng-if-end="" class="ng-scope">
                 <a href="cart" class="wac-button wac-button-subtle" ng-class="{ active: isCart() }">
-                    <span class="count ng-binding">5</span>
-                    <span translate=""><span class="ng-scope">Cart</span></span>
+                    <span class="ng-scope">Cart</span>
                 </a>
-            </li><!-- end ngIf: !mode.edit -->
-            <!-- ngIf: mode.edit && !isReview() -->
+            </li>
         </ul>
     </nav>
-
 </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-8">
+                    @{ Html.RenderPartial("_Products"); }
+                </div>
+            </div>
+
+        </div>
+    </div>
 
