@@ -259,7 +259,7 @@ ul#menu {
             max-height: 100px;
         }
         ul#menu li a.dropdown-toggle {
-            color: cornflowerblue;
+            color: white;
             display: block;
             font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
             font-size: 12px;
@@ -267,14 +267,13 @@ ul#menu {
             padding: 0 19px 0 15px;
             font-weight: bold;
             letter-spacing: 1px;
-            margin-top:-20px;
         }
 
         ul#menu li a {
             color: #fff;
             display: block;
             font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-            font-size: 18px;
+            font-size: 13px;
             line-height: 76px;
             padding: 0 19px 0 15px;
             font-weight: 300;
@@ -290,7 +289,7 @@ ul#menu {
              color: #fff;
              display: block;
              font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-             font-size: 18px;
+             font-size: 13px;
              line-height: 76px;
              padding: 0 19px 0 15px;
              font-weight: 300;
