@@ -24,5 +24,6 @@ namespace LicenseServer.Core.Model
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
+
     }
 }
