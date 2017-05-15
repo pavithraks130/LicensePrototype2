@@ -148,6 +148,10 @@
     <Compile Include="Migrations\201705150946224_ChangesToProductAndCategoryAndFeatureForColumn.Designer.cs">
       <DependentUpon>201705150946224_ChangesToProductAndCategoryAndFeatureForColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705151043346_CreateDateDataTypeChangesInProduct.cs" />
+    <Compile Include="Migrations\201705151043346_CreateDateDataTypeChangesInProduct.Designer.cs">
+      <DependentUpon>201705151043346_CreateDateDataTypeChangesInProduct.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -202,6 +206,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705150946224_ChangesToProductAndCategoryAndFeatureForColumn.resx">
       <DependentUpon>201705150946224_ChangesToProductAndCategoryAndFeatureForColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705151043346_CreateDateDataTypeChangesInProduct.resx">
+      <DependentUpon>201705151043346_CreateDateDataTypeChangesInProduct.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

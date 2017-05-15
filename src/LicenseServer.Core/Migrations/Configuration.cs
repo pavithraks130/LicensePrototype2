@@ -183,7 +183,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O1",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_01.Categories = new List<ProductCategory>();
                 biomedicalProduct_01.Categories.Add(category2);
@@ -198,7 +198,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O2",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_02.Categories = new List<ProductCategory>();
                 biomedicalProduct_02.Categories.Add(category2);
@@ -213,7 +213,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O3",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_02, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_03.Categories = new List<ProductCategory>();
                 biomedicalProduct_03.Categories.Add(category2);
@@ -228,7 +228,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O4",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_04 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_04.Categories = new List<ProductCategory>();
                 biomedicalProduct_04.Categories.Add(category2);
@@ -243,7 +243,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O5",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_05.Categories = new List<ProductCategory>();
                 biomedicalProduct_05.Categories.Add(category2);
@@ -258,7 +258,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O6",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_06.Categories = new List<ProductCategory>();
                 biomedicalProduct_06.Categories.Add(category2);
@@ -273,7 +273,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O7",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_07.Categories = new List<ProductCategory>();
                 biomedicalProduct_07.Categories.Add(category2);
@@ -288,7 +288,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O8",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_08.Categories = new List<ProductCategory>();
                 biomedicalProduct_08.Categories.Add(category2);
@@ -303,7 +303,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O9",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_09.Categories = new List<ProductCategory>();
                 biomedicalProduct_09.Categories.Add(category2);
@@ -318,7 +318,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_10",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_10.Categories = new List<ProductCategory>();
                 biomedicalProduct_10.Categories.Add(category2);
@@ -333,7 +333,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_11",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_11.Categories = new List<ProductCategory>();
                 biomedicalProduct_11.Categories.Add(category2);
@@ -348,7 +348,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_12",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_12.Categories = new List<ProductCategory>();
                 biomedicalProduct_12.Categories.Add(category2);
@@ -363,7 +363,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_13",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_13.Categories = new List<ProductCategory>();
                 biomedicalProduct_13.Categories.Add(category2);
@@ -378,7 +378,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_14",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_14.Categories = new List<ProductCategory>();
                 biomedicalProduct_14.Categories.Add(category2);
@@ -393,7 +393,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_15",
                     AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 biomedicalProduct_15.Categories = new List<ProductCategory>();
                 biomedicalProduct_15.Categories.Add(category2);
@@ -412,7 +412,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O1",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_01.Categories = new List<ProductCategory>();
                 calibrationProduct_01.Categories.Add(category1);
@@ -427,7 +427,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O2",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_02.Categories = new List<ProductCategory>();
                 calibrationProduct_02.Categories.Add(category1);
@@ -442,7 +442,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O3",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_03.Categories = new List<ProductCategory>();
                 calibrationProduct_03.Categories.Add(category1);
@@ -457,7 +457,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O4",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_04.Categories = new List<ProductCategory>();
                 calibrationProduct_04.Categories.Add(category1);
@@ -472,7 +472,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O5",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_05.Categories = new List<ProductCategory>();
                 calibrationProduct_05.Categories.Add(category1);
@@ -487,7 +487,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O6",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_06.Categories = new List<ProductCategory>();
                 calibrationProduct_06.Categories.Add(category1);
@@ -502,7 +502,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O7",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_07.Categories = new List<ProductCategory>();
                 calibrationProduct_07.Categories.Add(category1);
@@ -517,7 +517,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O8",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_08.Categories = new List<ProductCategory>();
                 calibrationProduct_08.Categories.Add(category1);
@@ -532,7 +532,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_O9",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_09.Categories = new List<ProductCategory>();
                 calibrationProduct_09.Categories.Add(category1);
@@ -547,7 +547,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_10",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_10.Categories = new List<ProductCategory>();
                 calibrationProduct_10.Categories.Add(category1);
@@ -562,7 +562,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_11",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_11.Categories = new List<ProductCategory>();
                 calibrationProduct_11.Categories.Add(category1);
@@ -577,7 +577,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_12",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_12.Categories = new List<ProductCategory>();
                 calibrationProduct_12.Categories.Add(category1);
@@ -592,7 +592,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_13",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_13.Categories = new List<ProductCategory>();
                 calibrationProduct_13.Categories.Add(category1);
@@ -607,7 +607,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_14",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_14.Categories = new List<ProductCategory>();
                 calibrationProduct_14.Categories.Add(category1);
@@ -622,7 +622,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_15",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 calibrationProduct_15.Categories = new List<ProductCategory>();
                 calibrationProduct_15.Categories.Add(category1);
@@ -641,7 +641,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_01",
                     AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 context.Product.Add(CMMSSolutionAPIPlugIn);
 
@@ -654,7 +654,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_02",
                     AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 context.Product.Add(CMMSSolutionMETorTEAM);
 
@@ -667,7 +667,7 @@ namespace LicenseServer.Core.Migrations
                     ProductCode = "Pro_02",
                     AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02, CMMSSolutionFeature_01 },
                     ModifiedDate = DateTime.Now,
-                    CreatedDate = DateTime.Now.ToString()
+                    CreatedDate = DateTime.Now
                 };
                 context.Product.Add(CMMSSolutionEMaintLink);
 

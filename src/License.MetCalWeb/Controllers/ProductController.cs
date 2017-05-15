@@ -143,6 +143,7 @@ namespace License.MetCalWeb.Controllers
                     foreach (var featureId in featuresList)
                         productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
                 }
+                productDetails.ModifiedDate = DateTime.Now;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PutAsJsonAsync("api/product/update/" + id, productDetails).Result;

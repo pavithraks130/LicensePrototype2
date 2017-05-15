@@ -106,6 +106,14 @@ namespace Centralized.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetCMMSProduccts")]
+        public IHttpActionResult GetCMMSProducts()
+        {
+            var productList = logic.GetCMMSProducts();
+            return Ok(productList);
+        }
+
+        [HttpGet]
         [Route("ProductByCategory/{Id}")]
         public HttpResponseMessage GetProductByCategory(int Id)
         {

@@ -90,5 +90,15 @@ namespace Centralized.WebAPI.Controllers
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
+
+        [HttpGet]
+        [Route("GetByCategory/{categoryId}")]
+        public IHttpActionResult FeaturesByCategory(int categoryId)
+        {
+            var featureList = logic.GetFeatureByCategoryId(categoryId);
+            return Ok(featureList);
+        }
+
+
     }
 }
