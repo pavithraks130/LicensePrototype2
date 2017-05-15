@@ -302,6 +302,7 @@
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\ProductCategoryController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\PurchaseNavigationController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
@@ -393,6 +394,10 @@
     <Content Include="Views\Subscription\SubscriptionContainer.cshtml" />
     <Content Include="Views\Subscription\ProductDetails.cshtml" />
     <Content Include="Views\Subscription\_Products.cshtml" />
+    <Content Include="Views\PurchaseNavigation\Shop.cshtml" />
+    <Content Include="Views\PurchaseNavigation\PayQuote.cshtml" />
+    <Content Include="Views\PurchaseNavigation\Renew.cshtml" />
+    <Content Include="Views\PurchaseNavigation\UpGrade.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

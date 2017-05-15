@@ -126,6 +126,11 @@ ul.wac-buttons li .wac-button {
         border-color: #1f5180;
     }
 
+.myclass {
+    color: #fff;
+    background-color: #1f5180;
+    border-color: #1f5180;
+}
 ul.wac-buttons li:first-child .wac-button {
     border-radius: 3px 0 0 3px;
 }
