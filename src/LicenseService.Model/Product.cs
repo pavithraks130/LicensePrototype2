@@ -19,6 +19,8 @@ namespace LicenseServer.DataModel
         public ICollection<ProductCategory> Categories { get; set; }
         public ICollection<Feature> AssociatedFeatures { get; set; }
 
+        public DateTime ModifiedDate { get; set; }
+
     }
 
     public class ProductCategory

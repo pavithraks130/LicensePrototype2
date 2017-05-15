@@ -19,6 +19,7 @@ namespace LicenseServer.Core.Model
         public double Price { get; set; }
         public ICollection<ProductCategory> Categories { get; set; }
         public ICollection<Feature> AssociatedFeatures { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 
     public class ProductCategory
@@ -27,5 +28,7 @@ namespace LicenseServer.Core.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Feature> Features { get; set; }
+
     }
 }

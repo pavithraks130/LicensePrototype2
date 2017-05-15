@@ -46,14 +46,23 @@ namespace LicenseServer.Core.Migrations
                 user = usermanager.FindByEmail(user.Email);
                 usermanager.AddToRole(user.UserId, roleName);
 
+                var category1 = new ProductCategory() { Name = "Calibration", Description = "Calibration Category" };
+                var category2 = new ProductCategory() { Name = "Bio Medical", Description = "Bio Medical Description" };
+
+                context.ProductCategory.Add(category1);
+                context.ProductCategory.Add(category2);
+
+                context.SaveChanges();
+
+
                 #region Biomedical Feature List
 
                 var biomedicalFeature_01 = new LicenseServer.Core.Model.Feature()
                 {
                     Name = "Full Suite",
                     Description = "It Contains full suite functionalities",
-                    Version = "v1.0"
-
+                    Version = "v1.0",
+                    Caategory = category2
 
                 };
                 context.Feature.Add(biomedicalFeature_01);
@@ -62,7 +71,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Electrical Safety",
                     Description = "It contains electrical safety functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category2
 
 
                 };
@@ -72,7 +82,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Patient Simulation",
                     Description = "It contains patient simulation functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category2
 
 
                 };
@@ -82,7 +93,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Infusion Pump Verification",
                     Description = "It contains infusion pump verification functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category2
 
 
                 };
@@ -94,7 +106,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Pressure Calibration",
                     Description = "It contains pressure calibration functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category1
 
 
                 };
@@ -104,7 +117,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Temperature Calibration",
                     Description = "It contains temperature calibration functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category1
 
 
                 };
@@ -114,7 +128,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Electrical Calibration",
                     Description = "It contains electrical calibration functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category1
                 };
                 context.Feature.Add(calibrationFeature_04);
 
@@ -122,7 +137,8 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "Fluke 2638A Bundle",
                     Description = "It contains fluke 2638A functionalities",
-                    Version = "v1.0"
+                    Version = "v1.0",
+                    Caategory = category1
                 };
                 context.Feature.Add(calibrationFeature_08);
                 #endregion Calibration feature List
@@ -131,24 +147,24 @@ namespace LicenseServer.Core.Migrations
 
                 var CMMSSolutionFeature_01 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "API Plug-in",
-                    Description = "It contains api plugin functionalities",
+                    Name = "CMMSSolutionFeature_01",
+                    Description = "It contains CMMSSolution Feature_01 functionalities",
                     Version = "v1.0"
                 };
                 context.Feature.Add(CMMSSolutionFeature_01);
 
                 var CMMSSolutionFeature_02 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "MET/TEAM",
-                    Description = "It contains MET/TEAM functionalities",
+                    Name = "CMMSSolutionFeature_02",
+                    Description = "It contains CMMSSolution Feature_02 functionalities",
                     Version = "v1.0"
                 };
                 context.Feature.Add(CMMSSolutionFeature_02);
 
                 var CMMSSolutionFeature_04 = new LicenseServer.Core.Model.Feature()
                 {
-                    Name = "EMaint Link",
-                    Description = "It contains EMaint Link functionalities",
+                    Name = "CMMSSolutionFeature_04",
+                    Description = "It contains CMMSSolution Feature_04 functionalities",
                     Version = "v1.0"
                 };
                 context.Feature.Add(CMMSSolutionFeature_04);
@@ -165,8 +181,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 50,
                     ProductCode = "Pro_O1",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_01.Categories = new List<ProductCategory>();
+                biomedicalProduct_01.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_01);
 
                 var biomedicalProduct_02 = new LicenseServer.Core.Model.Product()
@@ -176,8 +196,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 100,
                     ProductCode = "Pro_O2",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_02 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_02.Categories = new List<ProductCategory>();
+                biomedicalProduct_02.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_02);
 
                 var biomedicalProduct_03 = new LicenseServer.Core.Model.Product()
@@ -187,8 +211,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 150,
                     ProductCode = "Pro_O3",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_02, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_02, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_03.Categories = new List<ProductCategory>();
+                biomedicalProduct_03.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_03);
 
                 var biomedicalProduct_04 = new LicenseServer.Core.Model.Product()
@@ -198,8 +226,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 200,
                     ProductCode = "Pro_O4",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_04.Categories = new List<ProductCategory>();
+                biomedicalProduct_04.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_04);
 
                 var biomedicalProduct_05 = new LicenseServer.Core.Model.Product()
@@ -209,8 +241,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 250,
                     ProductCode = "Pro_O5",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_05.Categories = new List<ProductCategory>();
+                biomedicalProduct_05.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_05);
 
                 var biomedicalProduct_06 = new LicenseServer.Core.Model.Product()
@@ -220,8 +256,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 300,
                     ProductCode = "Pro_O6",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_06.Categories = new List<ProductCategory>();
+                biomedicalProduct_06.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_06);
 
                 var biomedicalProduct_07 = new LicenseServer.Core.Model.Product()
@@ -231,8 +271,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 350,
                     ProductCode = "Pro_O7",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_07.Categories = new List<ProductCategory>();
+                biomedicalProduct_07.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_07);
 
                 var biomedicalProduct_08 = new LicenseServer.Core.Model.Product()
@@ -242,8 +286,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 400,
                     ProductCode = "Pro_O8",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_08.Categories = new List<ProductCategory>();
+                biomedicalProduct_08.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_08);
 
                 var biomedicalProduct_09 = new LicenseServer.Core.Model.Product()
@@ -253,8 +301,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 450,
                     ProductCode = "Pro_O9",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_09.Categories = new List<ProductCategory>();
+                biomedicalProduct_09.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_09);
 
                 var biomedicalProduct_10 = new LicenseServer.Core.Model.Product()
@@ -264,8 +316,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 500,
                     ProductCode = "Pro_10",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_10.Categories = new List<ProductCategory>();
+                biomedicalProduct_10.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_10);
 
                 var biomedicalProduct_11 = new LicenseServer.Core.Model.Product()
@@ -275,8 +331,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 550,
                     ProductCode = "Pro_11",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_11.Categories = new List<ProductCategory>();
+                biomedicalProduct_11.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_11);
 
                 var biomedicalProduct_12 = new LicenseServer.Core.Model.Product()
@@ -286,8 +346,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 600,
                     ProductCode = "Pro_12",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_12.Categories = new List<ProductCategory>();
+                biomedicalProduct_12.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_12);
 
                 var biomedicalProduct_13 = new LicenseServer.Core.Model.Product()
@@ -297,8 +361,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 650,
                     ProductCode = "Pro_13",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_13.Categories = new List<ProductCategory>();
+                biomedicalProduct_13.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_13);
 
                 var biomedicalProduct_14 = new LicenseServer.Core.Model.Product()
@@ -308,8 +376,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 700,
                     ProductCode = "Pro_14",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_14.Categories = new List<ProductCategory>();
+                biomedicalProduct_14.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_14);
 
                 var biomedicalProduct_15 = new LicenseServer.Core.Model.Product()
@@ -319,8 +391,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 750,
                     ProductCode = "Pro_15",
-                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 }
+                    AssociatedFeatures = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                biomedicalProduct_15.Categories = new List<ProductCategory>();
+                biomedicalProduct_15.Categories.Add(category2);
                 context.Product.Add(biomedicalProduct_15);
 
                 #endregion Biomedical Product
@@ -334,8 +410,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 50,
                     ProductCode = "Pro_O1",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_01.Categories = new List<ProductCategory>();
+                calibrationProduct_01.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_01);
 
                 var calibrationProduct_02 = new LicenseServer.Core.Model.Product()
@@ -345,8 +425,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 100,
                     ProductCode = "Pro_O2",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_02 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_02.Categories = new List<ProductCategory>();
+                calibrationProduct_02.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_02);
 
                 var calibrationProduct_03 = new LicenseServer.Core.Model.Product()
@@ -356,8 +440,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 150,
                     ProductCode = "Pro_O3",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_02, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_02, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_03.Categories = new List<ProductCategory>();
+                calibrationProduct_03.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_03);
 
                 var calibrationProduct_04 = new LicenseServer.Core.Model.Product()
@@ -367,8 +455,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 200,
                     ProductCode = "Pro_O4",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_04 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_04 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_04.Categories = new List<ProductCategory>();
+                calibrationProduct_04.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_04);
 
                 var calibrationProduct_05 = new LicenseServer.Core.Model.Product()
@@ -378,8 +470,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 250,
                     ProductCode = "Pro_O5",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_05.Categories = new List<ProductCategory>();
+                calibrationProduct_05.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_05);
 
                 var calibrationProduct_06 = new LicenseServer.Core.Model.Product()
@@ -389,8 +485,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 300,
                     ProductCode = "Pro_O6",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_06.Categories = new List<ProductCategory>();
+                calibrationProduct_06.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_06);
 
                 var calibrationProduct_07 = new LicenseServer.Core.Model.Product()
@@ -400,8 +500,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 350,
                     ProductCode = "Pro_O7",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_07.Categories = new List<ProductCategory>();
+                calibrationProduct_07.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_07);
 
                 var calibrationProduct_08 = new LicenseServer.Core.Model.Product()
@@ -411,8 +515,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 400,
                     ProductCode = "Pro_O8",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_08.Categories = new List<ProductCategory>();
+                calibrationProduct_08.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_08);
 
                 var calibrationProduct_09 = new LicenseServer.Core.Model.Product()
@@ -422,8 +530,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 450,
                     ProductCode = "Pro_O9",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_09.Categories = new List<ProductCategory>();
+                calibrationProduct_09.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_09);
 
                 var calibrationProduct_10 = new LicenseServer.Core.Model.Product()
@@ -433,8 +545,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 500,
                     ProductCode = "Pro_10",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_10.Categories = new List<ProductCategory>();
+                calibrationProduct_10.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_10);
 
                 var calibrationProduct_11 = new LicenseServer.Core.Model.Product()
@@ -444,8 +560,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 550,
                     ProductCode = "Pro_11",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_11.Categories = new List<ProductCategory>();
+                calibrationProduct_11.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_11);
 
                 var calibrationProduct_12 = new LicenseServer.Core.Model.Product()
@@ -455,8 +575,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 600,
                     ProductCode = "Pro_12",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_12.Categories = new List<ProductCategory>();
+                calibrationProduct_12.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_12);
 
                 var calibrationProduct_13 = new LicenseServer.Core.Model.Product()
@@ -466,8 +590,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 650,
                     ProductCode = "Pro_13",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_13.Categories = new List<ProductCategory>();
+                calibrationProduct_13.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_13);
 
                 var calibrationProduct_14 = new LicenseServer.Core.Model.Product()
@@ -477,8 +605,12 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 700,
                     ProductCode = "Pro_14",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_14.Categories = new List<ProductCategory>();
+                calibrationProduct_14.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_14);
 
                 var calibrationProduct_15 = new LicenseServer.Core.Model.Product()
@@ -488,179 +620,64 @@ namespace LicenseServer.Core.Migrations
                     ImagePath = "P1.png",
                     Price = 750,
                     ProductCode = "Pro_15",
-                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 }
+                    AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
+                calibrationProduct_15.Categories = new List<ProductCategory>();
+                calibrationProduct_15.Categories.Add(category1);
                 context.Product.Add(calibrationProduct_15);
 
                 #endregion Calibration Product
 
                 #region CMMS Solution Product
 
-                var CMMSSolutionProduct_01 = new LicenseServer.Core.Model.Product()
+                var CMMSSolutionAPIPlugIn = new LicenseServer.Core.Model.Product()
                 {
-                    Name = "CMMSSolutionProduct_01",
-                    Description = "CMMSSolutionProduct_01",
+                    Name = "CMMSSolutionAPI PlugIn",
+                    Description = "CMMSSolution API PlugIn product",
                     ImagePath = "P1.png",
                     Price = 50,
                     ProductCode = "Pro_01",
-                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_01}
+                    AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
-                context.Product.Add(CMMSSolutionProduct_01);
+                context.Product.Add(CMMSSolutionAPIPlugIn);
 
-                var CMMSSolutionProduct_02 = new LicenseServer.Core.Model.Product()
+                var CMMSSolutionMETorTEAM = new LicenseServer.Core.Model.Product()
                 {
-                    Name = "CMMSSolutionProduct_02",
-                    Description = "CMMSSolutionProduct_02",
+                    Name = "CMMSSolution MET/TEAM",
+                    Description = "CMMSSolution MET/TEAM product",
                     ImagePath = "P1.png",
                     Price = 100,
                     ProductCode = "Pro_02",
-                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_02 }
+                    AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
-                context.Product.Add(CMMSSolutionProduct_02);
+                context.Product.Add(CMMSSolutionMETorTEAM);
 
-                var CMMSSolutionProduct_03 = new LicenseServer.Core.Model.Product()
+                var CMMSSolutionEMaintLink = new LicenseServer.Core.Model.Product()
                 {
-                    Name = "CMMSSolutionProduct_03",
-                    Description = "CMMSSolutionProduct_03",
+                    Name = "CMMSSolutionEMaintLink",
+                    Description = "CMMSSolution EMaint Link Product",
                     ImagePath = "P1.png",
                     Price = 150,
                     ProductCode = "Pro_02",
-                    AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02,CMMSSolutionFeature_01}
+                    AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02, CMMSSolutionFeature_01 },
+                    ModifiedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToString()
                 };
-                context.Product.Add(CMMSSolutionProduct_03);
-
-                var CMMSSolutionProduct_04 = new LicenseServer.Core.Model.Product()
-                {
-                    Name = "CMMSSolutionProduct_04",
-                    Description = "CMMSSolutionProduct_04",
-                    ImagePath = "P1.png",
-                    Price = 200,
-                    ProductCode = "Pro_04",
-                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04 }
-                };
-                context.Product.Add(CMMSSolutionProduct_04);
-
-                var CMMSSolutionProduct_05 = new LicenseServer.Core.Model.Product()
-                {
-                    Name = "CMMSSolutionProduct_05",
-                    Description = "CMMSSolutionProduct_05",
-                    ImagePath = "P1.png",
-                    Price = 250,
-                    ProductCode = "Pro_05",
-                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04,CMMSSolutionFeature_01 }
-                };
-                context.Product.Add(CMMSSolutionProduct_05);
-
-                var CMMSSolutionProduct_06 = new LicenseServer.Core.Model.Product()
-                {
-                    Name = "CMMSSolutionProduct_06",
-                    Description = "CMMSSolutionProduct_06",
-                    ImagePath = "P1.png",
-                    Price = 300,
-                    ProductCode = "Pro_06",
-                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04,CMMSSolutionFeature_02 }
-                };
-                context.Product.Add(CMMSSolutionProduct_06);
-
-                var CMMSSolutionProduct_07 = new LicenseServer.Core.Model.Product()
-                {
-                    Name = "CMMSSolutionProduct_07",
-                    Description = "CMMSSolutionProduct_07",
-                    ImagePath = "P1.png",
-                    Price = 350,
-                    ProductCode = "Pro_07",
-                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04,CMMSSolutionFeature_02,CMMSSolutionFeature_01 }
-                };
-                context.Product.Add(CMMSSolutionProduct_07);
+                context.Product.Add(CMMSSolutionEMaintLink);
 
                 #endregion CMMS Solution Product
 
                 context.SaveChanges();
 
-                //var calibrationSubscription = new LicenseServer.Core.Model.SubscriptionType()
-                //{
-                //    Name = "Calibration",
-                //    ActiveDays = 365,
-                //    Price = 500,
-                //    ImagePath = "P2.png"
-                //};
-                //context.SubscriptionType.Add(calibrationSubscription);
-
-                //var subdetails = new LicenseServer.Core.Model.SubscriptionDetail()
-                //{
-                //    Product = pro1,
-                //    SubscriptyType = sub1,
-                //    Quantity = 5
-                //};
-                //context.SubscriptionDetail.Add(subdetails);
-
-                //var subdetails11 = new LicenseServer.Core.Model.SubscriptionDetail()
-                //{
-                //    Product = pro11,
-                //    SubscriptyType = sub1,
-                //    Quantity = 5
-                //};
-                //context.SubscriptionDetail.Add(subdetails11);
+               
 
 
-
-
-                //var bioMedicalSubscription = new LicenseServer.Core.Model.SubscriptionType()
-                //{
-                //    Name = "Biomedical",
-                //    ActiveDays = 365,
-                //    Price = 1000,
-                //    ImagePath = "P2.png"
-                //};
-                //context.SubscriptionType.Add(bioMedicalSubscription);
-
-                //var subdetails2 = new LicenseServer.Core.Model.SubscriptionDetail()
-                //{
-                //    Product = pro2,
-                //    SubscriptyType = sub2,
-                //    Quantity = 10
-                //};
-                //context.SubscriptionDetail.Add(subdetails2);
-
-
-
-                //var diagnosticXray = new LicenseServer.Core.Model.SubscriptionType()
-                //{
-                //    Name = "Diagnostic Xray",
-                //    ActiveDays = 365,
-                //    Price = 1500,
-                //    ImagePath = "P3.png"
-                //};
-                //context.SubscriptionType.Add(diagnosticXray);
-
-                //var subdetails3 = new LicenseServer.Core.Model.SubscriptionDetail()
-                //{
-                //    Product = pro3,
-                //    SubscriptyType = sub3,
-                //    Quantity = 15
-                //};
-                //context.SubscriptionDetail.Add(subdetails3);
-
-
-
-                //var sub4 = new LicenseServer.Core.Model.SubscriptionType()
-                //{
-                //    Name = "1Pack",
-                //    ActiveDays = 365,
-                //    Price = 100,
-                //    ImagePath = "P4.png"
-                //};
-                //context.SubscriptionType.Add(sub4);
-
-                //var subdetails4 = new LicenseServer.Core.Model.SubscriptionDetail()
-                //{
-                //    Product = pro4,
-                //    SubscriptyType = sub4,
-                //    Quantity = 1
-                //};
-                //context.SubscriptionDetail.Add(subdetails4);
-
-               // context.SaveChanges();
             }
 
         }
