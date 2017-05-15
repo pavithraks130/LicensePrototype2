@@ -121,22 +121,9 @@ namespace License.MetCalWeb.Controllers
         {
             ProductCategory category = null;
             List<Product> productList = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);            
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.GetAsync("api/productCategory/GetById/" + id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<ProductCategory>(data);
-            }
-            else
-            {
-                category = new ProductCategory();
-            }
-            client.Dispose();
-            HttpClient client1 = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client1.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response1 = client1.GetAsync("api/Product/ProductByCategory/" + id).Result;
+            var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
             if (response1.IsSuccessStatusCode)
             {
                 var data = response1.Content.ReadAsStringAsync().Result;
@@ -146,11 +133,8 @@ namespace License.MetCalWeb.Controllers
             {
                 productList = new List<Product>();
             }
-            category.ActivationMonth = 1;
-            category.Products = productList;
-           
-            client1.Dispose();
-            return View(category);
+            client.Dispose();
+            return View(productList);
         }
 
         [HttpPost]

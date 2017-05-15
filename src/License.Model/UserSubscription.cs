@@ -95,6 +95,9 @@ namespace License.DataModel
 
         public virtual ICollection<Product> Products { get; set; }
 
+
+        public List<dynamic> ProductIdList { get; set; }
+
     }
 
     public class Product

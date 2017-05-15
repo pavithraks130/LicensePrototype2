@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using License.DataModel;
 using License.Logic.DataLogic;
 using License.Logic.Common;
+using System.Dynamic;
 
 namespace License.Logic.BusinessLogic
 {
@@ -22,7 +23,9 @@ namespace License.Logic.BusinessLogic
             List<SubscriptionType> typeList = new List<SubscriptionType>();
             foreach (var data in userSubscriptionData)
             {
-                typeList.Add(data.Subscription.SubscriptionType);
+                var tempObj = data.Subscription.SubscriptionType;
+                tempObj.ProductIdList = tempObj.Products.Select(p => (dynamic)new  { Id = p.Id, ProductCode = p.ProductCode }).ToList();
+                typeList.Add(tempObj);
 
                 UserSubscription sub = new UserSubscription();
                 sub.Quantity = data.Quantity;
@@ -48,13 +51,13 @@ namespace License.Logic.BusinessLogic
 
             if (typeList.Count > 0)
             {
-                Logic.DataLogic.ProductSubscriptionLogic proSubLogic = new Logic.DataLogic.ProductSubscriptionLogic();
+                Logic.BusinessLogic.ProductSubscriptionLogic proSubLogic = new Logic.BusinessLogic.ProductSubscriptionLogic();
                 proSubLogic.SaveToFile(typeList);
             }
 
         }
 
-        public List<SubscriptionDetails> GetSubscriptionList(string adminId , string userId = "")
+        public List<SubscriptionDetails> GetSubscriptionList(string adminId, string userId = "")
         {
             List<SubscriptionDetails> lstSsubscriptionDetail = new List<SubscriptionDetails>();
             var usersubList = userSubLogic.GetSubscription(adminId);
@@ -103,7 +106,7 @@ namespace License.Logic.BusinessLogic
 
         }
 
-        
-      
+
+
     }
 }
