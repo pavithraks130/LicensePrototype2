@@ -127,6 +127,34 @@ namespace LicenseServer.Core.Migrations
                 context.Feature.Add(calibrationFeature_08);
                 #endregion Calibration feature List
 
+                #region CMMS Solution feature list
+
+                var CMMSSolutionFeature_01 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "API Plug-in",
+                    Description = "It contains api plugin functionalities",
+                    Version = "v1.0"
+                };
+                context.Feature.Add(CMMSSolutionFeature_01);
+
+                var CMMSSolutionFeature_02 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "MET/TEAM",
+                    Description = "It contains MET/TEAM functionalities",
+                    Version = "v1.0"
+                };
+                context.Feature.Add(CMMSSolutionFeature_02);
+
+                var CMMSSolutionFeature_04 = new LicenseServer.Core.Model.Feature()
+                {
+                    Name = "EMaint Link",
+                    Description = "It contains EMaint Link functionalities",
+                    Version = "v1.0"
+                };
+                context.Feature.Add(CMMSSolutionFeature_04);
+
+                #endregion CMMS Solution feature list
+
                 context.SaveChanges();
 
                 #region Biomedical Product
@@ -465,6 +493,87 @@ namespace LicenseServer.Core.Migrations
                 context.Product.Add(calibrationProduct_15);
 
                 #endregion Calibration Product
+
+                #region CMMS Solution Product
+
+                var CMMSSolutionProduct_01 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_01",
+                    Description = "CMMSSolutionProduct_01",
+                    ImagePath = "P1.png",
+                    Price = 50,
+                    ProductCode = "Pro_01",
+                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_01}
+                };
+                context.Product.Add(CMMSSolutionProduct_01);
+
+                var CMMSSolutionProduct_02 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_02",
+                    Description = "CMMSSolutionProduct_02",
+                    ImagePath = "P1.png",
+                    Price = 100,
+                    ProductCode = "Pro_02",
+                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_02 }
+                };
+                context.Product.Add(CMMSSolutionProduct_02);
+
+                var CMMSSolutionProduct_03 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_03",
+                    Description = "CMMSSolutionProduct_03",
+                    ImagePath = "P1.png",
+                    Price = 150,
+                    ProductCode = "Pro_02",
+                    AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02,CMMSSolutionFeature_01}
+                };
+                context.Product.Add(CMMSSolutionProduct_03);
+
+                var CMMSSolutionProduct_04 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_04",
+                    Description = "CMMSSolutionProduct_04",
+                    ImagePath = "P1.png",
+                    Price = 200,
+                    ProductCode = "Pro_04",
+                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04 }
+                };
+                context.Product.Add(CMMSSolutionProduct_04);
+
+                var CMMSSolutionProduct_05 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_05",
+                    Description = "CMMSSolutionProduct_05",
+                    ImagePath = "P1.png",
+                    Price = 250,
+                    ProductCode = "Pro_05",
+                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04,CMMSSolutionFeature_01 }
+                };
+                context.Product.Add(CMMSSolutionProduct_05);
+
+                var CMMSSolutionProduct_06 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_06",
+                    Description = "CMMSSolutionProduct_06",
+                    ImagePath = "P1.png",
+                    Price = 300,
+                    ProductCode = "Pro_06",
+                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04,CMMSSolutionFeature_02 }
+                };
+                context.Product.Add(CMMSSolutionProduct_06);
+
+                var CMMSSolutionProduct_07 = new LicenseServer.Core.Model.Product()
+                {
+                    Name = "CMMSSolutionProduct_07",
+                    Description = "CMMSSolutionProduct_07",
+                    ImagePath = "P1.png",
+                    Price = 350,
+                    ProductCode = "Pro_07",
+                    AssociatedFeatures = new List<Feature> {CMMSSolutionFeature_04,CMMSSolutionFeature_02,CMMSSolutionFeature_01 }
+                };
+                context.Product.Add(CMMSSolutionProduct_07);
+
+                #endregion CMMS Solution Product
 
                 context.SaveChanges();
 
