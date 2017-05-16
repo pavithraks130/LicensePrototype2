@@ -93,7 +93,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult SubscriptionContainer()
         {
             CartItemCount();
-            Products();
             return View();
         }
 
