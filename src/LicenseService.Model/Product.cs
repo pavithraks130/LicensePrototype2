@@ -13,12 +13,11 @@ namespace LicenseServer.DataModel
         public string Description { get; set; }
         public string ProductCode { get; set; }
         public string ImagePath { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
         public ICollection<ProductCategory> Categories { get; set; }
         public ICollection<Feature> AssociatedFeatures { get; set; }
-
         public DateTime ModifiedDate { get; set; }
 
     }

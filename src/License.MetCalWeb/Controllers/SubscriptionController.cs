@@ -14,7 +14,7 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     [SessionExpire]
     public class SubscriptionController : Controller
-    {       
+    {
 
         public async Task<ActionResult> Index()
         {
@@ -118,7 +118,7 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpGet]
-        public ActionResult Products()
+        public ActionResult Categories()
         {
             List<ProductCategory> category = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -138,12 +138,42 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpGet]
+        public ActionResult Features(int id)
+        {
+            List<Feature> featureList = new List<Feature>();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = client.GetAsync("api/feature/GetByCategory/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                featureList = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
+            }
+            return View(featureList);
+        }
+
+        public ActionResult CMMSProducts()
+        {
+            List<Product> cmmsProducts = new List<Product>();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = client.GetAsync("api/Product/GetCMMSProducts").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                cmmsProducts =  JsonConvert.DeserializeObject<List<Product>>(jsonData);
+            }
+            return View(cmmsProducts);
+        }
+
+        [HttpGet]
         public ActionResult ProductDetails(int id)
         {
+            Features(id);
             CartItemCount();
             ProductCategory category = null;
             List<Product> productList = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);            
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
             if (response1.IsSuccessStatusCode)

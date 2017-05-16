@@ -24,7 +24,7 @@ namespace License.DataModel
 
         public int Quantity { get; set; }
     }
-   
+
     public class SubscriptionDetails
     {
         public int Id { get; set; }
@@ -55,7 +55,7 @@ namespace License.DataModel
             Features = new List<Feature>();
         }
     }
-    
+
     #region SyncSubscription
     public class UserSubscriptionData
     {
@@ -107,6 +107,8 @@ namespace License.DataModel
         public string Description { get; set; }
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public List<Feature> AssociatedFeatures { get; set; }
 
     }

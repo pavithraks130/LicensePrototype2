@@ -52,5 +52,23 @@ namespace LicenseServer.Logic
             var f = Work.FeaturesRepository.GetById(id);
             return AutoMapper.Mapper.Map<FeatureDataModel>(f);
         }
+
+        public List<FeatureDataModel> GetFeatureByCategoryId(int categoryId)
+        {
+            List<FeatureDataModel> featureList = new List<FeatureDataModel>();
+            var category = Work.ProductCategoryRepository.GetById(categoryId);
+            if (category != null)
+            {
+                if (category.Features != null && category.Features.Count > 0)
+                {
+                    foreach (var fet in category.Features)
+                    {
+                        var objFeture = AutoMapper.Mapper.Map<FeatureDataModel>(fet);
+                        featureList.Add(objFeture);
+                    }
+                }
+            }
+            return featureList;
+        }
     }
 }
