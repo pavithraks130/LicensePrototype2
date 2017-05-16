@@ -46,8 +46,8 @@ namespace LicenseServer.Core.Migrations
                 user = usermanager.FindByEmail(user.Email);
                 usermanager.AddToRole(user.UserId, roleName);
 
-                var category1 = new ProductCategory() { Name = "Calibration", Description = "Calibration Category" };
-                var category2 = new ProductCategory() { Name = "Bio Medical", Description = "Bio Medical Description" };
+                var category1 = new ProductCategory() { Name = "Calibration", Description = "Best in class calibration solution." };
+                var category2 = new ProductCategory() { Name = "Bio Medical", Description = "Best in class biomedical automation solution." };
 
                 context.ProductCategory.Add(category1);
                 context.ProductCategory.Add(category2);
