@@ -74,6 +74,7 @@ namespace License.MetCalWeb.Models
         public ICollection<Feature> AssociatedFeatures { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public int ActivationMonth { get; set; }
 
     }
 

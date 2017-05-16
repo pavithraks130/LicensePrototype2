@@ -1,58 +1,84 @@
-﻿@{
+﻿@model List<License.MetCalWeb.Models.Product>
+@{
     ViewBag.Title = "ProductDetails";
 }
 
 <link type="text/css" href="~/Content/SubscriptionContainerStyle.css" rel="stylesheet" />
 <link href="~/Content/ProductCatalogDetails.css" rel=" stylesheet" type="text/css" />
 
-
-<div class="navbar navbar-inverse">
-    <nav class="shop-header">
-        <ul id="menu" class="text-color nav navbar-nav navbar-right">
-            <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
-            <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
-            <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
-            <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
-        </ul>
-    </nav>
-</div>
-<div ng-if="!isCheckoutComplete()" class="line clearfix ng-scope">
-    <div>
-        <h3>@TempData["category"]</h3>
-    </div>
-</div>
-<div ng-if="!isCheckoutComplete()" class="line clearfix ng-scope">
-    <nav class="shop-header">
-        <ul>
-            <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
-            <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
-        </ul>
-    </nav>
-</div>
-@using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    <div class="line">
-        <h3>1.Concurrent Users</h3>
-    </div>
-    <div class="line row">
-        @{ Html.RenderAction("Features"); }
-    </div>
-    <div class="line row">
-
-        @{ Html.RenderAction("CMMSProducts"); }
-
-    </div>
-    <div class="form-group">
-        <label id="lblError" class="col-md-6"></label>
-        <div class="col-md-6">
-            <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
-            @if (LicenseSessionState.Instance.IsSuperAdmin)
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
-                <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
-            }
-        </div>
+            <div class="line navbar navbar-inverse">
+                <nav class="shop-header">
+                    <ul id="menu" class="text-color nav navbar-nav navbar-right">
+                        <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
+                        <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
+                        <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
+                        <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="line clearfix ng-scope">
+                <h3>@TempData["category"]</h3>
+            </div>
+            <div class="form-group">
+                <div class="line clearfix">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
+                        <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">
+                <ol>
+                    <li class="line">
+                        <div>
+                            <h3>1. Concurrent Users</h3>
+                            <div class="form-input col-md-12" style="margin:5px 20px ; ">
+                                @Html.DropDownListFor(Model => Model.FirstOrDefault().ActivationMonth, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control ddlActivationPeriode" })
+                            </div>
+                        </div>
+                    </li>
+                    <li class="line">
+                        <div>
+                            @{ Html.RenderAction("Features", new { id = TempData["Id"] }); }
+                        </div>
+                    </li>
+                    <li class="line">
+                        <div>
+                            @{ Html.RenderAction("CMMSProducts", new { id = TempData["Id"] }); }
+                        </div>
+                    </li>
+
+
+                </ol>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-7">
+                </div>
+                <label class="col-md-2 float-right">SubTotal(USD) </label>
+                <label class="total col-md-3">0</label>
+
+            </div>
+            <div class="form-group">
+                <label id="lblError" class="col-md-6"></label>
+                <div class="col-md-6">
+                    <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
+                    @if (LicenseSessionState.Instance.IsSuperAdmin)
+                    {
+                        <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                    }
+                </div>
+            </div>
+                                }
+
     </div>
-            }
+</div>
+
 <script>
     $(document).ready(function () {
 

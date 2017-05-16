@@ -38,29 +38,11 @@ namespace License.MetCalWeb.Controllers
                 ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             client.Dispose();
-            client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            response = await client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId);
-            if (response.IsSuccessStatusCode)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var count = JsonConvert.DeserializeObject<string>(data);
-                if (!string.IsNullOrEmpty(count))
-                {
-
-                    if (Convert.ToInt32(count) > 0)
-                        TempData["CartCount"] = "(" + count + ")";
-                }
-            }
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+            CartItemCount();
             client.Dispose();
-
             return View(typeList);
         }
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -95,8 +77,8 @@ namespace License.MetCalWeb.Controllers
 
         private void CartItemCount()
         {
-            TempData["CartCount"] = "(0)";
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);            
+            TempData["CartCount"] = "";
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -127,7 +109,6 @@ namespace License.MetCalWeb.Controllers
             {
                 category = new List<ProductCategory>();
             }
-            TempData["category"] = category;
             return View(category);
         }
 
@@ -161,16 +142,41 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult ProductDetails(int id)
         {
-            Features(id);
-            CartItemCount();
-            if (TempData["category"] != null)
+            TempData["Id"] = id;
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            listItems.Add(new SelectListItem
             {
-                var item = TempData["category"] as List<ProductCategory>;
-                var categoryName = item.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
-                TempData["category"] = categoryName;
+                Text = "5 User",
+                Value = "5",                
+                Selected = true
+            });
+            listItems.Add(new SelectListItem
+            {
+                Text = "10 User",
+                Value = "10",
+
+            });
+            listItems.Add(new SelectListItem
+            {
+                Text = "15 User",
+                Value = "15"
+            });
+            ViewData["UserCount"] = listItems;
+            CartItemCount();
+            List<Product> productList = null;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
+            if (response1.IsSuccessStatusCode)
+            {
+                var data = response1.Content.ReadAsStringAsync().Result;
+                productList = JsonConvert.DeserializeObject<List<Product>>(data);
             }
-           
-            return View();
+            else
+            {
+                productList = new List<Product>();
+            }
+            client.Dispose();
+            return View(productList);
         }
 
         [HttpPost]

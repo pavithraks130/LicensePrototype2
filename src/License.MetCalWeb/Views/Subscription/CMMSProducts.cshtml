@@ -1,38 +1,31 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.Product>
+@{ 
+    Layout = null;
+}
 
-<p>
-    <h3>3.CMMS Solutions</h3>
-</p>
-
-<div style="border-style:inset;border-width:1px;border-color:lightgrey">
+<h3>3. CMMS Solutions</h3>
+<div style="margin-top:20px;">
     @{ int index = -1;
         foreach (var product in Model)
         {
             index += 1;
             double price = product.Price * product.Quantity;
-            <div class="form-group">
-                <div class="col-md-5 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" /> &nbsp;<label class="col-md-3">@product.Name</label> </div>
-                <div class="col-md-2 proCost"><label class="lblSelectedProductCost">@product.Price</label></div>
-                <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
-                <div class="col-md-3 proPrice"><label class="price_val">@price</label></div>
+            <div class="form-group col-md-12" style="margin:5px;">
+                <div class="col-md-5 proName">
+                    <input type="checkbox" class="checkbox enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" />
+                    <label class="col-md-11 proName">@product.Name</label>
+                </div>
+                <div class="col-md-2 proCost">
+                    <label class="lblSelectedProductCost">@product.Price</label>
+                </div>
+                <div class="col-md-2 proQty">
+                    <input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" />
+                </div>
+                <div class="col-md-3 proPrice">
+                    <label class="price_val">@price</label>
+                </div>
             </div>
         }
     }
 </div>
-@*<table class="table">
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-            </tr>
-        }
 
-    </table>*@
