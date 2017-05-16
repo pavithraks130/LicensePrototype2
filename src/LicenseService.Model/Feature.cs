@@ -13,5 +13,6 @@ namespace LicenseServer.DataModel
         public string Description { get; set; }
         public string Version { get; set; }
         public bool IsEnabled { get; set; }
+        public double Price { get; set; }
     }
 }
