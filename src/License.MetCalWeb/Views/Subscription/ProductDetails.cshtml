@@ -53,3 +53,102 @@
         </div>
     </div>
             }
+<script>
+    $(document).ready(function () {
+
+        var total = 0;
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            j = 0;
+            $('input[type=checkbox]:checked').each(function (e) {
+                var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
+                var txtQty = $(parentObj).find('.proQty').find('.txt-qty');
+                var qty = $(txtQty).val();
+                if (parseInt(qty) == 0)
+                    j++;
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                $('#lblError').text("No Products Selected");
+                isPostEnabled = isPostEnabled && false;
+            }
+            else if (j > 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                $('#lblError').text("Quantity not specified for the selected Products");
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+
+            if ($('.txt-sub').val() == "") {
+                isPostEnabled = isPostEnabled && false;
+                $('#lblError').text("Subscription Name Not specified");
+                $('#lblError').attr('style', 'display:inline;color:red;');
+            }
+            return isPostEnabled;
+        });
+
+        $('.enableQty').on('click', function () {
+            var data = $(this).is(':checked');
+            var qtyObj = $(this).parent().parent();
+            var prodPrice = $(qtyObj).find('.proCost').find('.lblSelectedProductCost').text();
+            var txtQty = $(qtyObj).find('.proQty').find('.txt-qty');
+            var price = $(qtyObj).find('.proPrice').find('.price_val');
+            if (data == true) {
+                $(txtQty).removeAttr('disabled');
+                var qty = parseInt($(txtQty).val());
+                var pricePerUnit = parseInt(prodPrice)
+                var amount = pricePerUnit * qty;
+                $(price).text(amount);
+            }
+            else {
+                $(txtQty).attr('disabled', 'disabled');
+                $(price).text('0');
+            }
+            calculateTotal();
+        });
+
+
+        $('.txt-qty').on('change', function () {
+            var parentObj = $(this).parent().parent();
+            var qty = $(this).val();
+            var lblObj = $(parentObj).find('.proPrice').find('.price_val');
+            var costObj = $(parentObj).find('.proCost').find('.lblSelectedProductCost').text();
+            var selectedProdQTY = qty * parseInt(costObj);
+            $(parentObj).find('.proPrice').find('.price_val').text(selectedProdQTY);
+            calculateTotal();
+        });
+
+        $('.ddlActivationPeriode').on('change', function () {
+            calculateTotal();
+        });
+
+
+        function calculateTotal() {
+            var priceList = $('.price_val').toArray();
+            var i = 0;
+            var amount = 0;
+            priceList.forEach(function (e) {
+                var status = $(e).parent().parent().find('.proName').find('.checkbox').is(':checked');
+                if (status == true) {
+                    amount += parseInt($(e).text());
+                    i++;
+                }
+            });
+            if (i > 0) {
+                var periode = $('.ddlActivationPeriode').val();
+                var total = parseFloat(periode) * parseFloat(amount);
+                $('.total').text(total);
+                $('#hdnPrice').val(total);
+            }
+            else {
+                $('.total').text('0');
+                $('#hdnPrice').val(0);
+            }
+        }
+    });
+</script>
