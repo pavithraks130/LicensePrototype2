@@ -136,11 +136,13 @@ namespace LicenseServer.Logic
 
         public List<Product> GetProductUpdatesByProductId(List<Product> products)
         {
-            List<Product> productList = new List<Product>(); 
-            var proList = Work.ProductRepository.GetData(p => products.Any(tp => p.Id == tp.Id && p.ModifiedDate > tp.ModifiedDate)).ToList();
+            List<Product> productList = new List<Product>();
+            var proList = Work.ProductRepository.GetData().ToList();
+            proList = proList.Where(p => products.Any(tp => p.Id == tp.Id && p.ModifiedDate > tp.ModifiedDate)).ToList();
             foreach (var pro in proList)
             {
                 var proObj = AutoMapper.Mapper.Map<Product>(pro);
+                proObj.Quantity = products.FirstOrDefault(p => p.Id == proObj.Id).Quantity;
                 productList.Add(proObj);
             }
             return productList;

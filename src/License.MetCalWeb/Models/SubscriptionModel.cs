@@ -72,6 +72,7 @@ namespace License.MetCalWeb.Models
         public double Price { get; set; }
         public ICollection<ProductCategory> Categories { get; set; }
         public ICollection<Feature> AssociatedFeatures { get; set; }
+        public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 
     }
@@ -94,6 +95,8 @@ namespace License.MetCalWeb.Models
 
 
     #endregion
+
+
     public class SubscriptionDetails
     {
         public int Id { get; set; }

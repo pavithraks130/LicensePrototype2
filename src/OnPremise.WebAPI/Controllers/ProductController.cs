@@ -21,7 +21,7 @@ namespace OnPremise.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetProductsByAdminId/{adminUserId}s")]
+        [Route("GetProductsByAdminId/{adminUserId}")]
         public IHttpActionResult GetProductsByAdmin(string adminUserId)
         {
             var productList = logic.GetProductbyAdmin(adminUserId);

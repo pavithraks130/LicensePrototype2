@@ -136,7 +136,7 @@ namespace License.MetCalWeb.Controllers
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
                     AuthorizeBackendService service = new AuthorizeBackendService();
-                    service.SynchPurchaseOrder();
+                    service.SyncDataToOnpremise();
                 }
                 LicenseSessionState.Instance.IsAuthenticated = true;
 
