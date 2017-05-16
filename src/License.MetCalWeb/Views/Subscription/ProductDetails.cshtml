@@ -15,26 +15,12 @@
         <!-- ngIf: mode.edit -->
     </nav>
     <nav class="shop-header">
-        <ul>
-            <!-- ngIf: !mode.edit -->
-            <li ng-if-start="!mode.edit" class="ng-scope">
-                <a href="https://purchase/" class="wac-button wac-button-link active" ng-class="{ active: isShop() }" translate=""><span class="ng-scope">Shop</span></a>
-            </li>
-            <li class="ng-scope">
-                <a href="https://billing/quotes" class="wac-button wac-button-link" atl-mac-link="" translate=""><span class="ng-scope">Pay Quote</span></a>
-            </li>
-            <li class="ng-scope">
-                <a href="renew" id="renew" class="wac-button wac-button-link" ng-class="{ active: isRenew() }" translate=""><span class="ng-scope">Renew</span></a>
-            </li>
-            <li class="ng-scope">
-                <a href="upgrade" id="upgrade" class="wac-button wac-button-link" ng-class="{ active: isUpgrade() }" translate=""><span class="ng-scope">Upgrade</span></a>
-            </li>
-            <li ng-if-end="" class="ng-scope">
-                <a href="cart" class="wac-button wac-button-subtle" ng-class="{ active: isCart() }">
-                    <span class="ng-scope">Cart</span>
-                </a>
-            </li>
-        </ul>
+            <ul>
+                <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
+                <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
+                <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
+                <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
+            </ul>
     </nav>
 </div>
 

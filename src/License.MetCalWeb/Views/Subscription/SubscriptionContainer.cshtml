@@ -4,25 +4,21 @@
     ViewBag.Title = "SubscriptionContainer";
 }
 <link type="text/css" href="~/Content/SubscriptionContainerStyle.css" rel="stylesheet" />
-<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js'></script>
+@*<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js'></script>*@
 <style>
     .myclass {
         border: solid pink 3px;
     }
 </style>
 <div ng-if="!isCheckoutComplete()" class="subNav clearfix ng-scope">
-    <nav class="purchase-mode-nav" ng-class="{ invisible: !showModeNav &amp;&amp; !mode.edit}">
-        <!-- ngIf: !mode.edit --><div ng-if="!mode.edit" class="ng-scope">
+    @*<nav class="purchase-mode-nav" ng-class="{ invisible: !showModeNav &amp;&amp; !mode.edit}">
+        <div ng-if="!mode.edit" class="ng-scope">
             <div ng-app>
                 <span id='1' ng-class='{"myclass":tog==1}' ng-click='tog=1'>ORDER</span>
                 <span id='2' ng-class='{"myclass":tog==2}' ng-click='tog=2'>QUOTE</span>
             </div>
-            @*<ul class="wac-buttons">
-                    <li><button class="wac-button active" ng-click="setCreditCardMode()" ng-class="{ active: mode.buy }" style=""><span translate=""><span class="ng-scope">ORDER</span></span></button></li>
-                    <li><button class="wac-button" ng-click="setQuoteMode()" ng-class="{ active: mode.quote }" style=""><span translate=""><span class="ng-scope">QUOTE</span></span></button></li>
-                </ul>*@
-        </div><!-- end ngIf: !mode.edit -->
-        <!-- ngIf: mode.edit -->
+           
+        </div>*@
     </nav>
     <nav class="shop-header">
 
@@ -30,8 +26,7 @@
             <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
             <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
             <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
-            <li>@Html.ActionLink("Cart", "Cart", "PurchaseNavigation")</li>
-
+            <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new {@style= "color:green;border:thick" })</li>
         </ul>
     </nav>
 </div>

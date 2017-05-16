@@ -92,7 +92,29 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult SubscriptionContainer()
         {
+            CartItemCount();
+            Products();
             return View();
+        }
+
+        private void CartItemCount()
+        {
+            TempData["CartCount"] = "(0)";
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            var response = client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var count = JsonConvert.DeserializeObject<string>(data);
+                if (!string.IsNullOrEmpty(count))
+                {
+
+                    if (Convert.ToInt32(count) > 0)
+                        TempData["CartCount"] = "(" + count + ")";
+                }
+            }
+            client.Dispose();
         }
 
         [HttpGet]
@@ -111,6 +133,7 @@ namespace License.MetCalWeb.Controllers
             {
                 category = new List<ProductCategory>();
             }
+
             return View(category);
         }
 
@@ -147,6 +170,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult ProductDetails(int id)
         {
             Features(id);
+            CartItemCount();
             ProductCategory category = null;
             List<Product> productList = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
