@@ -135,6 +135,7 @@ namespace License.MetCalWeb.Models
         public string Version { get; set; }
         public bool IsEnabled { get; set; }
         public bool Selected { get; set; }
+        public double Price { get; set; }
 
     }
 

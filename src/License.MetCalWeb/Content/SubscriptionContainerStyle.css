@@ -184,3 +184,15 @@ ul.wac-buttons li .wac-button {
     background-color: #f5f5f5;
     border-color: #999;
 }
+.line {
+    margin: 0 auto;
+    margin-top: 20px;
+    position: relative;
+    width: 960px;
+    border-bottom: 1px solid #59afe1;
+    padding-bottom: 16px;
+}
+.text-color {
+    color: #3572B0;
+    text-decoration: none;
+}

@@ -132,7 +132,7 @@ namespace License.MetCalWeb.Controllers
             {
                 category = new List<ProductCategory>();
             }
-
+            TempData["category"] = category;
             return View(category);
         }
 
@@ -160,7 +160,7 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                cmmsProducts =  JsonConvert.DeserializeObject<List<Product>>(jsonData);
+                cmmsProducts = JsonConvert.DeserializeObject<List<Product>>(jsonData);
             }
             return View(cmmsProducts);
         }
@@ -170,22 +170,29 @@ namespace License.MetCalWeb.Controllers
         {
             Features(id);
             CartItemCount();
-            ProductCategory category = null;
-            List<Product> productList = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
-            if (response1.IsSuccessStatusCode)
+            if (TempData["category"] != null)
             {
-                var data = response1.Content.ReadAsStringAsync().Result;
-                productList = JsonConvert.DeserializeObject<List<Product>>(data);
+                var item = TempData["category"] as List<ProductCategory>;
+                var categoryName = item.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
+                TempData["category"] = categoryName;
             }
-            else
-            {
-                productList = new List<Product>();
-            }
-            client.Dispose();
-            return View(productList);
+            //ProductCategory category = null;
+            //List<Product> productList = null;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+            //var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
+            //if (response1.IsSuccessStatusCode)
+            //{
+            //    var data = response1.Content.ReadAsStringAsync().Result;
+            //    productList = JsonConvert.DeserializeObject<List<Product>>(data);
+            //}
+            //else
+            //{
+            //    productList = new List<Product>();
+            //}
+            //client.Dispose();
+            //return View(productList);
+            return View();
         }
 
         [HttpPost]

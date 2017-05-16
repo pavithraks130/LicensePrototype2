@@ -62,8 +62,11 @@ namespace LicenseServer.Core.Migrations
                     Name = "Full Suite",
                     Description = "It Contains full suite functionalities",
                     Version = "v1.0",
-                    Caategory = category2
-
+                    price = 30,
+                    Caategory = category2,
+                   
+                   
+                    
                 };
                 context.Feature.Add(biomedicalFeature_01);
 
@@ -72,8 +75,9 @@ namespace LicenseServer.Core.Migrations
                     Name = "Electrical Safety",
                     Description = "It contains electrical safety functionalities",
                     Version = "v1.0",
+                    price=40,
                     Caategory = category2
-
+                    
 
                 };
                 context.Feature.Add(biomedicalFeature_02);
@@ -83,6 +87,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Patient Simulation",
                     Description = "It contains patient simulation functionalities",
                     Version = "v1.0",
+                    price = 50,
                     Caategory = category2
 
 
@@ -94,6 +99,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Infusion Pump Verification",
                     Description = "It contains infusion pump verification functionalities",
                     Version = "v1.0",
+                    price = 70,
                     Caategory = category2
 
 
@@ -107,6 +113,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Pressure Calibration",
                     Description = "It contains pressure calibration functionalities",
                     Version = "v1.0",
+                    price = 30,
                     Caategory = category1
 
 
@@ -118,6 +125,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Temperature Calibration",
                     Description = "It contains temperature calibration functionalities",
                     Version = "v1.0",
+                    price = 40,
                     Caategory = category1
 
 
@@ -129,6 +137,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Electrical Calibration",
                     Description = "It contains electrical calibration functionalities",
                     Version = "v1.0",
+                    price = 50,
                     Caategory = category1
                 };
                 context.Feature.Add(calibrationFeature_04);
@@ -138,6 +147,7 @@ namespace LicenseServer.Core.Migrations
                     Name = "Fluke 2638A Bundle",
                     Description = "It contains fluke 2638A functionalities",
                     Version = "v1.0",
+                    price = 70,
                     Caategory = category1
                 };
                 context.Feature.Add(calibrationFeature_08);
@@ -149,6 +159,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "CMMSSolutionFeature_01",
                     Description = "It contains CMMSSolution Feature_01 functionalities",
+                    price = 30,
                     Version = "v1.0"
                 };
                 context.Feature.Add(CMMSSolutionFeature_01);
@@ -157,6 +168,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "CMMSSolutionFeature_02",
                     Description = "It contains CMMSSolution Feature_02 functionalities",
+                    price = 50,
                     Version = "v1.0"
                 };
                 context.Feature.Add(CMMSSolutionFeature_02);
@@ -165,6 +177,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "CMMSSolutionFeature_04",
                     Description = "It contains CMMSSolution Feature_04 functionalities",
+                    price = 70,
                     Version = "v1.0"
                 };
                 context.Feature.Add(CMMSSolutionFeature_04);
