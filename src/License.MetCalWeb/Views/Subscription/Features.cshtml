@@ -1,0 +1,23 @@
+﻿@model IEnumerable<License.MetCalWeb.Models.Feature>
+
+<p>
+   <h3>2.Choose optional Addons</h3>
+</p>
+<table class="table"  style="border-style:solid;border-width:1px">
+    
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+    </tr>
+}
+
+</table>

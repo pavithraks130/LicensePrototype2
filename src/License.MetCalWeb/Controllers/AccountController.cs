@@ -330,11 +330,6 @@ namespace License.MetCalWeb.Controllers
             User userModel = new User();
             userModel.UserId = userId;
             userModel.IsActive = false;
-            switch (type)
-            {
-                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
-            }
             client.PutAsJsonAsync("api/user/UpdateActiveStatus", userModel);
         }
 

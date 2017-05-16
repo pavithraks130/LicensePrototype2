@@ -52,7 +52,7 @@
                     <td class="col-md-3">
                         @foreach (var obj in item.SubscriptionList)
                         {
-                            @Html.DisplayName(obj.Name)
+                            @Html.DisplayName(obj.Name ?? "")
                             <br />
                         }
                     </td>
@@ -62,4 +62,3 @@
         </table>
     </div>
 </div>
-

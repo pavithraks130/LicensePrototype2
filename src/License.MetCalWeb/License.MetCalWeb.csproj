@@ -399,6 +399,8 @@
     <Content Include="Views\PurchaseNavigation\PayQuote.cshtml" />
     <Content Include="Views\PurchaseNavigation\Renew.cshtml" />
     <Content Include="Views\PurchaseNavigation\UpGrade.cshtml" />
+    <Content Include="Views\Subscription\CMMSProducts.cshtml" />
+    <Content Include="Views\Subscription\Features.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
