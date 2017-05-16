@@ -134,7 +134,10 @@ namespace License.MetCalWeb.Controllers
 
                 SignInAsync(user, true);
                 if (LicenseSessionState.Instance.IsSuperAdmin)
-                    SynchPurchaseOrder();
+                {
+                    AuthorizeBackendService service = new AuthorizeBackendService();
+                    service.SynchPurchaseOrder();
+                }
                 LicenseSessionState.Instance.IsAuthenticated = true;
 
                 if (String.IsNullOrEmpty(user.FirstName))
@@ -345,7 +348,6 @@ namespace License.MetCalWeb.Controllers
                 case ServiceType.OnPremiseWebApi: token = LicenseSessionState.Instance.OnPremiseToken; break;
             }
             HttpClient client = WebApiServiceLogic.CreateClient(webApiType);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
             var response = await client.GetAsync("api/user/UserById/" + token.Id);
             if (response.IsSuccessStatusCode)
             {
@@ -393,26 +395,6 @@ namespace License.MetCalWeb.Controllers
             return false;
         }
 
-        public async Task SynchPurchaseOrder()
-        {
-            ErrorMessage = string.Empty;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
-            var response = client.GetAsync("api/purchaseorder/syncpo/" + LicenseSessionState.Instance.User.ServerUserId).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
-                if (obj.Subscriptions.Count > 0)
-                    CentralizedSubscriptionLogic.UpdateSubscriptionOnpremise(obj);
-            }
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
-            }
-
-        }
+      
     }
 }

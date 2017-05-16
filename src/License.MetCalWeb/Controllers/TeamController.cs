@@ -48,7 +48,6 @@ namespace License.MetCalWeb.Controllers
             {
                 model.AdminId = LicenseSessionState.Instance.User.UserId;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PostAsJsonAsync("api/Team/Create", model).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -82,7 +81,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult EditTeam(int id, Team model)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PutAsJsonAsync("api/team/Update/" + id, model).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -108,7 +106,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult DeleteTeam(int id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.DeleteAsync("api/team/Delete/" + id).Result;
             if (response.IsSuccessStatusCode)
             {

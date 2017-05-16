@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace License.Logic.BusinessLogic
 {
-    public class ProductSubscriptionLogic
+    public class SubscriptionBO
     {
 
         public void SaveToFile(List<SubscriptionType> subscriptions)
@@ -28,12 +28,8 @@ namespace License.Logic.BusinessLogic
             {
                 // To remove the Products duplication in  both subscription and indivdual file.             
                 foreach (var pro in sub.Products)
-                {
                     SaveProductToJson(pro);
-                    int id = pro.Id;
-                }
                 sub.Products = null;
-
 
                 if (!subscriptionList.Any(s => s.Id == sub.Id))
                 {
@@ -77,12 +73,12 @@ namespace License.Logic.BusinessLogic
             {
                 var existingData = Common.CommonFileIO.GetJsonDataFromFile("SubscriptionDetails.txt");
                 subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(existingData);
-                
-                foreach(var sub in subscriptionList)
+
+                foreach (var sub in subscriptionList)
                 {
                     if (sub.Products == null)
                         sub.Products = new List<Product>();
-                    foreach(var obj in sub.ProductIdList)
+                    foreach (var obj in sub.ProductIdList)
                     {
                         var pro = GetProductFromJsonFile(obj.ProductCode.ToString());
                         sub.Products.Add(pro);

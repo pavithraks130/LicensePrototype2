@@ -118,7 +118,7 @@ namespace LicenseServer.Logic
         public List<Product> GetCMMSProducts()
         {
             List<Product> products = new List<Product>();
-            var proList = Work.ProductRepository.GetData(p=> p.Categories.Count == 0).ToList();
+            var proList = Work.ProductRepository.GetData(p => p.Categories.Count == 0).ToList();
             foreach (var pro in proList)
             {
                 var proObj = AutoMapper.Mapper.Map<Product>(pro);
@@ -133,5 +133,18 @@ namespace LicenseServer.Logic
             Work.ProductRepository.Save();
             return status;
         }
+
+        public List<Product> GetProductUpdatesByProductId(List<Product> products)
+        {
+            List<Product> productList = new List<Product>(); 
+            var proList = Work.ProductRepository.GetData(p => products.Any(tp => p.Id == tp.Id && p.ModifiedDate > tp.ModifiedDate)).ToList();
+            foreach (var pro in proList)
+            {
+                var proObj = AutoMapper.Mapper.Map<Product>(pro);
+                productList.Add(proObj);
+            }
+            return productList;
+        }
+
     }
 }

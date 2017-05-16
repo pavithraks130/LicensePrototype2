@@ -21,7 +21,6 @@ namespace License.MetCalWeb.Controllers
             TempData["CartCount"] = "";
             List<SubscriptionType> typeList = new List<SubscriptionType>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             HttpResponseMessage response;
             if (LicenseSessionState.Instance.IsGlobalAdmin)
                 response = await client.GetAsync("api/subscription/All");
@@ -69,7 +68,6 @@ namespace License.MetCalWeb.Controllers
             SubscriptionType subType = new SubscriptionType();
             List<Product> productList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Product/All").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -93,7 +91,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult SubscriptionContainer()
         {
             CartItemCount();
-            Products();
             return View();
         }
 
@@ -101,7 +98,6 @@ namespace License.MetCalWeb.Controllers
         {
             TempData["CartCount"] = "(0)";
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -122,7 +118,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<ProductCategory> category = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/productCategory/All").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -142,7 +137,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<Feature> featureList = new List<Feature>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/feature/GetByCategory/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -156,7 +150,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<Product> cmmsProducts = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Product/GetCMMSProducts").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -174,7 +167,6 @@ namespace License.MetCalWeb.Controllers
             ProductCategory category = null;
             List<Product> productList = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
             if (response1.IsSuccessStatusCode)
             {
@@ -225,7 +217,6 @@ namespace License.MetCalWeb.Controllers
             }
 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             if (bool.Parse(addToCart))
                 response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
             else

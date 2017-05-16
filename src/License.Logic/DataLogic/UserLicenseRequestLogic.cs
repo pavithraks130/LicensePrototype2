@@ -75,7 +75,7 @@ namespace License.Logic.DataLogic
         public List<UserLicenseRequest> GetAllRequestList(string adminId)
         {
             List<UserLicenseRequest> requestList = new List<UserLicenseRequest>();
-            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+            SubscriptionBO proSubLogic = new SubscriptionBO();
             subList = proSubLogic.GetSubscriptionFromFile();
             var teamList = Work.TeamRepository.GetData(f => f.AdminId == adminId);
             foreach (var team in teamList)
@@ -92,7 +92,7 @@ namespace License.Logic.DataLogic
         {
             if(subList == null)
             {
-                ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+                SubscriptionBO proSubLogic = new SubscriptionBO();
                 subList = proSubLogic.GetSubscriptionFromFile();
             }
             var userlist = Work.TeamMemberRepository.GetData(f => f.TeamId == teamId).ToList();
@@ -123,7 +123,7 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public List<UserLicenseRequest> GetLicenseRequest(string userId)
         {
-            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+            SubscriptionBO proSubLogic = new SubscriptionBO();
             var subList = proSubLogic.GetSubscriptionFromFile();
 
             var licReqList = Work.UserLicenseRequestRepo.GetData(f => f.Requested_UserId == userId).ToList();

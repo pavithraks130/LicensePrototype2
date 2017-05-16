@@ -35,7 +35,6 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> RemoveItem(int id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.DeleteAsync("api/cart/Delete/" + id);
             return RedirectToAction("CartItem", "Cart");
         }
@@ -62,7 +61,6 @@ namespace License.MetCalWeb.Controllers
         {
             PurchaseOrder poOrder = new PurchaseOrder();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsync("api/cart/offlinepayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
             if (response.IsSuccessStatusCode)
             {
@@ -84,7 +82,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<CartItem> itemList = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/cart/getItems/" + LicenseSessionState.Instance.User.ServerUserId);
             if (response.IsSuccessStatusCode)
             {
@@ -111,7 +108,6 @@ namespace License.MetCalWeb.Controllers
                 UserId = LicenseSessionState.Instance.User.ServerUserId
             };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsJsonAsync("api/Cart/Create", item);
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", "Subscription");

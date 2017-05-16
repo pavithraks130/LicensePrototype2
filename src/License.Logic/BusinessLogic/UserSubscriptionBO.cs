@@ -51,7 +51,7 @@ namespace License.Logic.BusinessLogic
 
             if (typeList.Count > 0)
             {
-                Logic.BusinessLogic.ProductSubscriptionLogic proSubLogic = new Logic.BusinessLogic.ProductSubscriptionLogic();
+                Logic.BusinessLogic.SubscriptionBO proSubLogic = new Logic.BusinessLogic.SubscriptionBO();
                 proSubLogic.SaveToFile(typeList);
             }
 
@@ -61,7 +61,7 @@ namespace License.Logic.BusinessLogic
         {
             List<SubscriptionDetails> lstSsubscriptionDetail = new List<SubscriptionDetails>();
             var usersubList = userSubLogic.GetSubscription(adminId);
-            ProductSubscriptionLogic psLogic = new ProductSubscriptionLogic();
+            SubscriptionBO psLogic = new SubscriptionBO();
             var subList = psLogic.GetSubscriptionFromFile();
             foreach (var userSub in usersubList)
             {

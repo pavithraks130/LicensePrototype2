@@ -19,7 +19,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<ProductCategory> categories = new List<ProductCategory>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/ProductCategory/All").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -45,7 +44,6 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                client.DefaultRequestHeaders.Add("authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PostAsJsonAsync("api/productcategory/create", category).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -66,7 +64,6 @@ namespace License.MetCalWeb.Controllers
         {
             ProductCategory category = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/productCategory/GetById/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -85,7 +82,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Edit(int id, ProductCategory category)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.PutAsJsonAsync("api/productCategory/update/" + id, category).Result;
             if (!response.IsSuccessStatusCode)
             {
@@ -101,7 +97,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Delete(int id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.DeleteAsync("api/productCategory/Delete/" + id).Result;
             if (!response.IsSuccessStatusCode)
             {
