@@ -393,7 +393,7 @@
     <Content Include="Views\Feature\Index.cshtml" />
     <Content Include="Views\Subscription\SubscriptionContainer.cshtml" />
     <Content Include="Views\Subscription\ProductDetails.cshtml" />
-    <Content Include="Views\Subscription\_Products.cshtml" />
+    <Content Include="Views\Subscription\Categories.cshtml" />
     <Content Include="Views\PurchaseNavigation\Shop.cshtml" />
     <Content Include="Views\PurchaseNavigation\PayQuote.cshtml" />
     <Content Include="Views\PurchaseNavigation\Renew.cshtml" />

@@ -62,6 +62,7 @@ namespace LicenseServer.Logic
             obj.Description = pro.Description;
             obj.Price = pro.Price;
             obj.ProductCode = pro.ProductCode;
+            obj.ModifiedDate = pro.ModifiedDate;
             if (obj.Categories.Count > 0)
             {
                 var idList = obj.Categories.Select(s => s.Id).ToList();
@@ -85,7 +86,7 @@ namespace LicenseServer.Logic
                 obj.Categories.Add(category);
             }
 
-            if(obj.AssociatedFeatures.Count > 0)
+            if (obj.AssociatedFeatures.Count > 0)
             {
                 var idList = obj.AssociatedFeatures.Select(s => s.Id).ToList();
                 foreach (int featureid in idList)
@@ -107,11 +108,23 @@ namespace LicenseServer.Logic
                     obj.AssociatedFeatures.Add(feature);
                 }
             }
-           
-           
+
+
             obj = Work.ProductRepository.Update(obj);
             Work.ProductRepository.Save();
             return obj.Id > 0;
+        }
+
+        public List<Product> GetCMMSProducts()
+        {
+            List<Product> products = new List<Product>();
+            var proList = Work.ProductRepository.GetData(p=> p.Categories.Count == 0).ToList();
+            foreach (var pro in proList)
+            {
+                var proObj = AutoMapper.Mapper.Map<Product>(pro);
+                products.Add(proObj);
+            }
+            return products;
         }
 
         public bool DeleteProduct(int id)

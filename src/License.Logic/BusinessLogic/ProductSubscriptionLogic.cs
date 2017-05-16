@@ -7,7 +7,7 @@ using License.DataModel;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace License.Logic.DataLogic
+namespace License.Logic.BusinessLogic
 {
     public class ProductSubscriptionLogic
     {
@@ -26,6 +26,15 @@ namespace License.Logic.DataLogic
             bool isDataModified = false;
             foreach (var sub in subscriptions)
             {
+                // To remove the Products duplication in  both subscription and indivdual file.             
+                foreach (var pro in sub.Products)
+                {
+                    SaveProductToJson(pro);
+                    int id = pro.Id;
+                }
+                sub.Products = null;
+
+
                 if (!subscriptionList.Any(s => s.Id == sub.Id))
                 {
                     isDataModified = true;
@@ -36,7 +45,29 @@ namespace License.Logic.DataLogic
             {
                 var data = JsonConvert.SerializeObject(subscriptionList);
                 Common.CommonFileIO.SaveDatatoFile(data, "SubscriptionDetails.txt");
+                Common.CommonFileIO.DeleteTempFolder();
             }
+        }
+
+        public void SaveProductToJson(Product proDtl)
+        {
+            if (Common.CommonFileIO.IsFileExist(proDtl.ProductCode + ".txt"))
+                Common.CommonFileIO.DeleteFile(proDtl.ProductCode + ".txt");
+            var data = JsonConvert.SerializeObject(proDtl);
+            Common.CommonFileIO.SaveDatatoFile(data, proDtl.ProductCode + ".txt");
+        }
+
+        public Product GetProductFromJsonFile(string productCode)
+        {
+            var fileName = productCode + ".txt";
+            if (Common.CommonFileIO.IsFileExist(fileName))
+            {
+                var prodJsondata = Common.CommonFileIO.GetJsonDataFromFile(fileName);
+                var obj = JsonConvert.DeserializeObject<Product>(prodJsondata);
+                return obj;
+            }
+            else
+                return null;
         }
 
         public List<SubscriptionType> GetSubscriptionFromFile()
@@ -46,13 +77,25 @@ namespace License.Logic.DataLogic
             {
                 var existingData = Common.CommonFileIO.GetJsonDataFromFile("SubscriptionDetails.txt");
                 subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(existingData);
+                
+                foreach(var sub in subscriptionList)
+                {
+                    if (sub.Products == null)
+                        sub.Products = new List<Product>();
+                    foreach(var obj in sub.ProductIdList)
+                    {
+                        var pro = GetProductFromJsonFile(obj.ProductCode.ToString());
+                        sub.Products.Add(pro);
+                    }
+                }
             }
             else
                 subscriptionList = new List<SubscriptionType>();
+            Common.CommonFileIO.DeleteTempFolder();
             return subscriptionList;
 
         }
 
-        
+
     }
 }

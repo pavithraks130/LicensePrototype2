@@ -20,11 +20,11 @@ namespace License.Logic.Common
 
 
         private static readonly string folderPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "CalibrationLicense");
 
         private static readonly string tempFolderPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "CalibrationLicense");
 
         private static string password = @"myKey123";
@@ -123,6 +123,7 @@ namespace License.Logic.Common
                 var deserializeData = File.ReadAllBytes(Path.Combine(tempFolderPath, fileName));
                 jsonData = Encoding.ASCII.GetString(deserializeData);
             }
+
             return jsonData;
         }
 
@@ -131,6 +132,17 @@ namespace License.Logic.Common
             if (Directory.Exists(folderPath))
                 return File.Exists(Path.Combine(folderPath, fileName));
             return false;
+        }
+
+        public static void DeleteFile(string fileName)
+        {
+            System.IO.File.Delete(Path.Combine(folderPath, fileName));
+        }
+
+        public static void DeleteTempFolder()
+        {
+            if (System.IO.Directory.Exists(tempFolderPath))
+                System.IO.Directory.Delete(tempFolderPath, true);
         }
     }
 }

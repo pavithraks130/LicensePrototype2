@@ -1,4 +1,4 @@
-﻿@model License.MetCalWeb.Models.ProductCategory
+﻿@model List<License.MetCalWeb.Models.Product>
 @{
     ViewBag.Title = "ProductDetails";
 }
@@ -37,7 +37,6 @@
         </ul>
     </nav>
 </div>
-<h2>@Model.Name</h2>
 
 <div class="row">
     <div class="col-md-12">
@@ -47,7 +46,7 @@
 
             <div class="form-group">
                 <div class="col-md-4"><label>Subscription Name</label></div>
-                @Html.TextBoxFor(m => m.Name, new { @class = "txt-sub form-control col-md-8" })
+                @*@Html.TextBoxFor(m => m.Name, new { @class = "txt-sub form-control col-md-8" })*@
             </div>
             <div class="form-group">
                 <label class="col-md-4">Choose maintainanse period</label>
@@ -61,7 +60,7 @@
                 <div class="col-md-3"><labl>Total Price(USD)</labl></div>
             </div>
             int index = -1;
-            foreach (var product in Model.Products)
+            foreach (var product in Model)
             {
                 index += 1;
                 double price = product.Price * product.Quantity;
@@ -75,7 +74,7 @@
             <div class="form-group">
                 <div class="col-md-7">
                 </div>
-                @Html.HiddenFor(m => m.Price, new { @id = "hdnPrice", @class = "col-md-7" })
+                @*@Html.HiddenFor(m => m.Price, new { @id = "hdnPrice", @class = "col-md-7" })*@
                 <label class="col-md-2 float-right">SubTotal(USD) </label>
                 <label class="total col-md-3">0</label>
 
