@@ -165,7 +165,7 @@
                                 <label>Product Code</label>
                             </div>
                             <div class="col-md-10">
-                                @Html.TextBoxFor(pro => pro.ProductCode, new { @class = "form-control" })
+                                @Html.DisplayFor(pro => pro.ProductCode, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(pro => pro.ProductCode)
                             </div>
                         </div>

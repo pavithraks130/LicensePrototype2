@@ -146,6 +146,13 @@ namespace License.MetCalWeb.Controllers
             type.Category = new ProductCategory();
             type.Category.Id = id;
             type.Category.Name = categoryName;
+            DataInitialization();
+            CartItemCount();
+            return View(type);
+        }
+        
+        public void DataInitialization()
+        {
             List<SelectListItem> listItems = new List<SelectListItem>
             {
                 new SelectListItem
@@ -166,9 +173,28 @@ namespace License.MetCalWeb.Controllers
                     Value = "15"
                 }
             };
+            List<SelectListItem> periodList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "12 Months",
+                    Value = "1",
+                    Selected = true
+                },
+                new SelectListItem
+                {
+                    Text = "24 Months",
+                    Value = "2",
+
+                },
+                new SelectListItem
+                {
+                    Text = "36 Months",
+                    Value = "3"
+                }
+            };
             ViewData["UserCount"] = listItems;
-            CartItemCount();
-            return View(type);
+            ViewData["PeriodeList"] = periodList;
         }
 
         [HttpPost]

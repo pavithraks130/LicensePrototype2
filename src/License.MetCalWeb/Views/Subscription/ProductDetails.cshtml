@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
+        {
             <div class="line clearfix">
                 <ul class="nav navbar-nav navbar-right custom-ul">
                     <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
@@ -31,31 +31,37 @@
                 </div>
             </div>
             <div class="form-group">
-                <ol>
-                    <li class="line">
-                        <div>
-                            <h3>1. Concurrent Users</h3>
-                            <div class="form-input con_user col-md-12" style="margin:5px 20px ; ">
-                                @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control selected_user_count" })
-                            </div>
-                        </div>
-                    </li>
-                    <li class="line">
-                        <div>
-                            @{ Html.RenderAction("Features", new { id = Model.Category.Id }); }
-                        </div>
-                    </li>
-                    <li class="line">
-                        <div>
-                            @{ Html.RenderAction("CMMSProducts", new { id = Model.Category.Id }); }
-                        </div>
-                    </li>
-
-
-                </ol>
-
+                <div class="line clearfix">
+                    <div class="form-group col-md-12 ">
+                        <label class="col-md-4"> Subscription Name</label>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control col-md-8 txtSubName" })
+                    </div>
+                    <div class="form-group col-md-12 ">
+                        <label class="col-md-4"> Subscription Periode</label>
+                        @Html.DropDownListFor(m => m.ActivationMonth, ViewData["PeriodeList"] as List<SelectListItem>, new { @class = "form-control col-md-8 ddlActivationPeriode" })
+                    </div>
+                </div>
             </div>
-
+            <div class="form-group">
+                <div class="line clearfix">
+                    <div style="margin-top:20px;">
+                        <h3>1. Concurrent Users</h3>
+                        <div class="form-input con_user col-md-12" style="margin:5px 20px ; ">
+                            @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, new { @class = "form-control selected_user_count" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="line clearfix">
+                    @{ Html.RenderAction("Features", new { id = Model.Category.Id }); }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="line clearfix">
+                    @{ Html.RenderAction("CMMSProducts", new { id = Model.Category.Id }); }
+                </div>
+            </div>
             <div class="form-group">
                 <div class="col-md-7">
                 </div>
@@ -69,26 +75,37 @@
                     <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
                     @if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                        <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                    <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
                     }
                 </div>
             </div>
             @Html.HiddenFor(m => m.Category.Id)
-            @Html.HiddenFor(m => m.Category.Name)
-        
-                                }
+                        @Html.HiddenFor(m => m.Category.Name)
+                        @Html.HiddenFor(m => m.Price, new { @id = "hdnPrice" })
+
+                        }
 
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
+        /// this code will be excuted only during page load
+        // Begin
+        var val = $('.selected_user_count :selected').text();
+        if (val != "") {
+            $('.divUsersCount').text(val);
+        }
+        // End
+
 
         var total = 0;
         $('.btn-save').click(function () {
             var isPostEnabled = true;
             i = 0;
             j = 0;
+
+            $('.')
             $('input[type=checkbox]:checked').each(function (e) {
                 var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
                 var txtQty = $(parentObj).find('.proQty').find('.txt-qty');
@@ -140,9 +157,28 @@
             calculateTotal();
         });
 
+        $('.selected_user_count').on('change', function () {
+            var val = $('.selected_user_count :selected').text();
+            $('.divUsersCount').text(val);
+            var usersListdiv = $('.divUsersCount').toArray();
+            usersListdiv.forEach(function (e) {
+                var obj = $(e).parent().parent();
+                var status = $(obj).find('.proName').find('.checkbox').is(':checked');
+                updateUserCount(obj, status);
+            });
+            calculateTotal();
+        });
+
+
         $('.chkFeature').on('click', function () {
             var obj = $(this).parent().parent();
             var status = $(this).is(':checked');
+            updateUserCount(obj, status);
+            calculateTotal();
+        });
+
+
+        function updateUserCount(obj, status) {
             var pricePerFeature = $(obj).find('.proCost').find('.lblSelectedProductCost').text();
             var price = $(obj).find('.proPrice').find('.price_val');
             var user_Count = $('.selected_user_count').val();
@@ -153,8 +189,7 @@
             else {
                 $(price).text("");
             }
-            calculateTotal();
-        });
+        }
 
         $('.txt-qty').on('change', function () {
             var parentObj = $(this).parent().parent();
@@ -166,16 +201,13 @@
             calculateTotal();
         });
 
-        $('.selected_user_count').on('change', function () {
-            var val = $('.selected_user_count :selected').text();
-            $('.divUsersCount').text(val);
+
+        $('.ddlActivationPeriode').on('change', function () {
+            calculateTotal();
         });
-
-
 
         function calculateTotal() {
             var priceList = $('.price_val').toArray();
-            console.log(priceList);
             var i = 0;
             var amount = 0;
             priceList.forEach(function (e) {
@@ -186,7 +218,8 @@
                 }
             });
             if (i > 0) {
-                var total = parseFloat(amount);
+                var periode = $('.ddlActivationPeriode').val();
+                var total = parseInt(periode) * parseFloat(amount);
                 $('.total').text(total);
                 $('#hdnPrice').val(total);
             }

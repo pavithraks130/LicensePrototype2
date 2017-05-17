@@ -405,6 +405,10 @@
     <Content Include="Views\PurchaseNavigation\UpGrade.cshtml" />
     <Content Include="Views\Subscription\CMMSProducts.cshtml" />
     <Content Include="Views\Subscription\Features.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\ProductCategory\Create.cshtml" />
+    <Content Include="Views\ProductCategory\Edit.cshtml" />
+    <Content Include="Views\ProductCategory\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
