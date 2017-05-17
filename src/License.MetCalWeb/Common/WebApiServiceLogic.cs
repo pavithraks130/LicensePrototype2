@@ -27,6 +27,18 @@ namespace License.MetCalWeb.Common
                 BaseAddress = new Uri(url)
             };
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            switch (serviceType)
+            {
+                case ServiceType.OnPremiseWebApi:
+                    if (LicenseSessionState.Instance.OnPremiseToken != null)
+                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
+                    break;
+                case ServiceType.CentralizeWebApi:
+                    if (LicenseSessionState.Instance.CentralizedToken != null)
+                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
+                    break;
+            }
             return client;
         }
     }

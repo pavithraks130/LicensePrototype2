@@ -17,7 +17,6 @@ namespace LicenseServer.Core.Model
         public bool IsEnabled { get; set; }
         public double price { get; set; }
         public ICollection<Product> AssociatedProduct { get; set; }
-
         public ProductCategory Caategory { get; set; }
 
     }

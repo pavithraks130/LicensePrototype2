@@ -26,7 +26,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<User> users = new List<User>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/user/All");
             if (response.IsSuccessStatusCode)
             {
@@ -125,12 +124,6 @@ namespace License.MetCalWeb.Controllers
         public async Task<bool> UpdateProfile(User model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);
-            switch (type)
-            {
-                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
-            }
-
             var response = await client.PutAsJsonAsync("/api/user/update/" + userId, model);
             if (response.IsSuccessStatusCode)
                 return true;
@@ -146,11 +139,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);
-            switch (type)
-            {
-                case ServiceType.CentralizeWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token); break;
-                case ServiceType.OnPremiseWebApi: client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token); break;
-            }
+           
             var response = await client.PutAsJsonAsync("api/user/ChangePassword/" + userId, model);
             if (response.IsSuccessStatusCode)
                 return true;

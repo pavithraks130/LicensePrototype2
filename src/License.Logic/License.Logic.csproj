@@ -108,6 +108,7 @@
     <Compile Include="BusinessLogic\TeamBO.cs" />
     <Compile Include="BusinessLogic\UserSubscriptionBO.cs" />
     <Compile Include="Common\common.cs" />
+    <Compile Include="DataLogic\ProductLogic.cs" />
     <Compile Include="DataLogic\TeamLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataLogic\BaseLogic.cs" />

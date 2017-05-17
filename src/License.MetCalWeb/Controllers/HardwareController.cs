@@ -24,7 +24,6 @@ namespace License.MetCalWeb.Controllers
         {
             var hm = new HardwareModel();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/asset/GetAll").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -45,7 +44,6 @@ namespace License.MetCalWeb.Controllers
         {
             TeamAsset asset = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -70,7 +68,6 @@ namespace License.MetCalWeb.Controllers
             {
 
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PutAsJsonAsync("api/asset/UpdateAsset/" + asset.Id, asset).Result;
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("HardwareContainer");
@@ -92,7 +89,6 @@ namespace License.MetCalWeb.Controllers
             {
                 case "Remove":
                     HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                     var response = client.DeleteAsync("api/asset/DeleteAsset/" + id.ToString()).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -122,7 +118,6 @@ namespace License.MetCalWeb.Controllers
             {
                 TeamAsset asset = null;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
                 var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
                 if (response.IsSuccessStatusCode)
                 {

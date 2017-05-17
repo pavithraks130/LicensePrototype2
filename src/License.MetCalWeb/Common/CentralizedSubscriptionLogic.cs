@@ -15,7 +15,6 @@ namespace License.MetCalWeb.Common
         {
             SubscriptionList userSubscriptionList = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PostAsync("api/cart/OnlinePayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
             if (response.IsSuccessStatusCode)
             {
@@ -47,7 +46,6 @@ namespace License.MetCalWeb.Common
                 subscriptionData.Add(userSubscription);
             }
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
         }
     }

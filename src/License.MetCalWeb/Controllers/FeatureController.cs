@@ -19,7 +19,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<Feature> data = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var respons = client.GetAsync("api/Feature/All").Result;
             if (respons.IsSuccessStatusCode)
             {
@@ -41,7 +40,6 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PostAsJsonAsync("api/Feature/Create", f).Result;
                 if (response.IsSuccessStatusCode)
                 {
@@ -66,7 +64,6 @@ namespace License.MetCalWeb.Controllers
         {
             Feature obj = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/feature/GetbyId/" + Id).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -88,7 +85,6 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PutAsJsonAsync("api/feature/Update/" + id, f).Result;
                 if (response.IsSuccessStatusCode)
                     return Json(new { message = "success", success = true });
@@ -106,7 +102,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Delete(int Id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.DeleteAsync("api/Feature/Delete/" + Id).Result;
             if (response.IsSuccessStatusCode)
                 return Json(new { message = "success", success = true });

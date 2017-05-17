@@ -26,7 +26,6 @@ namespace License.MetCalWeb.Common
         {
             IList<SubscriptionDetails> subscriptionProList = new List<SubscriptionDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/UserSubscription/SubscriptionDetils/" + adminId).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -47,7 +46,6 @@ namespace License.MetCalWeb.Common
         {
             var licenseMapModelList = new UserLicenseDetails();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             FetchUserSubscription subs = new FetchUserSubscription();
             if (fetchBasedonTeam)
                 subs.TeamId = LicenseSessionState.Instance.AppTeamContext.Id;
@@ -67,7 +65,6 @@ namespace License.MetCalWeb.Common
 
             IList<SubscriptionDetails> subscriptionProList = new List<SubscriptionDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             var response = client.GetAsync("api/UserSubscription/GetSubscriptioDtlsForLicenseMap/" + adminUserId + "/" + userId).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -83,7 +80,6 @@ namespace License.MetCalWeb.Common
             List<Team> teamlst = new List<Team>();
             HttpResponseMessage response;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.OnPremiseToken.access_token);
             if (LicenseSessionState.Instance.IsSuperAdmin && string.IsNullOrEmpty(userId))
                 response = client.GetAsync("api/Team/GetTeamsByAdminId/" + LicenseSessionState.Instance.User.UserId).Result;
             else

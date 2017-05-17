@@ -1,24 +1,28 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.Feature>
-
-<p>
-    <h3>2.Choose optional Addons</h3>
-</p>
-
-<div style="border-style:inset;border-color:lightgrey">
+@{
+    Layout = null;
+}
+<h3>2. Choose Features</h3>
+<div style="margin-top:20px;">
     @{ int index = -1;
             foreach (var feature in Model)
             {
                 index += 1;
                 double price = feature.Price * 2;// feature.Quantity;
             <div class="form-group col-md-12 " style="margin:5px">
-                <div class="col-md-1 proInput"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="@feature.Id" /></div>
-                <div class="col-md-5 proName"><label class="col-md-5">@feature.Name</label> </div>
-                <div class="col-md-1 proCost"><label class="lblSelectedProductCost">@feature.Price</label></div>
-                <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@feature.Id" value="2" disabled="disabled" /></div>
-                <div class="col-md-2 proPrice"><label class="price_val">@price</label></div>
-                @*<input type="checkbox" class="checkbox form-control enableQty col-md-1" name="types" value="@feature.Type" hidden="hidden" />*@
-                @*<div hidden="hidden"><iknput type="text" class="type_class form-control" name="types" value="@feature.Type"  /></div>*@
-               
+                <div class="col-md-5 proInput">
+                    <input type="checkbox" class="checkbox col-md-1 enableQty" name="selectedIndexAndProductIdList" value="@feature.Id" />
+                    <label class="col-md-11">@feature.Name</label>
+                </div>
+                <div class="col-md-2 proCost">
+                    <label class="lblSelectedProductCost">@feature.Price</label>
+                </div>
+                <div class="col-md-2 proQty">
+                    <input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@feature.Id" value="2" disabled="disabled" />
+                </div>
+                <div class="col-md-3 proPrice">
+                    <label class="price_val">@price</label>
+                </div>
             </div>
         }
     }

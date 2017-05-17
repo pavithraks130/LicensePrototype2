@@ -27,7 +27,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<Product> productList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Product/All").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -71,7 +70,6 @@ namespace License.MetCalWeb.Controllers
                     productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
                 }
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PostAsJsonAsync("api/product/create", productDetails).Result;
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Index");
@@ -91,7 +89,6 @@ namespace License.MetCalWeb.Controllers
         {
             Product pro = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/product/GetById/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -145,7 +142,6 @@ namespace License.MetCalWeb.Controllers
                 }
                 productDetails.ModifiedDate = DateTime.Now;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
                 var response = client.PutAsJsonAsync("api/product/update/" + id, productDetails).Result;
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Index");
@@ -163,7 +159,6 @@ namespace License.MetCalWeb.Controllers
         public void GetFeatureList()
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.GetAsync("api/Product/ProductDependency").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -182,7 +177,6 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Delete(int id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = client.DeleteAsync("api/product/delete/" + id).Result;
             if (response.IsSuccessStatusCode)
                 return Json(new { message = "success", status = true });

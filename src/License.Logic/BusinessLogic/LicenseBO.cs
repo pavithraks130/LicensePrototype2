@@ -65,7 +65,7 @@ namespace License.Logic.BusinessLogic
             UserLicenseDetails licDetails = new UserLicenseDetails();
             var licenseMapModelList = new List<SubscriptionDetails>();
             UserLicenseLogic logic = new UserLicenseLogic();
-            ProductSubscriptionLogic proSubLogic = new ProductSubscriptionLogic();
+            SubscriptionBO proSubLogic = new SubscriptionBO();
             userLogic.UserManager = UserManager;
             userLogic.RoleManager = RoleManager;
 

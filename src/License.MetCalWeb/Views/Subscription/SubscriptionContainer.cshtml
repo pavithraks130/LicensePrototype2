@@ -4,22 +4,12 @@
     ViewBag.Title = "SubscriptionContainer";
 }
 <link type="text/css" href="~/Content/SubscriptionContainerStyle.css" rel="stylesheet" />
-@*<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js'></script>*@
 <style>
     .myclass {
         border: solid pink 3px;
     }
 </style>
-<div ng-if="!isCheckoutComplete()" class="subNav clearfix ng-scope">
-    @*<nav class="purchase-mode-nav" ng-class="{ invisible: !showModeNav &amp;&amp; !mode.edit}">
-        <div ng-if="!mode.edit" class="ng-scope">
-            <div ng-app>
-                <span id='1' ng-class='{"myclass":tog==1}' ng-click='tog=1'>ORDER</span>
-                <span id='2' ng-class='{"myclass":tog==2}' ng-click='tog=2'>QUOTE</span>
-            </div>
-           
-        </div>*@
-    @*</nav>*@
+<div ng-if="!isCheckoutComplete()" class="subNav clearfix ng-scope">  
     <nav class="shop-header">
 
         <ul>

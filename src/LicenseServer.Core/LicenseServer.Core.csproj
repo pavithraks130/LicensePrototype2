@@ -152,6 +152,10 @@
     <Compile Include="Migrations\201705151043346_CreateDateDataTypeChangesInProduct.Designer.cs">
       <DependentUpon>201705151043346_CreateDateDataTypeChangesInProduct.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705160908519_AddedPriceToFeataure.cs" />
+    <Compile Include="Migrations\201705160908519_AddedPriceToFeataure.Designer.cs">
+      <DependentUpon>201705160908519_AddedPriceToFeataure.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -209,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705151043346_CreateDateDataTypeChangesInProduct.resx">
       <DependentUpon>201705151043346_CreateDateDataTypeChangesInProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705160908519_AddedPriceToFeataure.resx">
+      <DependentUpon>201705160908519_AddedPriceToFeataure.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

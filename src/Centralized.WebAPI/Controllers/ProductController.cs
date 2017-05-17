@@ -124,7 +124,13 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
-
+        [HttpPost]
+        [Route("CheckProductUpdates")]
+        public IHttpActionResult GetProductUpdatesByProductId(List<Product> products)
+        {
+            var data = logic.GetProductUpdatesByProductId(products);
+            return Ok(data);
+        }
 
     }
 }

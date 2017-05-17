@@ -25,7 +25,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<PurchaseOrder> orderList = new List<PurchaseOrder>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/purchaseorder/All");
             if (response.IsSuccessStatusCode)
             {
@@ -68,7 +67,6 @@ namespace License.MetCalWeb.Controllers
                 obj.ApprovedBy = LicenseSessionState.Instance.User.UserName;
             }
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", "User");
@@ -85,7 +83,6 @@ namespace License.MetCalWeb.Controllers
         {
             List<PurchaseOrder> poList = new List<PurchaseOrder>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/purchaseorder/OrderByUser/" + LicenseSessionState.Instance.User.ServerUserId);
             if (response.IsSuccessStatusCode)
             {
@@ -105,7 +102,6 @@ namespace License.MetCalWeb.Controllers
         {
             PurchaseOrder order = new PurchaseOrder();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response = await client.GetAsync("api/purchaseorder/OrderById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {
