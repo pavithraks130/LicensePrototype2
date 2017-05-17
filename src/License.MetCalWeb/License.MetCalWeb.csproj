@@ -225,8 +225,11 @@
     <Content Include="Global.asax" />
     <Content Include="Images\admin.png" />
     <Content Include="Images\arrowHead.PNG" />
+    <Content Include="Images\cloude_Image.PNG" />
+    <Content Include="Images\DataCenter.PNG" />
     <Content Include="Images\down-arrow.png" />
     <Content Include="Images\download.png" />
+    <Content Include="Images\Server.PNG" />
     <Content Include="Images\Users-icon.png" />
     <Content Include="ProductImages\B1.PNG" />
     <Content Include="ProductImages\B2.PNG" />
