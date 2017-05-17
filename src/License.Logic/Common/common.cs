@@ -20,11 +20,11 @@ namespace License.Logic.Common
 
 
         private static readonly string folderPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            Path.Combine(System.Configuration.ConfigurationManager.AppSettings.Get("BaseFolderPath"),
                 "CalibrationLicense");
 
         private static readonly string tempFolderPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            Path.Combine(System.Configuration.ConfigurationManager.AppSettings.Get("TempFolderPath"),
                 "CalibrationLicense");
 
         private static string password = @"myKey123";
@@ -33,6 +33,12 @@ namespace License.Logic.Common
         {
             try
             {
+                Logger.Logger.Info("destination Path " + folderPath);
+                Logger.Logger.Info("source Path " + tempFolderPath);
+
+                Logger.Logger.Info("file source Path " + inputFile);
+                Logger.Logger.Info("file destination Path " + outputFile);
+
                 //string password = @"CalibrationLicense"; // Your Key Here
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] key = UE.GetBytes(password);
@@ -98,6 +104,10 @@ namespace License.Logic.Common
 
         public static void SaveDatatoFile(string jsonData, string fileName)
         {
+            Logger.Logger.Info("Save Data to file");
+            Logger.Logger.Info("destination Path " + folderPath);
+            Logger.Logger.Info("source Path " + tempFolderPath);
+            
             if (!Directory.Exists(tempFolderPath))
                 Directory.CreateDirectory(tempFolderPath);
 

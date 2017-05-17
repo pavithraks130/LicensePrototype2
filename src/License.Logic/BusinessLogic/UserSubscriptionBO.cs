@@ -49,10 +49,17 @@ namespace License.Logic.BusinessLogic
                 licenseLogic.CreateLicenseData(licenseDataList);
             }
 
-            if (typeList.Count > 0)
+            try
             {
-                Logic.BusinessLogic.SubscriptionBO proSubLogic = new Logic.BusinessLogic.SubscriptionBO();
-                proSubLogic.SaveToFile(typeList);
+                if (typeList.Count > 0)
+                {
+                    Logic.BusinessLogic.SubscriptionBO proSubLogic = new Logic.BusinessLogic.SubscriptionBO();
+                    proSubLogic.SaveToFile(typeList);
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Logger.Error(ex);
             }
 
         }

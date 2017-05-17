@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.IO;
 using System.Web.Http;
 using License.Core.DBContext;
 using License.Core.Manager;
@@ -26,7 +27,7 @@ namespace OnPremise.WebAPI
             
             //Initializing AutoMapper
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
-
+            ConfigureLogger();
             ConfigureOAuth(app);
             //Registering the Web Api Configuration
             WebApiConfig.Register(httpConfig);
@@ -47,6 +48,14 @@ namespace OnPremise.WebAPI
             app.UseOAuthBearerTokens(opt);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
+        }
+
+        public void ConfigureLogger()
+        {
+            var folderName = System.Configuration.ConfigurationManager.AppSettings.Get("APILogFolder");
+            var appPath = System.Configuration.ConfigurationManager.AppSettings.Get("LogPath");
+            var logPath = Path.Combine(appPath, folderName);
+            Logger.Logger.ConfigureLogger(logPath,"OnPremiseWebAPI");
         }
     }
 }

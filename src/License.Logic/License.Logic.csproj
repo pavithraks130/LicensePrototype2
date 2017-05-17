@@ -134,6 +134,10 @@
       <Project>{f491dfb2-2c8b-4d4e-b797-36109917dd78}</Project>
       <Name>License.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\License.Logger\Logger.csproj">
+      <Project>{50961cdc-c21f-43ea-9f6f-ab74a7a8e547}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\License.Model\License.DataModel.csproj">
       <Project>{e4b922b6-6723-4e85-9522-c9eb666fd620}</Project>
       <Name>License.DataModel</Name>
