@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.Product>
+﻿@model  License.MetCalWeb.Models.SubscriptionType
 @{
     ViewBag.Title = "ProductDetails";
 }
@@ -21,60 +21,63 @@
                 </nav>
             </div>
             <div class="line clearfix ng-scope">
-                <h3>@TempData["category"]</h3>
+                <h3>@Model.Category.Name</h3>
             </div>
-            <div class="form-group">
-                <div class="line clearfix">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
-                        <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
-                    </ul>
+                <div class="form-group">
+                    <div class="line clearfix">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
+                            <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <ol>
-                    <li class="line">
-                        <div>
-                            <h3>1. Concurrent Users</h3>
-                            <div class="form-input col-md-12" style="margin:5px 20px ; ">
-                                @Html.DropDownListFor(Model => Model.FirstOrDefault().ActivationMonth, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control ddlActivationPeriode" })
+                <div class="form-group">
+                    <ol>
+                        <li class="line">
+                            <div>
+                                <h3>1. Concurrent Users</h3>
+                                <div class="form-input col-md-12" style="margin:5px 20px ; ">
+                                    @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control ddlActivationPeriode" })
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="line">
-                        <div>
-                            @{ Html.RenderAction("Features", new { id = TempData["Id"] }); }
-                        </div>
-                    </li>
-                    <li class="line">
-                        <div>
-                            @{ Html.RenderAction("CMMSProducts", new { id = TempData["Id"] }); }
-                        </div>
-                    </li>
+                        </li>
+                        <li class="line">
+                            <div>
+                                @{ Html.RenderAction("Features", new { id = Model.Category.Id }); }
+                            </div>
+                        </li>
+                        <li class="line">
+                            <div>
+                                @{ Html.RenderAction("CMMSProducts", new { id = Model.Category.Id }); }
+                            </div>
+                        </li>
 
 
-                </ol>
+                    </ol>
 
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-7">
                 </div>
-                <label class="col-md-2 float-right">SubTotal(USD) </label>
-                <label class="total col-md-3">0</label>
 
-            </div>
-            <div class="form-group">
-                <label id="lblError" class="col-md-6"></label>
-                <div class="col-md-6">
-                    <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
-                    @if (LicenseSessionState.Instance.IsSuperAdmin)
-                    {
-                        <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
-                    }
+                <div class="form-group">
+                    <div class="col-md-7">
+                    </div>
+                    <label class="col-md-2 float-right">SubTotal(USD) </label>
+                    <label class="total col-md-3">0</label>
+
                 </div>
-            </div>
-                                }
+                <div class="form-group">
+                    <label id="lblError" class="col-md-6"></label>
+                    <div class="col-md-6">
+                        <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
+                        @if (LicenseSessionState.Instance.IsSuperAdmin)
+                        {
+                            <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                        }
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.Category.Id)
+                                    @Html.HiddenFor(m => m.Category.Name)
+
+                                    }
 
     </div>
 </div>

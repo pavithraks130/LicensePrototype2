@@ -14,8 +14,8 @@ namespace LicenseServer.DataModel
         public string ImagePath { get; set; }
         public int ActiveDays { get; set; }
         public double Price { get; set; }
-        public string CreatedBy { get; set; }
-
+        public string CreatedBy { get; set; }        
+        public ProductCategory Category { get; set; }
         public IEnumerable<Product> Products { get; set; }
         
     }
