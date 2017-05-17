@@ -34,8 +34,8 @@
                     <li class="line">
                         <div>
                             <h3>1. Concurrent Users</h3>
-                            <div class="form-input col-md-12" style="margin:5px 20px ; ">
-                                @Html.DropDownListFor(Model => Model.FirstOrDefault().ActivationMonth, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control ddlActivationPeriode" })
+                            <div class="form-input con_user col-md-12" style="margin:5px 20px ; ">
+                                @Html.DropDownListFor(Model => Model.FirstOrDefault().ActivationMonth, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control selected_user_count ddlActivationPeriode" })
                             </div>
                         </div>
                     </li>
@@ -147,11 +147,22 @@
             calculateTotal();
         });
 
-        $('.ddlActivationPeriode').on('change', function () {
-            calculateTotal();
+
+
+
+
+        $('.selected_user_count').on('change', function () {
+            var parentObj = $(this).parent().parent();
+            var val = $(parentObj).find('con_user').find('.selected_user_count').text();
+            assaignUserCount(val);
         });
-
-
+        function assaignUserCount(obj) {
+            var userLabelList = $('.txt-qty').toArray();
+            userLabelList.forEach(function (e) {
+                $(e).parent().parent().find('.proQty').find('.txt-qty').text(obj);
+            });
+            }
+        
         function calculateTotal() {
             var priceList = $('.price_val').toArray();
             var i = 0;
