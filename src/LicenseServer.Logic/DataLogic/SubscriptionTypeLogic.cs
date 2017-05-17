@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LicenseServer.DataModel;
+using LicenseServer.Logic.Common;
 
 namespace LicenseServer.Logic
 {
@@ -38,6 +39,8 @@ namespace LicenseServer.Logic
         public SubscriptionType CreateSubscriptionWithProduct(SubscriptionType type)
         {
             var coreSubscriptionType = AutoMapper.Mapper.Map<Core.Model.SubscriptionType>(type);
+            var categoryObj = Work.ProductCategoryRepository.GetById(type.Category.Id);
+            coreSubscriptionType.Category = categoryObj;
             coreSubscriptionType = Work.SubscriptionRepository.Create(coreSubscriptionType);
             Work.SubscriptionRepository.Save();
             if (coreSubscriptionType.Id > 0 && type.Products.Count() > 0)
@@ -45,10 +48,28 @@ namespace LicenseServer.Logic
                 int i = 0;
                 foreach (var pro in type.Products)
                 {
-                    Core.Model.SubscriptionDetail detail = new Core.Model.SubscriptionDetail();
-                    detail.SubscriptionTypeId = coreSubscriptionType.Id;
-                    detail.ProductId = pro.Id;
-                    detail.Quantity = pro.Quantity;
+                    int productId = pro.Id;
+                    if (pro.Id == 0)
+                    {
+                        var featureId = pro.AssociatedFeatures.Select(s => s.Id).ToList();
+                        var featuresList = Work.FeaturesRepository.GetData(f => featureId.Contains(f.Id)).ToList();
+                        foreach (var proObj in categoryObj.Products)
+                        {
+                            var status = Helpers.CompareList<Core.Model.Feature>(proObj.AssociatedFeatures.ToList(), featuresList);
+                            if (status)
+                            {
+                                productId = proObj.Id;
+                                break;
+                            }
+                        }
+
+                    }
+                    Core.Model.SubscriptionDetail detail = new Core.Model.SubscriptionDetail()
+                    {
+                        SubscriptionTypeId = coreSubscriptionType.Id,
+                        ProductId = productId,
+                        Quantity = pro.Quantity
+                    };
                     Work.SubscriptionDetailResitory.Create(detail);
                     i++;
                 }
@@ -64,4 +85,5 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<Core.Model.SubscriptionType, SubscriptionType>(data);
         }
     }
+
 }

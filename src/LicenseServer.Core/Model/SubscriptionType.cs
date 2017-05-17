@@ -19,6 +19,11 @@ namespace LicenseServer.Core.Model
         public double Price { get; set; }
 
         public string CreatedBy { get; set; }
+        
+        public int CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public ProductCategory Category { get; set; }
 
         [ForeignKey("CreatedBy")]
         public Appuser CreatedUser { get; set; }

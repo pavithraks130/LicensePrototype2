@@ -140,98 +140,74 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpGet]
-        public ActionResult ProductDetails(int id)
+        public ActionResult ProductDetails(int id, string categoryName)
         {
-            TempData["Id"] = id;
-            List<SelectListItem> listItems = new List<SelectListItem>();
-            listItems.Add(new SelectListItem
+            SubscriptionType type = new SubscriptionType();
+            type.Category = new ProductCategory();
+            type.Category.Id = id;
+            type.Category.Name = categoryName;
+            List<SelectListItem> listItems = new List<SelectListItem>
             {
-                Text = "5 User",
-                Value = "5",                
-                Selected = true
-            });
-            listItems.Add(new SelectListItem
-            {
-                Text = "10 User",
-                Value = "10",
+                new SelectListItem
+                {
+                    Text = "5 User",
+                    Value = "5",
+                    Selected = true
+                },
+                new SelectListItem
+                {
+                    Text = "10 User",
+                    Value = "10",
 
-            });
-            listItems.Add(new SelectListItem
-            {
-                Text = "15 User",
-                Value = "15"
-            });
+                },
+                new SelectListItem
+                {
+                    Text = "15 User",
+                    Value = "15"
+                }
+            };
             ViewData["UserCount"] = listItems;
             CartItemCount();
-            List<Product> productList = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
-            if (response1.IsSuccessStatusCode)
-            {
-                var data = response1.Content.ReadAsStringAsync().Result;
-                productList = JsonConvert.DeserializeObject<List<Product>>(data);
-            }
-            else
-            {
-                productList = new List<Product>();
-            }
-            client.Dispose();
-            return View(productList);
+            return View(type);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(SubscriptionType type, string addToCart, int[] qty, params string[] selectedIndexAndProductIdList)
+        public async Task<ActionResult> Create(SubscriptionType type, string addToCart, string[] selectedFeatures, int[] cmmsQty, params string[] selectedProducts)
         {
             IList<Product> productCollection = new List<Product>();
 
-            HttpResponseMessage response = null;
-
-            int idCount = 0;
-            int lastId = 0;
-            for (int index = 0; index < selectedIndexAndProductIdList.Length; index++)
+            Product pro = new Product()
             {
-                if (int.Parse(selectedIndexAndProductIdList[index]) <= 8)
+                AssociatedFeatures = new List<Feature>(),
+                Quantity = type.NoOfUsers,
+                Categories = new List<ProductCategory>() { type.Category }
+            };
+            for (int i = 0; i < selectedFeatures.Length; i++)
+            {
+                Feature f = new Feature()
                 {
-                    idCount += int.Parse(Math.Pow(2, (int.Parse(selectedIndexAndProductIdList[index]) - 1) % 4).ToString());
-                    lastId = int.Parse(selectedIndexAndProductIdList[index]);
-                }
-
-                //if (types[index] == "FEATURE")
-                //{
-                //    idCount +=  2 ^ (int.Parse(selectedIndexAndProductIdList[index]) % 5 - 1);
-                //}
-                else
-                {
-                    var splitValue = selectedIndexAndProductIdList[index];
-                    int productId = int.Parse(splitValue);
-                    Product p = new Product()
-                    {
-                        Id = productId,
-                        Quantity = qty[index]
-                    };
-                    productCollection.Add(p);
-                }
+                    Id = Convert.ToInt32(selectedFeatures[i])
+                };
+                pro.AssociatedFeatures.Add(f);
             }
-            if (idCount != 0)
-            {
-               // var id = TempData["ProCatId"].ToString();
+            productCollection.Add(pro);
 
-                
-                if (lastId > 4)
-                {
-                    idCount += 15;
-                }
+            HttpResponseMessage response = null;
+            for (int i = 0; i < selectedProducts.Length; i++)
+            {
                 Product p = new Product()
                 {
-                    Id = idCount,
-                    Quantity = 1
+                    Id = Convert.ToInt32(selectedProducts[i]),
+                    Quantity = Convert.ToInt32(cmmsQty[i])
                 };
                 productCollection.Add(p);
             }
+
             SubscriptionType subscriptionType = new SubscriptionType()
             {
                 Name = type.Name,
                 Price = type.Price,
+                Category = type.Category,
                 Products = productCollection.AsEnumerable()
             };
             if (LicenseSessionState.Instance.IsSuperAdmin)

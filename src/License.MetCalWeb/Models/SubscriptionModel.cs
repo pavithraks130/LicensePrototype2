@@ -57,7 +57,8 @@ namespace License.MetCalWeb.Models
 
         public int ActivationMonth { get; set; }
         public double Price { get; set; }
-
+        public ProductCategory Category { get; set; }
+        public int NoOfUsers { get; set; }
         public string CreatedBy { get; set; }
         public IEnumerable<Product> Products { get; set; }
     }
@@ -145,7 +146,6 @@ namespace License.MetCalWeb.Models
         public string Type { get; set; }
 
     }
-
 
     public class ProductCategory
     {

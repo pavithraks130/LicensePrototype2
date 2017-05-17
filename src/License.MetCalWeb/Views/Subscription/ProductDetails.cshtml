@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.Product>
+﻿@model  License.MetCalWeb.Models.SubscriptionType
 @{
     ViewBag.Title = "ProductDetails";
 }
@@ -11,7 +11,7 @@
         @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
             <div class="line clearfix">
-                <ul  class="nav navbar-nav navbar-right custom-ul">
+                <ul class="nav navbar-nav navbar-right custom-ul">
                     <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
                     <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
                     <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
@@ -19,7 +19,7 @@
                 </ul>
             </div>
             <div class="line clearfix ">
-                <h3>@TempData["category"]</h3>
+                <h3>@Model.Category.Name</h3>
             </div>
             <div class="form-group">
                 <div class="line clearfix">
@@ -35,18 +35,18 @@
                         <div>
                             <h3>1. Concurrent Users</h3>
                             <div class="form-input con_user col-md-12" style="margin:5px 20px ; ">
-                                @Html.DropDownListFor(Model => Model.FirstOrDefault().ActivationMonth, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control selected_user_count ddlActivationPeriode" })
+                                @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control selected_user_count" })
                             </div>
                         </div>
                     </li>
                     <li class="line">
                         <div>
-                            @{ Html.RenderAction("Features", new { id = TempData["Id"] }); }
+                            @{ Html.RenderAction("Features", new { id = Model.Category.Id }); }
                         </div>
                     </li>
                     <li class="line">
                         <div>
-                            @{ Html.RenderAction("CMMSProducts", new { id = TempData["Id"] }); }
+                            @{ Html.RenderAction("CMMSProducts", new { id = Model.Category.Id }); }
                         </div>
                     </li>
 
@@ -72,6 +72,9 @@
                     }
                 </div>
             </div>
+            @Html.HiddenFor(m => m.Category.Id)
+            @Html.HiddenFor(m => m.Category.Name)
+        
                                 }
 
     </div>
@@ -136,6 +139,21 @@
             calculateTotal();
         });
 
+        $('.chkFeature').on('click', function () {
+            var obj = $(this).parent().parent();
+            var status = $(this).is(':checked');
+            var pricePerFeature = $(obj).find('.proCost').find('.lblSelectedProductCost').text();
+            var price = $(obj).find('.proPrice').find('.price_val');
+            var user_Count = $('.selected_user_count').val();
+            if (status == true) {
+                var featureTotal = parseFloat(pricePerFeature) * parseInt(user_Count);
+                $(price).text(featureTotal);
+            }
+            else {
+                $(price).text("");
+            }
+            calculateTotal();
+        });
 
         $('.txt-qty').on('change', function () {
             var parentObj = $(this).parent().parent();
@@ -147,24 +165,16 @@
             calculateTotal();
         });
 
-
-
-
-
         $('.selected_user_count').on('change', function () {
-            var parentObj = $(this).parent().parent();
-            var val = $(parentObj).find('con_user').find('.selected_user_count').text();
-            assaignUserCount(val);
+            var val = $('.selected_user_count :selected').text();
+            $('.divUsersCount').text(val);
         });
-        function assaignUserCount(obj) {
-            var userLabelList = $('.txt-qty').toArray();
-            userLabelList.forEach(function (e) {
-                $(e).parent().parent().find('.proQty').find('.txt-qty').text(obj);
-            });
-            }
-        
+
+
+
         function calculateTotal() {
             var priceList = $('.price_val').toArray();
+            console.log(priceList);
             var i = 0;
             var amount = 0;
             priceList.forEach(function (e) {
@@ -175,8 +185,7 @@
                 }
             });
             if (i > 0) {
-                var periode = $('.ddlActivationPeriode').val();
-                var total = parseFloat(periode) * parseFloat(amount);
+                var total = parseFloat(amount);
                 $('.total').text(total);
                 $('#hdnPrice').val(total);
             }

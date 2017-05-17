@@ -12,14 +12,14 @@
             double price = product.Price * product.Quantity;
             <div class="form-group col-md-12" style="margin:5px;">
                 <div class="col-md-5 proName">
-                    <input type="checkbox" class="checkbox enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" />
+                    <input type="checkbox" class="checkbox enableQty col-md-1" name="selectedProducts" value="@product.Id" />
                     <label class="col-md-11 proName">@product.Name</label>
                 </div>
                 <div class="col-md-2 proCost">
                     <label class="lblSelectedProductCost">@product.Price</label>
                 </div>
                 <div class="col-md-2 proQty">
-                    <input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" />
+                    <input type="text" class="txt-qty form-control" name="cmmsQty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" />
                 </div>
                 <div class="col-md-3 proPrice">
                     <label class="price_val">@price</label>
