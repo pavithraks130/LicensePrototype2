@@ -150,7 +150,7 @@ namespace License.MetCalWeb.Controllers
             CartItemCount();
             return View(type);
         }
-        
+
         public void DataInitialization()
         {
             List<SelectListItem> listItems = new List<SelectListItem>
@@ -219,15 +219,16 @@ namespace License.MetCalWeb.Controllers
             productCollection.Add(pro);
 
             HttpResponseMessage response = null;
-            for (int i = 0; i < selectedProducts.Length; i++)
-            {
-                Product p = new Product()
+            if (selectedProducts != null)
+                for (int i = 0; i < selectedProducts.Length; i++)
                 {
-                    Id = Convert.ToInt32(selectedProducts[i]),
-                    Quantity = Convert.ToInt32(cmmsQty[i])
-                };
-                productCollection.Add(p);
-            }
+                    Product p = new Product()
+                    {
+                        Id = Convert.ToInt32(selectedProducts[i]),
+                        Quantity = Convert.ToInt32(cmmsQty[i])
+                    };
+                    productCollection.Add(p);
+                }
 
             SubscriptionType subscriptionType = new SubscriptionType()
             {

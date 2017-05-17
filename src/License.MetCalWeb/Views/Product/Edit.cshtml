@@ -167,6 +167,7 @@
                             <div class="col-md-10">
                                 @Html.DisplayFor(pro => pro.ProductCode, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(pro => pro.ProductCode)
+                                @Html.HiddenFor(p=>p.ProductCode)
                             </div>
                         </div>
                         <div class="form-group">

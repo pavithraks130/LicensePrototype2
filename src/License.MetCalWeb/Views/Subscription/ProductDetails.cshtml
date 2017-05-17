@@ -104,21 +104,32 @@
             i = 0;
             j = 0;
 
-            $('.')
-            $('input[type=checkbox]:checked').each(function (e) {
+
+            if ($('.chkFeature:checked').length == 0)
+            {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                $('#lblError').text("No Features Selected");
+                isPostEnabled = isPostEnabled && false;
+            }
+
+            //checking CMMS Products
+            $('.chkCmmsPro:checked').each(function (e) {
                 var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
+                console.log(parentObj);
+                console.log($(parentObj).find('.proQty'));
                 var txtQty = $(parentObj).find('.proQty').find('.txt-qty');
+                console.log(txtQty);
                 var qty = $(txtQty).val();
                 if (parseInt(qty) == 0)
                     j++;
                 i++;
             });
-            if (i == 0) {
-                $('#lblError').attr('style', 'display:inline;color:red;');
-                $('#lblError').text("No Products Selected");
-                isPostEnabled = isPostEnabled && false;
-            }
-            else if (j > 0) {
+            //if (i == 0) {
+            //    $('#lblError').attr('style', 'display:inline;color:red;');
+            //    $('#lblError').text("No Products Selected");
+            //    isPostEnabled = isPostEnabled && false;
+            //}
+            if (j > 0) {
                 $('#lblError').attr('style', 'display:inline;color:red;');
                 $('#lblError').text("Quantity not specified for the selected Products");
                 isPostEnabled = isPostEnabled && false;
@@ -167,7 +178,6 @@
             });
             calculateTotal();
         });
-
 
         $('.chkFeature').on('click', function () {
             var obj = $(this).parent().parent();

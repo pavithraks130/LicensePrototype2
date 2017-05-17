@@ -422,7 +422,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_01",
                     ImagePath = "P1.png",
                     Price = 50,
-                    ProductCode = "Pro_O1",
+                    ProductCode = "Pro_16",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -437,7 +437,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_02",
                     ImagePath = "P1.png",
                     Price = 100,
-                    ProductCode = "Pro_O2",
+                    ProductCode = "Pro_17",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -452,7 +452,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_03",
                     ImagePath = "P1.png",
                     Price = 150,
-                    ProductCode = "Pro_O3",
+                    ProductCode = "Pro_18",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -467,7 +467,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_04",
                     ImagePath = "P1.png",
                     Price = 200,
-                    ProductCode = "Pro_O4",
+                    ProductCode = "Pro_19",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -482,7 +482,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_05",
                     ImagePath = "P1.png",
                     Price = 250,
-                    ProductCode = "Pro_O5",
+                    ProductCode = "Pro_20",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -497,7 +497,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_06",
                     ImagePath = "P1.png",
                     Price = 300,
-                    ProductCode = "Pro_O6",
+                    ProductCode = "Pro_21",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -512,7 +512,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_07",
                     ImagePath = "P1.png",
                     Price = 350,
-                    ProductCode = "Pro_O7",
+                    ProductCode = "Pro_22",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -527,7 +527,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_08",
                     ImagePath = "P1.png",
                     Price = 400,
-                    ProductCode = "Pro_O8",
+                    ProductCode = "Pro_23",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -542,7 +542,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_09",
                     ImagePath = "P1.png",
                     Price = 450,
-                    ProductCode = "Pro_O9",
+                    ProductCode = "Pro_24",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -557,7 +557,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_10",
                     ImagePath = "P1.png",
                     Price = 500,
-                    ProductCode = "Pro_10",
+                    ProductCode = "Pro_25",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -572,7 +572,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_11",
                     ImagePath = "P1.png",
                     Price = 550,
-                    ProductCode = "Pro_11",
+                    ProductCode = "Pro_26",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -587,7 +587,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_12",
                     ImagePath = "P1.png",
                     Price = 600,
-                    ProductCode = "Pro_12",
+                    ProductCode = "Pro_27",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -602,7 +602,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_13",
                     ImagePath = "P1.png",
                     Price = 650,
-                    ProductCode = "Pro_13",
+                    ProductCode = "Pro_28",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -617,7 +617,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_14",
                     ImagePath = "P1.png",
                     Price = 700,
-                    ProductCode = "Pro_14",
+                    ProductCode = "Pro_29",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -632,7 +632,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "calibrationProduct_15",
                     ImagePath = "P1.png",
                     Price = 750,
-                    ProductCode = "Pro_15",
+                    ProductCode = "Pro_30",
                     AssociatedFeatures = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -651,7 +651,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "CMMSSolution API PlugIn product",
                     ImagePath = "P1.png",
                     Price = 50,
-                    ProductCode = "Pro_01",
+                    ProductCode = "Pro_31",
                     AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -664,7 +664,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "CMMSSolution MET/TEAM product",
                     ImagePath = "P1.png",
                     Price = 100,
-                    ProductCode = "Pro_02",
+                    ProductCode = "Pro_32",
                     AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
@@ -677,7 +677,7 @@ namespace LicenseServer.Core.Migrations
                     Description = "CMMSSolution EMaint Link Product",
                     ImagePath = "P1.png",
                     Price = 150,
-                    ProductCode = "Pro_02",
+                    ProductCode = "Pro_33",
                     AssociatedFeatures = new List<Feature> { CMMSSolutionFeature_02, CMMSSolutionFeature_01 },
                     ModifiedDate = DateTime.Now,
                     CreatedDate = DateTime.Now
