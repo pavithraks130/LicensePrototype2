@@ -9,16 +9,13 @@
         border: solid pink 3px;
     }
 </style>
-<div ng-if="!isCheckoutComplete()" class="subNav clearfix ng-scope">  
-    <nav class="shop-header">
-
-        <ul>
-            <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
-            <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
-            <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
-            <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new {@style= "color:green;border:thick" })</li>
-        </ul>
-    </nav>
+<div class="line clearfix">
+    <ul class="nav navbar-nav navbar-right custom-ul">
+        <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
+        <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
+        <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
+        <li>@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
+    </ul>
 </div>
 <div class="row">
     <div class="col-md-12">

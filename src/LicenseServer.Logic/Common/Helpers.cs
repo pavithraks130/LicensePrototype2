@@ -13,6 +13,7 @@ namespace LicenseServer.Logic.Common
             bool flag = true;
             if (list1.Count != list2.Count)
                 return false;
+
             foreach (T obj in list1)
             {
                 if (!obj.Equals(list2[list1.IndexOf(obj)]))

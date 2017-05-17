@@ -10,74 +10,71 @@
     <div class="col-md-12">
         @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
-            <div class="line navbar navbar-inverse">
-                <nav class="shop-header">
-                    <ul id="menu" class="text-color nav navbar-nav navbar-right">
-                        <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
-                        <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
-                        <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
-                        <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
-                    </ul>
-                </nav>
+            <div class="line clearfix">
+                <ul class="nav navbar-nav navbar-right custom-ul">
+                    <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
+                    <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
+                    <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
+                    <li>@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
+                </ul>
             </div>
-            <div class="line clearfix ng-scope">
+            <div class="line clearfix ">
                 <h3>@Model.Category.Name</h3>
             </div>
-                <div class="form-group">
-                    <div class="line clearfix">
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
-                            <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
-                        </ul>
-                    </div>
+            <div class="form-group">
+                <div class="line clearfix">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
+                        <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
+                    </ul>
                 </div>
-                <div class="form-group">
-                    <ol>
-                        <li class="line">
-                            <div>
-                                <h3>1. Concurrent Users</h3>
-                                <div class="form-input col-md-12" style="margin:5px 20px ; ">
-                                    @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control ddlActivationPeriode" })
-                                </div>
+            </div>
+            <div class="form-group">
+                <ol>
+                    <li class="line">
+                        <div>
+                            <h3>1. Concurrent Users</h3>
+                            <div class="form-input col-md-12" style="margin:5px 20px ; ">
+                                @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, "", new { @class = "form-control ddlActivationPeriode" })
                             </div>
-                        </li>
-                        <li class="line">
-                            <div>
-                                @{ Html.RenderAction("Features", new { id = Model.Category.Id }); }
-                            </div>
-                        </li>
-                        <li class="line">
-                            <div>
-                                @{ Html.RenderAction("CMMSProducts", new { id = Model.Category.Id }); }
-                            </div>
-                        </li>
+                        </div>
+                    </li>
+                    <li class="line">
+                        <div>
+                            @{ Html.RenderAction("Features", new { id = Model.Category.Id }); }
+                        </div>
+                    </li>
+                    <li class="line">
+                        <div>
+                            @{ Html.RenderAction("CMMSProducts", new { id = Model.Category.Id }); }
+                        </div>
+                    </li>
 
 
-                    </ol>
+                </ol>
 
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-7">
                 </div>
+                <label class="col-md-2 float-right">SubTotal(USD) </label>
+                <label class="total col-md-3">0</label>
 
-                <div class="form-group">
-                    <div class="col-md-7">
-                    </div>
-                    <label class="col-md-2 float-right">SubTotal(USD) </label>
-                    <label class="total col-md-3">0</label>
-
+            </div>
+            <div class="form-group">
+                <label id="lblError" class="col-md-6"></label>
+                <div class="col-md-6">
+                    <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
+                    @if (LicenseSessionState.Instance.IsSuperAdmin)
+                    {
+                        <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                    }
                 </div>
-                <div class="form-group">
-                    <label id="lblError" class="col-md-6"></label>
-                    <div class="col-md-6">
-                        <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
-                        @if (LicenseSessionState.Instance.IsSuperAdmin)
-                        {
-                            <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
-                        }
-                    </div>
-                </div>
-                @Html.HiddenFor(m => m.Category.Id)
-                                    @Html.HiddenFor(m => m.Category.Name)
-
-                                    }
+            </div>
+            @Html.HiddenFor(m => m.Category.Id)
+                                @Html.HiddenFor(m => m.Category.Name)
+                                }
 
     </div>
 </div>
