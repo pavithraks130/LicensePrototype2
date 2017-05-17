@@ -11,10 +11,12 @@
             index += 1;
             double price = product.Price * product.Quantity;
             <div class="form-group">
-                <div class="col-md-5 proName"><input type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" /> &nbsp;<label class="col-md-3 proName">@product.Name</label> </div>
+                <div class="col-md-5 proName"><input  type="checkbox" class="checkbox form-control enableQty col-md-1" name="selectedIndexAndProductIdList" value="@product.Id" /> &nbsp;<label class="col-md-3 proName">@product.Name</label> </div>
                 <div class="col-md-2 proCost"><label class="lblSelectedProductCost">@product.Price</label></div>
-                <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity" disabled="disabled" /></div>
+                <div class="col-md-2 proQty"><input type="text" class="txt-qty form-control" name="qty" id="textQTYid+@product.Id" value="@product.Quantity"  disabled="disabled" /></div>
                 <div class="col-md-3 proPrice"><label class="price_val">@price</label></div>
+                @*<input type="checkbox" class="checkbox form-control enableQty col-md-1" name="types" value="@product.Type" hidden="hidden"/>*@
+                @*<div hidden="hidden"><input type="text" class="type_class enableQty form-control" name="types" value="@product.Type"  /></div>*@
             </div>
         }
     }

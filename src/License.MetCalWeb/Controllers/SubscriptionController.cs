@@ -139,6 +139,12 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Features(int id)
         {
+            List<Feature> featureList = GetFeatureList(id);
+            return View(featureList);
+        }
+
+        private static List<Feature> GetFeatureList(int id)
+        {
             List<Feature> featureList = new List<Feature>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
@@ -148,7 +154,12 @@ namespace License.MetCalWeb.Controllers
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 featureList = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
             }
-            return View(featureList);
+            foreach (var feature in featureList)
+            {
+                feature.Type = "FEATURE";
+            }
+
+            return featureList;
         }
 
         public ActionResult CMMSProducts()
@@ -161,6 +172,10 @@ namespace License.MetCalWeb.Controllers
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 cmmsProducts = JsonConvert.DeserializeObject<List<Product>>(jsonData);
+            }
+            foreach (var prodct in cmmsProducts)
+            {
+                prodct.Type = "PRODUCT";
             }
             return View(cmmsProducts);
         }
@@ -176,8 +191,17 @@ namespace License.MetCalWeb.Controllers
             //    var categoryName = item.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
             //    TempData["category"] = categoryName;
             //}
-          //  ProductCategory category = null;
+            //  ProductCategory category = null;
             List<Product> productList = null;
+            productList = GetProductList(id);
+            TempData["ProCatId"] = id;
+            return View(productList);
+            // return View();
+        }
+
+        private static List<Product> GetProductList(int id)
+        {
+            List<Product> productList;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + LicenseSessionState.Instance.CentralizedToken.access_token);
             var response1 = client.GetAsync("api/Product/ProductByCategory/" + id).Result;
@@ -191,8 +215,7 @@ namespace License.MetCalWeb.Controllers
                 productList = new List<Product>();
             }
             client.Dispose();
-            return View(productList);
-           // return View();
+            return productList;
         }
 
         [HttpPost]
@@ -201,14 +224,46 @@ namespace License.MetCalWeb.Controllers
             IList<Product> productCollection = new List<Product>();
 
             HttpResponseMessage response = null;
+           
+           int idCount = 0;
+            int lastId = 0;
             for (int index = 0; index < selectedIndexAndProductIdList.Length; index++)
             {
-                var splitValue = selectedIndexAndProductIdList[index];
-                int productId = int.Parse(splitValue);
+                if (int.Parse(selectedIndexAndProductIdList[index]) <= 8)
+                {
+                    idCount +=int.Parse(Math.Pow(2,(int.Parse(selectedIndexAndProductIdList[index])-1)% 4).ToString());
+                    lastId = int.Parse(selectedIndexAndProductIdList[index]);
+                }
+
+                //if (types[index] == "FEATURE")
+                //{
+                //    idCount +=  2 ^ (int.Parse(selectedIndexAndProductIdList[index]) % 5 - 1);
+                //}
+                else
+                {
+                    var splitValue = selectedIndexAndProductIdList[index];
+                    int productId = int.Parse(splitValue);
+                    Product p = new Product()
+                    {
+                        Id = productId,
+                        Quantity = qty[index]
+                    };
+                    productCollection.Add(p);
+                }
+            }
+            if (idCount != 0)
+            {
+                var id = TempData["ProCatId"].ToString();
+               
+                    List<Product> productList = GetProductList(int.Parse(id));
+                    if (lastId > 4)
+                    {
+                        idCount += 15;
+                    }
                 Product p = new Product()
                 {
-                    Id = productId,
-                    Quantity = qty[index]
+                    Id = idCount,
+                    Quantity = 1
                 };
                 productCollection.Add(p);
             }

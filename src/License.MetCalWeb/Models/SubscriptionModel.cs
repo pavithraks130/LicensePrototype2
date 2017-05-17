@@ -74,6 +74,8 @@ namespace License.MetCalWeb.Models
         public ICollection<Feature> AssociatedFeatures { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int ActivationMonth { get; set; }
+        private string type;
+        public string Type { get; set; }
 
     }
 
@@ -137,6 +139,7 @@ namespace License.MetCalWeb.Models
         public bool IsEnabled { get; set; }
         public bool Selected { get; set; }
         public double Price { get; set; }
+        public string Type { get; set; }
 
     }
 

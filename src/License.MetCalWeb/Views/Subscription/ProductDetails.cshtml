@@ -20,7 +20,7 @@
 <div ng-if="!isCheckoutComplete()" class="line clearfix ng-scope">
    
     <div>
-        <h3>@TempData["category"]</h3>
+        <h3>@Model.FirstOrDefault().Categories.FirstOrDefault().Name</h3>
     </div>
 </div>
 <div ng-if="!isCheckoutComplete()" class="line clearfix ng-scope">
@@ -57,10 +57,11 @@
             });
         }
         @Html.DropDownListFor(Model => Model.FirstOrDefault().ActivationMonth, listItems, "",new { @class = "form-control ddlActivationPeriode col-md-8" })
+        <br />
+        <br />
+        <br />
     </div>
-    <br/>
-    <br />
-    <br />
+    
 
     <div class="line row">
         @{ Html.RenderAction("Features"); }
@@ -73,7 +74,7 @@
     <div class="form-group">
         <div class="col-md-7">
         </div>
-        @*@Html.HiddenFor(m => m.Price, new { @id = "hdnPrice", @class = "col-md-7" })*@
+        @Html.HiddenFor(m => m.FirstOrDefault().Price, new { @id = "hdnPrice", @class = "col-md-7" })
         <label class="col-md-2 float-right">SubTotal(USD) </label>
         <label class="total col-md-3">0</label>
 
@@ -129,7 +130,9 @@
         });
 
         $('.enableQty').on('click', function () {
+
             var data = $(this).is(':checked');
+
             var qtyObj = $(this).parent().parent();
             var prodPrice = $(qtyObj).find('.proCost').find('.lblSelectedProductCost').text();
             var txtQty = $(qtyObj).find('.proQty').find('.txt-qty');
@@ -140,8 +143,11 @@
                 var pricePerUnit = parseInt(prodPrice)
                 var amount = pricePerUnit * qty;
                 $(price).text(amount);
+                //$(qtyObj).find('.type_class').text("FEATURE");
+                //$('.type_class').text("FEATURE");
             }
             else {
+                //$('.type_class').text("");
                 $(txtQty).attr('disabled', 'disabled');
                 $(price).text('0');
             }
