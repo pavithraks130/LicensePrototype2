@@ -10,17 +10,15 @@
     <div class="col-md-12">
         @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
-            <div class="line navbar navbar-inverse">
-                <nav class="shop-header">
-                    <ul id="menu" class="text-color nav navbar-nav navbar-right">
-                        <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
-                        <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
-                        <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
-                        <li style="border-style:solid;border-color:green;border-radius:3px 4px">@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
-                    </ul>
-                </nav>
+            <div class="line clearfix">
+                <ul  class="nav navbar-nav navbar-right custom-ul">
+                    <li>@Html.ActionLink("Shop", "Shop", "PurchaseNavigation")</li>
+                    <li>@Html.ActionLink("Pay Quote", "PayQuote", "PurchaseNavigation")</li>
+                    <li>@Html.ActionLink("Renew", "Renew", "PurchaseNavigation")</li>
+                    <li>@Html.ActionLink("Cart " + @TempData["CartCount"], "CartItem", "Cart", null, new { @style = "color:green;border:thick" })</li>
+                </ul>
             </div>
-            <div class="line clearfix ng-scope">
+            <div class="line clearfix ">
                 <h3>@TempData["category"]</h3>
             </div>
             <div class="form-group">
