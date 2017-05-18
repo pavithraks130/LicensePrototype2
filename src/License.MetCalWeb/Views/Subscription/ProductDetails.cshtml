@@ -24,9 +24,8 @@
             <div class="form-group">
                 <div class="line clearfix">
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Server", "ProductDeatails", "Subscription")</li>
-
-                         <li>@Html.ActionLink("Cloud", "ProductDeatails", "Subscription")</li>
+                        <li><a href="#">Server</a></li>
+                        <li><a href="#">Cloud</a></li>
                     </ul>
                 </div>
             </div>
@@ -75,7 +74,7 @@
                     <button class="btn btn-custom  btn-save float-right" style="margin-left:5px; margin-right:5px;" name="addToCart" value="false">Create</button>
                     @if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
-                    <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
+                        <button class="btn btn-custom  btn-save float-right" name="addToCart" value="true">Create And AddToCart</button>
                     }
                 </div>
             </div>
@@ -106,8 +105,7 @@
             j = 0;
 
 
-            if ($('.chkFeature:checked').length == 0)
-            {
+            if ($('.chkFeature:checked').length == 0) {
                 $('#lblError').attr('style', 'display:inline;color:red;');
                 $('#lblError').text("No Features Selected");
                 isPostEnabled = isPostEnabled && false;
@@ -115,7 +113,7 @@
 
             //checking CMMS Products
             $('.chkCmmsPro:checked').each(function (e) {
-                var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
+                var parentObj = $($('.chkCmmsPro:checked')[e]).parent().parent();
                 console.log(parentObj);
                 console.log($(parentObj).find('.proQty'));
                 var txtQty = $(parentObj).find('.proQty').find('.txt-qty');
