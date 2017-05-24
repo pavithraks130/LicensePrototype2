@@ -121,11 +121,13 @@ namespace LicenseServer.Logic.BusinessLogic
             {
                 foreach (var item in poItem.OrderItems)
                 {
-                    LicenseServer.DataModel.UserSubscription usersubs = new LicenseServer.DataModel.UserSubscription();
-                    usersubs.UserId = userId;
-                    usersubs.SubscriptionTypeId = item.SubscriptionId;
-                    usersubs.SubscriptionDate = DateTime.Now.Date;
-                    usersubs.Quantity = item.Quantity;
+                    UserSubscription usersubs = new UserSubscription()
+                    {
+                        UserId = userId,
+                        SubscriptionTypeId = item.SubscriptionId,
+                        SubscriptionDate = DateTime.Now.Date,
+                        Quantity = item.Quantity
+                    };
                     subsList.Add(usersubs);
                 }
                 var dataList = userSubLogic.CreateUserSubscriptionList(subsList, userId);

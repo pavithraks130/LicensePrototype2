@@ -28,10 +28,10 @@ namespace OnPremise.WebAPI
             //Initializing AutoMapper
             License.Logic.AutoMapperConfiguration.InitializeAutoMapperConfiguration();
             ConfigureLogger();
-            ConfigureOAuth(app);
             //Registering the Web Api Configuration
             WebApiConfig.Register(httpConfig);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            ConfigureOAuth(app);
             app.UseWebApi(httpConfig);
 
         }

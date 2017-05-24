@@ -160,6 +160,10 @@
     <Compile Include="Migrations\201705170450527_AddedCategoryToSubscriptionType.Designer.cs">
       <DependentUpon>201705170450527_AddedCategoryToSubscriptionType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705230725595_AddActivationDateToSubscription.cs" />
+    <Compile Include="Migrations\201705230725595_AddActivationDateToSubscription.Designer.cs">
+      <DependentUpon>201705230725595_AddActivationDateToSubscription.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -223,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705170450527_AddedCategoryToSubscriptionType.resx">
       <DependentUpon>201705170450527_AddedCategoryToSubscriptionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705230725595_AddActivationDateToSubscription.resx">
+      <DependentUpon>201705230725595_AddActivationDateToSubscription.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

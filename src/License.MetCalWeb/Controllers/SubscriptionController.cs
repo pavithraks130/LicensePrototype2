@@ -265,5 +265,23 @@ namespace License.MetCalWeb.Controllers
             }
             return null;
         }
+
+        [HttpGet]
+        public ActionResult Renew()
+        {
+            var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
+            return View(expiredSubscriptipon);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Renew(string[] selectedSubscription)
+        {
+            if(selectedSubscription.Count() > 0)
+            {
+
+            }
+            return View();
+        }
     }
 }

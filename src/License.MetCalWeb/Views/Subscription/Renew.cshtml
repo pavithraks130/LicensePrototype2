@@ -1,0 +1,73 @@
+﻿@model  List<License.MetCalWeb.Models.SubscriptionType>
+@{
+    ViewBag.Title = "Renew";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            alert("1234");
+            var obj = $('input[type=checkbox][name=selectedSubscription]:checked');
+            console.log(obj);
+            if (obj.length == 0) {
+                $('#lblerror').text("select the subscription  which you would like to renew");
+                $('#lblerror').attr('style', 'display:inline;color:red !important');
+                return false;
+            }
+            return true;
+        })
+    })
+</script>
+<h3>Renew</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        @using (Html.BeginForm("renew", "subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td class="col-md-1"></td>
+                        <td class="col-md-4">Subscription Name </td>
+                        <td class="col-md-3">Duration</td>
+                        <td class="col-md-4">Price</td>
+                    </tr>
+                </thead>
+                @foreach (var m in Model)
+                {
+                <tr>
+                    <td class="col-md-1">
+                        <input type="checkbox" value="@m.Id" name="selectedSubscription" />
+                    </td>
+                    <td class="col-md-4">
+                        @m.Name
+                    </td>
+                    <td class="col-md-3">
+                        @m.ActiveDays Days
+                    </td>
+                    <td class="col-md-4">
+                        @m.Price
+                    </td>
+                </tr>
+                }
+                <tr>
+                    <td colspan="3">
+                        Total
+                    </td>
+                    <td class="col-md-4">
+                        <label id="lblPayment" >0</label>
+                    </td>
+                </tr>
+            </table>
+           
+            <div class="col-md-8">
+                <label id="lblerror" style="display:none;" />
+            </div>
+            <div class="float-right col-md-4">
+                <button type="submit" class="btn btn-primary"> Renew Subscription</button>
+            </div>
+        }
+    </div>
+
+</div>

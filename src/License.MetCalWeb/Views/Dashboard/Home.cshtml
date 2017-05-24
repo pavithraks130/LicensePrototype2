@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Home";
 }
-<script>
+<script type="text/javascript">
     var x, y, n = 0, ny = 0, rotINT, rotYINT
     function rotateYDIV() {
         y = document.getElementById("rotate3D")
@@ -56,7 +56,7 @@
     });
 </script>
 <link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
-<style>
+<style type="text/css">
     .span-font {
         font-size: 16px !important;
     }
@@ -71,7 +71,6 @@
     }
 </style>
 
-
 <br />
 <div class="row">
     <div class="col-md-12">
@@ -83,74 +82,94 @@
 
         @using (Html.BeginForm())
         {
-            if (Model == null || Model.Count == 0)
-            {
+            <div class="col-md-8">
+                @if (Model == null || Model.Count == 0)
+                {
                 <div class="row">
                     <div class="form-group">
                         <label class="col-md-12">No License assigned</label>
                     </div>
 
                 </div>
-            }
-            else
-            {
+                }
+                else
+                {
                 foreach (var productLicense in Model)
                 {
-                    <div class="row div-spacing" style="height:80px;">
-                        <h3>
-                            Available License Type:
-                        </h3>
-                        <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.Name</h3></div>
+                <div class="row div-spacing" style="height:80px;">
+                    <h3>
+                        Available License Type:
+                    </h3>
+                    <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.Name</h3></div>
+                </div>
+
+                <div class="row" style="margin-top:20%">
+                    <div class="col-md-12">
+
                     </div>
-
-                    <div class="row" style="margin-top:20%">
-                        <div class="col-md-12">
-
-                        </div>
+                </div>
+                foreach (var product in productLicense.Products)
+                {
+                <div class="row" style="margin-top:5%">
+                    <div class="col-md-12">
+                        <h4><label>@product.Name</label></h4>
                     </div>
-                    foreach (var product in productLicense.Products)
-                    {
-                        <div class="row" style="margin-top:5%">
-                            <div class="col-md-12">
-                                <h4><label>@product.Name</label></h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Expire Date</label>
-                            </div>
-                            <div class="col-md-8">
-                                <label>@product.ExpireDate.Date.ToString("D")</label>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Expire Date</label>
+                    </div>
+                    <div class="col-md-8">
+                        <label>@product.ExpireDate.Date.ToString("D")</label>
+                    </div>
+                </div>
 
-                        <div class="row" style="margin-top:1%">
-                            <div class="animated_div"><label>Feature</label></div>
-                            <div class="animated_div"><label>Version</label></div>
-                            <div class="animated_div"><label>Info</label></div>
-                        </div>
-                        for (int i = 0; i < product.Features.Count; i++)
-                        {
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label>@product.Features[i].Name</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>@product.Features[i].Version</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>@product.Features[i].Description</label>
-                                </div>
-                            </div>
-                        }
-                    }
+                <div class="row" style="margin-top:1%">
+                    <div class="animated_div"><label>Feature</label></div>
+                    <div class="animated_div"><label>Version</label></div>
+                    <div class="animated_div"><label>Info</label></div>
+                </div>
+                for (int i = 0; i < product.Features.Count; i++)
+                {
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>@product.Features[i].Name</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label>@product.Features[i].Version</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label>@product.Features[i].Description</label>
+                    </div>
+                </div>
+                }
+                }
 
-                    <hr />
+                <hr />
 
                 }
 
-            }
+                }
+            </div>
 
+            <div class="col-md-4">
+                @if (LicenseSessionState.Instance.IsSuperAdmin)
+                {
+                    if(Convert.ToInt32(ViewData["ExpiredSubCount"]) > 0)
+                    {
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                                <div class="has-warning"></div>
+                            </div>
+                            <div class="col-md-8 text-warning">
+                                <b>You subscriptions are about to expire in few days. If you would like renew then click on below link.</b>
+                                <br />
+                                @Html.ActionLink("Renew Subscription","Renew","Subscription")
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
 
         }
     </div>

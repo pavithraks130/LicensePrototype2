@@ -20,6 +20,8 @@ namespace LicenseServer.DataModel
 
         public int ActiveDurataion { get; set; }
 
+        public DateTime ActivationDate { get; set; }
+
         public SubscriptionType Subtype { get; set; }
        
     }

@@ -12,7 +12,7 @@ namespace LicenseServer.Logic
         public List<UserSubscription> GetUserSubscription(string userId)
         {
             List<UserSubscription> subscriptions = new List<UserSubscription>();
-            var subscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == userId,null,"SubType");
+            var subscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == userId, null, "SubType");
             foreach (var obj in subscriptionList)
                 subscriptions.Add(AutoMapper.Mapper.Map<LicenseServer.Core.Model.UserSubscription, DataModel.UserSubscription>(obj));
             return subscriptions;
@@ -26,6 +26,7 @@ namespace LicenseServer.Logic
             SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
 
             Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<DataModel.UserSubscription, Core.Model.UserSubscription>(subscription);
+            subs.ActivationDate = DateTime.Now.Date;
             var obj = Work.UserSubscriptionRepository.Create(subs);
             Work.UserSubscriptionRepository.Save();
 
@@ -88,7 +89,8 @@ namespace LicenseServer.Logic
             {
                 var pro = produLogic.GetProductById(data.ProductId);
                 var count = data.Quantity;
-                string keyData = pro.ProductCode + "^" + DateTime.Now.AddDays(type.ActiveDays).Date.ToString() + "^" + type.Id + "^" + teamId;
+                DateTime activationDate = subs.ActivationDate;
+                string keyData = pro.ProductCode + "^" + activationDate.AddDays(type.ActiveDays).Date.ToString() + "^" + type.Id + "^" + teamId;
                 for (int i = 0; i < (data.Quantity * qty); i++)
                 {
                     var key = LicenseKey.LicenseKeyGen.CryptoEngine.Encrypt(keyData, true);
@@ -107,6 +109,18 @@ namespace LicenseServer.Logic
                 }
             }
             return licProductMapping;
+        }
+
+        public List<SubscriptionType> GetExpiringSubscription(string userId)
+        {
+            List<SubscriptionType> subType = null; 
+            var subList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId).ToList();
+            var subListObj = subList.Where(s => (s.ActivationDate.AddDays(s.Subtype.ActiveDays).Date - DateTime.Now.Date).Days <= 30).ToList();
+            if (subListObj != null && subListObj.Count > 0)
+            {
+               subType= subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.SubscriptionType>(s.Subtype)).ToList();   
+            }
+            return subType;
         }
     }
 }

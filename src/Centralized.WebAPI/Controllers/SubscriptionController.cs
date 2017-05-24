@@ -59,9 +59,5 @@ namespace Centralized.WebAPI.Controllers
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
-
-
-
-
     }
 }

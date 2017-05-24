@@ -409,6 +409,7 @@
     <Content Include="Views\ProductCategory\Create.cshtml" />
     <Content Include="Views\ProductCategory\Edit.cshtml" />
     <Content Include="Views\ProductCategory\Index.cshtml" />
+    <Content Include="Views\Subscription\Renew.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

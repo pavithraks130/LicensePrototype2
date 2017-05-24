@@ -30,6 +30,8 @@ namespace Centralized.WebAPI.Common
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+
+            //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin",new[] { "http://"+context.Request.Host.Value });
             UserLogic logic = new UserLogic();
             logic.UserManager = context.OwinContext.GetUserManager<LicUserManager>();
             logic.RoleManager = context.OwinContext.GetUserManager<LicRoleManager>();

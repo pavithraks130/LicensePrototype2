@@ -34,14 +34,25 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.SelectedTeam = teamList.FirstOrDefault();
                     LoadUserSubscription();
                 }
-            }            
+            }
             ViewData["IsTeamListPopupVisible"] = LicenseSessionState.Instance.TeamList.Count > 0 && LicenseSessionState.Instance.SelectedTeam == null;
+
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+            {
+                var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
+                ViewData["ExpiredSubCount"] = expiredSubscriptipon == null ? 0 : expiredSubscriptipon.Count;
+            }
+            else
+                ViewData["ExpiredSubCount"] = "";
+
             if (LicenseSessionState.Instance.SelectedTeam != null)
                 return View(LicenseSessionState.Instance.UserSubscriptionList);
-            
+
+           
             return View();
 
         }
+
 
         public ActionResult TeamList()
         {
