@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace License.Core.Model
 {
-    public class UserLicense
+    public class TeamLicense
     {
         [Key]
         public int Id { get; set; }
-
-        public string UserId { get; set; }
-
         public int LicenseId { get; set; }
-
         public int TeamId { get; set; }
-        
-        public bool IsTeamLicense { get; set; }
-
-
-        [ForeignKey("UserId")]
-        public AppUser User { get; set; }
+        public bool IsMapped { get; set; }
 
         [ForeignKey("LicenseId")]
         public virtual LicenseData License { get; set; }

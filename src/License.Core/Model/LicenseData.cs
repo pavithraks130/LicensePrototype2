@@ -18,6 +18,7 @@ namespace License.Core.Model
         public int ProductId { get; set; }
 
         public int UserSubscriptionId { get; set; }
+        public int TeamSubscriptionId { get; set; }
 
         public bool IsMapped { get; set; }
 

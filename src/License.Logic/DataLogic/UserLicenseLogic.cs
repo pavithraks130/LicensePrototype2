@@ -83,7 +83,8 @@ namespace License.Logic.DataLogic
             return true;
         }
 
-        private bool RevokeUserLicense(Core.Model.UserLicense lic)
+        private bool RevokeUserLicense(Core.Model.
+            UserLicense lic)
         {
             var obj = Work.UserLicenseRepository.GetData(r => r.LicenseId == lic.LicenseId && r.UserId == lic.UserId).FirstOrDefault();
             if (obj == null)

@@ -64,6 +64,7 @@
     <Compile Include="Registration.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="TeamAsset.cs" />
+    <Compile Include="TeamLicense.cs" />
     <Compile Include="User.cs" />
     <Compile Include="TeamMembers.cs" />
     <Compile Include="UserLicense.cs" />

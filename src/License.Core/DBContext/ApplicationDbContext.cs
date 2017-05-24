@@ -44,6 +44,7 @@ namespace License.Core.DBContext
         public DbSet<LicenseData> LicenseData { get; set; }
 
         public DbSet<UserLicense> UserLicense { get; set; }
+        public DbSet<TeamLicense> TeamLicense { get; set; }
 
         public DbSet<UserLicenseRequest> UserLicenseRequest { get; set; }
 

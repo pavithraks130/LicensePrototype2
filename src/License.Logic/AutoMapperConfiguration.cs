@@ -8,6 +8,9 @@ using License.DataModel;
 
 namespace License.Logic
 {
+    /// <summary>
+    /// Buisines Logic Model and Data Logic Model property assigning 
+    /// </summary>
     public class AutoMapperConfiguration
     {
         public static void InitializeAutoMapperConfiguration()
@@ -39,6 +42,9 @@ namespace License.Logic
 
             cfg.CreateMap<License.Core.Model.UserLicense, License.DataModel.UserLicense>();
             cfg.CreateMap<License.DataModel.UserLicense, License.Core.Model.UserLicense>();
+
+            cfg.CreateMap<License.Core.Model.TeamLicense, License.DataModel.TeamLicense>();
+            cfg.CreateMap<License.DataModel.TeamLicense, License.Core.Model.TeamLicense>();
 
 
             cfg.CreateMap<License.Core.Model.UserLicenseRequest, License.DataModel.UserLicenseRequest>()

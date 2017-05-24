@@ -8,6 +8,9 @@ using License.Core.Model;
 
 namespace License.Core.GenericRepository
 {
+    /// <summary>
+    /// It is used as commmon gateway to connect DBContext
+    /// </summary>
     public class UnitOfWork : IDisposable
     {
         private ApplicationDbContext _dbContext = new ApplicationDbContext();
@@ -46,6 +49,15 @@ namespace License.Core.GenericRepository
             get
             {
                 return _userLicenseRepository ?? (_userLicenseRepository = new LicenseRepository<UserLicense>(_dbContext));
+            }
+        }
+
+        private LicenseRepository<TeamLicense> _teamLicenseRepository;
+        public LicenseRepository<TeamLicense> TeamLicenseRepository
+        {
+            get
+            {
+                return _teamLicenseRepository ?? (_teamLicenseRepository = new LicenseRepository<TeamLicense>(_dbContext));
             }
         }
 
