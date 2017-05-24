@@ -25,9 +25,10 @@ namespace Centralized.WebAPI
 
             LicenseServer.Logic.Initializer.AutoMapperInitializer();
 
-            ConfigureOAuth(app);
+            
             WebApiConfig.Register(config);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            ConfigureOAuth(app);
             app.UseWebApi(config);
 
         }

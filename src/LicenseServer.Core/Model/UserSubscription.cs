@@ -23,6 +23,8 @@ namespace LicenseServer.Core.Model
 
         public int ActiveDurataion { get; set; }
 
+        public DateTime ActivationDate { get; set; }
+
         [ForeignKey("SubscriptionTypeId")]
         public virtual SubscriptionType Subtype { get; set; }
 

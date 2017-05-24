@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Centralized.WebAPI.Common;
+using System.Web.Http.Cors;
 
 namespace Centralized.WebAPI
 {
@@ -12,6 +13,7 @@ namespace Centralized.WebAPI
         {
             // Web API configuration and services
             config.Filters.Add(new GlobalExceptionHandling());
+            config.SuppressDefaultHostAuthentication();
 
             // Web API routes
             config.MapHttpAttributeRoutes();

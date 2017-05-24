@@ -48,5 +48,18 @@ namespace License.MetCalWeb.Common
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
         }
+
+        public static List<SubscriptionType> GetExpireSubscription()
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            var response = client.GetAsync("api/UserSubscription/ExpireSubscription/" + LicenseSessionState.Instance.User.ServerUserId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var responseData = response.Content.ReadAsStringAsync().Result;
+                var expiredSubscriptipon = JsonConvert.DeserializeObject<List<SubscriptionType>>(responseData);
+                return expiredSubscriptipon;
+            }
+            return null;
+        }
     }
 }
