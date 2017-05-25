@@ -82,9 +82,10 @@ namespace LicenseServer.Logic.BusinessLogic
                     {
                         UserId = userId,
                         SubscriptionTypeId = item.SubscriptionTypeId,
-                        SubscriptionDate = DateTime.Now.Date,
+                        ActivationDate = DateTime.Now.Date,
                         Quantity = item.Quantity
                     };
+                    usersubs.ExpireDate = usersubs.ActivationDate.AddDays(item.SubType.ActiveDays).Date;
                     subsList.Add(usersubs);
                 }
                 var dataList = userSubLogic.CreateUserSubscriptionList(subsList, userId);
@@ -125,7 +126,7 @@ namespace LicenseServer.Logic.BusinessLogic
                     {
                         UserId = userId,
                         SubscriptionTypeId = item.SubscriptionId,
-                        SubscriptionDate = DateTime.Now.Date,
+                        ActivationDate = DateTime.Now.Date,
                         Quantity = item.Quantity
                     };
                     subsList.Add(usersubs);

@@ -17,7 +17,8 @@ namespace License.Core.Model
 
         public int SubscriptionId { get; set; }
 
-        public DateTime SubscriptionDate { get; set; }
+        public DateTime SubscriptionDate { get; set; } = new DateTime(1900, 01, 01);
+        public DateTime RenewalDate { get; set; } = new DateTime(1900, 01, 01);
 
         [ForeignKey("UserId")]
         public AppUser User { get; set; }

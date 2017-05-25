@@ -269,17 +269,25 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Renew()
         {
-            var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
-            return View(expiredSubscriptipon);
+            RenewSubscriptionList renewSub = new RenewSubscriptionList();
+            renewSub.SubscriptionList = CentralizedSubscriptionLogic.GetExpireSubscription();
+            return View(renewSub);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Renew(string[] selectedSubscription)
+        public ActionResult Renew(RenewSubscriptionList renewSub, string[] selectedSubscription)
         {
-            if(selectedSubscription.Count() > 0)
+            renewSub.SubscriptionList = new List<SubscriptionType>();
+            renewSub.RenewalDate = DateTime.Now.Date;
+            if (selectedSubscription.Count() > 0)
             {
-
+                foreach (var subId in selectedSubscription)
+                {
+                    renewSub.SubscriptionList.Add(new SubscriptionType() { Id = Convert.ToInt32(subId) });
+                }
+                TempData["RenewSubscription"] = renewSub;
+                return RedirectToAction("PaymentGateway", "Cart", new { total = renewSub.Price });
             }
             return View();
         }

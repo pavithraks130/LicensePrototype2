@@ -28,6 +28,7 @@ namespace LicenseServer.DataModel
 
         public DateTime SubscriptionDate { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
+        public DateTime RenewalDate { get; set; }
 
         public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
 

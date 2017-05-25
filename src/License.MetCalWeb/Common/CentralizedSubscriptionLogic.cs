@@ -28,7 +28,20 @@ namespace License.MetCalWeb.Common
 
         }
 
-        public static void UpdateSubscriptionOnpremise(SubscriptionList subs)
+        public static async Task RenewSubscription(RenewSubscriptionList subscriptions)
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            var response = await client.PostAsJsonAsync("api/UserSubscription/RenewSubscription/" + LicenseSessionState.Instance.User.ServerUserId, subscriptions);
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var subscripListObj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
+                if (subscripListObj != null)
+                    UpdateSubscriptionOnpremise(subscripListObj, true);
+            }
+        }
+
+        public static void UpdateSubscriptionOnpremise(SubscriptionList subs, bool isRenewal = false)
         {
             string userId = string.Empty;
             userId = LicenseSessionState.Instance.User.UserId;
@@ -36,17 +49,25 @@ namespace License.MetCalWeb.Common
             foreach (var subDtls in subs.Subscriptions)
             {
                 //Code to save the user Subscription details to Database.
-                UserSubscriptionData userSubscription = new UserSubscriptionData();
-                userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
-                userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
-                userSubscription.UserId = userId;
-                userSubscription.Quantity = subDtls.OrderdQuantity;
-                userSubscription.Subscription = subDtls;
-                userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
+                UserSubscriptionData userSubscription = new UserSubscriptionData()
+                {
+                    SubscriptionDate = subDtls.SubscriptionDate,
+                    RenewalDate = subDtls.RenewalDate,
+                    SubscriptionId = subDtls.SubscriptionTypeId,
+                    UserId = userId,
+                    Quantity = subDtls.OrderdQuantity,
+                    Subscription = subDtls,
+                    LicenseKeys = subDtls.LicenseKeyProductMapping
+                };
                 subscriptionData.Add(userSubscription);
             }
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
+            string url = string.Empty;
+            if (isRenewal)
+                url = "api/UserSubscription/UpdateSubscriptionRenewal/" + LicenseSessionState.Instance.User.UserId;
+            else
+                url = "api/UserSubscription/SyncSubscription";
+            var response = client.PostAsJsonAsync(url, subscriptionData).Result;
         }
 
         public static List<SubscriptionType> GetExpireSubscription()

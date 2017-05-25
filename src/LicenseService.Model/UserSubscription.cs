@@ -8,7 +8,7 @@ namespace LicenseServer.DataModel
 {
     public class UserSubscription
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
         public string UserId { get; set; }
 
@@ -16,11 +16,11 @@ namespace LicenseServer.DataModel
 
         public int Quantity { get; set; }
 
-        public DateTime SubscriptionDate { get; set; }
+        public DateTime ExpireDate { get; set; } = new DateTime(1900, 01, 01);
 
-        public int ActiveDurataion { get; set; }
+        public DateTime ActivationDate { get; set; } = new DateTime(1900, 01, 01);
 
-        public DateTime ActivationDate { get; set; }
+        public DateTime RenewalDate { get;set; } = new DateTime(1900, 01, 01);
 
         public SubscriptionType Subtype { get; set; }
        

@@ -184,6 +184,10 @@
     <Compile Include="Migrations\201704131154227_ChangesToUserLicenseRequest.Designer.cs">
       <DependentUpon>201704131154227_ChangesToUserLicenseRequest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705241527596_AddedTeamLicenseAndUseSubUpdate.cs" />
+    <Compile Include="Migrations\201705241527596_AddedTeamLicenseAndUseSubUpdate.Designer.cs">
+      <DependentUpon>201705241527596_AddedTeamLicenseAndUseSubUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -258,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704131154227_ChangesToUserLicenseRequest.resx">
       <DependentUpon>201704131154227_ChangesToUserLicenseRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705241527596_AddedTeamLicenseAndUseSubUpdate.resx">
+      <DependentUpon>201705241527596_AddedTeamLicenseAndUseSubUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

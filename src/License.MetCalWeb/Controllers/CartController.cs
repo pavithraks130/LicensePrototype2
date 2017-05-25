@@ -14,11 +14,11 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     [SessionExpire]
     public class CartController : BaseController
-    {        
+    {
         public CartController()
         {
-            
-            
+
+
         }
 
         public async Task<ActionResult> CartItem()
@@ -48,13 +48,26 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public async Task<ActionResult> DoPayment()
         {
-           await  Purchase();
+            await Purchase();
             return View();
         }
 
         public async Task Purchase()
         {
-           await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();          
+            if (TempData["RenewSubscription"] != null)
+                await Common.CentralizedSubscriptionLogic.RenewSubscription((RenewSubscriptionList)TempData["RenewSubscription"]);
+            else
+                await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();
+        }
+
+        public void SyncRenewData()
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            var response = client.PostAsJsonAsync("api/UserSubscription/RenewSubscription/" + LicenseSessionState.Instance.User.ServerUserId, TempData["RenewSubscription"]).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+            }
         }
 
         public async Task<ActionResult> OfflinePayment()
@@ -72,7 +85,7 @@ namespace License.MetCalWeb.Controllers
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("",response.ReasonPhrase + " - " + obj.Message);
+                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
             return View(poOrder);
 

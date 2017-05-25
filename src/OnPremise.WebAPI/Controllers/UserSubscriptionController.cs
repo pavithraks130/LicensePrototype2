@@ -28,6 +28,14 @@ namespace OnPremise.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "Updated");
         }
 
+        [HttpPost]
+        [Route("UpdateSubscriptionRenewal/{userId}")]
+        public HttpResponseMessage UpdateSubscriptionRenewal(List<UserSubscriptionData> subscriptionList,string userId)
+        {
+            usersubBOLogic.UpdateSubscriptionRenewal(subscriptionList, userId);
+            return Request.CreateResponse(HttpStatusCode.OK, "Updated");
+        }
+
         [HttpGet]
         [Route("SubscriptionDetils/{adminId}")]
         public HttpResponseMessage GetSubscriptionDetails(string adminId)

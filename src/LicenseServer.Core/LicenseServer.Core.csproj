@@ -164,6 +164,14 @@
     <Compile Include="Migrations\201705230725595_AddActivationDateToSubscription.Designer.cs">
       <DependentUpon>201705230725595_AddActivationDateToSubscription.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705241525457_UserSubscriptionColumnChange.cs" />
+    <Compile Include="Migrations\201705241525457_UserSubscriptionColumnChange.Designer.cs">
+      <DependentUpon>201705241525457_UserSubscriptionColumnChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705241603309_DefaultValueUpdate.cs" />
+    <Compile Include="Migrations\201705241603309_DefaultValueUpdate.Designer.cs">
+      <DependentUpon>201705241603309_DefaultValueUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -230,6 +238,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705230725595_AddActivationDateToSubscription.resx">
       <DependentUpon>201705230725595_AddActivationDateToSubscription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705241525457_UserSubscriptionColumnChange.resx">
+      <DependentUpon>201705241525457_UserSubscriptionColumnChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705241603309_DefaultValueUpdate.resx">
+      <DependentUpon>201705241603309_DefaultValueUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
