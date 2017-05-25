@@ -71,6 +71,7 @@ namespace License.Logic.BusinessLogic
 
             licDetails.User = userLogic.GetUserById(model.UserId);
 
+
             List<UserLicense> data = null;
             if (model.TeamId == 0)
                 data = logic.GetUserLicense(model.UserId);

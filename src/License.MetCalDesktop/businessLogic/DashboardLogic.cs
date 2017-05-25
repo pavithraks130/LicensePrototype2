@@ -1,0 +1,86 @@
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Newtonsoft.Json;
+using License.MetCalDesktop.Model;
+using License.MetCalDesktop.Common;
+
+
+namespace License.MetCalDesktop.businessLogic
+{
+    public class DashboardLogic
+    {
+        private string featurefileName = "LicenseMetCalDesktopFetaures.txt";
+
+        public void LoadFeaturesOnline()
+        {
+            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            FetchUserSubscription userSub = new FetchUserSubscription();
+            userSub.TeamId = AppState.Instance.SelectedTeam.Id;
+            userSub.IsFeatureRequired = true;
+            userSub.UserId = AppState.Instance.User.UserId;
+            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeam", userSub).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var details = JsonConvert.DeserializeObject<UserLicenseDetails>(jsonData);
+                AppState.Instance.UserLicenseList = details.SubscriptionDetails;
+                UpdateFeatureToFile();
+            }
+        }
+
+        public void LoadFeatureOffline()
+        {
+            if (FileIO.IsFileExist(featurefileName))
+            {
+                var featuresList = FileIO.GetJsonDataFromFile(featurefileName);
+                var licenseDetails = JsonConvert.DeserializeObject<List<UserLicenseDetails>>(featuresList);
+                var userLisense = licenseDetails.FirstOrDefault(l => l.UserId == AppState.Instance.User.UserId);
+                AppState.Instance.UserLicenseList = userLisense.SubscriptionDetails;
+            }
+        }
+
+        public async Task UpdateFeatureToFile()
+        {
+            List<UserLicenseDetails> userlicdtls = new List<UserLicenseDetails>();
+            if (FileIO.IsFileExist(featurefileName))
+            {
+                var featuresList = FileIO.GetJsonDataFromFile(featurefileName);
+                var licenseDetails = JsonConvert.DeserializeObject<List<UserLicenseDetails>>(featuresList);
+                var userLisense = licenseDetails.FirstOrDefault(l => l.UserId == AppState.Instance.User.UserId);
+                foreach (var lic in AppState.Instance.UserLicenseList)
+                {
+                    var subs = userLisense.SubscriptionDetails.FirstOrDefault(s => s.UserSubscriptionId == lic.UserSubscriptionId);
+                    if (subs == null)
+                        userLisense.SubscriptionDetails.Add(lic);
+                    else
+                    {
+                        foreach (var pro in lic.Products)
+                        {
+                            var product = subs.Products.FirstOrDefault(p => p.Id == pro.Id);
+                            if (product == null)
+                                subs.Products.Add(product);
+                            else
+                            {
+                                subs.Products.Remove(product);
+                                subs.Products.Add(pro);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+                userlicdtls.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, SubscriptionDetails = AppState.Instance.UserLicenseList });
+            var jsonData = JsonConvert.SerializeObject(userlicdtls);
+            FileIO.SaveDatatoFile(jsonData, featurefileName);
+        }
+
+        public void SaveUserfeatureList()
+        {
+
+        }
+    }
+}

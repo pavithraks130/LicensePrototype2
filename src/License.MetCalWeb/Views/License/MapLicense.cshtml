@@ -51,27 +51,27 @@
                     <div class="col-md-8">
                         <table class="table" style="border: none">
                             @for (int i = 0; i < Model.Count; i++)
-                        {
-                            <tr style="">
-                                <td>
-                                    @Model[i].Name
-                                    <table class="table">
-                                        @for (int j = 0; j < Model[i].Products.Count; j++)
-                                        {
-                                    <tr>
-                                        <td>
-                                            <label class="control-label">
-                                                <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline">
-                                                @Model[i].Products[j].Name
-                                            </label>
-                                        </td>
-                                    </tr>
-                                        }
+                            {
+                                <tr style="">
+                                    <td>
+                                        @Model[i].Name
+                                        <table class="table">
+                                            @for (int j = 0; j < Model[i].Products.Count; j++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <label class="control-label">
+                                                            <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline" @((Model[i].Products[j].TotalLicenseCount - Model[i].Products[j].UsedLicenseCount) == 0 ? "disabled='disabled'" : "")>
+                                                            @Model[i].Products[j].Name
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            }
 
-                                    </table>
-                                </td>
-                            </tr>
-                        }
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
                         </table>
                         <label style="display:none;color:red;" id="lblError">License  not selected</label>
                     </div>

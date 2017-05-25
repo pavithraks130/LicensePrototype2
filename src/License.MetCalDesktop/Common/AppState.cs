@@ -22,6 +22,10 @@ namespace License.MetCalDesktop.Common
         public bool IsUserLoggedIn { get; set; }
         public bool IsSuperAdmin { get; set; }
         public PurchaseOrder purchaseOrder { get; set; }
+        public bool IsNetworkAvilable
+        {
+            get { return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable(); }
+        }
 
         public User User { get; set; }
 
@@ -51,5 +55,11 @@ namespace License.MetCalDesktop.Common
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             return client;
         }
+
+        public bool IsCredentialFileExist()
+        {
+            return FileIO.IsFileExist("credential.txt");
+        }
+
     }
 }

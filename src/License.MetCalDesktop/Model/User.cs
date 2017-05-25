@@ -18,5 +18,7 @@ namespace License.MetCalDesktop.Model
         public IList<string> Roles { get; set; }
         public string ServerUserId { get; set; }
         public bool IsActive { get; set; }
+        public string PasswordHash { get; set; }
+        public string ThumbPrint { get; set; }
     }
 }

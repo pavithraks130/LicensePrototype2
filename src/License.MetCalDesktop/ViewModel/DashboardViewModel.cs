@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using License.MetCalDesktop.businessLogic;
 
 namespace License.MetCalDesktop.ViewModel
 {
@@ -32,7 +33,10 @@ namespace License.MetCalDesktop.ViewModel
             LogoutCommand = new RelayCommand(LogOut);
             LoggedInUser = AppState.Instance.User.FirstName + ", " + AppState.Instance.User.LastName;
             isSuperAdmin = AppState.Instance.IsSuperAdmin;
-            LoadTeams();
+            if (AppState.Instance.IsNetworkAvilable)
+                LoadTeams();
+            else
+                LoadFeatures();
         }
         public void LoadTeams()
         {
@@ -56,6 +60,7 @@ namespace License.MetCalDesktop.ViewModel
                     AppState.Instance.SelectedTeam = teamList.FirstOrDefault();
                     LoadFeatures();
                 }
+                
             }
         }
 
@@ -66,19 +71,12 @@ namespace License.MetCalDesktop.ViewModel
         }
         public void LoadFeatures()
         {
-            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            FetchUserSubscription userSub = new FetchUserSubscription();
-            userSub.TeamId = AppState.Instance.SelectedTeam.Id;
-            userSub.IsFeatureRequired = true;
-            userSub.UserId = AppState.Instance.User.UserId;
-            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeam", userSub).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var details = JsonConvert.DeserializeObject<UserLicenseDetails>(jsonData);
-                AppState.Instance.UserLicenseList = details.SubscriptionDetails;
-            }
+            DashboardLogic logic = new DashboardLogic();
+            if (AppState.Instance.IsNetworkAvilable)
+                logic.LoadFeaturesOnline();
+            else
+                logic.LoadFeatureOffline();
+
             if (AppState.Instance.UserLicenseList != null)
             {
                 foreach (var data in AppState.Instance.UserLicenseList)

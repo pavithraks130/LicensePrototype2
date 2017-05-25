@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Net.Http;
 using Newtonsoft.Json;
 using License.MetCalDesktop.Model;
+using License.MetCalDesktop.businessLogic;
 
 namespace License.MetCalDesktop.ViewModel
 {
@@ -85,10 +86,7 @@ namespace License.MetCalDesktop.ViewModel
                 OnPropertyChanged("IsEnableLogin");
             }
         }
-        public bool IsNetworkAvilable
-        {
-            get { return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable(); }
-        }
+     
 
         #region IDataErrorInfo
 
@@ -159,107 +157,31 @@ namespace License.MetCalDesktop.ViewModel
         {
             if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
             {
+                LoginLogic logic = new LoginLogic();
                 IsEnableLogin = false;
-                var status = IsNetworkAvilable;
-                HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                var formData = new FormUrlEncodedContent(new[]{
-                new KeyValuePair<string, string>("grant_type", "password"),
-                new KeyValuePair<string, string>("username", Email),
-                new KeyValuePair<string, string>("password", Password) });
-                var response = client.PostAsync("/Authenticate", formData).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsondata = response.Content.ReadAsStringAsync().Result;
-                    var token = JsonConvert.DeserializeObject<AccessToken>(jsondata);
-                    AppState.Instance.OnPremiseToken = token;
-                    client.Dispose();
-                    client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
-                    response = client.GetAsync("api/user/UserById/" + token.Id).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        jsondata = response.Content.ReadAsStringAsync().Result;
-                        var user = JsonConvert.DeserializeObject<User>(jsondata);
-                        AppState.Instance.IsSuperAdmin = false;
-                        if (user.Roles.Contains("SuperAdmin"))
-                        {
-                            client.Dispose();
-                            var formData1 = new FormUrlEncodedContent(new[]{
-                            new KeyValuePair<string, string>("grant_type", "password"),
-                            new KeyValuePair<string, string>("username", Email),
-                            new KeyValuePair<string, string>("password", Password) });
-                            client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                            response = client.PostAsync("/Authenticate", formData1).Result;
-                            if (response.IsSuccessStatusCode)
-                            {
-                                jsondata = response.Content.ReadAsStringAsync().Result;
-                                token = JsonConvert.DeserializeObject<AccessToken>(jsondata);
-                                AppState.Instance.CentralizedToken = token;
-                            }
-                           
-                            AppState.Instance.IsSuperAdmin = true;
-                        }
-
-                        AppState.Instance.User = user;
-                        if (AppState.Instance.IsSuperAdmin)
-                        {
-                            SynchPurchaseOrder();
-                        }
-                        AppState.Instance.IsUserLoggedIn = true;                   
-
-                        NavigateNextPage?.Invoke("Dashboard", null);
-                        IsEnableLogin = true;
-                    }
-                }
+                Model.User user = null;
+                if (AppState.Instance.IsNetworkAvilable)
+                    user = logic.AuthenticateOnline(Email, Password);
+                else if (AppState.Instance.IsCredentialFileExist())
+                    user = logic.AuthenticateUser(Email, Password);
                 else
                 {
-                    MessageBox.Show("Unable to login, Invalid Credentials");
+                    MessageBox.Show("Need to be online for first time login");
                     IsEnableLogin = true;
+                    return;
                 }
+                if(user == null)
+                {
+                    MessageBox.Show(logic.ErrorMessage);
+                    IsEnableLogin = true;
+                    return;
+                }
+                AppState.Instance.User = user;
+                AppState.Instance.IsUserLoggedIn = true;
+                NavigateNextPage?.Invoke("Dashboard", null);
+                IsEnableLogin = true;
             }
         }
 
-        private void SynchPurchaseOrder()
-        {
-            string errorMessage = string.Empty;
-            HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
-            var response = client.GetAsync("api/purchaseorder/syncpo/" + AppState.Instance.User.ServerUserId).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<SubscriptionList>(jsonData);
-                if (obj.Subscriptions.Count > 0)
-                  UpdateSubscriptionOnpremise(obj);
-            }
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                errorMessage = response.ReasonPhrase + " - " + obj.Message;
-            }
-        }
-
-        private void UpdateSubscriptionOnpremise(SubscriptionList subs)
-        {
-            string userId = string.Empty;
-            userId = AppState.Instance.User.UserId;
-            List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
-            foreach (var subDtls in subs.Subscriptions)
-            {
-                //Code to save the user Subscription details to Database.
-                UserSubscriptionData userSubscription = new UserSubscriptionData();
-                userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
-                userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
-                userSubscription.UserId = userId;
-                userSubscription.Quantity = subDtls.OrderdQuantity;
-                userSubscription.Subscription = subDtls;
-                userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
-                subscriptionData.Add(userSubscription);
-            }
-            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
-        }
     }
 }

@@ -102,12 +102,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="businessLogic\DashboardLogic.cs" />
+    <Compile Include="businessLogic\LoginLogic.cs" />
     <Compile Include="Common\AppState.cs" />
     <Compile Include="Common\BaseEntity.cs" />
     <Compile Include="Common\common.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\DataValidations.cs" />
     <Compile Include="Common\Enum.cs" />
+    <Compile Include="Common\FileIO.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
     <Compile Include="Common\StringToListConverter.cs" />
     <Compile Include="Model\CardDetails.cs" />
