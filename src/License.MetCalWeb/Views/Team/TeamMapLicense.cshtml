@@ -1,4 +1,5 @@
-﻿@model List<License.MetCalWeb.Models.SubscriptionDetails>
+﻿@model License.MetCalWeb.Models.TeamMappingDetails
+
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {
@@ -20,24 +21,28 @@
     });
 </script>
 <h2>
-    License Mapping To User
+    License Mapping To Team
 </h2>
 <br />
 <div class="row">
     <div class="col-md-12">
-        @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
-        @using (Html.BeginForm(user, "License", FormMethod.Post))
+        @using (Html.BeginForm("TeamMapLicense", "Team", FormMethod.Post))
         {
             @Html.ValidationSummary()
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <div class="col-md-8">
                     <span>
-                        Team Member Name :  @ViewData["UserEmail"]
+                        Team Name :  @Model.SelectedTeamName
+                    </span>
+                </div>
+                <div class="col-md-8">
+                    <span>
+                        Concurrent team user  : @Html.TextBoxFor(x=>x.ConcurrentUserCount) 
                     </span>
                 </div>
             </div>
-            if (Model == null || Model.Count == 0)
+            if (Model == null || Model.SubscriptionDetailsList.Count == 0)
             {
                 <div class="form-group">
                     <div class="col-md-8">
@@ -50,19 +55,19 @@
                 <div class="form-group">
                     <div class="col-md-8">
                         <table class="table" style="border: none">
-                            @for (int i = 0; i < Model.Count; i++)
+                            @foreach(var subscriptionList in Model.SubscriptionDetailsList)
                             {
-                                <tr style="">
+                                <tr >
                                     <td>
-                                        @Model[i].Name
+                                        @subscriptionList.Name
                                         <table class="table">
-                                            @for (int j = 0; j < Model[i].Products.Count; j++)
+                                            @for (int j = 0; j < subscriptionList.Products.Count; j++)
                                             {
                                                 <tr>
                                                     <td>
                                                         <label class="control-label">
-                                                            <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline" @((Model[i].Products[j].TotalLicenseCount - Model[i].Products[j].UsedLicenseCount) == 0 ? "disabled='disabled'" : "")>
-                                                            @Model[i].Products[j].Name
+                                                            <input type="checkbox" name="selectedSubscription" value="ProId:@subscriptionList.Products[j].Id-UserSubId:@subscriptionList.UserSubscriptionId" checked="@subscriptionList.Products[j].IsSelected" class="checkbox-inline">
+                                                            @subscriptionList.Products[j].Name
                                                         </label>
                                                     </td>
                                                 </tr>
@@ -77,20 +82,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @if (!(bool)TempData["CanAddBulk"])
-                    {
                         <div class="col-md-8">
-                            <input type="submit" value="Submit" class="btn btn-default btn-custom btn-save" />
+                            <input type="submit" name="users" value="Submit" class="btn btn-default btn-custom btn-save" />
                         </div>
-                    }
-                    else
-                    {
-                        <div class="col-md-8">
-                            <input type="submit" value="Select Team Members" class=" col-md-4 btn btn-default btn-custom btn-save" />
-                        </div>
-                    }
                 </div>
             }
         }
     </div>
 </div>
+

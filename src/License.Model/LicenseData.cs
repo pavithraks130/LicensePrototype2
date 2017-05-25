@@ -30,7 +30,16 @@ namespace License.DataModel
 
         public List<LicenseData> LicenseDataList { get; set; }
     }
-    
+
+    public class TeamLicenseDataMapping
+    {
+        public int ConcurrentUserCount { get; set; }
+
+        public List<string> TeamList { get; set; }
+
+        public List<LicenseData> LicenseDataList { get; set; }
+    }
+
     public class FetchUserSubscription
     {
         public int TeamId { get; set; }

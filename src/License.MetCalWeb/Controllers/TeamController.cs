@@ -41,7 +41,6 @@ namespace License.MetCalWeb.Controllers
         }
 
         [HttpPost]
-        // [ValidateAntiForgeryToken]
         public ActionResult CreateTeam(Team model)
         {
             if (ModelState.IsValid)
@@ -69,7 +68,101 @@ namespace License.MetCalWeb.Controllers
                                         .Select(x => x.ErrorMessage));
             return Json(new { success = false, message = _message });
         }
+        public ActionResult AssignLicense()
+        {
+            List<Team> teams = new List<Team>();
+            if (LicenseSessionState.Instance.TeamList != null && LicenseSessionState.Instance.TeamList.Count > 0)
+                teams = LicenseSessionState.Instance.TeamList.ToList();
+            else
+                teams = new List<Team>();
+            return View(teams);
+        }
 
+        public ActionResult TeamMapLicense(int teamId)
+        {
+            TeamMappingDetails teamMappingDetails = new TeamMappingDetails();
+            TempData["Teamid"] = teamId;
+            teamMappingDetails.SelectedTeamName = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault().Name;
+            string adminUserId = string.Empty;
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                adminUserId = LicenseSessionState.Instance.User.UserId;
+            else
+            {
+                adminUserId = LicenseSessionState.Instance.SelectedTeam.AdminId;
+            }
+            teamMappingDetails.SubscriptionDetailsList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).ToList();
+            return View(teamMappingDetails);
+
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TeamMapLicense(TeamMappingDetails teamMappingDetails, params string[] selectedSubscription)
+        {
+            var responseData = UpdateLicense(teamMappingDetails.ConcurrentUserCount,selectedSubscription);
+            if (!String.IsNullOrEmpty(responseData))
+            {
+                ModelState.AddModelError("", responseData);
+                return View("TeamContainer", "TeamManagement");
+            }
+            return RedirectToAction("TeamContainer", "TeamManagement");
+        }
+
+        public string UpdateLicense(int concurrentUserCount, string[] selectedSubscription)
+        {
+
+            List<string> teamIdList = new List<string>();
+            teamIdList.Add(TempData["Teamid"].ToString());
+            List<LicenseData> lstLicData = ExtractLicenseData(selectedSubscription);
+            TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { ConcurrentUserCount= concurrentUserCount, LicenseDataList = lstLicData, TeamList = teamIdList };
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            var response = client.PostAsJsonAsync("api/License/CreateTeamLicence", mapping).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                return response.ReasonPhrase + " - " + obj.Message;
+            }
+            else
+            {
+                if (teamIdList.Contains(LicenseSessionState.Instance.SelectedTeam.Id.ToString()))//doubt
+                {
+                    var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+                    LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
+                }
+            }
+            return String.Empty;
+        }
+
+        private static List<LicenseData> ExtractLicenseData(string[] SelectedSubscription)
+        {
+            List<LicenseData> lstLicData = new List<LicenseData>();
+            foreach (var data in SelectedSubscription)
+            {
+                var splitValue = data.Split(new char[] { '-' });
+                var prodId = splitValue[0].Split(new char[] { ':' })[1];
+                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
+
+                LicenseData licData = new LicenseData()
+                {
+                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
+                    ProductId = Convert.ToInt32(prodId)
+                };
+                lstLicData.Add(licData);
+            }
+
+            return lstLicData;
+        }
+
+        public IList<SubscriptionDetails> GetLicenseListBySubscription(string userId)
+        {
+            TempData["UserId"] = userId;
+            //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
+            string adminUserId = string.Empty;
+            IList<SubscriptionDetails> licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscriptionForLicenseMap(userId, adminUserId);
+            return licenseMapModelList;
+        }
         public ActionResult EditTeam(int id)
         {
             var team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == id);

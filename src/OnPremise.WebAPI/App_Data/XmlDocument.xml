@@ -517,9 +517,16 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.AddUserLicsen(License.DataModel.UserLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.AddUserLicense(License.DataModel.UserLicenseDataMapping)">
             <summary>
             Post method. Map the License to the User. The license will be fetched based on the subscription and Product Id
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.AddTeamLicense(License.DataModel.TeamLicenseDataMapping)">
+            <summary>
+            Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
             </summary>
             <param name="model"></param>
             <returns></returns>

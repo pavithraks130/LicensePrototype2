@@ -197,21 +197,7 @@ namespace License.MetCalWeb.Controllers
             else
                 userIdList.Add(Convert.ToString(TempData["UserId"]));
 
-
-            List<LicenseData> lstLicData = new List<LicenseData>();
-            foreach (var data in SelectedSubscription)
-            {
-                var splitValue = data.Split(new char[] { '-' });
-                var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-
-                LicenseData licData = new LicenseData()
-                {
-                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
-                    ProductId = Convert.ToInt32(prodId)
-                };
-                lstLicData.Add(licData);
-            }
+            List<LicenseData> lstLicData = ExtractLicenseData(SelectedSubscription);
             UserLicenseDataMapping mapping = new UserLicenseDataMapping() { TeamId = LicenseSessionState.Instance.SelectedTeam.Id, LicenseDataList = lstLicData, UserList = userIdList };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/CreateUserLicence", mapping).Result;
@@ -229,9 +215,29 @@ namespace License.MetCalWeb.Controllers
                     LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
                 }
             }
-
             return String.Empty;
         }
+
+        private static List<LicenseData> ExtractLicenseData(string[] SelectedSubscription)
+        {
+            List<LicenseData> lstLicData = new List<LicenseData>();
+            foreach (var data in SelectedSubscription)
+            {
+                var splitValue = data.Split(new char[] { '-' });
+                var prodId = splitValue[0].Split(new char[] { ':' })[1];
+                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
+
+                LicenseData licData = new LicenseData()
+                {
+                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
+                    ProductId = Convert.ToInt32(prodId)
+                };
+                lstLicData.Add(licData);
+            }
+
+            return lstLicData;
+        }
+
 
         public string RevokeLicenseFromUser(string[] SelectedSubscription)
         {

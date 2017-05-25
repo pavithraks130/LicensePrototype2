@@ -14,12 +14,14 @@ namespace OnPremise.WebAPI.Controllers
     [RoutePrefix("api/License")]
     public class LicenseController : BaseController
     {
-        UserLicenseLogic logic = null;
+        UserLicenseLogic userLicenselogic = null;
+        TeamLicenseLogic teamLicenselogic = null;
         UserLicenseRequestLogic reqLogic = null;
 
         public LicenseController()
         {
-            logic = new UserLicenseLogic();
+            userLicenselogic = new UserLicenseLogic();
+            teamLicenselogic = new TeamLicenseLogic();
             reqLogic = new UserLicenseRequestLogic();
         }
 
@@ -30,13 +32,29 @@ namespace OnPremise.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateUserLicence")]
-        public HttpResponseMessage AddUserLicsen(UserLicenseDataMapping model)
+        public HttpResponseMessage AddUserLicense(UserLicenseDataMapping model)
         {
-            var status = logic.CreateMultiUserLicense(model);
+            var status = userLicenselogic.CreateMultiUserLicense(model);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLicenselogic.ErrorMessage);
+        }
+
+        /// <summary>
+        /// Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CreateTeamLicence")]
+        public HttpResponseMessage AddTeamLicense(TeamLicenseDataMapping model)
+        {
+            var status = teamLicenselogic.CreateMultipleTeamLicense(model);
+            if (status)
+                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLicenselogic.ErrorMessage);
         }
 
         /// <summary>
@@ -48,11 +66,11 @@ namespace OnPremise.WebAPI.Controllers
         [Route("RevokeUserLicence")]
         public HttpResponseMessage RemoveUserLicense(UserLicenseDataMapping model)
         {
-            var status = logic.RevokeUserLicense(model);
+            var status = userLicenselogic.RevokeUserLicense(model);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLicenselogic.ErrorMessage);
         }
 
         /// <summary>

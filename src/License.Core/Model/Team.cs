@@ -14,6 +14,7 @@ namespace License.Core.Model
         public string Name { get; set; }
         public bool IsDefaultTeam { get; set; }
         public string AdminId { get; set; }
+        public int ConcurrentUserCount { get; set; }
         [ForeignKey("AdminId")]
         public virtual AppUser AdminUser { get; set; }
         public virtual ICollection<TeamMember> TeamMembers { get; set; }
