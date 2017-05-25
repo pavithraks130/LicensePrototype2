@@ -15,6 +15,7 @@ namespace License.MetCalWeb.Models
         public User AdminUser { get; set; }
         public bool IsDefaultTeam { get; set; }
         public bool IsSelected { get; set; }
+        public int ConcurrentUserCount { get; set; }
         public ICollection<TeamMember> TeamMembers { get; set; }
     }
 

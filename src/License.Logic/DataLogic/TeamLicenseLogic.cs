@@ -45,6 +45,46 @@ namespace License.Logic.DataLogic
             }
             return true;
         }
+
+        /// <summary>
+        /// function to create the License  for multiple User . This function will be used for bulk license mapping to 
+        /// multiple User.
+        /// </summary>
+        /// <param name="licList"></param>
+        /// <param name="userIdList"></param>
+        /// <returns></returns>
+        public bool CreateMultipleTeamLicense(TeamLicenseDataMapping model)
+        {
+            LicenseLogic licLogic = new LicenseLogic();
+            foreach (var teamId in model.TeamList)
+            {
+                int id = int.Parse(teamId);
+                var teamLicList = Work.TeamLicenseRepository.GetData(tl => tl.TeamId == id).ToList();
+                for(int index = 0;index < model.LicenseDataList.Count;index++)
+                {
+                    var proId = model.LicenseDataList[index].ProductId;
+                    var userSubId = model.LicenseDataList[index].UserSubscriptionId;
+                    var data = Work.LicenseDataRepository.GetData(l => l.ProductId == proId && l.UserSubscriptionId == userSubId).ToList().Select(l => l.Id).ToList();
+                   // var data = dataTemp;
+                    var obj = teamLicList.FirstOrDefault(tl => data.Contains(tl.LicenseId));
+                    if (obj == null)
+                    {
+                       // var licId = licLogic.GetUnassignedLicense(model.LicenseDataList[index].UserSubscriptionId, model.LicenseDataList[index].ProductId).Id;
+                        var licId = licLogic.GetUnassignedLicense(model.LicenseDataList[index].UserSubscriptionId, model.LicenseDataList[index].ProductId);
+                        TeamLicense tl = new TeamLicense()
+                        {
+                            LicenseId = licId.Id,
+                            TeamId = id
+                        };
+                        CreateTeamLicense(tl);
+                    }
+                    teamLicList.Remove(obj);
+                }
+
+            }
+            return true;
+        }
+
         public void UpdateLicenseStatus(int licId, bool status)
         {
             var obj = Work.LicenseDataRepository.GetById(licId);

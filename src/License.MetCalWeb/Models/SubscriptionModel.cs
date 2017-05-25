@@ -112,6 +112,16 @@ namespace License.MetCalWeb.Models
             Products = new List<ProductDetails>();
         }
     }
+    public class TeamMappingDetails
+    {
+        public int ConcurrentUserCount { get; set; }
+        public string SelectedTeamName { get; set; }
+        public List<SubscriptionDetails> SubscriptionDetailsList { get; set; }
+        public TeamMappingDetails()
+        {
+            SubscriptionDetailsList = new List<SubscriptionDetails>();
+        }
+    }
 
     public class ProductDetails
     {

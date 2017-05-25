@@ -1,0 +1,24 @@
+﻿@model IEnumerable<License.MetCalWeb.Models.Team>
+
+<div class="form-group">
+
+    <h4>Team Details</h4>
+    <table class="table" style="border: none">
+        @foreach (var team in Model)
+        {
+            <tr>
+                <td class="col-md-4">
+                    <div>@team.Name</div>
+                </td>
+                <td class="col-md-4">
+                    <button class="alert-success">
+                        @Html.ActionLink("Add License", "TeamMapLicense", "Team", new { teamId = @team.Id }, null)
+                    </button>
+                    <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "License", new { teamId = @team.Id }, null)</button>
+                </td>
+            </tr>
+        }
+    </table>
+    
+</div>
+
