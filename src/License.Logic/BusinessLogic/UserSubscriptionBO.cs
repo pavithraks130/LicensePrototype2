@@ -24,12 +24,13 @@ namespace License.Logic.BusinessLogic
             foreach (var data in userSubscriptionData)
             {
                 var tempObj = data.Subscription.SubscriptionType;
-                tempObj.ProductIdList = tempObj.Products.Select(p => (dynamic)new  { Id = p.Id, ProductCode = p.ProductCode }).ToList();
+                tempObj.ProductIdList = tempObj.Products.Select(p => (dynamic)new { Id = p.Id, ProductCode = p.ProductCode }).ToList();
                 typeList.Add(tempObj);
 
                 UserSubscription sub = new UserSubscription();
                 sub.Quantity = data.Quantity;
                 sub.SubscriptionDate = data.SubscriptionDate;
+                sub.RenewalDate = data.RenewalDate;
                 sub.SubscriptionId = data.SubscriptionId;
                 sub.UserId = data.UserId;
                 var userSubscriptionId = userSubLogic.CreateSubscription(sub);
@@ -57,7 +58,7 @@ namespace License.Logic.BusinessLogic
                     proSubLogic.SaveToFile(typeList);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Logger.Error(ex);
             }
@@ -113,6 +114,22 @@ namespace License.Logic.BusinessLogic
 
         }
 
+
+        public void UpdateSubscriptionRenewal(List<UserSubscriptionData> subscriptionData, string userId)
+        {
+            var userSubscriptioList = userSubLogic.GetSubscription(userId);
+            List<UserSubscription> userSubscriptions = new List<UserSubscription>();
+            foreach (var data in subscriptionData)
+            {
+                var userSubscription = userSubscriptioList.FirstOrDefault(u => u.SubscriptionId == data.SubscriptionId);
+                LicenseLogic licenseLogic = new LicenseLogic();
+                licenseLogic.UpdateRenewalLicenseKeys(data.LicenseKeys, userSubscription.Id);
+                userSubscription.RenewalDate = data.RenewalDate;
+                userSubscriptions.Add(userSubscription);
+            }
+            if (userSubscriptions.Count > 0)
+                userSubLogic.UpdateSubscriptions(userSubscriptions);
+        }
 
 
     }

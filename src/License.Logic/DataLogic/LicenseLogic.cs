@@ -52,5 +52,38 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
         }
 
+        public void UpdateRenewalLicenseKeys(List<LicenseKeyProductMapping> licKeysMapping, int userSubscriptionId)
+        {
+            var licenseDatalist = Work.LicenseDataRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId);
+            var productIdList = licKeysMapping.Select(s => s.ProductId).Distinct();
+            foreach (var pro in productIdList)
+            {
+                int i = 0;
+                var renewalKeys = licKeysMapping.Where(l => l.ProductId == pro).ToList();
+                var existingKeys = licenseDatalist.Where(l => l.ProductId == pro).ToList();
+                foreach (var keys in renewalKeys)
+                {
+                    if (i < existingKeys.Count)
+                    {
+                        existingKeys[i].LicenseKey = keys.LicenseKey;
+                        Work.LicenseDataRepository.Update(existingKeys[i]);
+                    }
+                    else
+                    {
+                        Core.Model.LicenseData licenseData = new Core.Model.LicenseData();
+                        licenseData.LicenseKey = keys.LicenseKey;
+                        licenseData.ProductId = keys.ProductId;
+                        licenseData.UserSubscriptionId = userSubscriptionId;
+                        Work.LicenseDataRepository.Create(licenseData);
+                    }
+                    i++;
+                }
+                if (i > 0)
+                    Work.LicenseDataRepository.Save();
+            }
+           
+
+        }
+
     }
 }

@@ -28,4 +28,12 @@ namespace LicenseServer.DataModel
 
         public string UserId { get; set; }
     }
+
+    public class RenewSubscriptionList
+    {
+        public DateTime RenewalDate { get; set; }
+        public double Price { get; set; }
+        public int RenewDuration { get; set; }
+        public List<SubscriptionType> SubscriptionList { get; set; }
+    }
 }

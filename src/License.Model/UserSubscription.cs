@@ -16,6 +16,8 @@ namespace License.DataModel
 
         public DateTime SubscriptionDate { get; set; }
 
+        public DateTime RenewalDate { get; set; }
+
         public User User { get; set; }
 
         public SubscriptionType Subscription { get; set; }
@@ -64,6 +66,8 @@ namespace License.DataModel
         public int SubscriptionId { get; set; }
 
         public DateTime SubscriptionDate { get; set; }
+
+        public DateTime RenewalDate { get; set; }
 
         public Subscription Subscription { get; set; }
 

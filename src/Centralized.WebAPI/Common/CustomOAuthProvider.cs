@@ -35,6 +35,7 @@ namespace Centralized.WebAPI.Common
             UserLogic logic = new UserLogic();
             logic.UserManager = context.OwinContext.GetUserManager<LicUserManager>();
             logic.RoleManager = context.OwinContext.GetUserManager<LicRoleManager>();
+            
             User user = logic.AuthenticateUser(context.UserName, context.Password);
             if (user == null)
             {

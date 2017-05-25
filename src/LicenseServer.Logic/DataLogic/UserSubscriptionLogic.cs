@@ -20,36 +20,15 @@ namespace LicenseServer.Logic
 
         public Subscription CreateUserSubscription(UserSubscription subscription, int teamId)
         {
-            Subscription purchasedSubscription = new Subscription();
-            SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
-            UserSubscription sub = null;
-            SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
-
             Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<DataModel.UserSubscription, Core.Model.UserSubscription>(subscription);
             subs.ActivationDate = DateTime.Now.Date;
             var obj = Work.UserSubscriptionRepository.Create(subs);
             Work.UserSubscriptionRepository.Save();
-
-            if (obj != null)
-            {
-
-                sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
-                purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
-                purchasedSubscription.SubscriptionTypeId = obj.SubscriptionTypeId;
-                purchasedSubscription.SubscriptionDate = obj.SubscriptionDate;
-                purchasedSubscription.OrderdQuantity = obj.Quantity;
-                purchasedSubscription.SubscriptionType = typeLogic.GetById(obj.SubscriptionTypeId);
-                var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionTypeId);
-                var proList = new List<Product>();
-                foreach (var dt in details)
-                {
-                    var pro = dt.Product;
-                    pro.Quantity = dt.Quantity;
-                    proList.Add(pro);
-                }
-                purchasedSubscription.SubscriptionType.Products = proList;
-            }
-            return purchasedSubscription;
+            UserSubscription sub = null;
+            sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
+            if (sub != null)
+                return GetSubscriptionWithLicense(sub,teamId);
+            return null;
         }
 
         public SubscriptionList CreateUserSubscriptionList(List<UserSubscription> subsList, string userId)
@@ -89,8 +68,7 @@ namespace LicenseServer.Logic
             {
                 var pro = produLogic.GetProductById(data.ProductId);
                 var count = data.Quantity;
-                DateTime activationDate = subs.ActivationDate;
-                string keyData = pro.ProductCode + "^" + activationDate.AddDays(type.ActiveDays).Date.ToString() + "^" + type.Id + "^" + teamId;
+                string keyData = pro.ProductCode + "^" + subs.ExpireDate.Date.ToString() + "^" + type.Id + "^" + teamId;
                 for (int i = 0; i < (data.Quantity * qty); i++)
                 {
                     var key = LicenseKey.LicenseKeyGen.CryptoEngine.Encrypt(keyData, true);
@@ -113,14 +91,64 @@ namespace LicenseServer.Logic
 
         public List<SubscriptionType> GetExpiringSubscription(string userId)
         {
-            List<SubscriptionType> subType = null; 
+            List<SubscriptionType> subType = null;
             var subList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId).ToList();
-            var subListObj = subList.Where(s => (s.ActivationDate.AddDays(s.Subtype.ActiveDays).Date - DateTime.Now.Date).Days <= 30).ToList();
+            var subListObj = subList.Where(s => (s.ExpireDate.Date - DateTime.Now.Date).Days <= 30).ToList();
             if (subListObj != null && subListObj.Count > 0)
             {
-               subType= subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.SubscriptionType>(s.Subtype)).ToList();   
+                subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.SubscriptionType>(s.Subtype)).ToList();
             }
             return subType;
+        }
+
+        public SubscriptionList RenewSubscription(RenewSubscriptionList subList, string userId)
+        {
+            var user = UserManager.FindByIdAsync(userId).Result;
+            List<Subscription> subscriptionListWithLicense = new List<Subscription>();
+            var subIdList = subList.SubscriptionList.Select(s => s.Id).ToList();
+            var userSubList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId && subIdList.Contains(u.SubscriptionTypeId)).ToList();
+            foreach (var sub in userSubList)
+            {
+                sub.RenewalDate = subList.RenewalDate;
+                sub.ExpireDate = sub.ExpireDate.AddDays(sub.Subtype.ActiveDays);
+                Work.UserSubscriptionRepository.Update(sub); 
+            }
+            Work.UserSubscriptionRepository.Save();
+            foreach(var sub in userSubList)
+            {
+                
+                var subTemp = AutoMapper.Mapper.Map<UserSubscription>(sub);
+                var subObj = GetSubscriptionWithLicense(subTemp, user.OrganizationId);
+                subscriptionListWithLicense.Add(subObj);
+            }
+            SubscriptionList subListObj = new SubscriptionList();
+            subListObj.UserId = userId;
+            subListObj.Subscriptions = subscriptionListWithLicense;
+            return subListObj;
+        }
+        
+        public Subscription GetSubscriptionWithLicense(UserSubscription sub,int teamId)
+        {
+            Subscription purchasedSubscription = new Subscription();
+            SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
+            SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
+
+            purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
+            purchasedSubscription.SubscriptionTypeId = sub.SubscriptionTypeId;
+            purchasedSubscription.SubscriptionDate = sub.ActivationDate;
+            purchasedSubscription.RenewalDate = sub.RenewalDate;
+            purchasedSubscription.OrderdQuantity = sub.Quantity;
+            purchasedSubscription.SubscriptionType = typeLogic.GetById(sub.SubscriptionTypeId);
+            var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionTypeId);
+            var proList = new List<Product>();
+            foreach (var dt in details)
+            {
+                var pro = dt.Product;
+                pro.Quantity = dt.Quantity;
+                proList.Add(pro);
+            }
+            purchasedSubscription.SubscriptionType.Products = proList;
+            return purchasedSubscription;
         }
     }
 }

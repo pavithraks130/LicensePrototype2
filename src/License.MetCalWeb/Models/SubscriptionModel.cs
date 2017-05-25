@@ -29,6 +29,8 @@ namespace License.MetCalWeb.Models
         public int SubscriptionTypeId { get; set; }
 
         public DateTime SubscriptionDate { get; set; }
+
+        public DateTime RenewalDate { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
 
         public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
@@ -90,6 +92,8 @@ namespace License.MetCalWeb.Models
 
         public DateTime SubscriptionDate { get; set; }
 
+        public DateTime RenewalDate { get; set; }
+
         public Subscription Subscription { get; set; }
 
         public int Quantity { get; set; }
@@ -99,8 +103,7 @@ namespace License.MetCalWeb.Models
 
 
     #endregion
-
-
+    
     public class SubscriptionDetails
     {
         public int Id { get; set; }
@@ -163,6 +166,17 @@ namespace License.MetCalWeb.Models
         public List<ProductCategory> Categories { get; set; }
 
         public List<Feature> Features { get; set; }
+    }
+
+    public class RenewSubscriptionList
+    {
+        public DateTime RenewalDate { get; set; } = new DateTime(1900, 01, 01);
+
+        public double Price { get; set; }
+
+        public int RenewDuration { get; set; }
+
+        public List<SubscriptionType> SubscriptionList { get; set; }
     }
 
 }

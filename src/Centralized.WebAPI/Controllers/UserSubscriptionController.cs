@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using LicenseServer.Logic;
-
+using LicenseServer.DataModel;
 namespace Centralized.WebAPI.Controllers
 {
     [RoutePrefix("api/UserSubscription")]
@@ -16,6 +16,12 @@ namespace Centralized.WebAPI.Controllers
         public UserSubscriptionController()
         {
             logic = new UserSubscriptionLogic();
+        }
+
+        public void Initialize()
+        {
+            logic.UserManager = UserManager;
+            logic.RoleManager = RoleManager;
         }
 
         [HttpGet]
@@ -29,5 +35,16 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, subList);
         }
 
+        [HttpPost]
+        [Route("RenewSubscription/{userId}")]
+        public HttpResponseMessage RenewSubscription(string userId, RenewSubscriptionList renewSubList)
+        {
+            Initialize();
+            var subscriptionList = logic.RenewSubscription(renewSubList, userId);
+            if (!String.IsNullOrEmpty(logic.ErrorMessage))
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, subscriptionList);
+        }
     }
 }

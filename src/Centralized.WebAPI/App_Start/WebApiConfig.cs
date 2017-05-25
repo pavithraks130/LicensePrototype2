@@ -13,7 +13,6 @@ namespace Centralized.WebAPI
         {
             // Web API configuration and services
             config.Filters.Add(new GlobalExceptionHandling());
-            config.SuppressDefaultHostAuthentication();
 
             // Web API routes
             config.MapHttpAttributeRoutes();

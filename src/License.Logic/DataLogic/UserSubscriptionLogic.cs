@@ -42,5 +42,19 @@ namespace License.Logic.DataLogic
             Work.UserSubscriptionRepository.Save();
             return obj.Id;
         }
+
+        public void UpdateSubscriptions(List<UserSubscription> subs)
+        {
+            int i = 0;
+            foreach(var sub in subs)
+            {
+                var subObj = Work.UserSubscriptionRepository.GetById(sub.Id);
+                subObj.RenewalDate = sub.RenewalDate;
+                Work.UserSubscriptionRepository.Update(subObj);
+                i++;
+            }
+            if (i > 0)
+                Work.UserSubscriptionRepository.Save();
+        }
     }
 }
