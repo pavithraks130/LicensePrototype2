@@ -47,15 +47,15 @@ namespace License.Logic.BusinessLogic
 
         public void SaveProductToJson(Product proDtl)
         {
-            if (Common.CommonFileIO.IsFileExist(proDtl.ProductCode + ".txt"))
-                Common.CommonFileIO.DeleteFile(proDtl.ProductCode + ".txt");
+            if (Common.CommonFileIO.IsFileExist(proDtl.Id + ".txt"))
+                Common.CommonFileIO.DeleteFile(proDtl.Id + ".txt");
             var data = JsonConvert.SerializeObject(proDtl);
-            Common.CommonFileIO.SaveDatatoFile(data, proDtl.ProductCode + ".txt");
+            Common.CommonFileIO.SaveDatatoFile(data, proDtl.Id + ".txt");
         }
 
-        public Product GetProductFromJsonFile(string productCode)
+        public Product GetProductFromJsonFile(int proId)
         {
-            var fileName = productCode + ".txt";
+            var fileName = proId + ".txt";
             if (Common.CommonFileIO.IsFileExist(fileName))
             {
                 var prodJsondata = Common.CommonFileIO.GetJsonDataFromFile(fileName);
@@ -80,7 +80,7 @@ namespace License.Logic.BusinessLogic
                         sub.Products = new List<Product>();
                     foreach (var obj in sub.ProductIdList)
                     {
-                        var pro = GetProductFromJsonFile(obj.ProductCode.ToString());
+                        var pro = GetProductFromJsonFile(obj.Id);
                         sub.Products.Add(pro);
                     }
                 }
