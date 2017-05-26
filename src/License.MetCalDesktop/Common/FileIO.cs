@@ -57,32 +57,29 @@ namespace License.MetCalDesktop.Common
 
         public static void DecryptFile(string inputFile, string outputFile)
         {
+            //string password = @"CalibrationLicense"; // Your Key Here
 
-            {
-                //string password = @"CalibrationLicense"; // Your Key Here
+            UnicodeEncoding UE = new UnicodeEncoding();
+            byte[] key = UE.GetBytes(password);
 
-                UnicodeEncoding UE = new UnicodeEncoding();
-                byte[] key = UE.GetBytes(password);
+            FileStream fsCrypt = new FileStream(inputFile, FileMode.Open);
 
-                FileStream fsCrypt = new FileStream(inputFile, FileMode.Open);
+            RijndaelManaged RMCrypto = new RijndaelManaged();
 
-                RijndaelManaged RMCrypto = new RijndaelManaged();
+            CryptoStream cs = new CryptoStream(fsCrypt,
+                RMCrypto.CreateDecryptor(key, key),
+                CryptoStreamMode.Read);
 
-                CryptoStream cs = new CryptoStream(fsCrypt,
-                    RMCrypto.CreateDecryptor(key, key),
-                    CryptoStreamMode.Read);
+            FileStream fsOut = new FileStream(outputFile, FileMode.Create);
 
-                FileStream fsOut = new FileStream(outputFile, FileMode.Create);
+            int data;
+            while ((data = cs.ReadByte()) != -1)
+                fsOut.WriteByte((byte)data);
 
-                int data;
-                while ((data = cs.ReadByte()) != -1)
-                    fsOut.WriteByte((byte)data);
+            fsOut.Close();
+            cs.Close();
+            fsCrypt.Close();
 
-                fsOut.Close();
-                cs.Close();
-                fsCrypt.Close();
-
-            }
         }
 
         public static void SaveDatatoFile(string jsonData, string fileName)
@@ -105,6 +102,13 @@ namespace License.MetCalDesktop.Common
 
         public static string GetJsonDataFromFile(string fileName)
         {
+
+            if (!Directory.Exists(tempFolderPath))
+                Directory.CreateDirectory(tempFolderPath);
+
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
             string jsonData = String.Empty;
             DecryptFile(Path.Combine(folderPath, fileName), Path.Combine(tempFolderPath, fileName));
             if (File.Exists(Path.Combine(tempFolderPath, fileName)))

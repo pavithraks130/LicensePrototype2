@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using License.MetCalDesktop.Model;
+using System.Net;
 
 namespace License.MetCalDesktop.Common
 {
@@ -22,11 +23,22 @@ namespace License.MetCalDesktop.Common
         public bool IsUserLoggedIn { get; set; }
         public bool IsSuperAdmin { get; set; }
         public PurchaseOrder purchaseOrder { get; set; }
-        public bool IsNetworkAvilable
+       
+        public bool IsNetworkAvilable()
         {
-            get { return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable(); }
+            try
+            {
+                using (var client = new WebClient())
+                using (var stream = client.OpenRead("http://www.google.com"))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
-
         public User User { get; set; }
 
         public AccessToken OnPremiseToken { get; set; }

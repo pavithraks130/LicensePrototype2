@@ -160,7 +160,7 @@ namespace License.MetCalDesktop.ViewModel
                 LoginLogic logic = new LoginLogic();
                 IsEnableLogin = false;
                 Model.User user = null;
-                if (AppState.Instance.IsNetworkAvilable)
+                if (AppState.Instance.IsNetworkAvilable())
                     user = logic.AuthenticateOnline(Email, Password);
                 else if (AppState.Instance.IsCredentialFileExist())
                     user = logic.AuthenticateUser(Email, Password);
