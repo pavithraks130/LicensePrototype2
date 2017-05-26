@@ -14,4 +14,11 @@ namespace License.DataModel
         public bool IsMapped { get; set; }
         public virtual LicenseData License { get; set; }
     }
+
+    public class TeamLicenseDetails
+    {
+        public Team Team { get; set; }
+
+        public List<SubscriptionDetails> SubscriptionDetails { get; set; }
+    }
 }

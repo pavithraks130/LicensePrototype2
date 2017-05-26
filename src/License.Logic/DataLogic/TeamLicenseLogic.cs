@@ -98,5 +98,15 @@ namespace License.Logic.DataLogic
             var obj = Work.LicenseDataRepository.GetData(f => f.UserSubscriptionId == userSubscriptionId && f.ProductId == productId && f.IsMapped == false).FirstOrDefault();
             return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
         }
+
+        public List<TeamLicense> GetTeamLicense(string teamId)
+        {
+            List<TeamLicense> teamLicenses = new List<TeamLicense>();
+            int id = int.Parse(teamId);
+            var datas = Work.TeamLicenseRepository.GetData(t => t.TeamId == id);
+            foreach (var data in datas)
+                teamLicenses.Add(AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data));
+            return teamLicenses;
+        }
     }
 }

@@ -216,5 +216,26 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        public ActionResult RevokeTeamLicense(string teamId)
+        {
+            TempData["TeamId"] = teamId;
+            TeamLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetTeamLicenseDetails(teamId);
+            //ViewData["UserEmail"] = licDetails.User.Email;
+            return View(licDetails.SubscriptionDetails);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RevokeTeamLicense(params string[] SelectedSubscription)
+        {
+            //var responseData = RevokeLicenseFromUser(SelectedSubscription);
+            //if (!String.IsNullOrEmpty(responseData))
+            //{
+            //    ModelState.AddModelError("", responseData);
+            //    return View("TeamContainer", "TeamManagement");
+            //}
+            return RedirectToAction("TeamContainer", "TeamManagement");
+        }
+
     }
 }

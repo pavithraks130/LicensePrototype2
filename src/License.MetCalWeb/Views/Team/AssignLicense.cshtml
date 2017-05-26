@@ -14,7 +14,7 @@
                     <button class="alert-success">
                         @Html.ActionLink("Add License", "TeamMapLicense", "Team", new { teamId = @team.Id }, null)
                     </button>
-                    <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "License", new { teamId = @team.Id }, null)</button>
+                    <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeTeamLicense", "Team", new { teamId = @team.Id }, null)</button>
                 </td>
             </tr>
         }

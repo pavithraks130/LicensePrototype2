@@ -188,5 +188,24 @@ namespace OnPremise.WebAPI.Controllers
             var data = licBOLogic.GetUserLicenseSubscriptionDetails(model);
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
+
+        /// <summary>
+        /// Post Method. Used to fetch the Team Subscribed License List based on the Team Id .
+        /// Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
+        /// which contains UserId, TeamId and IsFeatureRequired Property.
+        /// This request can be used to fetch the User License details based on the Teama Id .
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetSubscriptionLicenseByTeamId")]
+        public HttpResponseMessage GetTeamSubscripedLicense(string teamId)
+        {
+            LicenseBO licBOLogic = new LicenseBO();
+            licBOLogic.UserManager = UserManager;
+            licBOLogic.RoleManager = RoleManager;
+            var data = licBOLogic.GetTeamLicenseSubscriptionDetails(teamId);
+            return Request.CreateResponse(HttpStatusCode.OK, data);
+        }
     }
 }

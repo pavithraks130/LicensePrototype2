@@ -13,14 +13,7 @@ namespace License.MetCalWeb.Models
         public List<LicenseData> LicenseDataList { get; set; }
     }
 
-    public class TeamLicenseDataMapping
-    {
-        public int ConcurrentUserCount { get; set; }
-        public List<string> TeamList { get; set; }
-
-        public List<LicenseData> LicenseDataList { get; set; }
-    }
-
+  
     public class LicenseData
     {
         public int Id { get; set; }
