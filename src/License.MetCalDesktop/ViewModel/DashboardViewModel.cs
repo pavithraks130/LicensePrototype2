@@ -42,7 +42,10 @@ namespace License.MetCalDesktop.ViewModel
         {
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            var response = client.GetAsync("api/Team/GetTeamsByUserId/" + AppState.Instance.User.UserId).Result;
+            string url = "api/Team/GetTeamsByUserId/";
+            if (AppState.Instance.IsSuperAdmin)
+                url = "api/Team/GetTeamsByAdminId/";
+            var response = client.GetAsync(url + AppState.Instance.User.UserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

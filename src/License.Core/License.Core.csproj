@@ -188,6 +188,10 @@
     <Compile Include="Migrations\201705241527596_AddedTeamLicenseAndUseSubUpdate.Designer.cs">
       <DependentUpon>201705241527596_AddedTeamLicenseAndUseSubUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705251636192_TeamTableChange1.cs" />
+    <Compile Include="Migrations\201705251636192_TeamTableChange1.Designer.cs">
+      <DependentUpon>201705251636192_TeamTableChange1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -265,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705241527596_AddedTeamLicenseAndUseSubUpdate.resx">
       <DependentUpon>201705241527596_AddedTeamLicenseAndUseSubUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705251636192_TeamTableChange1.resx">
+      <DependentUpon>201705251636192_TeamTableChange1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

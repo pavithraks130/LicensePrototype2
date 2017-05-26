@@ -27,7 +27,9 @@ namespace License.MetCalDesktop.businessLogic
                 var userListData = FileIO.GetJsonDataFromFile(LoginFileName);
                 userList = JsonConvert.DeserializeObject<List<User>>(userListData);
             }
-            userList.Add(user);
+            if (!userList.Any(u => u.Email == user.Email))
+                userList.Add(user);
+            
             var jsonData = JsonConvert.SerializeObject(userList);
             FileIO.SaveDatatoFile(jsonData, LoginFileName);
         }
@@ -46,7 +48,7 @@ namespace License.MetCalDesktop.businessLogic
             rngProvider.GetBytes(bytedata);
             return Convert.ToBase64String(bytedata);
         }
-        
+
         public string CreatePasswordhash(string password, string thumbPrint)
         {
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(password + thumbPrint);
@@ -156,7 +158,7 @@ namespace License.MetCalDesktop.businessLogic
             }
             return user;
         }
-        
+
         private void SynchPurchaseOrder(string userID)
         {
             string errorMessage = string.Empty;
