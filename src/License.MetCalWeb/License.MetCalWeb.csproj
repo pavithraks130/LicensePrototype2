@@ -329,6 +329,7 @@
     <Compile Include="Models\RequestedLicense.cs" />
     <Compile Include="Models\ResponseFailure.cs" />
     <Compile Include="Models\SubscriptionModel.cs" />
+    <Compile Include="Models\TeamLicenseDetails.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
     <Compile Include="Models\UserLicenseDataMapping.cs" />

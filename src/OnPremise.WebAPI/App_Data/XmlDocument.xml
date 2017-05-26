@@ -594,6 +594,16 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetTeamSubscripedLicense(System.String)">
+            <summary>
+            Post Method. Used to fetch the Team Subscribed License List based on the Team Id .
+            Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
+            which contains UserId, TeamId and IsFeatureRequired Property.
+            This request can be used to fetch the User License details based on the Teama Id .
+            </summary>
+            <param name="teamId"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamController.GetTeamById(System.Int32)">
             <summary>
             Get Method. To get the Team along with Team Member details based on the TeamId.

@@ -135,5 +135,71 @@ namespace License.Logic.BusinessLogic
             licDetails.SubscriptionDetails = licenseMapModelList;
             return licDetails;
         }
+
+        public TeamLicenseDetails GetTeamLicenseSubscriptionDetails(string teamId)
+        {
+            TeamLicenseDetails licDetails = new TeamLicenseDetails();
+            var licenseMapModelList = new List<SubscriptionDetails>();
+            TeamLicenseLogic teamLicenseLogic = new TeamLicenseLogic();
+            SubscriptionBO proSubLogic = new SubscriptionBO();
+            userLogic.UserManager = UserManager;
+            userLogic.RoleManager = RoleManager;
+
+            List<TeamLicense> teamLicenseList = teamLicenseLogic.GetTeamLicense(teamId);
+
+            var subscriptionTypeList = proSubLogic.GetSubscriptionFromFile();
+
+            if (teamLicenseList.Count > 0)
+            {
+                var subsIdList = teamLicenseList.Select(l => l.License.Subscription.SubscriptionId);
+                var subscriptionList = subscriptionTypeList.Where(s => subsIdList.Contains(s.Id)).ToList();
+                DateTime licExpireData = DateTime.MinValue;
+                foreach (var subs in subscriptionList)
+                {
+                    var teamLicList = teamLicenseList.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
+                    var proList = teamLicList.Select(u => u.License.ProductId).ToList();
+                    SubscriptionDetails mapModel = new SubscriptionDetails()
+                    {
+                        Name = subs.Name,
+                        UserSubscriptionId = teamLicenseList.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
+                    };
+                    foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
+                    {
+                        var objLic = teamLicList.FirstOrDefault(f => f.License.ProductId == pro.Id);
+                        if (objLic != null)
+                        {
+                            string licenseKeydata = String.Empty;
+                            licenseKeydata = objLic.License.LicenseKey;
+                            var splitData = licenseKeydata.Split(new char[] { '-' });
+                            var datakey = splitData[0];
+                            var decryptObj = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(datakey, true);
+                            var licdataList = decryptObj.Split(new char[] { '^' });
+                            licExpireData = Convert.ToDateTime(licdataList[1]);
+                        }
+                        ProductDetails prod = new ProductDetails()
+                        {
+                            Id = pro.Id,
+                            Name = pro.Name,
+                            ExpireDate = licExpireData
+                        };
+                        foreach (var fet in pro.AssociatedFeatures)
+                        {
+                            var feature = new Feature()
+                            {
+                                Id = fet.Id,
+                                Name = fet.Name,
+                                Description = fet.Description,
+                                Version = fet.Version
+                            };
+                            prod.Features.Add(feature);
+                        }
+                        mapModel.Products.Add(prod);
+                    }
+                    licenseMapModelList.Add(mapModel);
+                }
+            }
+            licDetails.SubscriptionDetails = licenseMapModelList;
+            return licDetails;
+        }
     }
 }

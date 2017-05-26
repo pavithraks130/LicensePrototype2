@@ -60,6 +60,27 @@ namespace License.MetCalWeb.Common
             return licenseMapModelList;
         }
 
+
+        /// <summary>
+        /// Function to get the User License with details  for which user is authorized
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="isFeatureRequired"></param>
+        /// <returns></returns>
+        public static TeamLicenseDetails GetTeamLicenseDetails(string teamId)
+        {
+            var licenseMapModelList = new TeamLicenseDetails();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            FetchUserSubscription subs = new FetchUserSubscription();
+            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeamId", teamId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                licenseMapModelList = JsonConvert.DeserializeObject<TeamLicenseDetails>(jsonData);
+            }
+            return licenseMapModelList;
+        }
+
         public static IList<SubscriptionDetails> GetSubscriptionForLicenseMap(string userId, string adminUserId)
         {
 
