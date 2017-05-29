@@ -174,8 +174,7 @@ namespace License.Logic.BusinessLogic
 
                 for (int index = 0; index < productIdList.Count; index++)
                 {
-                    string productCode = "Pro_" + productIdList[index].ToString();
-                    var product = subscriptionBO.GetProductFromJsonFile(productCode);
+                    var product = subscriptionBO.GetProductFromJsonFile(productIdList[index]);
                     if (product != null)
                     {
                         productList.Add(product);

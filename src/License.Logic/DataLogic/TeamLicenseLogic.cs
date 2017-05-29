@@ -96,8 +96,7 @@ namespace License.Logic.DataLogic
 
             for (int index = 0; index < prodIdList.Count; index++)
             {
-                string productCode = "Pro_" + prodIdList[index].Key.ToString();
-                var product = subscriptionBO.GetProductFromJsonFile(productCode);
+                var product = subscriptionBO.GetProductFromJsonFile(prodIdList[index].Key);
                 if (product != null)
                 {
                     Products pro = new Products();
@@ -105,7 +104,6 @@ namespace License.Logic.DataLogic
                     pro.AvailableProductCount = prodIdList[index].Count;
                     prodList.Add(pro);
                 }
-
             }
             return prodList;
         }
