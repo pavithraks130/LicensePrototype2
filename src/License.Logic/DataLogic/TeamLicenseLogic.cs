@@ -37,10 +37,13 @@ namespace License.Logic.DataLogic
                 if (obj == null)
                 {
                     var licId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
-                    TeamLicense teamlic = new TeamLicense();
-                    teamlic.TeamId = lic.TeamId;
-                    teamlic.LicenseId = licId;
-                    teamlic.IsMapped = false;
+                    TeamLicense teamlic = new TeamLicense()
+                    {
+                        TeamId = lic.TeamId,
+                        LicenseId = licId,
+                        IsMapped = false,
+                        ProductId = lic.License.ProductId
+                    };
                     CreateTeamLicense(teamlic);
                 }
                 teamLicList.Remove(obj);
@@ -72,7 +75,8 @@ namespace License.Logic.DataLogic
                         TeamLicense tl = new TeamLicense()
                         {
                             LicenseId = licId.Id,
-                            TeamId = id
+                            TeamId = id,
+                            ProductId = proId
                         };
                         CreateTeamLicense(tl);
                     }
