@@ -197,17 +197,22 @@ namespace OnPremise.WebAPI.Controllers
         /// </summary>
         /// <param name="teamId"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("GetSubscriptionLicenseByTeamId")]
-        public HttpResponseMessage GetTeamSubscripedLicense(string teamId)
+        [HttpGet]
+        [Route("GetSubscriptionLicenseByTeamId/{teamId}")]
+        public HttpResponseMessage GetTeamSubscritionLicense(int teamId)
         {
-            LicenseBO licBOLogic = new LicenseBO();
-            licBOLogic.UserManager = UserManager;
-            licBOLogic.RoleManager = RoleManager;
-            var data = licBOLogic.GetTeamLicenseSubscriptionDetails(teamId);
+            TeamBO teamBOLogic = new TeamBO();
+            var data = teamBOLogic.GetTeamLicenseProductByTeamId(teamId);
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
-        
-        
+
+        [HttpPost]
+        [Route("Delete")]
+        public HttpResponseMessage DeleteTeamLicenses(DeleteTeamDetails data)
+        {
+            TeamBO teamBOLogic = new TeamBO();
+            var status = teamBOLogic.DeleteTeamLicense(data.productIdList, data.TeamId);
+                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+        }
     }
 }

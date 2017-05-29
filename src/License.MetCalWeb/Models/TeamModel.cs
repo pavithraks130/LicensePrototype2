@@ -9,7 +9,7 @@ namespace License.MetCalWeb.Models
     public class Team
     {
         public int Id { get; set; }
-        [Required]        
+        [Required]
         public string Name { get; set; }
         public string AdminId { get; set; }
         public User AdminUser { get; set; }
@@ -25,7 +25,22 @@ namespace License.MetCalWeb.Models
         public List<TeamMember> PendinigUsers { get; set; }
         public List<TeamMember> AcceptedUsers { get; set; }
 
+        public List<Product> ProductList { get; set; }
+
         public List<UserLicenseRequest> LicenseRequestList { get; set; }
+        public TeamDetails()
+        {
+            ProductList = new List<Product>();
+        }
+    }
+    public class DeleteTeamDetails
+    {
+        public int TeamId { get; set; }
+        public List<int> productIdList { get; set; }
+        public DeleteTeamDetails()
+        {
+            productIdList = new List<int>();
+        }
     }
 
     public class TeamMember

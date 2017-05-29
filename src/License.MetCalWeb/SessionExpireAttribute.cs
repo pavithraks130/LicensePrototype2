@@ -13,7 +13,6 @@ namespace License.MetCalWeb
             HttpContext context = HttpContext.Current;
             if (context.Session["LicenseWebInstance"]  == null || context.Session.IsNewSession)
             {
-
                 filterContext.Result = new RedirectResult("~/Account/Login");
                 return;
             }

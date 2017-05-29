@@ -21,4 +21,21 @@ namespace License.DataModel
 
         public List<SubscriptionDetails> SubscriptionDetails { get; set; }
     }
+
+    public class Products
+    {
+        public Product Product { get; set; }
+        public int AvailableProductCount { get; set; }
+        public bool IsSelected { get; set; }
+    }
+
+    public class DeleteTeamDetails
+    {
+        public int TeamId { get; set; }
+        public List<int> productIdList { get; set; }
+        public DeleteTeamDetails()
+        {
+            productIdList = new List<int>();
+        }
+    }
 }

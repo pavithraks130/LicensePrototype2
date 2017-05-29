@@ -15,11 +15,13 @@ namespace OnPremise.WebAPI.Controllers
     public class TeamController : BaseController
     {
         TeamBO teamBoLogic = null;
-        TeamLogic logic = null;
+        TeamLogic teamLogic = null;
+        TeamLicenseLogic teamLicenseLogic = null;
         public TeamController()
         {
             teamBoLogic = new TeamBO();
-            logic = new TeamLogic();
+            teamLogic = new TeamLogic();
+            teamLicenseLogic = new TeamLicenseLogic();
         }
 
         //[HttpGet]
@@ -29,7 +31,7 @@ namespace OnPremise.WebAPI.Controllers
         //    var lstTeams = logic.GetTeam();
         //    return Ok(lstTeams);
         //}
-        
+
         /// <summary>
         /// Get Method. To get the Team along with Team Member details based on the TeamId.
         /// </summary>
@@ -55,7 +57,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("GetTeamsByAdminId/{adminId}")]
         public IHttpActionResult GetTeamByAdminId(string adminId)
         {
-            var dtls = logic.GetTeamsByAdmin(adminId);
+            var dtls = teamLogic.GetTeamsByAdmin(adminId);
             return Ok(dtls);
         }
 
@@ -68,8 +70,8 @@ namespace OnPremise.WebAPI.Controllers
         [Route("GetTeamsByUserId/{userId}")]
         public IHttpActionResult GetTeamByUserId(string userId)
         {
-           
-            var dtls = logic.GetTeamsByUser(userId);
+
+            var dtls = teamLogic.GetTeamsByUser(userId);
             return Ok(dtls);
         }
 
@@ -82,12 +84,12 @@ namespace OnPremise.WebAPI.Controllers
         [Route("Create")]
         public HttpResponseMessage CreateTeam(Team team)
         {
-            logic.UserManager = UserManager;
-            team = logic.CreateTeam(team);
+            teamLogic.UserManager = UserManager;
+            team = teamLogic.CreateTeam(team);
             if (team != null)
                 return Request.CreateResponse(HttpStatusCode.OK, team);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamLogic.ErrorMessage);
         }
 
         /// <summary>
@@ -100,11 +102,11 @@ namespace OnPremise.WebAPI.Controllers
         [Route("Update/{id}")]
         public HttpResponseMessage UpdateTeam(int id, Team team)
         {
-            team = logic.UpdateTeam(id, team);
+            team = teamLogic.UpdateTeam(id, team);
             if (team != null)
                 return Request.CreateResponse(HttpStatusCode.OK, team);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamLogic.ErrorMessage);
         }
 
         /// <summary>
@@ -117,13 +119,21 @@ namespace OnPremise.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteTeam(int id)
         {
-            var status = logic.DeleteTeam(id);
+            var status = teamLogic.DeleteTeam(id);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
-            else if (String.IsNullOrEmpty(logic.ErrorMessage))
+            else if (String.IsNullOrEmpty(teamLogic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Data NOt found");
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamLogic.ErrorMessage);
         }
+
+        [HttpGet]
+        [Route("GetSubscribedProducts")]
+        public HttpResponseMessage GetSubscriptionProduct()
+        {
+            var data = teamLicenseLogic.GetProductFromLicenseData();
+            return Request.CreateResponse(HttpStatusCode.OK, data);
+        }     
     }
 }

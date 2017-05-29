@@ -144,7 +144,7 @@ namespace License.Logic.BusinessLogic
             userLogic.UserManager = UserManager;
             userLogic.RoleManager = RoleManager;
 
-            List<TeamLicense> teamLicenseList = teamLicenseLogic.GetTeamLicense(teamId);
+            List<TeamLicense> teamLicenseList = teamLicenseLogic.GetTeamLicense(Convert.ToInt32(teamId));
 
             var subscriptionTypeList = proSubLogic.GetSubscriptionFromFile();
 
