@@ -32,28 +32,7 @@
         }
     }
 
-    $(function () {
-        if (@Convert.ToBoolean(ViewData["IsTeamListPopupVisible"]).ToString().ToLower())
-        {
-            UpdateTeamContext();
-        }
 
-        function UpdateTeamContext() {
-            $.ajax({
-                type: "GET",
-                url: "/Dashboard/TeamList",
-                success: function (data) {
-                    $('#myModal').html(data);
-                    $('#myModal').modal('show');
-                },
-                error: function () {
-                }
-            });
-        }
-        $("#closbtn").click(function () {
-            $('#myModal').modal('hide');
-        });
-    });
 </script>
 <link href="~/Content/Drag-and-drop-container.css" rel="stylesheet" />
 <style type="text/css">
@@ -173,7 +152,4 @@
 
         }
     </div>
-</div>
-<div id="myModal" class="modal">
-
 </div>

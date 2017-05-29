@@ -16,6 +16,8 @@ namespace License.DataModel
 
         public int UserSubscriptionId { get; set; }
 
+        public bool IsMapped { get; set; }
+
         public int ProductId { get; set; }
         
         public UserSubscription Subscription { get; set; }

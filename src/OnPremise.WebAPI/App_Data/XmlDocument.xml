@@ -761,5 +761,11 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.IsConcurrentUserLoggedIn(License.DataModel.ConcurrentUserLogin)">
+            <summary>
+            GET Method. Check for the concurent user 
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

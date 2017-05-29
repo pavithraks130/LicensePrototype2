@@ -99,6 +99,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("UpdateActiveStatus")]
+        [AllowAnonymous]
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
             Initialize();

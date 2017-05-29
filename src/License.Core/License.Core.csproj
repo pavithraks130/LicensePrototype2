@@ -192,6 +192,22 @@
     <Compile Include="Migrations\201705251636192_TeamTableChange1.Designer.cs">
       <DependentUpon>201705251636192_TeamTableChange1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705271708555_RemovedUnusedColumn.cs" />
+    <Compile Include="Migrations\201705271708555_RemovedUnusedColumn.Designer.cs">
+      <DependentUpon>201705271708555_RemovedUnusedColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705281142599_ChangesToTeamLicense.cs" />
+    <Compile Include="Migrations\201705281142599_ChangesToTeamLicense.Designer.cs">
+      <DependentUpon>201705281142599_ChangesToTeamLicense.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705281148034_ChangesToTeamLicense1.cs" />
+    <Compile Include="Migrations\201705281148034_ChangesToTeamLicense1.Designer.cs">
+      <DependentUpon>201705281148034_ChangesToTeamLicense1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705281618321_ChangesToUserLicense1.cs" />
+    <Compile Include="Migrations\201705281618321_ChangesToUserLicense1.Designer.cs">
+      <DependentUpon>201705281618321_ChangesToUserLicense1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\LicenseData.cs" />
@@ -272,6 +288,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705251636192_TeamTableChange1.resx">
       <DependentUpon>201705251636192_TeamTableChange1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705271708555_RemovedUnusedColumn.resx">
+      <DependentUpon>201705271708555_RemovedUnusedColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705281142599_ChangesToTeamLicense.resx">
+      <DependentUpon>201705281142599_ChangesToTeamLicense.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705281148034_ChangesToTeamLicense1.resx">
+      <DependentUpon>201705281148034_ChangesToTeamLicense1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705281618321_ChangesToUserLicense1.resx">
+      <DependentUpon>201705281618321_ChangesToUserLicense1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -124,5 +124,20 @@ namespace License.Logic.DataLogic
             Work.TeamRepository.Save();
             return deletestatus;
         }
+
+        public bool AllowTeamMemberLogin(int teamId, string userId)
+        {
+            var team = Work.TeamRepository.GetById(teamId);
+            if (team.ConcurrentUserCount == 0)
+                return true;
+            var loggedInUserCount = team.TeamMembers.Where(tm => tm.InviteeUserId != userId && tm.InviteeUser.IsActive == true).Count();
+            var user = UserManager.FindByIdAsync(team.AdminId).Result;
+            if (user.IsActive)
+                loggedInUserCount += 1;
+            if (loggedInUserCount < team.ConcurrentUserCount)
+                return true;
+            return false;
+
+        }
     }
 }

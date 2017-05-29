@@ -80,7 +80,7 @@ namespace License.Logic.BusinessLogic
                         sub.Products = new List<Product>();
                     foreach (var obj in sub.ProductIdList)
                     {
-                        var pro = GetProductFromJsonFile(obj.Id);
+                        var pro = GetProductFromJsonFile(Convert.ToInt32(obj.Id));
                         sub.Products.Add(pro);
                     }
                 }

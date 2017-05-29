@@ -14,7 +14,7 @@ namespace License.Logic.BusinessLogic
         UserLicenseRequestLogic userLicenseRequestLogic = null;
         UserLicenseLogic licLogic = null;
         UserLogic userLogic = null;
-
+        TeamLogic _teamLogic = null;
         public AppUserManager UserManager { get; set; }
         public AppRoleManager RoleManager { get; set; }
         public string ErrorMessage { get; set; }
@@ -24,6 +24,7 @@ namespace License.Logic.BusinessLogic
             userLicenseRequestLogic = new UserLicenseRequestLogic();
             licLogic = new UserLicenseLogic();
             userLogic = new UserLogic();
+            _teamLogic = new TeamLogic();
         }
 
 
@@ -59,7 +60,6 @@ namespace License.Logic.BusinessLogic
                 ErrorMessage = licLogic.ErrorMessage;
             }
         }
-
         public UserLicenseDetails GetUserLicenseSubscriptionDetails(FetchUserSubscription model)
         {
             UserLicenseDetails licDetails = new UserLicenseDetails();
@@ -135,7 +135,6 @@ namespace License.Logic.BusinessLogic
             licDetails.SubscriptionDetails = licenseMapModelList;
             return licDetails;
         }
-
         public TeamLicenseDetails GetTeamLicenseSubscriptionDetails(string teamId)
         {
             TeamLicenseDetails licDetails = new TeamLicenseDetails();
@@ -200,6 +199,18 @@ namespace License.Logic.BusinessLogic
             }
             licDetails.SubscriptionDetails = licenseMapModelList;
             return licDetails;
+        }
+
+        public bool ValidateConcurrentUser(int teamId, string userId)
+        {
+            _teamLogic.UserManager = UserManager;
+            bool status = _teamLogic.AllowTeamMemberLogin(teamId, userId);
+            return status;
+        }
+
+        public void UpdateTeamLicenseToUser(int teamId, string userId)
+        {
+            licLogic.AssignTeamLicenseToUser(teamId, userId);
         }
     }
 }

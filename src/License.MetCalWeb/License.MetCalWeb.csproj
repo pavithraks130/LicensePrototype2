@@ -320,6 +320,7 @@
     </Compile>
     <Compile Include="Helper\HtmlHelperExtension.cs" />
     <Compile Include="LicenseSessionState.cs" />
+    <Compile Include="Logic\AccountLogic.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\CartItem.cs" />
@@ -392,7 +393,7 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\TeamManagement\AssignRevokeTeam.cshtml" />
-    <Content Include="Views\Dashboard\TeamList.cshtml" />
+    <Content Include="Views\Account\TeamList.cshtml" />
     <Content Include="Views\Feature\Create.cshtml" />
     <Content Include="Views\Feature\Edit.cshtml" />
     <Content Include="Views\Feature\Index.cshtml" />

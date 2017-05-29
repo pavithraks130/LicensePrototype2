@@ -8,6 +8,9 @@ namespace License.MetCalWeb
     public class LicenseSessionState
     {
 
+        public static string UserId { get; set; }
+        public static string ServerUserId { get; set; }
+        public static bool GlobalAdmin { get; set; }
         public static LicenseSessionState Instance
         {
             get
@@ -24,7 +27,14 @@ namespace License.MetCalWeb
 
         public bool IsSuperAdmin { get; set; }
 
-        public bool IsGlobalAdmin { get; set; }
+        public bool IsGlobalAdmin
+        {
+            get { return LicenseSessionState.GlobalAdmin; }
+            set
+            {
+                LicenseSessionState.GlobalAdmin = value;
+            }
+        }
 
         public bool IsAdmin { get; set; }
 

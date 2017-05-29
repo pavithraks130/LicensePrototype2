@@ -16,27 +16,8 @@ namespace License.MetCalWeb.Controllers
         // GET: Tab
         public ActionResult Home()
         {
-            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
-            {
-                string userId = string.Empty;
-                if (!LicenseSessionState.Instance.IsSuperAdmin)
-                    userId = LicenseSessionState.Instance.User.UserId;
-                var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
-                LicenseSessionState.Instance.TeamList = teamList;
-
-                if (teamList.Count == 0)
-                {
-                    ViewData["IsTeamListPopupVisible"] = false;
-                    return View();
-                }
-                else if (teamList.Count == 1)
-                {
-                    LicenseSessionState.Instance.SelectedTeam = teamList.FirstOrDefault();
-                    LoadUserSubscription();
-                }
-            }
-            ViewData["IsTeamListPopupVisible"] = LicenseSessionState.Instance.TeamList.Count > 0 && LicenseSessionState.Instance.SelectedTeam == null;
-
+            if (LicenseSessionState.Instance.SelectedTeam != null)
+                LoadUserLicense();
             if (LicenseSessionState.Instance.IsSuperAdmin)
             {
                 var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
@@ -45,29 +26,26 @@ namespace License.MetCalWeb.Controllers
             else
                 ViewData["ExpiredSubCount"] = "";
 
-            if (LicenseSessionState.Instance.SelectedTeam != null)
+            if (LicenseSessionState.Instance.UserSubscriptionList != null)
                 return View(LicenseSessionState.Instance.UserSubscriptionList);
-
-           
             return View();
-
         }
 
 
-        public ActionResult TeamList()
-        {
-            return View(LicenseSessionState.Instance.TeamList);
-        }
+        //public ActionResult TeamList()
+        //{
+        //    return View(LicenseSessionState.Instance.TeamList);
+        //}
 
-        [HttpPost]
-        public ActionResult TeamList(int teamId)
-        {
-            LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.Where(t => t.Id == teamId).FirstOrDefault();
-            var message = LoadUserSubscription();
-            return Json(new { success = true, message = message });
-        }
+        //[HttpPost]
+        //public ActionResult TeamList(int teamId)
+        //{
+        //    LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.Where(t => t.Id == teamId).FirstOrDefault();
+        //    var message = LoadUserLicense();
+        //    return Json(new { success = true, message = message });
+        //}
 
-        public string LoadUserSubscription()
+        public string LoadUserLicense()
         {
             LicenseSessionState.Instance.AppTeamContext = new Team()
             {
@@ -82,6 +60,7 @@ namespace License.MetCalWeb.Controllers
             }
             return string.Empty;
         }
+
         // GET: Tab
         public ActionResult About()
         {
