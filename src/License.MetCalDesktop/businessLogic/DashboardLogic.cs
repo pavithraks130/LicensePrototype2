@@ -51,26 +51,10 @@ namespace License.MetCalDesktop.businessLogic
                 var featuresList = FileIO.GetJsonDataFromFile(featurefileName);
                 var licenseDetails = JsonConvert.DeserializeObject<List<UserLicenseDetails>>(featuresList);
                 var userLisense = licenseDetails.FirstOrDefault(l => l.UserId == AppState.Instance.User.UserId);
-                foreach (var lic in AppState.Instance.UserLicenseList)
-                {
-                    var subs = userLisense.SubscriptionDetails.FirstOrDefault(s => s.UserSubscriptionId == lic.UserSubscriptionId);
-                    if (subs == null)
-                        userLisense.SubscriptionDetails.Add(lic);
-                    else
-                    {
-                        foreach (var pro in lic.Products)
-                        {
-                            var product = subs.Products.FirstOrDefault(p => p.Id == pro.Id);
-                            if (product == null)
-                                subs.Products.Add(product);
-                            else
-                            {
-                                subs.Products.Remove(product);
-                                subs.Products.Add(pro);
-                            }
-                        }
-                    }
-                }
+                if (userLisense == null)
+                    licenseDetails.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, SubscriptionDetails = AppState.Instance.UserLicenseList });
+                else
+                    userLisense.SubscriptionDetails = AppState.Instance.UserLicenseList;
             }
             else
                 userlicdtls.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, SubscriptionDetails = AppState.Instance.UserLicenseList });
@@ -78,9 +62,5 @@ namespace License.MetCalDesktop.businessLogic
             FileIO.SaveDatatoFile(jsonData, featurefileName);
         }
 
-        public void SaveUserfeatureList()
-        {
-
-        }
     }
 }

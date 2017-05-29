@@ -33,7 +33,7 @@ namespace License.MetCalDesktop.ViewModel
             LogoutCommand = new RelayCommand(LogOut);
             LoggedInUser = AppState.Instance.User.FirstName + ", " + AppState.Instance.User.LastName;
             isSuperAdmin = AppState.Instance.IsSuperAdmin;
-            if (AppState.Instance.IsNetworkAvilable)
+            if (AppState.Instance.IsNetworkAvilable())
                 LoadTeams();
             else
                 LoadFeatures();
@@ -75,7 +75,7 @@ namespace License.MetCalDesktop.ViewModel
         public void LoadFeatures()
         {
             DashboardLogic logic = new DashboardLogic();
-            if (AppState.Instance.IsNetworkAvilable)
+            if (AppState.Instance.IsNetworkAvilable())
                 logic.LoadFeaturesOnline();
             else
                 logic.LoadFeatureOffline();
