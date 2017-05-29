@@ -37,7 +37,7 @@ namespace License.DataModel
 
         public List<string> TeamList { get; set; }
 
-        public List<LicenseData> LicenseDataList { get; set; }
+        public List<int> ProductIdList { get; set; }
     }
 
     public class FetchUserSubscription

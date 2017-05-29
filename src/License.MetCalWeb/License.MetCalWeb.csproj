@@ -414,6 +414,7 @@
     <Content Include="Views\License\TeamsList.cshtml" />
     <Content Include="Views\Team\AssignLicense.cshtml" />
     <Content Include="Views\Team\TeamMapLicense.cshtml" />
+    <Content Include="Views\Team\RevokeTeamLicense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

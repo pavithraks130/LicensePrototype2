@@ -25,6 +25,12 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
         }
 
+        public LicenseData GetUnassignedLicenseForTeam( int productId)
+        {
+            var obj = Work.LicenseDataRepository.GetData(f=>f.ProductId == productId && f.IsMapped == false).FirstOrDefault();
+            return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
+        }
+
         public void UpdateLicenseStatus(int licId, bool status)
         {
             var obj = Work.LicenseDataRepository.GetById(licId);

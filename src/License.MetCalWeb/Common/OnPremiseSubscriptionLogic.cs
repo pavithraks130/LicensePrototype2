@@ -36,6 +36,25 @@ namespace License.MetCalWeb.Common
             return subscriptionProList;
         }
 
+
+        /// <summary>
+        /// Function to get the Product Subscription based on the Admin Id  with count for which admin subscribed. UserId is the Admin UserId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static IList<Products> GetProductsFromSubscription()
+        {
+            IList<Products> productsList = new List<Products>();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            var response = client.GetAsync("api/Team/GetSubscribedProducts/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrEmpty(jsonData))
+                    productsList = JsonConvert.DeserializeObject<IList<Products>>(jsonData);
+            }
+            return productsList;
+        }
         /// <summary>
         /// Function to get the User License with details  for which user is authorized
         /// </summary>
@@ -67,18 +86,17 @@ namespace License.MetCalWeb.Common
         /// <param name="userId"></param>
         /// <param name="isFeatureRequired"></param>
         /// <returns></returns>
-        public static TeamLicenseDetails GetTeamLicenseDetails(string teamId)
+        public static List<Product> GetTeamLicenseDetails(int teamId)
         {
-            var licenseMapModelList = new TeamLicenseDetails();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            FetchUserSubscription subs = new FetchUserSubscription();
-            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeamId", teamId).Result;
+            var distinctProductList = new List<Product>();
+                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            var response = client.GetAsync("api/License/GetSubscriptionLicenseByTeamId/"+ teamId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                licenseMapModelList = JsonConvert.DeserializeObject<TeamLicenseDetails>(jsonData);
+                distinctProductList = JsonConvert.DeserializeObject<List<Product>>(jsonData);
             }
-            return licenseMapModelList;
+            return distinctProductList;
         }
 
         public static IList<SubscriptionDetails> GetSubscriptionForLicenseMap(string userId, string adminUserId)
