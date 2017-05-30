@@ -83,7 +83,10 @@
                             }
                         </td>
                         <td class="col-md-4">
-                            <input type="text" name="con_count" value=@obj.ConcurrentUserCount style="width:40px" />
+                           <select  name="con_count" >
+                               <option value="1">1</option>
+                           </select>
+                            @*<input type="text" name="con_count" value=@obj.ConcurrentUserCount style="width:40px" />*@
                         </td>
                         <td class="col-md-4">
                             <button class="alert-success">
