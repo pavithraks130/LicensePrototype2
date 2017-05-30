@@ -83,14 +83,7 @@ namespace License.MetCalWeb.Controllers
             TeamMappingDetails teamMappingDetails = new TeamMappingDetails();
             TempData["Teamid"] = teamId;
             teamMappingDetails.SelectedTeamName = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault().Name;
-            string adminUserId = string.Empty;
-            if (LicenseSessionState.Instance.IsSuperAdmin)
-                adminUserId = LicenseSessionState.Instance.User.UserId;
-            else
-            {
-                adminUserId = LicenseSessionState.Instance.SelectedTeam.AdminId;
-            }
-            teamMappingDetails.SubscriptionDetailsList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).ToList();
+            teamMappingDetails.ProductList = OnPremiseSubscriptionLogic.GetProductsFromSubscription().ToList();
             return View(teamMappingDetails);
 
         }
@@ -114,8 +107,8 @@ namespace License.MetCalWeb.Controllers
 
             List<string> teamIdList = new List<string>();
             teamIdList.Add(TempData["Teamid"].ToString());
-            List<LicenseData> lstLicData = ExtractLicenseData(selectedSubscription);
-            TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { ConcurrentUserCount= concurrentUserCount, LicenseDataList = lstLicData, TeamList = teamIdList };
+            List<int> listOfProId = ExtractLicenseData(selectedSubscription);
+            TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { ConcurrentUserCount= concurrentUserCount, ProductIdList = listOfProId, TeamList = teamIdList };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/CreateTeamLicence", mapping).Result;
             if (!response.IsSuccessStatusCode)
@@ -135,24 +128,15 @@ namespace License.MetCalWeb.Controllers
             return String.Empty;
         }
 
-        private static List<LicenseData> ExtractLicenseData(string[] SelectedSubscription)
+        private static List<int> ExtractLicenseData(string[] SelectedSubscription)
         {
-            List<LicenseData> lstLicData = new List<LicenseData>();
+            List<int> proIdList = new List<int>();
             foreach (var data in SelectedSubscription)
             {
-                var splitValue = data.Split(new char[] { '-' });
-                var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-
-                LicenseData licData = new LicenseData()
-                {
-                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
-                    ProductId = Convert.ToInt32(prodId)
-                };
-                lstLicData.Add(licData);
+                var prodId = data.Split(new char[] { ':' })[1];
+                proIdList.Add(Convert.ToInt32(prodId));
             }
-
-            return lstLicData;
+            return proIdList;
         }
 
         public IList<SubscriptionDetails> GetLicenseListBySubscription(string userId)
@@ -216,24 +200,23 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
-        public ActionResult RevokeTeamLicense(string teamId)
+        public ActionResult RevokeTeamLicense(int teamId)
         {
-            TempData["TeamId"] = teamId;
-            TeamLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetTeamLicenseDetails(teamId);
-            //ViewData["UserEmail"] = licDetails.User.Email;
-            return View(licDetails.SubscriptionDetails);
+            TeamDetails teamDetails = new TeamDetails();
+            teamDetails.Team = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault();
+            teamDetails.ProductList = OnPremiseSubscriptionLogic.GetTeamLicenseDetails(teamId);
+            return View(teamDetails);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RevokeTeamLicense(params string[] SelectedSubscription)
+        public ActionResult RevokeTeamLicense(int teamId,params string[] SelectedSubscription)
         {
-            //var responseData = RevokeLicenseFromUser(SelectedSubscription);
-            //if (!String.IsNullOrEmpty(responseData))
-            //{
-            //    ModelState.AddModelError("", responseData);
-            //    return View("TeamContainer", "TeamManagement");
-            //}
+            DeleteTeamDetails details = new DeleteTeamDetails();
+            details.TeamId = teamId;
+            details.productIdList = ExtractLicenseData(SelectedSubscription);
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            var response = client.PostAsJsonAsync("api/License/Delete", details).Result;
             return RedirectToAction("TeamContainer", "TeamManagement");
         }
 

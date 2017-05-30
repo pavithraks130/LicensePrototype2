@@ -16,6 +16,8 @@ namespace License.DataModel
 
         public int UserSubscriptionId { get; set; }
 
+        public bool IsMapped { get; set; }
+
         public int ProductId { get; set; }
         
         public UserSubscription Subscription { get; set; }
@@ -37,7 +39,7 @@ namespace License.DataModel
 
         public List<string> TeamList { get; set; }
 
-        public List<LicenseData> LicenseDataList { get; set; }
+        public List<int> ProductIdList { get; set; }
     }
 
     public class FetchUserSubscription

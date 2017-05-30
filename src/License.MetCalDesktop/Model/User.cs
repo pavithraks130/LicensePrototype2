@@ -21,4 +21,14 @@ namespace License.MetCalDesktop.Model
         public string PasswordHash { get; set; }
         public string ThumbPrint { get; set; }
     }
+    public class ConcurrentUserLogin
+    {
+        public int TeamId { get; set; }
+
+        public string UserId { get; set; }
+
+        public bool IsUserLoggedIn { get; set; }
+
+        public string ErrorOrNotificationMessage { get; set; }
+    }
 }

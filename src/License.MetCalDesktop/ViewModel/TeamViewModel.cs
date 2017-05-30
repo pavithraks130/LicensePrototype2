@@ -8,12 +8,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using License.MetCalDesktop.Common;
 using System.Windows.Input;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace License.MetCalDesktop.ViewModel
 {
     public class TeamViewModel : INotifyPropertyChanged
     {
-        public EventHandler ClosepoupWindow;
+        public delegate void ClosePopupWindowEvent(object sender,CustomEventArgs e);
+
+        public EventHandler<CustomEventArgs> ClosepoupWindow;
 
         public ICommand UpdateCommand { get; set; }
 
@@ -44,7 +48,20 @@ namespace License.MetCalDesktop.ViewModel
         public void UpdateSelectedTeam(object args)
         {
             AppState.Instance.SelectedTeam = (Team)args;
-            ClosepoupWindow?.Invoke(this, new EventArgs());
+            ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
+            userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
+            userLogin.UserId = AppState.Instance.User.UserId;
+            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+            var jsonData = response.Content.ReadAsStringAsync().Result;
+            var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+            CustomEventArgs e = new CustomEventArgs();
+            e.IsConcurrentuserLoggedIn = userLoginObj.IsUserLoggedIn;
+            if (userLoginObj.IsUserLoggedIn)
+                e.ErrorMessage = "";
+            else
+                e.ErrorMessage = userLoginObj.ErrorOrNotificationMessage;
+            ClosepoupWindow?.Invoke(this,e);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

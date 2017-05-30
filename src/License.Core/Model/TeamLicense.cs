@@ -15,7 +15,7 @@ namespace License.Core.Model
         public int LicenseId { get; set; }
         public int TeamId { get; set; }
         public bool IsMapped { get; set; }
-
+        public int ProductId { get; set; }
         [ForeignKey("LicenseId")]
         public virtual LicenseData License { get; set; }
     }

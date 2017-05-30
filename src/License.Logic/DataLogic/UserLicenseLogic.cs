@@ -133,5 +133,48 @@ namespace License.Logic.DataLogic
                 licenses.Add(AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(data));
             return licenses;
         }
+
+        public void AssignTeamLicenseToUser(int teamId, string userId)
+        {
+            var teamLicData = Work.TeamLicenseRepository.GetData(t => t.TeamId == teamId).ToList();
+            if (teamLicData == null)
+                return;
+            var productList = teamLicData.Select(l => l.ProductId).Distinct();
+            foreach (var proId in productList)
+            {
+                var data = teamLicData.FirstOrDefault(l => l.ProductId == proId && l.IsMapped == false);
+                if (data != null)
+                {
+                    UserLicense lic = new UserLicense()
+                    {
+                        LicenseId = data.LicenseId,
+                        TeamId = teamId,
+                        UserId = userId,
+                        IsTeamLicense = true,
+                        TeamLicenseId = data.Id
+                    };
+                    CreateUserLicense(lic);
+                    data.IsMapped = true;
+                    Work.TeamLicenseRepository.Update(data);
+                    Work.TeamLicenseRepository.Save();
+                }
+            }
+        }
+        public void RevokeTeamLicenseFromUser(string userId)
+        {
+            var licenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.IsTeamLicense == true);
+            foreach (var lic in licenseList)
+            {
+                var teamLic = Work.TeamLicenseRepository.GetById(lic.TeamLicenseId);
+                teamLic.IsMapped = false;
+                Work.TeamLicenseRepository.Update(teamLic);
+                Work.UserLicenseRepository.Delete(lic);
+            }
+            if (licenseList.Count() > 0)
+            {
+                Work.TeamLicenseRepository.Save();
+                Work.UserLicenseRepository.Save();
+            }
+        }
     }
 }

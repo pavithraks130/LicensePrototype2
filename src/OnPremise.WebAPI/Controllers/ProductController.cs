@@ -13,18 +13,18 @@ namespace OnPremise.WebAPI.Controllers
     [Authorize]
     public class ProductController : BaseController
     {
-        ProductLogic logic = null;
+        ProductLogic productLogic = null;
 
         public ProductController()
         {
-            logic = new ProductLogic();
+            productLogic = new ProductLogic();
         }
 
         [HttpGet]
         [Route("GetProductsByAdminId/{adminUserId}")]
         public IHttpActionResult GetProductsByAdmin(string adminUserId)
         {
-            var productList = logic.GetProductbyAdmin(adminUserId);
+            var productList = productLogic.GetProductbyAdmin(adminUserId);
             return Ok(productList);
         }
 
@@ -32,8 +32,9 @@ namespace OnPremise.WebAPI.Controllers
         [Route("UpdateProducts")]
         public HttpResponseMessage UpdateProducts(List<Product> productList)
         {
-            logic.UpdateProducts(productList);
+            productLogic.UpdateProducts(productList);
             return Request.CreateResponse(HttpStatusCode.OK, "success");
         }
+        
     }
 }

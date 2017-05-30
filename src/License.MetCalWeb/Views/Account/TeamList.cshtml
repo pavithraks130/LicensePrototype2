@@ -13,10 +13,10 @@
                 data: { 'teamId': $('#ddlTeam').val() },
                 success: function (data) {
                     if (data.success) {
-                        location.reload();
+                        location.href = data.url;
                     }
                     else {
-                        $('#error').text(data.message);
+                        alert(data.message);
                     }
                 }
             });
@@ -29,7 +29,7 @@
 <div class="modal-dialog">
     <div class="modal-content">
         <div id='myModalContent'>
-            @using (Html.BeginForm("TeamList", "Dashboard",FormMethod.Post))
+            @using (Html.BeginForm("TeamList", "Account",FormMethod.Post))
             {
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

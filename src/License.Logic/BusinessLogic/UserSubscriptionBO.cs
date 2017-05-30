@@ -82,11 +82,15 @@ namespace License.Logic.BusinessLogic
                         UserSubscriptionId = userSub.Id,
                         Name = subType.Name
                     };
+                    LicenseLogic licDataLogic = new LicenseLogic();
+                    var userlicList = licDataLogic.GetLicenseList(userSub.Id);
+
                     foreach (var pro in subType.Products)
                     {
-                        UserLicenseLogic userLicLogic = new UserLicenseLogic();
-                        int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                        var proObj = new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = (pro.Quantity * userSub.Quantity), UsedLicenseCount = usedLicCount };
+                        var licList = userlicList.Where(p => p.ProductId == pro.Id).ToList();
+                        //  UserLicenseLogic userLicLogic = new UserLicenseLogic();
+                        //int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
+                        var proObj = new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = licList.Count, UsedLicenseCount = licList.Where(l => l.IsMapped == true).Count() };
                         proObj.IsDisabled = proObj.TotalLicenseCount == proObj.UsedLicenseCount;
                         model.Products.Add(proObj);
                     }

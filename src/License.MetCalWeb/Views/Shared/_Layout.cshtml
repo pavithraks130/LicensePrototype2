@@ -34,11 +34,20 @@
                 $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
                 });
 
+            function logout_Session() {
+                $.ajax({
+                    url: @Url.Action("LogOut","Account"),
+                    method:'GET',
+                    success: function (data) {
+                        return true;
+                    }
+                });
+            }
 
         });
     </script>
 </head>
-<body>
+<body onunload="logout_session">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">

@@ -33,45 +33,10 @@ namespace License.MetCalDesktop.ViewModel
             LogoutCommand = new RelayCommand(LogOut);
             LoggedInUser = AppState.Instance.User.FirstName + ", " + AppState.Instance.User.LastName;
             isSuperAdmin = AppState.Instance.IsSuperAdmin;
-            if (AppState.Instance.IsNetworkAvilable())
-                LoadTeams();
-            else
-                LoadFeatures();
-        }
-        public void LoadTeams()
-        {
-            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            string url = "api/Team/GetTeamsByUserId/";
-            if (AppState.Instance.IsSuperAdmin)
-                url = "api/Team/GetTeamsByAdminId/";
-            var response = client.GetAsync(url + AppState.Instance.User.UserId).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var teamList = JsonConvert.DeserializeObject<List<Team>>(jsonData);
-                if (teamList.Count > 1)
-                {
-                    AppState.Instance.TeamList = teamList;
-                    Views.Teams teamWindow = new Views.Teams();
-                    teamWindow.ClosePopupWindow += CloseWindow;
-                    teamWindow.ShowDialog();
 
-                }
-                else if (teamList.Count == 1)
-                {
-                    AppState.Instance.SelectedTeam = teamList.FirstOrDefault();
-                    LoadFeatures();
-                }
-                
-            }
-        }
-
-        public void CloseWindow(object source, EventArgs e)
-        {
-            (source as System.Windows.Window).Close();
             LoadFeatures();
         }
+       
         public void LoadFeatures()
         {
             DashboardLogic logic = new DashboardLogic();
@@ -97,11 +62,33 @@ namespace License.MetCalDesktop.ViewModel
 
         public void LogOut(object param)
         {
+            UpdateLogoutStatus(AppState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
+            if (AppState.Instance.IsSuperAdmin)
+                UpdateLogoutStatus(AppState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
             AppState.Instance.User = null;
             AppState.Instance.UserLicenseList = null;
             AppState.Instance.IsUserLoggedIn = false;
-            if (NavigateNextPage != null)
-                NavigateNextPage("login", null);
+            NavigateNextPage?.Invoke("login", null);
+        }
+
+        public void UpdateLogoutStatus(string userId, ServiceType type)
+        {
+            HttpClient client = AppState.CreateClient(type.ToString());
+            switch (type)
+            {
+                case ServiceType.CentralizeWebApi:
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+                    break;
+                case ServiceType.OnPremiseWebApi:
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                    break;
+            }
+            User userModel = new User()
+            {
+                UserId = userId,
+                IsActive = false
+            };
+            client.PutAsJsonAsync("api/user/UpdateActiveStatus", userModel);
         }
 
     }

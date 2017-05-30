@@ -86,7 +86,7 @@ namespace License.MetCalDesktop.ViewModel
                 OnPropertyChanged("IsEnableLogin");
             }
         }
-     
+
 
         #region IDataErrorInfo
 
@@ -170,7 +170,7 @@ namespace License.MetCalDesktop.ViewModel
                     IsEnableLogin = true;
                     return;
                 }
-                if(user == null)
+                if (user == null)
                 {
                     MessageBox.Show(logic.ErrorMessage);
                     IsEnableLogin = true;
@@ -178,10 +178,65 @@ namespace License.MetCalDesktop.ViewModel
                 }
                 AppState.Instance.User = user;
                 AppState.Instance.IsUserLoggedIn = true;
-                NavigateNextPage?.Invoke("Dashboard", null);
+                if (AppState.Instance.IsNetworkAvilable())
+                    LoadTeams();
                 IsEnableLogin = true;
             }
         }
 
+        public void LoadTeams()
+        {
+            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            string url = "api/Team/GetTeamsByUserId/";
+            if (AppState.Instance.IsSuperAdmin)
+                url = "api/Team/GetTeamsByAdminId/";
+            var response = client.GetAsync(url + AppState.Instance.User.UserId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var teamList = JsonConvert.DeserializeObject<List<Team>>(jsonData);
+                if (teamList.Count > 1)
+                {
+                    AppState.Instance.TeamList = teamList;
+                    Views.Teams teamWindow = new Views.Teams();
+                    teamWindow.ClosePopupWindow += CloseWindow;
+                    teamWindow.ShowDialog();
+
+                }
+                else if (teamList.Count == 1)
+                {
+                    AppState.Instance.SelectedTeam = teamList.FirstOrDefault();
+                    ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
+                    userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
+                    userLogin.UserId = AppState.Instance.User.UserId;
+                    client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                    response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+                    jsonData = response.Content.ReadAsStringAsync().Result;
+                    var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+                    if (userLoginObj.IsUserLoggedIn)
+                        NavigateNextPage?.Invoke("Dashboard", null);
+                    else
+                        MessageBox.Show(userLoginObj.ErrorOrNotificationMessage);
+                }
+
+            }
+        }
+
+        private void CloseWindow(object sender, EventArgs e1)
+        {
+            var e = (CustomEventArgs)e1;
+            (sender as System.Windows.Window).Close();
+            if (e.IsConcurrentuserLoggedIn)
+                NavigateNextPage?.Invoke("Dashboard", null);
+            else
+            {
+                AppState.Instance.User = null;
+                AppState.Instance.UserLicenseList = null;
+                AppState.Instance.IsUserLoggedIn = false;
+                MessageBox.Show(e.ErrorMessage);
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using License.Core.Model;
+using License.Logic.BusinessLogic;
 using License.Logic.DataLogic;
 using License.DataModel;
 using Microsoft.AspNet.Identity;
@@ -175,10 +176,13 @@ namespace OnPremise.WebAPI.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("UpdateActiveStatus")]
+        [AllowAnonymous]
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
             Initialize();
             logic.UpdateLogOutStatus(model.UserId, model.IsActive);
+            UserLicenseLogic licLogic = new UserLicenseLogic();
+            licLogic.RevokeTeamLicenseFromUser(model.UserId);
             if (!String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
             else
@@ -201,6 +205,33 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, "Updated");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
+
+        /// <summary>
+        /// GET Method. Check for the concurent user 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("IsConcurrentUserLoggedIn")]
+        public HttpResponseMessage IsConcurrentUserLoggedIn(ConcurrentUserLogin userLogin)
+        {
+            LicenseBO licBO = new LicenseBO();
+            licBO.UserManager = UserManager;
+            HttpStatusCode statusCode;
+            var status = licBO.ValidateConcurrentUser(userLogin.TeamId, userLogin.UserId);
+            if (status)
+            {
+                licBO.UpdateTeamLicenseToUser(userLogin.TeamId, userLogin.UserId);
+                statusCode = HttpStatusCode.OK;
+                userLogin.IsUserLoggedIn = true;
+            }
+            else
+            {
+                logic.UpdateLogOutStatus(userLogin.UserId, false);
+                userLogin.IsUserLoggedIn = false;
+                statusCode = HttpStatusCode.ExpectationFailed;
+            }
+            return Request.CreateResponse(statusCode, userLogin);
         }
     }
 }

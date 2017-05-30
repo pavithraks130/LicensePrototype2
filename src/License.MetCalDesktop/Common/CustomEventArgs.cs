@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace License.MetCalDesktop.Common
 {
-   public enum ServiceType
+    public class CustomEventArgs : EventArgs
     {
-        OnPremiseWebApi,
-        CentralizeWebApi
-    }
+        public bool IsConcurrentuserLoggedIn { get; set; }
 
+        public string ErrorMessage { get; set; }
+    }
 }

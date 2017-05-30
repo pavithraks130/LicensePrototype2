@@ -16,6 +16,10 @@ namespace License.DataModel
 
         public int TeamId { get; set; }
 
+        public bool IsTeamLicense { get; set; }
+
+        public int TeamLicenseId { get; set; }
+
         public User User { get; set; }
         
         public LicenseData License { get; set; }

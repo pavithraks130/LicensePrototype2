@@ -1,17 +1,10 @@
-﻿@model License.MetCalWeb.Models.TeamMappingDetails
+﻿@model License.MetCalWeb.Models.TeamDetails
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {
             var isPostEnabled = true;
             i = 0;
-            minQuantity = 50000;
-            $('input[type=checkbox]:checked').each(function (e) {
-                var parentObj = $($('.checkCombo:checked')[e]).parent().parent();
-                var txtQty1 = $(parentObj).find('.checkCombo').find('.available_product_count').val()
-                var txtQty = $(parentObj).find('.available_product_count').find('.txt-qty').val();
-                if (minQuantity > parseInt(txtQty)) {
-                    minQuantity = parseInt(txtQty);
-                }
+            $('input[type=checkbox]:checked').each(function () {
                 i++;
             });
             if (i == 0) {
@@ -22,19 +15,7 @@
                 $('#lblError').attr('style', 'display:none;');
                 isPostEnabled = isPostEnabled && true;
             }
-            var qty = $('.con_user_count').val();
-            if (parseInt(qty) <= 1) {
-                $('#lblErrorcon').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else if (parseInt(qty) > minQuantity) {
-                $('#lblErrorcon').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else {
-                $('#lblErrorcon').attr('style', 'display:none;');
-                isPostEnabled = isPostEnabled && true;
-            }
+           
             return isPostEnabled;
         });
     });
@@ -45,19 +26,16 @@
 <br />
 <div class="row">
     <div class="col-md-12">
-        @using (Html.BeginForm("TeamMapLicense", "Team", FormMethod.Post))
+        @using (Html.BeginForm("RevokeTeamLicense", "Team", FormMethod.Post))
         {
             @Html.ValidationSummary()
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <div class="col-md-8" style="padding-bottom:20px">
                     <span>
-                        Team Name :  @Model.SelectedTeamName
+                        Team Name :  @Model.Team.Name
                     </span>
-                </div>
-
-                <div class="col-md-8" style="padding-bottom:20px">
-                    <span> Concurrent team user :<input type="text" class="con_user_count" name="concurrentUserCount" value="@Model.ConcurrentUserCount" /></span>
+                    <input type="text" name="teamId" value=@Model.Team.Id hidden="hidden" readonly="readonly"/>
                 </div>
             </div>
             if (Model == null || Model.ProductList.Count == 0)
@@ -82,21 +60,15 @@
 
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="selectedSubscription" value="ProId:@pro.Product.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableProductCount == 0 ? "disabled='disabled'" : "")>
                                         <label class="control-label">
-
-                                            @pro.Product.Name
+                                            <input type="checkbox" name="selectedSubscription" value="ProId:@pro.Id" checked="" class="checkbox-inline">
+                                            @pro.Name
                                         </label>
                                     </td>
-                                    <td class="available_product_count">
-                                        <input type="text" class="txt-qty form-control" name="avl_Qty" value="@pro.AvailableProductCount" readonly="readonly" disabled="disabled" />
-                                    </td>
-
                                 </tr>
                             }
                         </table>
                         <label style="display:none;color:red;" id="lblError">License not selected</label><br />
-                        <label style="display:none;color:red;" id="lblErrorcon"> Concurrent team user should be greater than <strong>one</strong> and less or equal to  minimum <strong>product available</strong> count </label>
                     </div>
                 </div>
                 <div class="form-group">
