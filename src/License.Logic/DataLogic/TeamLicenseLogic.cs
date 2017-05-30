@@ -20,37 +20,7 @@ namespace License.Logic.DataLogic
             return obj.Id > 0;
 
         }
-
-        /// <summary>
-        /// creating the UserLicense this can be used to update the single user.
-        /// </summary>
-        /// <param name="licList"></param>
-        /// <returns></returns>
-        public bool CreateTeamLicense(List<TeamLicense> licList)
-        {
-            LicenseLogic licLogic = new LicenseLogic();
-            foreach (var lic in licList)
-            {
-                var teamLicList = Work.TeamLicenseRepository.GetData(tl => tl.TeamId == lic.TeamId).ToList();
-                var data = Work.LicenseDataRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
-                var obj = teamLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
-                if (obj == null)
-                {
-                    var licId = licLogic.GetUnassignedLicense(lic.License.UserSubscriptionId, lic.License.ProductId).Id;
-                    TeamLicense teamlic = new TeamLicense()
-                    {
-                        TeamId = lic.TeamId,
-                        LicenseId = licId,
-                        IsMapped = false,
-                        ProductId = lic.License.ProductId
-                    };
-                    CreateTeamLicense(teamlic);
-                }
-                teamLicList.Remove(obj);
-            }
-            return true;
-        }
-
+             
         /// <summary>
         /// function to create the License  for multiple User . This function will be used for bulk license mapping to 
         /// multiple User.
@@ -85,6 +55,7 @@ namespace License.Logic.DataLogic
             }
             return true;
         }
+
         public List<Products> GetProductFromLicenseData()
         {
             //ListOut the product with IsMap is false;

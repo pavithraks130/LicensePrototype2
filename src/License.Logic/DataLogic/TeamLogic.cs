@@ -54,7 +54,7 @@ namespace License.Logic.DataLogic
         public DataModel.Team GetTeamById(int id)
         {
             TeamMemberLogic memLogic = new TeamMemberLogic();
-            var obj = Work.TeamRepository.GetData(r => r.Id == id).FirstOrDefault();
+            var obj = Work.TeamRepository.GetById(id);
             DataModel.Team teamObj = AutoMapper.Mapper.Map<DataModel.Team>(obj);
             teamObj.TeamMembers = memLogic.GetTeamMembers(id);
             return teamObj;
@@ -138,6 +138,15 @@ namespace License.Logic.DataLogic
                 return true;
             return false;
 
+        }
+
+        public DataModel.Team UpdateConcurrentUser(DataModel.Team teamObj)
+        {
+            var team = Work.TeamRepository.GetById(teamObj.Id);
+            team.ConcurrentUserCount = teamObj.ConcurrentUserCount;
+            Work.TeamRepository.Update(team);
+            Work.TeamRepository.Save();
+            return AutoMapper.Mapper.Map<DataModel.Team>(team);
         }
     }
 }

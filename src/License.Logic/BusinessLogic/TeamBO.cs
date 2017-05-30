@@ -15,6 +15,8 @@ namespace License.Logic.BusinessLogic
         TeamMemberLogic logic = null;
         TeamLogic teamLogic = null;
         TeamLicenseLogic teamLicenseLogic = null;
+        LicenseLogic licLogic = null;
+        UserLicenseLogic userLicLogic = null;
 
         public string ErrorMessage { get; set; }
 
@@ -27,6 +29,8 @@ namespace License.Logic.BusinessLogic
             logic = new TeamMemberLogic();
             teamLogic = new TeamLogic();
             teamLicenseLogic = new TeamLicenseLogic();
+            userLicLogic = new UserLicenseLogic();
+            licLogic = new LicenseLogic();
         }
 
         public void Initialize()
@@ -132,7 +136,6 @@ namespace License.Logic.BusinessLogic
             return true;
         }
 
-
         public bool RemoveTeamMembers(List<TeamMember> teamMemberList)
         {
             bool status = true;
@@ -147,6 +150,7 @@ namespace License.Logic.BusinessLogic
             }
             return status;
         }
+
         /// <summary>
         /// It will returns the list of products based on selected team.
         /// </summary>
@@ -248,13 +252,78 @@ namespace License.Logic.BusinessLogic
             else
                 teamList = teamLogic.GetTeamsByUser(userId);
             List<int> productIds = new List<int>();
-            foreach(var team in teamList)
+            foreach (var team in teamList)
             {
                 var proIds = GetProductByTeamId(team.Id);
                 productIds.AddRange(proIds);
             }
 
             return productIds.Distinct().ToList();
+        }
+
+
+        public TeamConcurrentUserResponse UpdateConcurrentUsers(Team team)
+        {
+            TeamConcurrentUserResponse concurentUserResponse = new TeamConcurrentUserResponse();
+            concurentUserResponse.TeamId = team.Id;
+
+            var dbTeamObj = teamLogic.GetTeamById(team.Id);
+            var teamLicList = teamLicenseLogic.GetTeamLicense(team.Id);
+            if (dbTeamObj.ConcurrentUserCount == 0) // specifying concurrent user  for first time 
+                teamLogic.UpdateConcurrentUser(team);
+            //If dbConcurrent user is greater than the changed valuee
+            else if (dbTeamObj.ConcurrentUserCount > team.ConcurrentUserCount)
+            {
+                var proList = teamLicList.Select(t => t.ProductId).Distinct();
+                foreach (var pro in proList)
+                {
+                    var licList = teamLicList.Where(t => t.ProductId == pro).ToList();
+                    for (int k = team.ConcurrentUserCount; k < licList.Count; k++)
+                    {
+                        var deleteLic = licList[k];
+                        if (deleteLic.IsMapped)
+                            userLicLogic.RevokeTeamLicenseFromUser(deleteLic.Id);
+                        licLogic.UpdateLicenseStatus(deleteLic.LicenseId, false);
+                        teamLicenseLogic.RemoveLicenseByLicenseId(deleteLic.LicenseId);
+                    }
+                }
+                teamLogic.UpdateConcurrentUser(team);
+            }
+            //If dbConcurrent user is lesser than the changed value
+            else if (dbTeamObj.ConcurrentUserCount < team.ConcurrentUserCount)
+            {
+                var requiredLicense = team.ConcurrentUserCount - dbTeamObj.ConcurrentUserCount;
+                var proIds = teamLicList.Select(l => l.ProductId).Distinct();
+                bool isLicenseAvailable = true;
+                foreach (var pro in proIds)
+                {
+                    var licAvailableCount = licLogic.GetAvailableLicenseCountByProduct(pro);
+                    isLicenseAvailable &= licAvailableCount >= requiredLicense;
+                }
+                if (!isLicenseAvailable)
+                {
+                    concurentUserResponse.ErrorMessage = "Not much license Exist";
+                    concurentUserResponse.UserUpdateStatus = false;
+                    concurentUserResponse.OldUserCount = dbTeamObj.ConcurrentUserCount;
+                    return concurentUserResponse;
+                }
+                else
+                {
+                    TeamLicenseDataMapping licMappingObj = new TeamLicenseDataMapping();
+                    licMappingObj.ConcurrentUserCount = requiredLicense;
+                    licMappingObj.ProductIdList = proIds.ToList();
+                    licMappingObj.TeamList = new List<string>
+                    {
+                        team.Id.ToString()
+                    };
+                    teamLicenseLogic.CreateMultipleTeamLicense(licMappingObj);
+                }
+
+                teamLogic.UpdateConcurrentUser(team);
+            }
+
+            concurentUserResponse.UserUpdateStatus = true;
+            return concurentUserResponse;
         }
     }
 }

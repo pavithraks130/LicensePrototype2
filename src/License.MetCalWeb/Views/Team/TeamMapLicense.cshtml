@@ -1,39 +1,29 @@
 ﻿@model License.MetCalWeb.Models.TeamMappingDetails
 <script>
     $(document).ready(function () {
-        $('.btn-save').click(function () {
+        $('.btn-save').click(function (e) {
+            var i = 0;
             var isPostEnabled = true;
-            i = 0;
-            minQuantity = 50000;
+            var concurrentUsertext = $('.hdnConcurentUser').val();
+            var concurentUser = parseInt(concurrentUsertext);
             $('input[type=checkbox]:checked').each(function (e) {
-                var parentObj = $($('.checkCombo:checked')[e]).parent().parent();
-                var txtQty1 = $(parentObj).find('.checkCombo').find('.available_product_count').val()
-                var txtQty = $(parentObj).find('.available_product_count').find('.txt-qty').text();
-                if (minQuantity > parseInt(txtQty)) {
-                    minQuantity = parseInt(txtQty);
+                var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
+                var ctrl = $(parentObj).find('.pro_count').find('.lblProCount');
+                if (ctrl.length > 0) {
+                    var availableQty = $(ctrl).text();
+                    var qty = parseInt(availableQty);
+                    isPostEnabled = isPostEnabled && qty >= concurentUser;
                 }
                 i++;
             });
+            if (!isPostEnabled) {
+                $('#lblError').attr('style', 'display:inline');
+                $('#lblError').text('can not map license, required number of product license not exist');
+            }
             if (i == 0) {
-                $('#lblError').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else {
-                $('#lblError').attr('style', 'display:none;');
-                isPostEnabled = isPostEnabled && true;
-            }
-            var qty = $('.con_user_count').val();
-            if (parseInt(qty) <= 1) {
-                $('#lblErrorcon').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else if (parseInt(qty) > minQuantity) {
-                $('#lblErrorcon').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else {
-                $('#lblErrorcon').attr('style', 'display:none;');
-                isPostEnabled = isPostEnabled && true;
+                isPostEnabled = false;
+                $('#lblError').attr('style', "display:inline");
+                $('#lblError').text("License not selected");
             }
             return isPostEnabled;
         });
@@ -57,7 +47,7 @@
                 </div>
 
                 <div class="col-md-8" style="padding-bottom:20px">
-                    <span> Concurrent team user :<input type="text" class="con_user_count" name="concurrentUserCount" value="@Model.ConcurrentUserCount" /></span>
+                    <span> Concurrent team user : @Html.DisplayFor(m=>m.ConcurrentUserCount)
                 </div>
             </div>
             if (Model == null || Model.ProductList.Count == 0)
@@ -82,20 +72,19 @@
 
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="selectedSubscription" value="ProId:@pro.Product.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableProductCount == 0 ? "disabled='disabled'" : "")>
+                                        <input type="checkbox" name="selectedSubscription" value="ProId:@pro.Product.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableProductCount == 0 || pro.IsSelected ? "disabled='disabled'" : "")>
                                         <label class="control-label">
 
                                             @pro.Product.Name
                                         </label>
                                     </td>
-                                    <td class="available_product_count">
-                                        <label class="txt-qty" name="avl_Qty">@pro.AvailableProductCount</label>
+                                    <td class="pro_count">
+                                        <label class="lblProCount" name="avl_Qty">@pro.AvailableProductCount</label>
                                     </td>
                                 </tr>
                             }
                         </table>
-                        <label style="display:none;color:red;" id="lblError">License not selected</label><br />
-                        <label style="display:none;color:red;" id="lblErrorcon"> Concurrent team user should be greater than <strong>one</strong> and less or equal to  minimum <strong>product available</strong> count </label>
+                        <label class="message-error" id="lblError"></label><br />
                     </div>
                 </div>
                 <div class="form-group">
@@ -104,6 +93,7 @@
                     </div>
                 </div>
             }
+            @Html.HiddenFor(m => m.ConcurrentUserCount, new { @class = "hdnConcurentUser" })
         }
     </div>
 </div>

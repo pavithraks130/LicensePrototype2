@@ -14,7 +14,7 @@ namespace License.DataModel
         public string AdminId { get; set; }
         public User AdminUser { get; set; }
         public bool IsDefaultTeam { get; set; }
-
+        public int ConcurrentUserCount { get; set; }
         public ICollection<TeamMember> TeamMembers { get; set; }
     }
 
@@ -32,6 +32,14 @@ namespace License.DataModel
         public bool IsActive { get; set; }
         [JsonIgnore]
         public Team Team { get; set; }
+    }
+
+    public class TeamConcurrentUserResponse
+    {
+        public int TeamId { get; set; }
+        public bool UserUpdateStatus { get; set; }
+        public string ErrorMessage { get; set; }
+        public int OldUserCount { get; set; }
     }
 
     public class TeamDetails

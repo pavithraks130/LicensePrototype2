@@ -24,6 +24,18 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Index()
         {
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem() { Text = "1", Value = "1" });
+            items.Add(new SelectListItem() { Text = "2", Value = "2" });
+            items.Add(new SelectListItem() { Text = "3", Value = "3" });
+            items.Add(new SelectListItem() { Text = "4", Value = "4" });
+            items.Add(new SelectListItem() { Text = "5", Value = "5" });
+            items.Add(new SelectListItem() { Text = "6", Value = "6" });
+            items.Add(new SelectListItem() { Text = "7", Value = "7" });
+            items.Add(new SelectListItem() { Text = "8", Value = "8" });
+            items.Add(new SelectListItem() { Text = "9", Value = "9" });
+            items.Add(new SelectListItem() { Text = "10", Value = "10" });
+            ViewData["UserCountList"] = items;
             string userId = string.Empty;
             if (!LicenseSessionState.Instance.IsSuperAdmin)
                 userId = LicenseSessionState.Instance.User.UserId;
@@ -69,8 +81,10 @@ namespace License.MetCalWeb.Controllers
         public ActionResult TeamMapLicense(int teamId)
         {
             TeamMappingDetails teamMappingDetails = new TeamMappingDetails();
+            var team = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault();
             TempData["Teamid"] = teamId;
-            teamMappingDetails.SelectedTeamName = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault().Name;
+            teamMappingDetails.ConcurrentUserCount = team.ConcurrentUserCount;
+            teamMappingDetails.SelectedTeamName = team.Name;
             teamMappingDetails.ProductList = OnPremiseSubscriptionLogic.GetProductsFromSubscription().ToList();
             return View(teamMappingDetails);
 
@@ -210,5 +224,31 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        public ActionResult UpdateConcurentUser(int teamId, int noOfUser)
+        {
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            Team team = new Team() { Id = teamId, ConcurrentUserCount = noOfUser };
+            var response = client.PostAsJsonAsync("api/team/UpdateConcurentUser", team).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var responsedata = JsonConvert.DeserializeObject<TeamConcurrentUserResponse>(jsonData);
+                if (responsedata.UserUpdateStatus)
+                {
+                    team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
+                    if (team != null)
+                        team.ConcurrentUserCount = noOfUser;
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                    return Json(new { success = false, message = responsedata.ErrorMessage }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var failureData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                return Json(new { success = false, message = failureData.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

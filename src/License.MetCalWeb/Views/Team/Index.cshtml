@@ -6,6 +6,28 @@
 <script>
     $(function () {
 
+        $('.ddlConcurentUser').on('change', function (e) {
+            var teamId = $(this).attr('data-value');
+            var userCount = $(this).val();
+            $.ajax({
+                url: '/Team/UpdateConcurentUser',
+                method: 'GET',
+                data: { 'teamId': teamId, 'noOfUser': userCount },
+                success: function (data) {
+                    if (data.success) {
+                        alert("updated successfuly");
+                    }
+                    else {
+                        alert(data.message);
+                        $(this).val(data.OldUserCount)
+                    }
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            })
+        });
+
         $(".teamEdit").click(function () {
             var id = $(this).attr('data-id');
             var options = { "backdrop": "static", keyboard: true };
@@ -60,7 +82,7 @@
             <div class="form-group">
                 <button class="col-md-4 btn btn-primary btn-lg btn-custom btnCreate">Create Team</button>
             </div>
-            <br/>
+            <br />
             <br />
             <table class="table" style="table-layout:fixed; padding:10px">
                 <tr>
@@ -83,21 +105,19 @@
                             }
                         </td>
                         <td class="col-md-4">
-                           <select  name="con_count" >
-                               <option value="1">1</option>
-                           </select>
+                            @Html.DropDownList("user_count_dropdown", new SelectList(ViewData["UserCountList"] as IEnumerable<SelectListItem>, "Text", "Value", @obj.ConcurrentUserCount), "", new { @class = "ddlConcurentUser form-control", data_value = @obj.Id })
                             @*<input type="text" name="con_count" value=@obj.ConcurrentUserCount style="width:40px" />*@
                         </td>
                         <td class="col-md-4">
                             <button class="alert-success">
                                 @Html.ActionLink("Add License", "TeamMapLicense", "Team", new { teamId = @obj.Id }, null)
                             </button>
-                            </td>
+                        </td>
                         <td class="col-md-4">
                             <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeTeamLicense", "Team", new { teamId = @obj.Id }, null)</button>
                         </td>
                     </tr>
-                }
+    }
             </table>
         </div>
     </div>

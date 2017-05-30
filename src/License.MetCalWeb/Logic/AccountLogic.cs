@@ -58,10 +58,14 @@ namespace License.MetCalWeb.Logic
 
         public void UpdateLogoutStatus(string userId, ServiceType type)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(type);
-            User userModel = new User();
-            userModel.UserId = userId;
-            userModel.IsActive = false;
+            if (String.IsNullOrEmpty(userId))
+                return;
+            HttpClient client = WebApiServiceLogic.CreateClientWithoutToken(type);
+            User userModel = new User()
+            {
+                UserId = userId,
+                IsActive = false
+            };
             client.PutAsJsonAsync("api/user/UpdateActiveStatus", userModel);
         }
 

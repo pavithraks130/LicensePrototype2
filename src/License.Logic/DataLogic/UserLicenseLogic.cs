@@ -179,5 +179,16 @@ namespace License.Logic.DataLogic
                 Work.UserLicenseRepository.Save();
             }
         }
+
+        public void RevokeTeamLicenseFromUser(int teamLicenseId)
+        {
+            var lic = Work.UserLicenseRepository.GetData(l => l.TeamLicenseId == teamLicenseId);
+            if (lic != null)
+            {
+                var selectedLic = lic.FirstOrDefault();
+                Work.UserLicenseRepository.Delete(selectedLic);
+                Work.UserLicenseRepository.Save();
+            }
+        }
     }
 }

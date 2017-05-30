@@ -33,6 +33,7 @@ namespace License.MetCalWeb.Models
             ProductList = new List<Product>();
         }
     }
+
     public class DeleteTeamDetails
     {
         public string LogInUserId { get; set; }
@@ -57,8 +58,7 @@ namespace License.MetCalWeb.Models
         public bool IsSelected { get; set; }
         public bool IsActive { get; set; }
     }
-
-
+    
     public class TeamMemberResponse
     {
         public string UserId { get; set; }
@@ -67,5 +67,13 @@ namespace License.MetCalWeb.Models
 
         public string Password { get; set; }
         public int TeamMemberId { get; set; }
+    }
+
+    public class TeamConcurrentUserResponse
+    {
+        public int TeamId { get; set; }
+        public bool UserUpdateStatus { get; set; }
+        public string ErrorMessage { get; set; }
+        public int OldUserCount { get; set; }
     }
 }

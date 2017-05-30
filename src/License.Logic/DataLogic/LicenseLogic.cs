@@ -91,7 +91,14 @@ namespace License.Logic.DataLogic
 
         }
 
-      
+        public int GetAvailableLicenseCountByProduct(int productId)
+        {
+            var licList = Work.LicenseDataRepository.GetData(l => l.ProductId == productId && l.IsMapped == false).ToList();
+            if (licList != null && licList.Count != 0)
+                return licList.Count;
+            else
+                return 0;
+        }
 
     }
 }

@@ -135,5 +135,16 @@ namespace OnPremise.WebAPI.Controllers
             var data = teamLicenseLogic.GetProductFromLicenseData();
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }     
+
+        [HttpPost]
+        [Route("UpdateConcurentUser")]
+        public HttpResponseMessage UpdateConcurentUser(Team team)
+        {
+            var response = teamBoLogic.UpdateConcurrentUsers(team);
+            if (string.IsNullOrEmpty(teamBoLogic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBoLogic.ErrorMessage);
+        }
     }
 }
