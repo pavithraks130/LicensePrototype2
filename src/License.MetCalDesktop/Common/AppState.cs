@@ -50,6 +50,7 @@ namespace License.MetCalDesktop.Common
         public Team SelectedTeam { get; set; }
         public SubscriptionType SelectedSubscription { get; set; }
 
+        public ConcurrentUserLogin UserLogin { get; set; }
         public static HttpClient CreateClient(string serviceType)
         {
             string url = string.Empty;

@@ -412,7 +412,6 @@
     <Content Include="Views\ProductCategory\Index.cshtml" />
     <Content Include="Views\Subscription\Renew.cshtml" />
     <Content Include="Views\License\SelectListOfUser.cshtml" />
-    <Content Include="Views\License\TeamsList.cshtml" />
     <Content Include="Views\Team\AssignLicense.cshtml" />
     <Content Include="Views\Team\TeamMapLicense.cshtml" />
     <Content Include="Views\Team\RevokeTeamLicense.cshtml" />
