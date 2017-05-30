@@ -21,8 +21,8 @@ namespace License.MetCalWeb.Controllers
     {
         string ErrorMessage;
         private AccountLogic _accountLogic = null;
-
         private IAuthenticationManager _authManager = null;
+
         private IAuthenticationManager AuthenticationManager
         {
             get

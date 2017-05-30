@@ -155,6 +155,7 @@ namespace License.MetCalDesktop.businessLogic
                         }
                         AppState.Instance.IsSuperAdmin = true;
                     }
+
                     CreateCredentialFile(user, password);
                     if (AppState.Instance.IsSuperAdmin)
                     {
