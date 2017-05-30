@@ -213,10 +213,19 @@ namespace License.MetCalWeb.Controllers
         public ActionResult RevokeTeamLicense(int teamId,params string[] SelectedSubscription)
         {
             DeleteTeamDetails details = new DeleteTeamDetails();
+            details.LogInUserId = LicenseSessionState.Instance.User.UserId;
             details.TeamId = teamId;
             details.productIdList = ExtractLicenseData(SelectedSubscription);
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/Delete", details).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                var errorMessageContent = response.ReasonPhrase + " - " + obj.Message;
+                ModelState.AddModelError("", errorMessageContent);
+                return View("TeamContainer", "TeamManagement");
+            }
             return RedirectToAction("TeamContainer", "TeamManagement");
         }
 

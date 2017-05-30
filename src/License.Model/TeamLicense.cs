@@ -32,6 +32,7 @@ namespace License.DataModel
 
     public class DeleteTeamDetails
     {
+        public string LogInUserId { get; set; }
         public int TeamId { get; set; }
         public List<int> productIdList { get; set; }
         public DeleteTeamDetails()

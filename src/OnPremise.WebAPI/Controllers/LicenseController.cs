@@ -211,8 +211,20 @@ namespace OnPremise.WebAPI.Controllers
         public HttpResponseMessage DeleteTeamLicenses(DeleteTeamDetails data)
         {
             TeamBO teamBOLogic = new TeamBO();
-            var status = teamBOLogic.DeleteTeamLicense(data.productIdList, data.TeamId);
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            var result = teamLicenselogic.CheckConcurrentUser(data.TeamId);
+            if (result.Count == 1 && result.First().InviteeUserId == data.LogInUserId)
+            {
+                var status = teamBOLogic.DeleteTeamLicense(data.productIdList, data.TeamId);
+                if (status)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Success");
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBOLogic.ErrorMessage);
+                }
+            }
+            return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "ConCurrent User Access Failed");
         }
     }
 }

@@ -149,6 +149,12 @@ namespace License.Logic.DataLogic
             Work.TeamLicenseRepository.Save();
             return deletestatus;
         }
+        public List<Core.Model.TeamMember> CheckConcurrentUser(int teamId)
+        {
+            var userList = Work.TeamMemberRepository.GetData(t => t.TeamId == teamId).ToList();
+            var users = userList.Where(u => u.InviteeUser.IsActive == true).ToList();
+            return users;
+        }
 
     }
 }
