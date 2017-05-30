@@ -21,10 +21,7 @@ namespace License.MetCalWeb.Controllers
     {
         string ErrorMessage;
         private AccountLogic _accountLogic = null;
-
         private IAuthenticationManager _authManager = null;
-        private readonly string applicationCode = "kXtpZlZCESG7F8jo+uVuaA==";
-        private readonly string applicationSecretPass = "WebPortal";
 
         private IAuthenticationManager AuthenticationManager
         {
