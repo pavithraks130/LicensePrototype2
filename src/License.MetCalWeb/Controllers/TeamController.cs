@@ -68,15 +68,6 @@ namespace License.MetCalWeb.Controllers
                                         .Select(x => x.ErrorMessage));
             return Json(new { success = false, message = _message });
         }
-        public ActionResult AssignLicense()
-        {
-            List<Team> teams = new List<Team>();
-            if (LicenseSessionState.Instance.TeamList != null && LicenseSessionState.Instance.TeamList.Count > 0)
-                teams = LicenseSessionState.Instance.TeamList.ToList();
-            else
-                teams = new List<Team>();
-            return View(teams);
-        }
 
         public ActionResult TeamMapLicense(int teamId)
         {
