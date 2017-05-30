@@ -18,8 +18,10 @@
                         alert("updated successfuly");
                     }
                     else {
+                        console.log($(this));
+                        console.log($(e));
+                        e.target.value = data.OldUserCount;
                         alert(data.message);
-                        $(this).val(data.OldUserCount)
                     }
                 },
                 error: function () {

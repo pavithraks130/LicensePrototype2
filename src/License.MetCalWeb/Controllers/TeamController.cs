@@ -238,16 +238,18 @@ namespace License.MetCalWeb.Controllers
                     team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
                     if (team != null)
                         team.ConcurrentUserCount = noOfUser;
-                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = "", OldUserCount = team.ConcurrentUserCount }, JsonRequestBehavior.AllowGet);
                 }
                 else
-                    return Json(new { success = false, message = responsedata.ErrorMessage }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, message = responsedata.ErrorMessage, OldUserCount = responsedata.OldUserCount }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var failureData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                return Json(new { success = false, message = failureData.Message }, JsonRequestBehavior.AllowGet);
+                team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
+
+                return Json(new { success = false, message = failureData.Message, OldUserCount = team != null ? team.ConcurrentUserCount : 0 }, JsonRequestBehavior.AllowGet);
             }
         }
     }
