@@ -179,32 +179,44 @@ namespace License.Logic.BusinessLogic
             List<int> collectionOfprodIdToDelete = new List<int>();//It contains same product id multiple times.
 
             List<Core.Model.LicenseData> licenseDataList = new List<Core.Model.LicenseData>();
-            //by using teamid select all License Id from teamlicense table
-            var teamLicenseIdList = teamLicenseLogic.GetTeamLicense(teamId).Select(tl => tl.LicenseId).ToList();
-            //by using license id find the product id from license data table
-            var licenseData = teamLicenseLogic.GetLicenseData();
-            foreach (var liceId in teamLicenseIdList)
+            try
             {
-                var liceData = licenseData.Where(x => x.Id == liceId).FirstOrDefault();
-                collectionOfprodIdToDelete.Add(liceData.ProductId);
-                licenseDataList.Add(liceData);
+
+
+                //by using teamid select all License Id from teamlicense table
+                var teamLicenseIdList = teamLicenseLogic.GetTeamLicense(teamId).Select(tl => tl.LicenseId).ToList();
+                //by using license id find the product id from license data table
+                var licenseData = teamLicenseLogic.GetLicenseData();
+                foreach (var liceId in teamLicenseIdList)
+                {
+                    var liceData = licenseData.Where(x => x.Id == liceId).FirstOrDefault();
+                    collectionOfprodIdToDelete.Add(liceData.ProductId);
+                    licenseDataList.Add(liceData);
+                }
+                //select only delete request product id from  prodIdList list
+                var distinctSelectedTeamProductId = collectionOfprodIdToDelete.Distinct();
+                var outerJoinproductId = distinctSelectedTeamProductId.Except(productIdToDelete).ToList();
+                foreach (int id in outerJoinproductId)
+                {
+                    collectionOfprodIdToDelete.RemoveAll(x => x.Equals(id));
+                    licenseDataList.RemoveAll(p => p.ProductId.Equals(id));
+                }
+                foreach (var ld in licenseDataList)
+                {
+                    //Making IsMapped true from LicenseData table
+                    teamLicenseLogic.UpdateLicenseDataTableByProductId(ld.Id);
+                    //Deleting license from TeamLicense table.
+                    teamLicenseLogic.RemoveLicenseByLicenseId(ld.Id);
+                }
+                return true;
+
             }
-            //select only delete request product id from  prodIdList list
-            var distinctSelectedTeamProductId = collectionOfprodIdToDelete.Distinct();
-            var outerJoinproductId = distinctSelectedTeamProductId.Except(productIdToDelete).ToList();
-            foreach (int id in outerJoinproductId)
+            catch (Exception)
             {
-                collectionOfprodIdToDelete.RemoveAll(x => x.Equals(id));
-                licenseDataList.RemoveAll(p => p.ProductId.Equals(id));
+
+                return false;
             }
-            foreach (var ld in licenseDataList)
-            {
-                //Making IsMapped true from LicenseData table
-                teamLicenseLogic.UpdateLicenseDataTableByProductId(ld.Id);
-                //Deleting license from TeamLicense table.
-                teamLicenseLogic.RemoveLicenseByLicenseId(ld.Id);
-            }
-            return true;
+
         }
 
         public List<int> GetProductByTeamId(int teamId)

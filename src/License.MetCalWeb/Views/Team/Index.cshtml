@@ -59,28 +59,42 @@
         <div class="container">
             <div class="form-group">
                 <button class="col-md-4 btn btn-primary btn-lg btn-custom btnCreate">Create Team</button>
-
-                <button class="col-md-4 btn btn-primary btn-lg btn-custom">
-                    @Html.ActionLink("Add/Remove License", "AssignLicense", "Team", new { @class = "btn-primary" })
-                </button>
             </div>
-            <table class="table" style="table-layout:fixed;">
+            <br/>
+            <br />
+            <table class="table" style="table-layout:fixed; padding:10px">
                 <tr>
                     <th>Team Name</th>
                     <th>Team Size</th>
                     <th>Action</th>
+                    <th>Concurrent Users</th>
+                    <th colspan="2">Add/Remove License</th>
                 </tr>
                 @foreach (var obj in Model)
                 {
                     <tr>
-                        <td>@obj.Name</td>
-                        <td>@(obj.TeamMembers == null ? 0 : obj.TeamMembers.Count)</td>
-                        <td>
+                        <td class="col-md-4">@obj.Name</td>
+                        <td class="col-md-4">@(obj.TeamMembers == null ? 0 : obj.TeamMembers.Count)</td>
+                        <td class="col-md-4">
                             @if (obj.IsDefaultTeam == false && LicenseSessionState.Instance.IsSuperAdmin)
                             {
                                 <a href="javascript:void(0);" class="teamEdit" data-id="@obj.Id">Edit</a> <label>|</label>
                                 @Html.ActionLink("Delete", "DeleteTeam", "Team", new { id = obj.Id }, null)
                             }
+                        </td>
+                        <td class="col-md-4">
+                           <select  name="con_count" >
+                               <option value="1">1</option>
+                           </select>
+                            @*<input type="text" name="con_count" value=@obj.ConcurrentUserCount style="width:40px" />*@
+                        </td>
+                        <td class="col-md-4">
+                            <button class="alert-success">
+                                @Html.ActionLink("Add License", "TeamMapLicense", "Team", new { teamId = @obj.Id }, null)
+                            </button>
+                            </td>
+                        <td class="col-md-4">
+                            <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeTeamLicense", "Team", new { teamId = @obj.Id }, null)</button>
                         </td>
                     </tr>
                 }

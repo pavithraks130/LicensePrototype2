@@ -212,7 +212,11 @@ namespace OnPremise.WebAPI.Controllers
         {
             TeamBO teamBOLogic = new TeamBO();
             var status = teamBOLogic.DeleteTeamLicense(data.productIdList, data.TeamId);
+            if (status)
+            {
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            }
+            return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBOLogic.ErrorMessage);
         }
     }
 }

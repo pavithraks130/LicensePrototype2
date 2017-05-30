@@ -24,14 +24,11 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Index()
         {
-            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
-            {
-                string userId = string.Empty;
-                if (!LicenseSessionState.Instance.IsSuperAdmin)
-                    userId = LicenseSessionState.Instance.User.UserId;
-                var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
-                LicenseSessionState.Instance.TeamList = teamList;
-            }
+            string userId = string.Empty;
+            if (!LicenseSessionState.Instance.IsSuperAdmin)
+                userId = LicenseSessionState.Instance.User.UserId;
+            var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+            LicenseSessionState.Instance.TeamList = teamList;
             return View(LicenseSessionState.Instance.TeamList);
         }
 
@@ -68,15 +65,6 @@ namespace License.MetCalWeb.Controllers
                                         .Select(x => x.ErrorMessage));
             return Json(new { success = false, message = _message });
         }
-        public ActionResult AssignLicense()
-        {
-            List<Team> teams = new List<Team>();
-            if (LicenseSessionState.Instance.TeamList != null && LicenseSessionState.Instance.TeamList.Count > 0)
-                teams = LicenseSessionState.Instance.TeamList.ToList();
-            else
-                teams = new List<Team>();
-            return View(teams);
-        }
 
         public ActionResult TeamMapLicense(int teamId)
         {
@@ -93,7 +81,7 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult TeamMapLicense(TeamMappingDetails teamMappingDetails, params string[] selectedSubscription)
         {
-            var responseData = UpdateLicense(teamMappingDetails.ConcurrentUserCount,selectedSubscription);
+            var responseData = UpdateLicense(teamMappingDetails.ConcurrentUserCount, selectedSubscription);
             if (!String.IsNullOrEmpty(responseData))
             {
                 ModelState.AddModelError("", responseData);
@@ -108,7 +96,7 @@ namespace License.MetCalWeb.Controllers
             List<string> teamIdList = new List<string>();
             teamIdList.Add(TempData["Teamid"].ToString());
             List<int> listOfProId = ExtractLicenseData(selectedSubscription);
-            TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { ConcurrentUserCount= concurrentUserCount, ProductIdList = listOfProId, TeamList = teamIdList };
+            TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { ConcurrentUserCount = concurrentUserCount, ProductIdList = listOfProId, TeamList = teamIdList };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/CreateTeamLicence", mapping).Result;
             if (!response.IsSuccessStatusCode)
@@ -210,14 +198,16 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RevokeTeamLicense(int teamId,params string[] SelectedSubscription)
+        public ActionResult RevokeTeamLicense(int teamId, params string[] SelectedSubscription)
         {
             DeleteTeamDetails details = new DeleteTeamDetails();
+            details.LogInUserId = LicenseSessionState.Instance.User.UserId;
             details.TeamId = teamId;
             details.productIdList = ExtractLicenseData(SelectedSubscription);
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/Delete", details).Result;
             return RedirectToAction("TeamContainer", "TeamManagement");
+
         }
 
     }
