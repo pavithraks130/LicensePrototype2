@@ -226,16 +226,18 @@ namespace License.MetCalDesktop.ViewModel
 
         private void CloseWindow(object sender, EventArgs e1)
         {
-            var e = (CustomEventArgs)e1;
+            
             (sender as System.Windows.Window).Close();
-            if (e.IsConcurrentuserLoggedIn)
+            if (AppState.Instance.UserLogin == null)
+                return;
+            if (AppState.Instance.UserLogin.IsUserLoggedIn)
                 NavigateNextPage?.Invoke("Dashboard", null);
             else
             {
                 AppState.Instance.User = null;
                 AppState.Instance.UserLicenseList = null;
                 AppState.Instance.IsUserLoggedIn = false;
-                MessageBox.Show(e.ErrorMessage);
+                MessageBox.Show(AppState.Instance.UserLogin.ErrorOrNotificationMessage);
             }
         }
     }

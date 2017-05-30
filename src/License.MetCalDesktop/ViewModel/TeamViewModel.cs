@@ -17,7 +17,7 @@ namespace License.MetCalDesktop.ViewModel
     {
         public delegate void ClosePopupWindowEvent(object sender,CustomEventArgs e);
 
-        public EventHandler<CustomEventArgs> ClosepoupWindow;
+        public EventHandler ClosepoupWindow;
 
         public ICommand UpdateCommand { get; set; }
 
@@ -52,16 +52,18 @@ namespace License.MetCalDesktop.ViewModel
             userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
             userLogin.UserId = AppState.Instance.User.UserId;
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
             var jsonData = response.Content.ReadAsStringAsync().Result;
             var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
-            CustomEventArgs e = new CustomEventArgs();
-            e.IsConcurrentuserLoggedIn = userLoginObj.IsUserLoggedIn;
-            if (userLoginObj.IsUserLoggedIn)
-                e.ErrorMessage = "";
-            else
-                e.ErrorMessage = userLoginObj.ErrorOrNotificationMessage;
-            ClosepoupWindow?.Invoke(this,e);
+            AppState.Instance.UserLogin = userLoginObj;
+            //CustomEventArgs e = new CustomEventArgs();
+            //e.IsConcurrentuserLoggedIn = userLoginObj.IsUserLoggedIn;
+            //if (userLoginObj.IsUserLoggedIn)
+            //    e.ErrorMessage = "";
+            //else
+            //    e.ErrorMessage = userLoginObj.ErrorOrNotificationMessage;
+            ClosepoupWindow?.Invoke(this,new EventArgs());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
