@@ -109,6 +109,7 @@
     <Compile Include="Datatype.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EncryptDecrypt.cs" />
     <Compile Include="LicenseKey.cs">
       <SubType>Code</SubType>
     </Compile>

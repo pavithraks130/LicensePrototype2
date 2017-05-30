@@ -21,8 +21,8 @@ namespace License.MetCalWeb.Controllers
     {
         string ErrorMessage;
         private AccountLogic _accountLogic = null;
-
         private IAuthenticationManager _authManager = null;
+
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -182,7 +182,7 @@ namespace License.MetCalWeb.Controllers
                         }
                         else
                         {
-                            LogOut();
+                            ClearSession();
                             ModelState.AddModelError("", "Maximum user has logged in Please try after some time");
                             return View();
                         }
@@ -293,10 +293,14 @@ namespace License.MetCalWeb.Controllers
             }
             else
                 _accountLogic.UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
+            ClearSession();
+            return RedirectToAction("LogIn");
+        }
 
+        public void ClearSession()
+        {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
-            return RedirectToAction("LogIn");
         }
 
         public ActionResult Confirm(string invite, string status)
@@ -355,7 +359,7 @@ namespace License.MetCalWeb.Controllers
             }
             else
             {
-                LogOut();
+                ClearSession();
                 return Json(new { success = false, message = "Maximum users as already logged in" });
             }
         }

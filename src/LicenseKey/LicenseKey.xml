@@ -164,6 +164,27 @@
             <param name="targetLength">The length of the string.</param>
             <returns>The string value.</returns>
         </member>
+        <member name="T:LicenseKey.EncryptDecrypt">
+            <summary>
+            Class to Encrypt and Decrypt Strings
+            </summary>
+        </member>
+        <member name="M:LicenseKey.EncryptDecrypt.EncryptString(System.String,System.String)">
+            <summary>
+            Encrypts a String with Pass Phrase
+            </summary>
+            <param name="plainText">Plain Text</param>
+            <param name="passPhrase">Pass Phrase</param>
+            <returns></returns>
+        </member>
+        <member name="M:LicenseKey.EncryptDecrypt.DecryptString(System.String,System.String)">
+            <summary>
+            Encrypts a String with Pass Phrase
+            </summary>
+            <param name="cipherText">Cipher Text</param>
+            <param name="passPhrase">Pass Phrase</param>
+            <returns></returns>
+        </member>
         <member name="T:LicenseKey.GenerateKey">
             <summary>
                 A Summary description for GenerateKey.

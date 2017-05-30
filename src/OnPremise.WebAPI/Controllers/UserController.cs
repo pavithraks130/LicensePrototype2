@@ -137,6 +137,7 @@ namespace OnPremise.WebAPI.Controllers
         [AllowAnonymous]
         public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
         {
+            
             var user = UserManager.FindByEmail(model.Email);
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
             ForgotPasswordToken passwordToken = new ForgotPasswordToken();
@@ -215,8 +216,11 @@ namespace OnPremise.WebAPI.Controllers
         [Route("IsConcurrentUserLoggedIn")]
         public HttpResponseMessage IsConcurrentUserLoggedIn(ConcurrentUserLogin userLogin)
         {
-            LicenseBO licBO = new LicenseBO();
-            licBO.UserManager = UserManager;
+            Initialize();
+            LicenseBO licBO = new LicenseBO()
+            {
+                UserManager = UserManager
+            };
             HttpStatusCode statusCode;
             var status = licBO.ValidateConcurrentUser(userLogin.TeamId, userLogin.UserId);
             if (status)

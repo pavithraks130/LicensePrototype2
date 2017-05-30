@@ -137,13 +137,16 @@ namespace License.Logic.DataLogic
         public void AssignTeamLicenseToUser(int teamId, string userId)
         {
             var teamLicData = Work.TeamLicenseRepository.GetData(t => t.TeamId == teamId).ToList();
+            var userLicData = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.TeamId == teamId).ToList();
             if (teamLicData == null)
                 return;
             var productList = teamLicData.Select(l => l.ProductId).Distinct();
             foreach (var proId in productList)
             {
+                var mappedlic = teamLicData.Where(l => l.ProductId == proId && l.IsMapped == true).ToList().Select(l => l.Id).ToList();
                 var data = teamLicData.FirstOrDefault(l => l.ProductId == proId && l.IsMapped == false);
-                if (data != null)
+                var licMapped = userLicData.Any(l => mappedlic.Contains(l.TeamLicenseId));
+                if (licMapped == false && data != null)
                 {
                     UserLicense lic = new UserLicense()
                     {

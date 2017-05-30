@@ -8,12 +8,15 @@ using System.Security.Cryptography;
 using License.MetCalDesktop.Common;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace License.MetCalDesktop.businessLogic
 {
     public class LoginLogic
     {
         private string LoginFileName = "credential.txt";
+        private string applicationCode = "zDzH/Enor7NV/QbSy6rNbw==";
+        private string applicationSecretPass = "MetCal";
         public string ErrorMessage { get; set; }
 
         public void CreateCredentialFile(User user, string password)
@@ -112,6 +115,10 @@ namespace License.MetCalDesktop.businessLogic
                         new KeyValuePair<string, string>("grant_type", "password"),
                         new KeyValuePair<string, string>("username", email),
                         new KeyValuePair<string, string>("password", password) });
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                EncodeToBase64(string.Format("{0}:{1}",
+                applicationCode,
+                applicationSecretPass)));
             var response = client.PostAsync("/Authenticate", formData).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -135,6 +142,10 @@ namespace License.MetCalDesktop.businessLogic
                             new KeyValuePair<string, string>("username", email),
                             new KeyValuePair<string, string>("password", password) });
                         client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                EncodeToBase64(string.Format("{0}:{1}",
+                applicationCode,
+                applicationSecretPass)));
                         response = client.PostAsync("/Authenticate", formData1).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -142,9 +153,9 @@ namespace License.MetCalDesktop.businessLogic
                             token = JsonConvert.DeserializeObject<AccessToken>(jsondata);
                             AppState.Instance.CentralizedToken = token;
                         }
-
                         AppState.Instance.IsSuperAdmin = true;
                     }
+
                     CreateCredentialFile(user, password);
                     if (AppState.Instance.IsSuperAdmin)
                     {
@@ -200,6 +211,11 @@ namespace License.MetCalDesktop.businessLogic
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
+        }
+        private static string EncodeToBase64(string value)
+        {
+            var toEncodeAsBytes = Encoding.UTF8.GetBytes(value);
+            return Convert.ToBase64String(toEncodeAsBytes);
         }
     }
 }
