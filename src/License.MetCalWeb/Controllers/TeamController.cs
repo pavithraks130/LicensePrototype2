@@ -24,14 +24,11 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Index()
         {
-            if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
-            {
-                string userId = string.Empty;
-                if (!LicenseSessionState.Instance.IsSuperAdmin)
-                    userId = LicenseSessionState.Instance.User.UserId;
-                var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
-                LicenseSessionState.Instance.TeamList = teamList;
-            }
+            string userId = string.Empty;
+            if (!LicenseSessionState.Instance.IsSuperAdmin)
+                userId = LicenseSessionState.Instance.User.UserId;
+            var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+            LicenseSessionState.Instance.TeamList = teamList;
             return View(LicenseSessionState.Instance.TeamList);
         }
 

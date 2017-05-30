@@ -8,7 +8,7 @@
             $('input[type=checkbox]:checked').each(function (e) {
                 var parentObj = $($('.checkCombo:checked')[e]).parent().parent();
                 var txtQty1 = $(parentObj).find('.checkCombo').find('.available_product_count').val()
-                var txtQty = $(parentObj).find('.available_product_count').find('.txt-qty').val();
+                var txtQty = $(parentObj).find('.available_product_count').find('.txt-qty').text();
                 if (minQuantity > parseInt(txtQty)) {
                     minQuantity = parseInt(txtQty);
                 }
@@ -89,9 +89,8 @@
                                         </label>
                                     </td>
                                     <td class="available_product_count">
-                                        <input type="text" class="txt-qty form-control" name="avl_Qty" value="@pro.AvailableProductCount" readonly="readonly" disabled="disabled" />
+                                        <label class="txt-qty" name="avl_Qty">@pro.AvailableProductCount</label>
                                     </td>
-
                                 </tr>
                             }
                         </table>
