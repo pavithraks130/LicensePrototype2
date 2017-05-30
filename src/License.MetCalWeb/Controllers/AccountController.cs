@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -20,6 +22,9 @@ namespace License.MetCalWeb.Controllers
         string ErrorMessage;
 
         private IAuthenticationManager _authManager = null;
+        private readonly string applicationCode = "kXtpZlZCESG7F8jo+uVuaA==";
+        private readonly string applicationSecretPass = "WebPortal";
+
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -369,6 +374,14 @@ namespace License.MetCalWeb.Controllers
                                 new KeyValuePair<string, string>("username", model.Email),
                                 new KeyValuePair<string, string>("password", model.Password)
                             });
+            if(webApiType == ServiceType.OnPremiseWebApi)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                EncodeToBase64(string.Format("{0}:{1}",
+                applicationCode,
+                applicationSecretPass)));
+            }
+
             var response = await client.PostAsync("Authenticate", formContent);
             if (response.IsSuccessStatusCode)
             {
@@ -390,6 +403,10 @@ namespace License.MetCalWeb.Controllers
             return false;
         }
 
-      
+        private static string EncodeToBase64(string value)
+        {
+            var toEncodeAsBytes = Encoding.UTF8.GetBytes(value);
+            return Convert.ToBase64String(toEncodeAsBytes);
+        }
     }
 }
