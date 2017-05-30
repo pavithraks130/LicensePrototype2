@@ -17,8 +17,24 @@ namespace OnPremise.WebAPI.Common
     {
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            if (context.ClientId != String.Empty)
+            string clientId = string.Empty, clientSecret = string.Empty;
+            context.TryGetBasicCredentials(out clientId, out clientSecret);
+            if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && ValidateEncryptedApplicationIdentity(clientId, clientSecret))
+            {
                 context.Validated();
+            }
+            else
+            {
+                context.SetError("invalid_client", "Client credentials could not be retrieved through the Authorization header.");
+                context.Rejected();
+            }
+        }
+
+        private bool ValidateEncryptedApplicationIdentity(string clientId, string clientSecret)
+        {
+            var decryptedApplicationIdentity = LicenseKey.EncryptDecrypt.DecryptString(clientId, clientSecret);
+            //TODO: Need this to be more robust, right now product IDS are being set in a range for a single product
+            return decryptedApplicationIdentity.Contains("TO");
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
