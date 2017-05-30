@@ -119,7 +119,7 @@ namespace License.Logic.DataLogic
         public List<UserLicense> GetUserLicense(string userId)
         {
             List<UserLicense> licenses = new List<UserLicense>();
-            var datas = Work.UserLicenseRepository.GetData(l => l.UserId == userId);
+            var datas = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.IsTeamLicense == false);
             foreach (var data in datas)
                 licenses.Add(AutoMapper.Mapper.Map<Core.Model.UserLicense, UserLicense>(data));
             return licenses;

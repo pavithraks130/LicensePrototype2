@@ -71,6 +71,13 @@ namespace License.Logic.BusinessLogic
             var usersubList = userSubLogic.GetSubscription(adminId);
             SubscriptionBO psLogic = new SubscriptionBO();
             var subList = psLogic.GetSubscriptionFromFile();
+            List<int> proList = new List<int>();
+            if (!String.IsNullOrEmpty(userId))
+            {
+                bool isAdmin = adminId == userId;
+                TeamBO teamBo = new TeamBO();
+                proList = teamBo.GetTeamProductByUserId(userId, isAdmin);
+            }
             foreach (var userSub in usersubList)
             {
                 var subType = subList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
@@ -87,12 +94,13 @@ namespace License.Logic.BusinessLogic
 
                     foreach (var pro in subType.Products)
                     {
-                        var licList = userlicList.Where(p => p.ProductId == pro.Id).ToList();
-                        //  UserLicenseLogic userLicLogic = new UserLicenseLogic();
-                        //int usedLicCount = userLicLogic.GetUserLicenseCount(userSub.Id, pro.Id);
-                        var proObj = new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = licList.Count, UsedLicenseCount = licList.Where(l => l.IsMapped == true).Count() };
-                        proObj.IsDisabled = proObj.TotalLicenseCount == proObj.UsedLicenseCount;
-                        model.Products.Add(proObj);
+                        if (!proList.Contains(pro.Id))
+                        {
+                            var licList = userlicList.Where(p => p.ProductId == pro.Id).ToList();
+                            var proObj = new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = licList.Count, UsedLicenseCount = licList.Where(l => l.IsMapped == true).Count() };
+                            proObj.IsDisabled = proObj.TotalLicenseCount == proObj.UsedLicenseCount;
+                            model.Products.Add(proObj);
+                        }
                     }
                     lstSsubscriptionDetail.Add(model);
                 }
@@ -102,6 +110,8 @@ namespace License.Logic.BusinessLogic
             {
                 UserLicenseLogic logic = new UserLicenseLogic();
                 var data = logic.GetUserLicense(userId);
+                if(data != null && data.Count >0)
+                    data = data.Where(p => p.IsTeamLicense == false).ToList();
                 foreach (var obj in data)
                 {
                     var subObj = lstSsubscriptionDetail.FirstOrDefault(f => f.UserSubscriptionId == obj.License.UserSubscriptionId);
@@ -115,9 +125,7 @@ namespace License.Logic.BusinessLogic
                 }
             }
             return lstSsubscriptionDetail;
-
         }
-
 
         public void UpdateSubscriptionRenewal(List<UserSubscriptionData> subscriptionData, string userId)
         {

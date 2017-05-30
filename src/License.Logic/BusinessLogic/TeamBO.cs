@@ -156,29 +156,13 @@ namespace License.Logic.BusinessLogic
         {
             SubscriptionBO subscriptionBO = new SubscriptionBO();
             List<Product> productList = new List<Product>();
-            List<int> productIdList = new List<int>();
-            var teamLicenseIdList = teamLicenseLogic.GetTeamLicense(teamId).Select(tl => tl.LicenseId).ToList();
-            if (teamLicenseIdList.Count > 0)
+            var productIdList = GetProductByTeamId(teamId);
+            for (int index = 0; index < productIdList.Count; index++)
             {
-                var licenseData = teamLicenseLogic.GetLicenseData();
-                //Get distinct Product Id List, by license id 
-                foreach (var liceId in teamLicenseIdList)
+                var product = subscriptionBO.GetProductFromJsonFile(productIdList[index]);
+                if (product != null)
                 {
-                    int licenseProductId = licenseData.Where(x => x.Id == liceId).Select(p => p.ProductId).FirstOrDefault();
-                    //check whether the product id already exist in list
-                    if (productIdList.Count == 0 || !productIdList.Contains(licenseProductId))
-                    {
-                        productIdList.Add(licenseProductId);
-                    }
-                }
-
-                for (int index = 0; index < productIdList.Count; index++)
-                {
-                    var product = subscriptionBO.GetProductFromJsonFile(productIdList[index]);
-                    if (product != null)
-                    {
-                        productList.Add(product);
-                    }
+                    productList.Add(product);
                 }
             }
             return productList;
@@ -210,7 +194,7 @@ namespace License.Logic.BusinessLogic
             var outerJoinproductId = distinctSelectedTeamProductId.Except(productIdToDelete).ToList();
             foreach (int id in outerJoinproductId)
             {
-                collectionOfprodIdToDelete.RemoveAll(x=>x.Equals(id));
+                collectionOfprodIdToDelete.RemoveAll(x => x.Equals(id));
                 licenseDataList.RemoveAll(p => p.ProductId.Equals(id));
             }
             foreach (var ld in licenseDataList)
@@ -221,6 +205,44 @@ namespace License.Logic.BusinessLogic
                 teamLicenseLogic.RemoveLicenseByLicenseId(ld.Id);
             }
             return true;
+        }
+
+        public List<int> GetProductByTeamId(int teamId)
+        {
+            List<int> productIdList = new List<int>();
+            var teamLicenseIdList = teamLicenseLogic.GetTeamLicense(teamId).Select(tl => tl.LicenseId).ToList();
+            if (teamLicenseIdList.Count > 0)
+            {
+                var licenseData = teamLicenseLogic.GetLicenseData();
+                //Get distinct Product Id List, by license id 
+                foreach (var liceId in teamLicenseIdList)
+                {
+                    int licenseProductId = licenseData.Where(x => x.Id == liceId).Select(p => p.ProductId).FirstOrDefault();
+                    //check whether the product id already exist in list
+                    if (productIdList.Count == 0 || !productIdList.Contains(licenseProductId))
+                    {
+                        productIdList.Add(licenseProductId);
+                    }
+                }
+            }
+            return productIdList;
+        }
+
+        public List<int> GetTeamProductByUserId(string userId, bool isAdmin)
+        {
+            List<Team> teamList = null;
+            if (isAdmin)
+                teamList = teamLogic.GetTeamsByAdmin(userId);
+            else
+                teamList = teamLogic.GetTeamsByUser(userId);
+            List<int> productIds = new List<int>();
+            foreach(var team in teamList)
+            {
+                var proIds = GetProductByTeamId(team.Id);
+                productIds.AddRange(proIds);
+            }
+
+            return productIds.Distinct().ToList();
         }
     }
 }

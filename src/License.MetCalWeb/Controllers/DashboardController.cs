@@ -53,11 +53,11 @@ namespace License.MetCalWeb.Controllers
                 AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId,
                 Name = LicenseSessionState.Instance.SelectedTeam.Name
             };
-            if (LicenseSessionState.Instance.UserSubscriptionList == null || LicenseSessionState.Instance.UserSubscriptionList.Count == 0)
-            {
-                var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-                LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
-            }
+            //if (LicenseSessionState.Instance.UserSubscriptionList == null || LicenseSessionState.Instance.UserSubscriptionList.Count == 0)
+            //{
+            var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+            LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
+            //}
             return string.Empty;
         }
 
