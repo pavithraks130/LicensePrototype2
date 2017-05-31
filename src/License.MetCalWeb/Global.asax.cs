@@ -45,7 +45,7 @@ namespace License.MetCalWeb
                 _accLogic.UpdateLogoutStatus(LicenseSessionState.UserId, Common.ServiceType.OnPremiseWebApi);
             if (!String.IsNullOrEmpty(LicenseSessionState.ServerUserId))
                 _accLogic.UpdateLogoutStatus(LicenseSessionState.ServerUserId, Common.ServiceType.CentralizeWebApi);
-           // HttpContext.Current.Response.Redirect("~/Account/Login");
+           // this.Response.Redirect("Account/Login");
         }
 
         protected void Application_End(object sender, EventArgs e)

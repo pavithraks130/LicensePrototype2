@@ -1,7 +1,8 @@
 ﻿@model License.MetCalWeb.Models.TeamDetails
 <script>
     $(document).ready(function () {
-        $('.btn-save').click(function () {
+        $('.btn-save').click(function (e) {
+            e.preventDefault();
             var isPostEnabled = true;
             i = 0;
             $('input[type=checkbox]:checked').each(function () {
@@ -15,8 +16,26 @@
                 $('#lblError').attr('style', 'display:none;');
                 isPostEnabled = isPostEnabled && true;
             }
-           
-            return isPostEnabled;
+            if (isPostEnabled) {
+                var form = $('form');
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            location.href = '@Url.Action("Index","Team")';
+                        }
+                        else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+            return false;
         });
     });
 </script>
@@ -26,7 +45,7 @@
 <br />
 <div class="row">
     <div class="col-md-12">
-        @using (Html.BeginForm("RevokeTeamLicense", "Team", FormMethod.Post))
+        @using (Html.BeginForm("RevokeTeamLicense", "Team", new { teamId = Model.Team.Id }, FormMethod.Post, null))
         {
             @Html.ValidationSummary()
             @Html.AntiForgeryToken()
@@ -35,7 +54,7 @@
                     <span>
                         Team Name :  @Model.Team.Name
                     </span>
-                    <input type="text" name="teamId" value=@Model.Team.Id hidden="hidden" readonly="readonly"/>
+                    <input type="text" name="teamId" value=@Model.Team.Id hidden="hidden" readonly="readonly" />
                 </div>
             </div>
             if (Model == null || Model.ProductList.Count == 0)

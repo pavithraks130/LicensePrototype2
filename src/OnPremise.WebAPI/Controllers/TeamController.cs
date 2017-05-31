@@ -119,7 +119,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteTeam(int id)
         {
-            var status = teamLogic.DeleteTeam(id);
+            var status = teamBoLogic.DeleteTeam(id);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else if (String.IsNullOrEmpty(teamLogic.ErrorMessage))

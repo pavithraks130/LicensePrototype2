@@ -211,7 +211,7 @@ namespace OnPremise.WebAPI.Controllers
         public HttpResponseMessage DeleteTeamLicenses(DeleteTeamDetails data)
         {
             TeamBO teamBOLogic = new TeamBO();
-            var status = teamBOLogic.DeleteTeamLicense(data.productIdList, data.TeamId);
+            var status = teamBOLogic.DeleteTeamLicense(data);
             if (status)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");

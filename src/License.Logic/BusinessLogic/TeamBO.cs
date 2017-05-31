@@ -178,7 +178,7 @@ namespace License.Logic.BusinessLogic
         /// <param name="productIdToDelete">product id list for delete from team selected team</param>
         /// <param name="teamId">selected team team id</param>
         /// <returns></returns>
-        public bool DeleteTeamLicense(List<int> productIdToDelete, int teamId)
+        public bool DeleteTeamLicense(DeleteTeamDetails teamObj)
         {
             List<int> collectionOfprodIdToDelete = new List<int>();//It contains same product id multiple times.
 
@@ -186,38 +186,36 @@ namespace License.Logic.BusinessLogic
             try
             {
 
-
-                //by using teamid select all License Id from teamlicense table
-                var teamLicenseIdList = teamLicenseLogic.GetTeamLicense(teamId).Select(tl => tl.LicenseId).ToList();
-                //by using license id find the product id from license data table
-                var licenseData = teamLicenseLogic.GetLicenseData();
-                foreach (var liceId in teamLicenseIdList)
+                var teammembersList = logic.GetTeamMembers(teamObj.TeamId);
+                var userList = teammembersList.Where(tm => tm.InviteeUser.IsActive == true).ToList();
+                var proceedDelete = true;
+                if (userList != null && userList.Count > 0)
                 {
-                    var liceData = licenseData.Where(x => x.Id == liceId).FirstOrDefault();
-                    collectionOfprodIdToDelete.Add(liceData.ProductId);
-                    licenseDataList.Add(liceData);
+                    ErrorMessage = "Won't be able to revoke Licence until team Members log out";
+                    proceedDelete = false;
                 }
-                //select only delete request product id from  prodIdList list
-                var distinctSelectedTeamProductId = collectionOfprodIdToDelete.Distinct();
-                var outerJoinproductId = distinctSelectedTeamProductId.Except(productIdToDelete).ToList();
-                foreach (int id in outerJoinproductId)
+                if (proceedDelete)
                 {
-                    collectionOfprodIdToDelete.RemoveAll(x => x.Equals(id));
-                    licenseDataList.RemoveAll(p => p.ProductId.Equals(id));
+                    userLicLogic.RevokeTeamLicenseFromUser(teamObj.LogInUserId,teamObj.TeamId);
+                    var teamLic = teamLicenseLogic.GetTeamLicense(teamObj.TeamId);
+                    foreach (var pro in teamObj.productIdList)
+                    {
+                        var teamLicByPro = teamLic.Where(tl => tl.ProductId == pro).ToList();
+                        if (teamLicByPro != null && teamLicByPro.Count > 0)
+                        {
+                            foreach (var teamLicense in teamLicByPro)
+                            {
+                                teamLicenseLogic.RemoveLicenseByLicenseId(teamLicense.LicenseId);
+                                licLogic.UpdateLicenseStatus(teamLicense.LicenseId, false);
+                            }
+                        }
+                    }
                 }
-                foreach (var ld in licenseDataList)
-                {
-                    //Making IsMapped true from LicenseData table
-                    teamLicenseLogic.UpdateLicenseDataTableByProductId(ld.Id);
-                    //Deleting license from TeamLicense table.
-                    teamLicenseLogic.RemoveLicenseByLicenseId(ld.Id);
-                }
-                return true;
-
+                return proceedDelete;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                ErrorMessage = ex.Message;
                 return false;
             }
 
@@ -260,7 +258,6 @@ namespace License.Logic.BusinessLogic
 
             return productIds.Distinct().ToList();
         }
-
 
         public TeamConcurrentUserResponse UpdateConcurrentUsers(Team team)
         {
@@ -324,6 +321,34 @@ namespace License.Logic.BusinessLogic
 
             concurentUserResponse.UserUpdateStatus = true;
             return concurentUserResponse;
+        }
+
+        public bool DeleteTeam(int teamId)
+        {
+            try
+            {
+                var licList = teamLicenseLogic.GetTeamLicense(teamId);
+                if (licList != null && licList.Count > 0)
+                {
+                    foreach (var lic in licList)
+                    {
+                        if (lic.IsMapped)
+                            userLicLogic.RevokeTeamLicenseFromUser(lic.Id);
+                        teamLicenseLogic.RemoveLicenseByLicenseId(lic.LicenseId);
+                        licLogic.UpdateLicenseStatus(lic.LicenseId, false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            bool status = false;
+            if (String.IsNullOrEmpty(ErrorMessage))
+                status = teamLogic.DeleteTeam(teamId);
+            if (!status)
+                ErrorMessage = ErrorMessage + " " + teamLogic.ErrorMessage;
+            return status;
         }
     }
 }

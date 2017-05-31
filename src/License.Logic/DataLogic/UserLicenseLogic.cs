@@ -163,6 +163,24 @@ namespace License.Logic.DataLogic
                 }
             }
         }
+        public void RevokeTeamLicenseFromUser(string userId, int teamId)
+        {
+            var licenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.TeamId == teamId && u.IsTeamLicense == true).ToList();
+            if (licenseList == null)
+                return;
+            foreach (var lic in licenseList)
+            {
+                var teamLic = Work.TeamLicenseRepository.GetById(lic.TeamLicenseId);
+                teamLic.IsMapped = false;
+                Work.TeamLicenseRepository.Update(teamLic);
+                Work.UserLicenseRepository.Delete(lic);
+            }
+            if (licenseList.Count() > 0)
+            {
+                Work.TeamLicenseRepository.Save();
+                Work.UserLicenseRepository.Save();
+            }
+        }
         public void RevokeTeamLicenseFromUser(string userId)
         {
             var licenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.IsTeamLicense == true);

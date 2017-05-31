@@ -119,8 +119,10 @@ namespace License.Logic.BusinessLogic
                     {
                         var pro = subObj.Products.FirstOrDefault(f => f.Id == obj.License.ProductId);
                         if (pro != null)
+                        {
                             pro.IsSelected = true;
-                        pro.InitialState = true;
+                            pro.InitialState = true;
+                        }
                     }
                 }
             }

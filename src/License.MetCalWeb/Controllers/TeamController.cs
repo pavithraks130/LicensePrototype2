@@ -220,7 +220,13 @@ namespace License.MetCalWeb.Controllers
             details.productIdList = ExtractLicenseData(SelectedSubscription);
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/Delete", details).Result;
-            return RedirectToAction("TeamContainer", "TeamManagement");
+            if (!response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var responsefailure = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
+                return Json(new { success = false, message = responsefailure.Message });
+            }
+            return Json(new { success = true, message = "" });
 
         }
 
