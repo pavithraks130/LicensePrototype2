@@ -100,6 +100,13 @@ namespace License.Logic.DataLogic
                     foreach (var dt in licenseData)
                     {
                         i++;
+                        if (dt.IsTeamLicense)
+                        {
+                            var teamLicense = Work.TeamLicenseRepository.GetById(dt.TeamLicenseId);
+                            teamLicense.IsMapped = false;
+                            Work.TeamLicenseRepository.Update(teamLicense);
+                            Work.TeamLicenseRepository.Save();
+                        }
                         Work.UserLicenseRepository.Delete(dt);
                     }
                     if (i > 0)
@@ -110,7 +117,7 @@ namespace License.Logic.DataLogic
 
 
                 var membList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamObj.InviteeUserId && team.AdminId == teamObj.Team.AdminId).ToList();
-                  int count =   membList.Where(t=> t.Id != teamObj.Id).Count();
+                int count = membList.Where(t => t.Id != teamObj.Id).Count();
                 if (teamObj.IsAdmin && count == 0)
                     UserManager.RemoveFromRole(teamObj.InviteeUserId, "Admin");
                 var status = Work.TeamMemberRepository.Delete(teamObj);
