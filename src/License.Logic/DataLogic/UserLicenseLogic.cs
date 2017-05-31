@@ -183,7 +183,7 @@ namespace License.Logic.DataLogic
         }
         public void RevokeTeamLicenseFromUser(string userId)
         {
-            var licenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.IsTeamLicense == true);
+            var licenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.IsTeamLicense == true).ToList();
             foreach (var lic in licenseList)
             {
                 var teamLic = Work.TeamLicenseRepository.GetById(lic.TeamLicenseId);

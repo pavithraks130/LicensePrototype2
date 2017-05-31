@@ -131,9 +131,12 @@ namespace License.Logic.DataLogic
             if (team.ConcurrentUserCount == 0)
                 return true;
             var loggedInUserCount = team.TeamMembers.Where(tm => tm.InviteeUserId != userId && tm.InviteeUser.IsActive == true).Count();
-            var user = UserManager.FindByIdAsync(team.AdminId).Result;
-            if (user.IsActive)
-                loggedInUserCount += 1;
+            if (team.AdminId != userId)
+            {
+                var user = UserManager.FindByIdAsync(team.AdminId).Result;
+                if (user.IsActive)
+                    loggedInUserCount += 1;
+            }
             if (loggedInUserCount < team.ConcurrentUserCount)
                 return true;
             return false;
