@@ -240,7 +240,7 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 subscriptionType.CreatedBy = LicenseSessionState.Instance.User.ServerUserId;
 
-            subscriptionType.ImagePath = "B5.png";
+            subscriptionType.ImagePath = "P_1.PNG";
             int monthType = Convert.ToInt32(type.ActivationMonth);
             switch (monthType)
             {

@@ -79,18 +79,6 @@
                    
                 }
             }
-
-            //for (var i = 0; i < numbers.length; i++) {
-            //    $('<div>' + numbers[i] + '</div>').data('number', numbers[i]).attr('id', 'card' + i).appendTo('#admin_license_type').draggable({
-            //        containment: '#content',
-            //        stack: '#admin_license_type div',
-            //        cursor: 'move',
-            //        revert: true
-            //    });
-            //}
-
-            // Create the card slots
-            //var words = ['one-pack', 'two-pack', 'three-pack', 'four-pack', 'five-pack', 'six-pack', 'seven-pack', 'eight-pack', 'nine-pack', 'ten-pack'];
             for (var i = 0; i < words.length; i++) {
                 $('<div>' + words[i] + '</div>').data('number', words[i]).appendTo('#selected_user_license').droppable({
                     accept: '#admin_license_type div',
@@ -105,7 +93,7 @@
 <table class="col-md-50" style="border:1px  solid #333;">
     <tr>
         <th class="col-md-20"><h2>Selected User:</h2><h4>@ViewData["TeamMember"]</h4></th>
-        <th class="col-md-28"><h2>Admin:</h2> <img src="~/Resources/admin.png" /></th>
+        <th class="col-md-28"><h2>Admin:</h2><img src="~/Catalog/Images/Admin.png" /></th>       
     </tr>
     <tr>
         <td colspan="2" class="float-right"><h3>License Pool</h3> </td>
@@ -119,111 +107,3 @@
     </tr>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<!DOCTYPE HTML>
-    <html>
-    <head>
-        <style>
-            #div1, #div2 {
-                float: left;
-                width: 450px;
-                height: 75px;
-                margin: 10px;
-                padding: 0px;
-                border: 3px solid black;
-                background-color: burlywood;
-            }
-
-            #div2 {
-                float: right;
-                width: 200px;
-                height: 150px;
-                margin: 10px;
-                padding: 0px;
-                border: 3px solid black;
-                background-color: cadetblue;
-            }
-        </style>
-        <script>
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-        }
-
-        function drop(ev) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-        }
-        </script>
-    </head>
-    <body>
-        <h2>Drag and Drop</h2>
-        <p>Drag the item back and forth between the two  elements.</p>
-        @foreach (var obj in Model)
-        {
-        <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-            @for (int i = 0; i < obj.LicenseDetails.AvailableLicenseCount; i++)
-            {
-            <img src="~/ProductImages/CartItem/B5.PNG" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31" />
-            }
-        </div>
-            break;
-        }
-        <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-
-    </body>
-    </html>*@

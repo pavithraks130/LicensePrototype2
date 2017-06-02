@@ -8,7 +8,7 @@
     <title>@ViewBag.Title - FLUKE Calibration</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Resources/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Catalog/Images/Favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -29,40 +29,7 @@
     <script>
         var clicked = false;
         var validNavigation = false;
-        @*$(window).unload(function () {
-            //console.log(window.performance.navigation.type);
-            //var isWindowClose = true;
-            //if (window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
-            //    isWindowClose = false;
-            //} else if (window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
-            //    isWindowClose = false;
-            //} else if (window.performance.navigation.type === window.performance.navigation.TYPE_NAVIGATE) {
-            //    isWindowClose = false;
-            //}
-            //if (window) {
-            //    console.log('reload Event');
-            //}
-            //else {
-            //    console.log("close event");
-            //}
-            console.log(validNavigation);
-            console.log(clicked);
-            if (!validNavigation && !clicked)
-            {
-                console.log("log out ");
-                jQuery.ajax({ method: 'GET', url: '@Url.Action("LogOut","Account")', async: false })
-            }
-            validNavigation = false;
-            return false;
-    });
-        // Attach the event keypress to exclude the F5 refresh
-        $(document).keydown(function (e) {
-            console.log(e.keyCode);
-            var key = e.which || e.keyCode;
-            if (key == 116 || key == 18) {
-                validNavigation = true;
-            }
-        });*@
+
     $(document).ready(function () {
         $('ul.nav li.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
@@ -78,7 +45,7 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("Home", "Dashboard")">
-                    <img src="~/Resources/logo.png" title="Fluke Calibration" />
+                    <img src="~/Catalog/Images/Logo.png"  title="Fluke Calibration"/>
                 </a>
 
             </div>

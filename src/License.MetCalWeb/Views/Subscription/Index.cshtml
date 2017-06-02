@@ -29,8 +29,8 @@
                         @foreach (var subscription in Model)
                 {
                             <tr>
-                                <td>
-                                    @Html.Image(String.Concat("../ProductImages/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
+                                <td>                                    
+                                    @Html.Image(String.Concat("../Catalog/Products_Images/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
                                 </td>
                                 <td>
                                     @subscription.Name
@@ -60,7 +60,7 @@
                                 <td>
                                     <div class="navbar-header">
                                         <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
-                                            <img src="~/Resources/Cart-Menu.png" />
+                                            <img src="~/Catalog/Images/Cart_Menu.png" />
                                         </a>
                                     </div>
                                    
