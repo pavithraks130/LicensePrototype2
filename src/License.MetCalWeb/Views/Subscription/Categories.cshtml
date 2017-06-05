@@ -3,13 +3,10 @@
 @{
     ViewBag.Title = "Category";
 }
-
 <h4>Track and support</h4>
 @using (Html.BeginForm())
 {
     <table class="table" style="border:inset">
-
-
         @foreach (var item in Model)
         {
             <tr>
@@ -27,6 +24,5 @@
 
             </tr>
         }
-
     </table>
 }

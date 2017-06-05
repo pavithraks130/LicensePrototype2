@@ -1,32 +1,8 @@
 ﻿@model  License.MetCalWeb.Models.TeamAsset
-@{
-    Layout = null;
-}
 
-<script>
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr("action"),
-                method: form.attr("method"),
-                data: form.serialize(),
-                success: function (partialResult) {
-                    if (partialResult.success == false) {
-                        $('#error').text(partialResult.message);
-                    }
-                    else {
-                        location.reload();
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-        });
-    });
-</script>
+@{
+    ViewBag.Title = "Edit hardware";
+}
 @using (Html.BeginForm("EditHardware", "Hardware",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -91,3 +67,28 @@
         </div>
     </div>
 }
+@* Script *@
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>

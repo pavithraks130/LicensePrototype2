@@ -204,15 +204,16 @@
     <Content Include="Catalog\Slide_Images\f-c1730_01a_c.png" />
     <Content Include="Catalog\Slide_Images\f-cxt1000_02a_h.png" />
     <Content Include="Catalog\Slide_Images\f-tl221_01b_h.png" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Drag-and-drop-container.css" />
-    <Content Include="Content\MenuDropdown.css" />
-    <Content Include="Content\ProductCatalogDetails.css" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Content\SubscriptionContainerStyle.css" />
+    <Content Include="Content\drag-and-drop-container.css" />
+    <Content Include="Content\drag-and-drop-container.min.css" />
+    <Content Include="Content\product-catalog-details.css" />
+    <Content Include="Content\product-catalog-details.min.css" />
+    <Content Include="Content\site.css" />
+    <Content Include="Content\site.min.css" />
+    <Content Include="Content\subscription-container.css" />
+    <Content Include="Content\subscription-container.min.css" />
     <Content Include="EmailTemplate\EmailTemImages\colorschememapping.xml" />
     <Content Include="EmailTemplate\EmailTemImages\filelist.xml" />
     <Content Include="EmailTemplate\EmailTemImages\image001.jpg" />
@@ -229,7 +230,7 @@
     <Content Include="Catalog\Images\Arrow_Head.PNG" />
     <Content Include="Catalog\Products_Images\P_1.PNG" />
     <Content Include="Catalog\Products_Images\P_2.PNG" />
-    <Content Include="Catalog\Page_Background\Background_1.PNG" />
+    <Content Include="Catalog\Page_Background_Images\Background_1.PNG" />
     <Content Include="Catalog\Images\Cart_Menu.png" />
     <Content Include="Catalog\Images\Favicon.ico" />
     <Content Include="Catalog\Images\Logo.png" />
@@ -242,16 +243,6 @@
     <Content Include="EmailTemplate\EmailTemImages\themedata.thmx" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-1.2.6.min.js" />
-    <Content Include="Scripts\jquery-ui-personalized-1.6rc4.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -316,11 +307,9 @@
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\DefaultStartup.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Dashboard\About.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />

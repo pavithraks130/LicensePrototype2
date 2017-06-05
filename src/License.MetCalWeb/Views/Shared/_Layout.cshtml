@@ -6,12 +6,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - FLUKE Calibration</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Catalog/Images/Favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    @*=================Developer stylesheet========================*@
+    @*Warnings: Stylsheet reference order sholud not be modify. *@
+    <link href="~/Content/site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
+
+    @* =================Deployment Stylesheet====================== *@
+
+    @*<link href="~/Content/site.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+
     <style>
         .custom-body {
             margin-top: 20px !important;
@@ -26,26 +31,20 @@
             font-weight: normal !important;
         }
     </style>
-    <script>
-        var clicked = false;
-        var validNavigation = false;
+    @* Javascript referense  *@
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-    $(document).ready(function () {
-        $('ul.nav li.dropdown').hover(function () {
-            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-        }, function () {
-            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
-        });
-     });
-
-    </script>
+    <link href="~/Catalog/Images/Favicon.ico" rel="shortcut icon" type="image/x-icon" />
 </head>
 <body onclick="clicked=true;">
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <a class="element image-button image-left place-left " style="color: #3D1400" href="@Url.Action("Home", "Dashboard")">
-                    <img src="~/Catalog/Images/Logo.png"  title="Fluke Calibration"/>
+                    <img src="~/Catalog/Images/Logo.png" title="Fluke Calibration" />
                 </a>
 
             </div>
@@ -72,8 +71,6 @@
                                 <li>@Html.ActionLink("Feature", "Index", "Feature")</li>
                             </ul>
                         </li>
-
-
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
@@ -121,14 +118,30 @@
             </ul>
         </div>
     </div>
+
     <div class="container body-content custom-body">
         @RenderBody()
     </div>
+
     <footer class="navbar-fixed-bottom navbar-fixed-bottom-custom">
         <div class="container">
             <p>&copy; @DateTime.Now.Year - FLUKE Calibration</p>
         </div>
     </footer>
 
+    @* Javascript *@
+    <script>
+        var clicked = false;
+        var validNavigation = false;
+
+        $(document).ready(function () {
+            $('ul.nav li.dropdown').hover(function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+            }, function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
+            });
+        });
+
+    </script>
 </body>
 </html>

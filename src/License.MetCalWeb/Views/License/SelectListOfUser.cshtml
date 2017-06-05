@@ -3,26 +3,7 @@
 @{
     ViewBag.Title = "SelectListOfUser";
 }
-<script>
-    $(document).ready(function () {
-        $('.btn-save').click(function () {
-            var isPostEnabled = true;
-            i = 0;
-            $('input[type=checkbox]:checked').each(function () {
-                i++;
-            });
-            if (i == 0) {
-                $('#lblError').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else {
-                $('#lblError').attr('style', 'display:none;');
-                isPostEnabled = isPostEnabled && true;
-            }
-            return isPostEnabled;
-        });
-    });
-</script>
+
 <div class="row">
     <div class="col-md-12">
 
@@ -52,3 +33,25 @@
         }
     </div>
 </div>
+
+@* Javascript *@
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function () {
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            return isPostEnabled;
+        });
+    });
+</script>

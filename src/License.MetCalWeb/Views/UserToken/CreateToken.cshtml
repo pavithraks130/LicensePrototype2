@@ -3,30 +3,6 @@
 @{
     Layout = null;
 }
-<script type="text/javascript">
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr("action"),
-                method: form.attr("method"),
-                data: form.serialize(),
-                success: function (partialResult) {
-                    if (partialResult.success == false) {
-                        $('#error').text(partialResult.message);
-                    }
-                    else {
-                        location.reload();
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-        });
-    });
-</script>
 <div class="modal-dialog " style="position: static!important">
     <div class="modal-content">
         <div class="modal-header">
@@ -60,3 +36,29 @@
         }
     </div>
 </div>
+
+@* Javascript *@
+<script type="text/javascript">
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>

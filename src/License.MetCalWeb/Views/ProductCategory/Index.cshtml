@@ -1,54 +1,9 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.ProductCategory>
+
 @{
     ViewBag.Title = "Index";
 }
-
 <h2>Index</h2>
-<script>
-    $(function () {
-        $('.btnCreate').on('click', function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: "/ProductCategory/Create",
-                method: "GET",
-                success: function (data) {
-                    $('#myModal').html(data);
-                    $('#myModal').modal('show');
-                },
-                error: function (data) { }
-            });
-        });
-
-        $('.acnEdit').on('click', function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: $(this).attr('href'),
-                method: 'GET',
-                success: function (data) {
-                    $('#myModal').html(data);
-                    $('#myModal').modal('show');
-                },
-                error: function (data) { }
-            });
-        });
-        $('.acnDelete').on('click', function (e) {
-            e.preventDefault();
-            $.ajax({
-                url: $(this).attr('href'),
-                method: 'POST',
-                success: function (data) {
-                    if (data.success) {
-                        window.location.reload();
-                    }
-                    else {
-                        alert(data.message);
-                    }
-                },
-                error: function (data) { }
-            });
-        });
-    });
-</script>
 <div class="row">
     <div class="col-md-12">
         @if (Model == null || Model.Count() == 0)
@@ -104,5 +59,51 @@
     </div>
 </div>
 <div class="modal" id="myModal">
-
 </div>
+
+@* Javascript *@
+<script>
+    $(function () {
+        $('.btnCreate').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/ProductCategory/Create",
+                method: "GET",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function (data) { }
+            });
+        });
+
+        $('.acnEdit').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+                method: 'GET',
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function (data) { }
+            });
+        });
+        $('.acnDelete').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+                method: 'POST',
+                success: function (data) {
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                },
+                error: function (data) { }
+            });
+        });
+    });
+</script>

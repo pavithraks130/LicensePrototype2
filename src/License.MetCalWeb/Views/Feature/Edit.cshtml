@@ -1,31 +1,8 @@
 ﻿@model License.MetCalWeb.Models.Feature
-@{
-    Layout = null;
-}
-<script>
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr("action"),
-                method: form.attr("method"),
-                data: form.serialize(),
-                success: function (data) {
-                    if (data.success == false) {
-                        $('#lblError').text(data.message);
-                        $('#lblError').attr('style', "display:inline");
-                    }
-                    else {
-                        window.location.reload();
-                    }
-                },
-                error: function () { }
-            });
 
-        });
-    });
-</script>
+@{
+    ViewBag.Title = "Edit";
+}
 @using (Html.BeginForm("Edit", "Feature", new { id = Model.Id }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -76,3 +53,28 @@
         </div>
     </div>
 }
+@* Javascript *@
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.success == false) {
+                        $('#lblError').text(data.message);
+                        $('#lblError').attr('style', "display:inline");
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                },
+                error: function () { }
+            });
+
+        });
+    });
+</script>

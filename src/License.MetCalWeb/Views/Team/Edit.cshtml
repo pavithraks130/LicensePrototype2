@@ -1,33 +1,8 @@
 ﻿@model License.MetCalWeb.Models.Team
+
 @{
     ViewBag.Title = "Edit";
 }
-
-<script>
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr("action"),
-                method: form.attr("method"),  
-                data: form.serialize(),
-                success: function (partialResult) {
-                    if (partialResult.success == false) {
-                        $('#error').text(partialResult.message);
-                    }
-                    else {
-                        location.reload();
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-        });
-    });
-</script>
-
 <h2>Create</h2>
 @using (Html.BeginForm("EditTeam", "Team", new { id = Model.Id }, FormMethod.Post))
 {
@@ -61,3 +36,28 @@
         </div>
     </div>
 }
+@* Javascript *@
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>
