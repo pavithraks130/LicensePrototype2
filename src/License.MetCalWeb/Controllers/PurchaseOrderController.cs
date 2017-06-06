@@ -11,16 +11,23 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controller to perform purchase order related functionality
+    /// </summary>
     [Authorize]
     [SessionExpire]
     public class PurchaseOrderController : Controller
     {
         public PurchaseOrderController()
         {
-          
+
         }
 
-        // GET: PurchaseOrder
+        /// <summary>
+        /// Get Action to list all the purchase Order  for approve reject the Purchase order. Purchase order list is sent view
+        /// for listing the order
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> Index()
         {
             List<PurchaseOrder> orderList = new List<PurchaseOrder>();
@@ -40,34 +47,34 @@ namespace License.MetCalWeb.Controllers
             return View(orderList);
         }
 
+        /// <summary>
+        /// POSt Action is triggered when the  form submitted for the approval or rejected, service call made to update the data
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="button"></param>
+        /// <param name="selectedPurchaseOrder"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string comment, string button, params string[] selectedPurchaseOrder)
         {
-            List<PurchaseOrder> orderList = new List<PurchaseOrder>();
-            foreach (string str in selectedPurchaseOrder)
-            {
-                PurchaseOrder po = new PurchaseOrder()
-                {
-                    Id = Convert.ToInt32(str)
-                };
-                orderList.Add(po);
-            }
-
             bool isApproved = false;
             switch (button)
             {
                 case "Approve": isApproved = true; break;
                 case "Reject": isApproved = false; break;
             }
-            foreach (var obj in orderList)
+            var orderList = selectedPurchaseOrder.ToList().Select(poId => new PurchaseOrder()
             {
-                obj.IsApproved = isApproved;
-                obj.Comment = comment;
-                obj.ApprovedBy = LicenseSessionState.Instance.User.UserName;
-            }
+                Id = Convert.ToInt32(poId),
+                IsApproved = isApproved,
+                Comment = comment,
+                ApprovedBy = LicenseSessionState.Instance.User.UserName
+            }).ToList();
+
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
+
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", "User");
             else
@@ -79,6 +86,11 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Get Action to list all the Ourchase order with the status listing.
+        /// Returns view with list of Purchase order which will listed in the view with the sstataus
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> OrderStatus()
         {
             List<PurchaseOrder> poList = new List<PurchaseOrder>();
@@ -98,6 +110,12 @@ namespace License.MetCalWeb.Controllers
             return View(poList);
         }
 
+        /// <summary>
+        ///  Get Aaction. On click on the Purchaase order will be redirected to the detail view to view the order history.
+        ///  View will be returned with the PO Order Detail based on PO Order id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ActionResult> OrderDetail(int id)
         {
             PurchaseOrder order = new PurchaseOrder();

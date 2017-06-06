@@ -16,13 +16,13 @@ namespace LicenseServer.DataModel
         public DateTime CreatedDate { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
-        public ICollection<ProductCategory> Categories { get; set; }
-        public ICollection<Feature> AssociatedFeatures { get; set; }
+        public ICollection<SubscriptionCategory> Categories { get; set; }
+        public ICollection<Feature> Features { get; set; }
         public DateTime ModifiedDate { get; set; }
 
     }
 
-    public class ProductCategory
+    public class SubscriptionCategory
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -31,8 +31,7 @@ namespace LicenseServer.DataModel
 
     public class ProductDependency
     {
-        public List<ProductCategory> Categories { get; set; }
-
+        public List<SubscriptionCategory> Categories { get; set; }
         public List<Feature> Features { get; set; }
     }
 }

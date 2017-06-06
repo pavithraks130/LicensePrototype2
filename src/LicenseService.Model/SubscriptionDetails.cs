@@ -10,13 +10,13 @@ namespace LicenseServer.DataModel
     {
         public int Id { get; set; }
 
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public int ProductId { get; set; }
 
         public int Quantity { get; set; }
 
-        public SubscriptionType SubscriptyType { get; set; }
+        public Subscription Subscription { get; set; }
 
         public Product Product { get; set; }
     }

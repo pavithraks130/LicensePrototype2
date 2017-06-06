@@ -11,6 +11,9 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controller to provide Funuctionality related to the Cart
+    /// </summary>
     [Authorize]
     [SessionExpire]
     public class CartController : BaseController
@@ -21,17 +24,24 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        /// <summary>
+        /// Get Action to list the Cart Items based on the user Id who as logged in and display the view by passing the item list
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> CartItem()
         {
             List<CartItem> itemList = new List<CartItem>();
             if (LicenseSessionState.Instance.User == null)
-            {
                 return RedirectToAction("LogIn", "Account");
-            }
             itemList = await GetCartItems();
             return View(itemList);
         }
 
+        /// <summary>
+        /// Action to remove the cart item based on the Cart Item Id  and return to the Cart index
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ActionResult> RemoveItem(int id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -39,12 +49,22 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("CartItem", "Cart");
         }
 
+        /// <summary>
+        /// To Redirect to the Payment process once user checkout 
+        /// </summary>
+        /// <param name="total"></param>
+        /// <returns></returns>
         public ActionResult PaymentGateway(string total)
         {
-            ViewData["Total"] = total;
+            ViewBag.Total = total;
             return View();
         }
 
+        /// <summary>
+        /// Post action to update the payment details in the Centralized Db and sync the Subscriptions purchased from
+        /// centralized to On Premise
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> DoPayment()
         {
@@ -52,6 +72,7 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        // Async call to sync the data  by making a service call
         public async Task Purchase()
         {
             if (TempData["RenewSubscription"] != null)
@@ -60,6 +81,9 @@ namespace License.MetCalWeb.Controllers
                 await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();
         }
 
+        /// <summary>
+        /// Async function  call to synch the Renewed subscription
+        /// </summary>
         public void SyncRenewData()
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -70,6 +94,11 @@ namespace License.MetCalWeb.Controllers
             }
         }
 
+        /// <summary>
+        /// Action to perform the Offline Paymentonce the data submitted to the offline payment the Purchase Order Id is 
+        /// returned to track the status
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> OfflinePayment()
         {
             PurchaseOrder poOrder = new PurchaseOrder();
@@ -91,6 +120,11 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        /// <summary>
+        /// Async call to get the list of cart Items based on the centralized Server User Id  which is updated in ServerUserId 
+        /// in the User object
+        /// </summary>
+        /// <returns></returns>
         private async Task<List<CartItem>> GetCartItems()
         {
             List<CartItem> itemList = null;
@@ -110,7 +144,11 @@ namespace License.MetCalWeb.Controllers
             return itemList;
         }
 
-
+        /// <summary>
+        /// Async Action to add Subscription to the cart
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public async Task<ActionResult> AddProductToCart(int? Id)
         {
             CartItem item = new CartItem()

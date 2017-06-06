@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using System.ComponentModel.DataAnnotations;
 
-namespace LicenseServer.Core.Model
+namespace License.MetCalWeb.Models
 {
     public class Feature
     {
-        [Key]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public string Version { get; set; }
         public bool IsEnabled { get; set; }
+        public bool Selected { get; set; }
         public double Price { get; set; }
-        public ICollection<Product> AssociatedProduct { get; set; }
-        public SubscriptionCategory Caategory { get; set; }
+        public string Type { get; set; }
 
     }
 }

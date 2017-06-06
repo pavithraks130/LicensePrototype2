@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace License.Core.Model
 {
-    public class LicenseData
+    public class ProductLicense
     {
         [Key]
         public int Id { get; set; }

@@ -51,7 +51,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateSubscription")]
-        public HttpResponseMessage CreateSubscription(SubscriptionType type)
+        public HttpResponseMessage CreateSubscription(Subscription type)
         {
             var subscriptionType = logic.CreateSubscriptionWithProduct(type);
             if (subscriptionType != null)

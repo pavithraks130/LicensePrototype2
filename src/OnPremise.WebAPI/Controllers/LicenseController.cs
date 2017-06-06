@@ -50,7 +50,7 @@ namespace OnPremise.WebAPI.Controllers
         [Route("CreateTeamLicence")]
         public HttpResponseMessage AddTeamLicense(TeamLicenseDataMapping model)
         {
-            var status = teamLicenselogic.CreateMultipleTeamLicense(model);
+            var status = teamLicenselogic.CreateTeamLicense(model);
             if (status)
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else
@@ -206,9 +206,14 @@ namespace OnPremise.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
 
+        /// <summary>
+        /// Delete Method : To delete the team License
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Delete")]
-        public HttpResponseMessage DeleteTeamLicenses(DeleteTeamDetails data)
+        public HttpResponseMessage DeleteTeamLicenses(TeamLicenseDataMapping data)
         {
             TeamBO teamBOLogic = new TeamBO();
             var status = teamBOLogic.DeleteTeamLicense(data);

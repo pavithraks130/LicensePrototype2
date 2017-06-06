@@ -10,11 +10,17 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controler is used to perform the actions related to the Feature. CRUD operation for the Features
+    /// </summary>
     [Authorize(Roles ="BackendAdmin")]
     [SessionExpire]
     public class FeatureController : BaseController
     {
-        // GET: Feature
+        /// <summary>
+        /// Get Action to list all the features
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             List<Feature> data = null;
@@ -28,11 +34,20 @@ namespace License.MetCalWeb.Controllers
             return View(data);
         }
 
+        /// <summary>
+        /// Get Action to display the Create View for the feature
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
             return View();
         }
 
+        /// <summary>
+        /// Post Action to feature for creating the new Record tin db.Service call will be performed to create the feature record in DB
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Feature f)
@@ -60,6 +75,11 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        /// <summary>
+        /// Get Action to display the view with the Existing data for the selected Feature.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public ActionResult Edit(int Id)
         {
             Feature obj = null;
@@ -79,6 +99,12 @@ namespace License.MetCalWeb.Controllers
             return View(obj);
         }
 
+        /// <summary>
+        /// POst Action to save the modified data for the selected feature
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="f"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, Feature f)
         {
@@ -99,6 +125,11 @@ namespace License.MetCalWeb.Controllers
             return Json(new { message = _message, success = false });
         }
 
+        /// <summary>
+        /// Delete the selected Feature based on the Id.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public ActionResult Delete(int Id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);

@@ -11,6 +11,18 @@ namespace License.Logic.DataLogic
     public class TeamLicenseLogic : BaseLogic
     {
         private readonly object Count;
+        ProductLicenseLogic proLicLogic = null;
+
+        public TeamLicenseLogic()
+        {
+            proLicLogic = new ProductLicenseLogic();
+        }
+
+        /// <summary>
+        /// Function to create Team License
+        /// </summary>
+        /// <param name="teamLicense"></param>
+        /// <returns></returns>
         private bool CreateTeamLicense(TeamLicense teamLicense)
         {
             var obj = AutoMapper.Mapper.Map<TeamLicense, Core.Model.TeamLicense>(teamLicense);
@@ -20,7 +32,7 @@ namespace License.Logic.DataLogic
             return obj.Id > 0;
 
         }
-             
+
         /// <summary>
         /// function to create the License  for multiple User . This function will be used for bulk license mapping to 
         /// multiple User.
@@ -28,24 +40,25 @@ namespace License.Logic.DataLogic
         /// <param name="licList">license List</param>
         /// <param name="userIdList">user Id List</param>
         /// <returns></returns>
-        public bool CreateMultipleTeamLicense(TeamLicenseDataMapping model)
+        public bool CreateTeamLicense(TeamLicenseDataMapping model)
         {
-            LicenseLogic licLogic = new LicenseLogic();
-            foreach (var teamId in model.TeamList)
+            ProductLicenseLogic licLogic = new ProductLicenseLogic();
+            TeamLogic teamLogic = new TeamLogic();
+            foreach (var team in model.TeamList)
             {
-                for (int concurrentUserIndex = 0; concurrentUserIndex < model.ConcurrentUserCount; concurrentUserIndex++)
+                int teamId = team.Id;
+                var concurrentUser = team.ConcurrentUserCount; //teamLogic.GetTeamById(teamId).ConcurrentUserCount;
+                for (int concurrentUserIndex = 0; concurrentUserIndex < concurrentUser; concurrentUserIndex++)
                 {
-                    int id = int.Parse(teamId);
-                    for (int index = 0; index < model.ProductIdList.Count; index++)
+                    for (int index = 0; index < model.LicenseDataList.Count; index++)
                     {
 
-                        var proId = model.ProductIdList[index];
-                        var data = Work.LicenseDataRepository.GetData(l => l.ProductId == proId).ToList().Select(l => l.Id).ToList();
-                        var licId = licLogic.GetUnassignedLicenseForTeam(model.ProductIdList[index]);
+                        var proId = model.LicenseDataList[index].ProductId;
+                        var licId = licLogic.GetUnassignedLicense(proId);
                         TeamLicense tl = new TeamLicense()
                         {
                             LicenseId = licId.Id,
-                            TeamId = id,
+                            TeamId = teamId,
                             ProductId = proId
                         };
                         CreateTeamLicense(tl);
@@ -56,15 +69,16 @@ namespace License.Logic.DataLogic
             return true;
         }
 
-        public List<Products> GetProductFromLicenseData()
+        /// Get the product list based on the Availablity of the License for the Product and Expire Date of the Product
+        public List<Product> GetProductFromLicenseData()
         {
             //ListOut the product with IsMap is false;
             //Retrieve prodcut from Json File.
 
-            List<Products> prodList = new List<Products>();
+            List<Product> prodList = new List<Product>();
             SubscriptionBO subscriptionBO = new SubscriptionBO();
 
-            var productIdList = Work.LicenseDataRepository.GetData(ld => ld.IsMapped == false).ToList().Select(l => l.ProductId).ToList();
+            var productIdList = Work.ProductLicenseRepository.GetData(ld => ld.IsMapped == false).ToList().Select(l => l.ProductId).ToList();
             var prodIdList = (from id in productIdList
                               group id by id into list
                               select new { list.Key, Count = list.Count() }).ToList();
@@ -74,52 +88,60 @@ namespace License.Logic.DataLogic
                 var product = subscriptionBO.GetProductFromJsonFile(prodIdList[index].Key);
                 if (product != null)
                 {
-                    Products pro = new Products();
-                    pro.Product = product;
-                    pro.AvailableProductCount = prodIdList[index].Count;
-                    prodList.Add(pro);
+                    product.AvailableCount = prodIdList[index].Count;
+                    prodList.Add(product);
                 }
             }
             return prodList;
         }
 
+        // Updating the License status if the license Mapped to user or Removed from user 
         public void UpdateLicenseStatus(int licId, bool status)
         {
-            var obj = Work.LicenseDataRepository.GetById(licId);
+            var obj = Work.ProductLicenseRepository.GetById(licId);
             obj.IsMapped = status;
-            Work.LicenseDataRepository.Update(obj);
-            Work.LicenseDataRepository.Save();
+            Work.ProductLicenseRepository.Update(obj);
+            Work.ProductLicenseRepository.Save();
         }
 
-        public LicenseData GetUnassignedLicense(int userSubscriptionId, int productId)
-        {
-            var obj = Work.LicenseDataRepository.GetData(f => f.UserSubscriptionId == userSubscriptionId && f.ProductId == productId && f.IsMapped == false).FirstOrDefault();
-            return AutoMapper.Mapper.Map<Core.Model.LicenseData, LicenseData>(obj);
-        }
-
+        // Get the Team License based on the Team ID
         public List<TeamLicense> GetTeamLicense(int teamId)
         {
             List<TeamLicense> teamLicenses = new List<TeamLicense>();
             var datas = Work.TeamLicenseRepository.GetData(t => t.TeamId == teamId);
-            foreach (var data in datas)
-                teamLicenses.Add(AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data));
+            teamLicenses = datas.Select(data => AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data)).ToList();            
             return teamLicenses;
         }
-        public IEnumerable<License.Core.Model.LicenseData> GetLicenseData()
+
+        //Remove License by Team . to delete all the Team License deltion when user deletes the team
+        public bool RemoveLicenseByTeam(int teamId)
         {
-            return Work.LicenseDataRepository.GetData();
+            var status = true;
+            var teamlicense = Work.TeamLicenseRepository.GetData(t => t.TeamId == teamId).ToList();
+            teamlicense.ForEach((tl) =>
+            {
+                status = status && RemoveTeamLicenseById(tl.Id, tl.LicenseId);
+            });
+            return status;
         }
-        public void UpdateLicenseDataTableByProductId(int licId)
+
+        // Removing the Team License based on the Product Id  when user Revoke the Product from team 
+        public bool RemoveLicenseByProduct(int teamId, int productId)
         {
-            UpdateLicenseStatus(licId, false);
+            var teamLicense = Work.TeamLicenseRepository.GetData(tl => tl.TeamId == teamId && tl.ProductId == productId).ToList();
+            teamLicense.ForEach(lic => RemoveTeamLicenseById(lic.Id, lic.LicenseId));
+            return true;
         }
-        public bool RemoveLicenseByLicenseId(int licId)
+
+        // Removing the Team License based on the Id. Id : Team lIcense Id 
+        public bool RemoveTeamLicenseById(int Id, int licenseId)
         {
-            var deleteRowId = Work.TeamLicenseRepository.GetData(tl => tl.LicenseId == licId).FirstOrDefault().Id;
-            var deletestatus = Work.TeamLicenseRepository.Delete(deleteRowId);
+            var deletestatus = Work.TeamLicenseRepository.Delete(Id);
             Work.TeamLicenseRepository.Save();
+            proLicLogic.UpdateLicenseStatus(licenseId, false);
             return deletestatus;
         }
+
 
     }
 }

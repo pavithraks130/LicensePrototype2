@@ -9,43 +9,43 @@ namespace LicenseServer.Logic
 {
     public class ProductCategoryLogic : BaseLogic
     {
-        public List<ProductCategory> GetAll()
+        public List<SubscriptionCategory> GetAll()
         {
-            List<ProductCategory> productCategory = new List<ProductCategory>();
-            var categoryList = Work.ProductCategoryRepository.GetData().ToList();
+            List<SubscriptionCategory> productCategory = new List<SubscriptionCategory>();
+            var categoryList = Work.SubscriptionCategoryRepo.GetData().ToList();
             foreach (var category in categoryList)
-                productCategory.Add(AutoMapper.Mapper.Map<ProductCategory>(category));
+                productCategory.Add(AutoMapper.Mapper.Map<SubscriptionCategory>(category));
             return productCategory;
         }
 
-        public ProductCategory GetById(int id)
+        public SubscriptionCategory GetById(int id)
         {
-            var obj = Work.ProductCategoryRepository.GetById(id);
-            return AutoMapper.Mapper.Map<ProductCategory>(obj);
+            var obj = Work.SubscriptionCategoryRepo.GetById(id);
+            return AutoMapper.Mapper.Map<SubscriptionCategory>(obj);
         }
 
-        public bool Create(ProductCategory obj)
+        public SubscriptionCategory Create(SubscriptionCategory obj)
         {
-            var categoryObj = AutoMapper.Mapper.Map<LicenseServer.Core.Model.ProductCategory>(obj);
-            categoryObj = Work.ProductCategoryRepository.Create(categoryObj);
-            Work.ProductCategoryRepository.Save();
-            return categoryObj.Id > 0;
+            var categoryObj = AutoMapper.Mapper.Map<LicenseServer.Core.Model.SubscriptionCategory>(obj);
+            categoryObj = Work.SubscriptionCategoryRepo.Create(categoryObj);
+            Work.SubscriptionCategoryRepo.Save();
+            return AutoMapper.Mapper.Map<SubscriptionCategory>(categoryObj);
         }
 
-        public bool Update(int id, ProductCategory obj)
+        public SubscriptionCategory Update(int id, SubscriptionCategory obj)
         {
-            var categoryObj = Work.ProductCategoryRepository.GetById(id);
+            var categoryObj = Work.SubscriptionCategoryRepo.GetById(id);
             categoryObj.Name = obj.Name;
             categoryObj.Description = obj.Description;
-            categoryObj = Work.ProductCategoryRepository.Update(categoryObj);
-            Work.ProductCategoryRepository.Save();
-            return categoryObj.Id > 0;
+            categoryObj = Work.SubscriptionCategoryRepo.Update(categoryObj);
+            Work.SubscriptionCategoryRepo.Save();
+            return AutoMapper.Mapper.Map<SubscriptionCategory>(categoryObj);
         }
 
         public bool Delete(int id)
         {
-            var status = Work.ProductCategoryRepository.Delete(id);
-            Work.ProductCategoryRepository.Save();
+            var status = Work.SubscriptionCategoryRepo.Delete(id);
+            Work.SubscriptionCategoryRepo.Save();
             return status;
         }
 

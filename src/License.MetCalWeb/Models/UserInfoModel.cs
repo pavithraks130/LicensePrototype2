@@ -5,11 +5,11 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class UserInfoModel
-    {
-        public int UserId { get; set; }
-        public string Name { get; set; }
-        public string EmailId { get; set; }
-        public string TeamName { get; set; }
-    }
+    //public class UserInfoModel
+    //{
+    //    public int UserId { get; set; }
+    //    public string Name { get; set; }
+    //    public string EmailId { get; set; }
+    //    public string TeamName { get; set; }
+    //}
 }

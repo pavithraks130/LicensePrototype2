@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LicenseServer.Core.Model
 {
-    public class SubscriptionType
+    public class Subscription
     {
         [Key]
         public int Id { get; set; }
@@ -23,7 +23,7 @@ namespace LicenseServer.Core.Model
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
-        public ProductCategory Category { get; set; }
+        public SubscriptionCategory Category { get; set; }
 
         [ForeignKey("CreatedBy")]
         public Appuser CreatedUser { get; set; }

@@ -19,7 +19,7 @@ namespace LicenseServer.Core.DbContext
 
         public DbSet<CartItem> CartItem { get; set; }
 
-        public DbSet<SubscriptionType> SubscriptionType { get; set; }
+        public DbSet<Subscription> Subscription { get; set; }
 
         public DbSet<SubscriptionDetail> SubscriptionDetail { get; set; }
 
@@ -29,7 +29,7 @@ namespace LicenseServer.Core.DbContext
 
         public DbSet<Feature> Feature { get; set; }
 
-        public DbSet<ProductCategory> ProductCategory { get; set; }
+        public DbSet<SubscriptionCategory> SubscriptionCategory { get; set; }
 
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }

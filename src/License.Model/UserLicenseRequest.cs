@@ -17,7 +17,7 @@ namespace License.DataModel
         public bool IsRejected { get; set; }
         public string ApprovedBy { get; set; }
         public User User { get; set; }
-        public UserSubscription UserSubscripption { get; set; }
+        public UserSubscription UserSubscription { get; set; }
         public Product Product { get; set; }
         public String Comment { get; set; }
         public int TeamId { get; set; }

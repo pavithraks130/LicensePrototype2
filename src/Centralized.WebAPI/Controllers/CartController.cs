@@ -10,6 +10,9 @@ using LicenseServer.Logic.BusinessLogic;
 
 namespace Centralized.WebAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/Cart")]
     public class CartController : BaseController
@@ -23,7 +26,7 @@ namespace Centralized.WebAPI.Controllers
             cartBOLogic = new CartBO();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             cartBOLogic.UserManager = UserManager;
             cartBOLogic.RoleManager = RoleManager;
@@ -40,9 +43,9 @@ namespace Centralized.WebAPI.Controllers
         public HttpResponseMessage CreateCart(CartItem item)
         {
 
-            bool status = logic.CreateCartItem(item);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            var cart = logic.CreateCartItem(item);
+            if (cart != null && cart.Id > 0)
+                return Request.CreateResponse(HttpStatusCode.OK, cart);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
 
@@ -138,7 +141,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateSubscriptionAddToCart")]
-        public HttpResponseMessage CreateSubscriptionAddToCart(SubscriptionType subscriptionType)
+        public HttpResponseMessage CreateSubscriptionAddToCart(Subscription subscriptionType)
         {
             bool status = cartBOLogic.CreateSubscriptionAddToCart(subscriptionType);
             if (status)

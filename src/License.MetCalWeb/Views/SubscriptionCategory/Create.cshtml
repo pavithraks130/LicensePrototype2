@@ -1,4 +1,4 @@
-﻿@model License.MetCalWeb.Models.ProductCategory
+﻿@model License.MetCalWeb.Models.SubscriptionCategory
 @{
     Layout = null;
 }
@@ -30,7 +30,7 @@
         });
     });
 </script>
-@using (Html.BeginForm("Create", "ProductCategory", FormMethod.Post))
+@using (Html.BeginForm("Create", "SubscriptionCategory", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <div class="modal-dialog">

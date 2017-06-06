@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.SubscriptionDetails>
+﻿@model List<License.MetCalWeb.Models.Subscription>
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {
@@ -25,7 +25,7 @@
 <br />
 <div class="row">
     <div class="col-md-12">
-        @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
+        @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "AssignLicense";}
         @using (Html.BeginForm(user, "License", FormMethod.Post))
         {
             @Html.ValidationSummary()
@@ -33,7 +33,7 @@
             <div class="form-group">
                 <div class="col-md-8">
                     <span>
-                        Team Member Name :  @ViewData["UserEmail"]
+                        Team Member Name :  @ViewBag.UserEmail
                     </span>
                 </div>
             </div>

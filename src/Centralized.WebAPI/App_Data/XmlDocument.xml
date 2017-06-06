@@ -481,6 +481,11 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:Centralized.WebAPI.Controllers.CartController">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Centralized.WebAPI.Controllers.CartController.CreateCart(LicenseServer.DataModel.CartItem)">
             <summary>
             Post Method. Create Item Record in the cart for the Subscription which is added
@@ -525,7 +530,7 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateSubscriptionAddToCart(LicenseServer.DataModel.SubscriptionType)">
+        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateSubscriptionAddToCart(LicenseServer.DataModel.Subscription)">
             <summary>
             POST Method. Create the Custom Subscription 
             </summary>
@@ -542,7 +547,7 @@
             <summary>
             Create Feature Record in database
             </summary>
-            <param name="f"></param>
+            <param name="feature"></param>
             <returns></returns>
         </member>
         <member name="M:Centralized.WebAPI.Controllers.FetaureController.UpdateFeature(System.Int32,LicenseServer.DataModel.Feature)">
@@ -556,6 +561,46 @@
         <member name="M:Centralized.WebAPI.Controllers.FetaureController.DeleteFeature(System.Int32)">
             <summary>
             Delete spsecified Id Record
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Centralized.WebAPI.Controllers.ProductCategoryController">
+            <summary>
+            Cataegory Api Service Call for Getting the Subscription Category details.
+            </summary>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductCategoryController.Getcategories">
+            <summary>
+            Get Method: Service is used to get the Subscription Categories.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductCategoryController.CreateCategory(LicenseServer.DataModel.SubscriptionCategory)">
+            <summary>
+            POSt Method: Create Subscription Category
+            </summary>
+            <param name="category"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductCategoryController.GetCategoryById(System.Int32)">
+            <summary>
+            Get Method: Get Subscription category based on the id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductCategoryController.UpdateCategory(System.Int32,LicenseServer.DataModel.SubscriptionCategory)">
+            <summary>
+            PUT Method: Updating the Category changes based on the categoryId.
+            </summary>
+            <param name="id"></param>
+            <param name="category"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductCategoryController.DeleteCategory(System.Int32)">
+            <summary>
+            Delete Method: Delte the Subscription Category by Id.
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -586,6 +631,33 @@
             Delete Method. Delete Product based on the Product ID.
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetProductById(System.Int32)">
+            <summary>
+            Get Method: To get the Product by Product ID
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetCMMSProducts">
+            <summary>
+            Get Method: To Get the CMMS Products
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetProductByCategory(System.Int32)">
+            <summary>
+            Get Methos: Get Products by the Category Id
+            </summary>
+            <param name="categoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetProductUpdatesByProductId(System.Collections.Generic.List{LicenseServer.DataModel.Product})">
+            <summary>
+            Post method: to get the Product canges based on the Product Id. Input to this service is list Products with Product Id and Last Modified changes.
+            </summary>
+            <param name="products"></param>
             <returns></returns>
         </member>
         <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.GetPurchaseOrder">
@@ -658,7 +730,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.SubscriptionController.CreateSubscription(LicenseServer.DataModel.SubscriptionType)">
+        <member name="M:Centralized.WebAPI.Controllers.SubscriptionController.CreateSubscription(LicenseServer.DataModel.Subscription)">
             <summary>
             POST method. Creates the Subscriptioon
             </summary>
@@ -735,6 +807,22 @@
             </summary>
             <param name="userId"></param>
             <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.UserSubscriptionController.GetExpireSubscription(System.String)">
+            <summary>
+            Get Method: To the subscription which expires in month  based on the userId
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.UserSubscriptionController.RenewSubscription(System.String,LicenseServer.DataModel.RenewSubscriptionList)">
+            <summary>
+            Post method: To renew the subscription which are selected for the renew based on the subscription ID. Input to this service
+            is list of Subscription which need to Renewed for the  User.
+            </summary>
+            <param name="userId"></param>
+            <param name="renewSubList"></param>
             <returns></returns>
         </member>
         <member name="M:Centralized.WebAPI.Controllers.UserTokenController.GetAll">

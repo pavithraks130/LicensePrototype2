@@ -1,12 +1,11 @@
 ﻿
-@using License.MetCalWeb.Models
-@model LoginViewModel
+@model  License.MetCalWeb.Models.LoginViewModel
 @{
     ViewBag.Title = "Log in";
 }
 <script>
         $(function () {
-        if (@Convert.ToBoolean(ViewData["IsTeamListPopupVisible"]).ToString().ToLower())
+        if (@Convert.ToBoolean(ViewBag.IsTeamListPopupVisible).ToString().ToLower())
         {
             UpdateTeamContext();
         }

@@ -16,7 +16,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Bulk License Map", "MapLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
+                    <li>@Html.ActionLink("Bulk License Map", "AssignLicense", "License", new { userId = string.Empty, bulkLicenseAdd = true }, null)</li>
                     <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
                 </ul>
             </div>
@@ -123,7 +123,7 @@
                                 @if (LicenseSessionState.Instance.IsAdmin)
                                 {
                                     <button class="alert-success">
-                                        @Html.ActionLink("Add License", "MapLicense", "License", new { userId = @t.InviteeUserId, bulkLicenseAdd = false }, null)
+                                        @Html.ActionLink("Add License", "AssignLicense", "License", new { userId = @t.InviteeUserId, bulkLicenseAdd = false }, null)
                                     </button>
                                     <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "License", new { userId = @t.InviteeUserId }, null)</button>
 

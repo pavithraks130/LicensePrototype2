@@ -11,6 +11,10 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controller for the User Token Option. User Token is used to control te registration  from anonymous user. This is the token provided by the Fluke Admin/ Global Admin 
+    /// through mail. This token need to be specified during registration
+    /// </summary>
     [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
     public class UserTokenController : BaseController
@@ -20,7 +24,11 @@ namespace License.MetCalWeb.Controllers
         {
            
         }
-        // GET: UserToken
+        
+        /// <summary>
+        /// Listing all the user Token created based on the Email Id.
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> Index()
         {
             List<UserToken> tokenList = new List<UserToken>();
@@ -40,11 +48,20 @@ namespace License.MetCalWeb.Controllers
             return View(tokenList);
         }
 
+        /// <summary>
+        /// Get Action to display the View for the email specification
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CreateToken()
         {
             return View();
         }
 
+        /// <summary>
+        /// POST method for create Token which called when user submit form.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateToken(UserToken token)

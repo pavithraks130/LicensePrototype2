@@ -10,10 +10,16 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// DashBoard controller used to display the data(Product License and Expire Subscription details) to the User once user Log In .
+    /// </summary>
     [Authorize]
     public class DashboardController : Controller
     {
-        // GET: Tab
+        /// <summary>
+        /// Get Action to display the product License which is mapped already to user based on the Team Context selected.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Home()
         {
             if (LicenseSessionState.Instance.SelectedTeam != null)
@@ -21,10 +27,10 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.IsSuperAdmin)
             {
                 var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
-                ViewData["ExpiredSubCount"] = expiredSubscriptipon == null ? 0 : expiredSubscriptipon.Count;
+                ViewBag.ExpiredSubCount = expiredSubscriptipon == null ? 0 : expiredSubscriptipon.Count;
             }
             else
-                ViewData["ExpiredSubCount"] = "";
+                ViewBag.ExpiredSubCount = "";
 
             if (LicenseSessionState.Instance.UserSubscriptionList != null)
                 return View(LicenseSessionState.Instance.UserSubscriptionList);
@@ -32,19 +38,10 @@ namespace License.MetCalWeb.Controllers
         }
 
 
-        //public ActionResult TeamList()
-        //{
-        //    return View(LicenseSessionState.Instance.TeamList);
-        //}
-
-        //[HttpPost]
-        //public ActionResult TeamList(int teamId)
-        //{
-        //    LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.Where(t => t.Id == teamId).FirstOrDefault();
-        //    var message = LoadUserLicense();
-        //    return Json(new { success = true, message = message });
-        //}
-
+        /// <summary>
+        /// Function to make te Service call to get the data related to the Logged In User.
+        /// </summary>
+        /// <returns></returns>
         public string LoadUserLicense()
         {
             LicenseSessionState.Instance.AppTeamContext = new Team()
@@ -53,11 +50,8 @@ namespace License.MetCalWeb.Controllers
                 AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId,
                 Name = LicenseSessionState.Instance.SelectedTeam.Name
             };
-            //if (LicenseSessionState.Instance.UserSubscriptionList == null || LicenseSessionState.Instance.UserSubscriptionList.Count == 0)
-            //{
             var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
             LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
-            //}
             return string.Empty;
         }
 

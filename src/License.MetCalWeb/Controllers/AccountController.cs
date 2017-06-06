@@ -16,6 +16,9 @@ using License.MetCalWeb.Logic;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// User Autentication , Reset Password, Forgot password, Register actions are performed here.
+    /// </summary>
     [AllowAnonymous]
     public class AccountController : BaseController
     {
@@ -40,19 +43,26 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult Register()
         {
-            ViewData["SucessMessageDisplay"] = false;
+            ViewBag.SucessMessageDisplay = false;
             return View();
 
         }
 
+        /// <summary>
+        /// POST Action : Action is called when user submits the Registration form. Restered User record will be created  in both Centralized and On Premise DB.
+        /// 1. The User record will be created in Centralized and send the Centralized server User Id.
+        /// 2. User Record will be created in the ON Premise Db with server User Id Updated to Server user Id Property
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterModel model)
         {
-            ViewData["SucessMessageDisplay"] = false;
+            ViewBag.SucessMessageDisplay = false;
             if (ModelState.IsValid)
             {
-
+                //Invoking the Create User Service ofo the centralized Server
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = await client.PostAsJsonAsync("api/user/create", model);
                 if (response.IsSuccessStatusCode)
@@ -62,12 +72,13 @@ namespace License.MetCalWeb.Controllers
 
                     client.Dispose();
                     model.ServerUserId = datamodel.UserId;
+                    //Invoking the Create User Service ofo the OnPremise Server
                     client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                     response = await client.PostAsJsonAsync("api/user/create", model);
                     if (response.IsSuccessStatusCode)
                     {
 
-                        ViewData["SucessMessageDisplay"] = true;
+                        ViewBag.SucessMessageDisplay = true;
                         FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
                         StreamReader reader = new StreamReader(stream);
                         string str = reader.ReadToEnd();
@@ -94,6 +105,11 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Post Actioon called on the Login Form Submission for suthetication
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogIn(LoginViewModel model)
@@ -101,8 +117,8 @@ namespace License.MetCalWeb.Controllers
             User user = null;
             if (ModelState.IsValid)
             {
-                // Authentication is supparated for the On Premises user and Centralized User. Global Admin will  be authenticate with Centralised DB 
-                // and on premises user and admin will be authenticated with on premise DB
+                // AUthentication performed on the On Premise Server, If te Authentication fails or the Server User id is not empty then the user is authenticated with
+                // centralized service
                 var status = await _accountLogic.AuthenticateUser(model, ServiceType.OnPremiseWebApi);
                 if (status)
                 {
@@ -121,6 +137,8 @@ namespace License.MetCalWeb.Controllers
                         return View();
                     }
                 }
+
+                // Once the Authentication is performed and user  object returned is not equal to null , then the global session object are set  as shown below.
                 if (user == null)
                 {
                     ModelState.AddModelError("", _accountLogic.ErrorMessage);
@@ -140,12 +158,15 @@ namespace License.MetCalWeb.Controllers
                 LicenseSessionState.UserId = user.UserId;
                 LicenseSessionState.ServerUserId = user.ServerUserId;
                 SignInAsync(user, true);
+
+                // If the Logged user is  Super Admin then Async call is made to sync the Offline purchased Subscription if exist and approved by the global admin
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
                     AuthorizeBackendService service = new AuthorizeBackendService();
                     service.SyncDataToOnpremise();
                 }
                 LicenseSessionState.Instance.IsAuthenticated = true;
+
                 if (LicenseSessionState.Instance.IsGlobalAdmin)
                 {
                     if (String.IsNullOrEmpty(user.FirstName))
@@ -154,20 +175,27 @@ namespace License.MetCalWeb.Controllers
                         return RedirectToAction("Index", "User");
                     return RedirectToAction("Home", "Dashboard");
                 }
+
+                // Here the concurrent user login and Team Selection functionalities are executed.
                 if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
                 {
                     string userId = string.Empty;
                     if (!LicenseSessionState.Instance.IsSuperAdmin)
                         userId = LicenseSessionState.Instance.User.UserId;
 
+                    // Get the Team list for which the logged in User belongs to  if the us3er belongs to more than one team then the pop up window is displayed for the 
+                    // team selection
                     var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
                     LicenseSessionState.Instance.TeamList = teamList;
 
                     if (teamList.Count == 0)
                     {
-                        ViewData["IsTeamListPopupVisible"] = false;
+                        ViewBag.IsTeamListPopupVisible = false;
                         return View();
                     }
+
+                    // if the user belongs to the single team then the user logged in using the  team context to which he belongs.
+                    // if the logged in user cout reaches the maximum limit then alert message will be displayed and user will be logged Out
                     else if (teamList.Count == 1)
                     {
                         LicenseSessionState.Instance.SelectedTeam = teamList.FirstOrDefault();
@@ -188,7 +216,9 @@ namespace License.MetCalWeb.Controllers
                         }
                     }
                 }
-                ViewData["IsTeamListPopupVisible"] = LicenseSessionState.Instance.TeamList.Count > 0 && LicenseSessionState.Instance.SelectedTeam == null;
+
+                // ViewData["IsTeamListPopupVisible"] is used to display the popup window for TeamList Selection 
+                ViewBag.IsTeamListPopupVisible = LicenseSessionState.Instance.TeamList.Count > 0 && LicenseSessionState.Instance.SelectedTeam == null;
                 return View();
             }
             else
@@ -221,13 +251,21 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Action for the Forgot Password submission.  Intialy the ONPremise service will called to generate the Token for rthe forgot password  if the value is returned null then the 
+        /// Centralized ser vice will be called for the token generation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(ForgotPassword model)
         {
             if (ModelState.IsValid)
             {
+                // Invokjking the On Premise Service for token generation
                 var tokenModel = _accountLogic.GetForgotPasswordToken(model, ServiceType.OnPremiseWebApi);
+                // If the return value is Null then centralized service called
                 if (tokenModel == null)
                     tokenModel = _accountLogic.GetForgotPasswordToken(model, ServiceType.CentralizeWebApi);
                 if (tokenModel != null)
@@ -245,12 +283,22 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult ResetPassword(string userId, string code)
         {
-            License.MetCalWeb.Models.ResetPassword model = new ResetPassword();
-            model.Token = code;
-            model.UserId = userId;
+            License.MetCalWeb.Models.ResetPassword model = new ResetPassword()
+            {
+                Token = code,
+                UserId = userId
+            };
             return View(model);
         }
 
+        /// <summary>
+        /// Action for Reset password form submission. Here too the first call will be made
+        /// to the On Premise  if it fails or if the ServeruserId is not empty then the Centralized service call will be made
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="userId"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPassword model, string userId, string code)
@@ -282,6 +330,10 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Get Action to clear the session  on Log out
+        /// </summary>
+        /// <returns></returns>
         public ActionResult LogOut()
         {
             if (LicenseSessionState.Instance.IsGlobalAdmin)
@@ -297,12 +349,19 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("LogIn");
         }
 
+        // Used to sign out from AUthentication manager
         public void ClearSession()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Clear();
         }
 
+        /// <summary>
+        /// Get Action for updating the User Invitation
+        /// </summary>
+        /// <param name="invite"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public ActionResult Confirm(string invite, string status)
         {
             string passPhrase = System.Configuration.ConfigurationManager.AppSettings.Get("passPhrase");
@@ -336,11 +395,21 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Get ACtioin passes the List of team to the View.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult TeamList()
         {
             return View(LicenseSessionState.Instance.TeamList);
         }
 
+        /// <summary>
+        /// POST action to validate the user for Login based on the
+        /// concurrent user Count , If its valid then the team License will be assigned based on the team Context selected
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult TeamList(int teamId)
         {
@@ -364,11 +433,14 @@ namespace License.MetCalWeb.Controllers
             }
         }
 
+        //  Service call to Verify is Authenticated User can loggin in the Selected Team Context for the concurrent user Aauthentcation
         public ConcurrentUserLogin IsConcurrentUserLoggedIn()
         {
-            ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
-            userLogin.TeamId = LicenseSessionState.Instance.SelectedTeam.Id;
-            userLogin.UserId = LicenseSessionState.Instance.User.UserId;
+            ConcurrentUserLogin userLogin = new ConcurrentUserLogin()
+            {
+                TeamId = LicenseSessionState.Instance.SelectedTeam.Id,
+                UserId = LicenseSessionState.Instance.User.UserId
+            };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
             var jsonData = response.Content.ReadAsStringAsync().Result;

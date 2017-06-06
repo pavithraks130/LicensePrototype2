@@ -18,11 +18,17 @@ namespace Centralized.WebAPI.Controllers
             logic = new UserSubscriptionLogic();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             logic.UserManager = UserManager;
             logic.RoleManager = RoleManager;
         }
+
+        /// <summary>
+        /// Get Method: To the subscription which expires in month  based on the userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
 
         [HttpGet]
         [Route("ExpireSubscription/{userId}")]
@@ -35,6 +41,13 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, subList);
         }
 
+        /// <summary>
+        /// Post method: To renew the subscription which are selected for the renew based on the subscription ID. Input to this service
+        /// is list of Subscription which need to Renewed for the  User.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="renewSubList"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("RenewSubscription/{userId}")]
         public HttpResponseMessage RenewSubscription(string userId, RenewSubscriptionList renewSubList)

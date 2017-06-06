@@ -41,9 +41,9 @@ namespace Centralized.WebAPI.Controllers
         [Route("Create")]
         public HttpResponseMessage CreateProduct(Product model)
         {
-            var status = logic.CreateProduct(model);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.Created, "Created the Product");
+            var pro = logic.CreateProduct(model);
+            if (pro != null && pro.Id > 0)
+                return Request.CreateResponse(HttpStatusCode.Created, pro);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to create Product due to internal error");
         }
@@ -58,9 +58,9 @@ namespace Centralized.WebAPI.Controllers
         [Route("update/{id}")]
         public HttpResponseMessage UpdateProduct(int id, Product model)
         {
-            var status = logic.UpdateProduct(id, model);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated the Product");
+            var pro = logic.UpdateProduct(id, model);
+            if (pro != null && pro.Id > 0)
+                return Request.CreateResponse(HttpStatusCode.OK, pro);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to Update Product due to internal error");
         }
@@ -82,18 +82,12 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to Delete Product due to internal error");
         }
 
-        [HttpGet]
-        [Route("ProductDependency")]
-        public HttpResponseMessage GetProductDependency()
-        {
-            ProductBO productBo = new ProductBO();
-            var obj = productBo.GetDependencyDetails();
-            if (obj != null)
-                return Request.CreateResponse(HttpStatusCode.OK, obj);
-            else
-                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
-        }
-        
+        /// <summary>
+        /// Get Method: To get the Product by Product ID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+
         [HttpGet]
         [Route("GetById/{Id}")]
         public HttpResponseMessage GetProductById(int Id)
@@ -105,6 +99,10 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Get Method: To Get the CMMS Products
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetCMMSProducts")]
         public IHttpActionResult GetCMMSProducts()
@@ -113,17 +111,27 @@ namespace Centralized.WebAPI.Controllers
             return Ok(productList);
         }
 
+        /// <summary>
+        /// Get Methos: Get Products by the Category Id
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("ProductByCategory/{Id}")]
-        public HttpResponseMessage GetProductByCategory(int Id)
+        [Route("ProductByCategory/{categoryId}")]
+        public HttpResponseMessage GetProductByCategory(int categoryId)
         {
-            var obj = logic.GetProductByCategoryId(Id);
+            var obj = logic.GetProductByCategoryId(categoryId);
             if (obj != null)
                 return Request.CreateResponse(HttpStatusCode.OK, obj);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Post method: to get the Product canges based on the Product Id. Input to this service is list Products with Product Id and Last Modified changes.
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CheckProductUpdates")]
         public IHttpActionResult GetProductUpdatesByProductId(List<Product> products)

@@ -107,7 +107,7 @@
                             }
                         </td>
                         <td class="col-md-4">
-                            @Html.DropDownList("user_count_dropdown", new SelectList(ViewData["UserCountList"] as IEnumerable<SelectListItem>, "Text", "Value", @obj.ConcurrentUserCount), "", new { @class = "ddlConcurentUser form-control", data_value = @obj.Id })
+                            @Html.DropDownList("user_count_dropdown", new SelectList(ViewBag.UserCountList, "Text", "Value", @obj.ConcurrentUserCount), "", new { @class = "ddlConcurentUser form-control", data_value = @obj.Id })
                             @*<input type="text" name="con_count" value=@obj.ConcurrentUserCount style="width:40px" />*@
                         </td>
                         <td class="col-md-4">

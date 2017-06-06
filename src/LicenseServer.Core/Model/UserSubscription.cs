@@ -15,7 +15,7 @@ namespace LicenseServer.Core.Model
 
         public string UserId { get; set; }
 
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public int Quantity { get; set; }
 
@@ -26,8 +26,8 @@ namespace LicenseServer.Core.Model
 
         public DateTime RenewalDate { get; set; } = new DateTime(1900, 01, 01);
 
-        [ForeignKey("SubscriptionTypeId")]
-        public virtual SubscriptionType Subtype { get; set; }
+        [ForeignKey("SubscriptionId")]
+        public virtual Subscription Subtype { get; set; }
 
         [ForeignKey("UserId")]
         public Appuser User { get; set; }

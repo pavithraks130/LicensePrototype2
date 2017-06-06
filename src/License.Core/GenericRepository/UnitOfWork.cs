@@ -34,12 +34,12 @@ namespace License.Core.GenericRepository
             }
         }
 
-        private LicenseRepository<LicenseData> _licenseDataRepository;
-        public LicenseRepository<LicenseData> LicenseDataRepository
+        private LicenseRepository<ProductLicense> _productLicenseRepository;
+        public LicenseRepository<ProductLicense> ProductLicenseRepository
         {
             get
             {
-                return _licenseDataRepository ?? (_licenseDataRepository = new LicenseRepository<LicenseData>(_dbContext));
+                return _productLicenseRepository ?? (_productLicenseRepository = new LicenseRepository<ProductLicense>(_dbContext));
             }
         }
 

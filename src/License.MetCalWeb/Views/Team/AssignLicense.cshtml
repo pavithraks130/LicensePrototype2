@@ -35,7 +35,7 @@
 <br />
 <div class="row">
     <div class="col-md-12">
-        @using (Html.BeginForm("TeamMapLicense", "Team", FormMethod.Post))
+        @using (Html.BeginForm("AssignLicense", "Team", FormMethod.Post))
         {
             @Html.ValidationSummary()
             @Html.AntiForgeryToken()
@@ -72,10 +72,10 @@
 
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="selectedSubscription" value="ProId:@pro.Product.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableProductCount == 0 || pro.IsSelected ? "disabled='disabled'" : "")>
+                                        <input type="checkbox" name="selectedProducts" value="ProId:@pro.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableProductCount == 0 || pro.IsSelected ? "disabled='disabled'" : "")>
                                         <label class="control-label">
 
-                                            @pro.Product.Name
+                                            @pro.Name
                                         </label>
                                     </td>
                                     <td class="pro_count">
@@ -94,6 +94,7 @@
                 </div>
             }
             @Html.HiddenFor(m => m.ConcurrentUserCount, new { @class = "hdnConcurentUser" })
+            @Html.HiddenFor(m=>m.TeamID)
         }
     </div>
 </div>

@@ -8,10 +8,16 @@ using License.Logic.BusinessLogic;
 
 namespace License.Logic.DataLogic
 {
+    /// <summary>
+    /// History 
+    /// Created By: 
+    /// Created date :
+    /// Purpose : 1. User License Request CRUD operation
+    /// </summary>
     public class UserLicenseRequestLogic : BaseLogic
     {
 
-        List<SubscriptionType> subList = null;
+        List<Subscription> subList = null;
         /// <summary>
         /// Creating the single object  to DB
         /// </summary>
@@ -41,6 +47,7 @@ namespace License.Logic.DataLogic
             return obj != null;
         }
 
+        /// Creation of Multiple License Request for single user
         public void Create(List<UserLicenseRequest> reqList)
         {
             bool status = true;
@@ -54,6 +61,7 @@ namespace License.Logic.DataLogic
                 Work.UserLicenseRequestRepo.Save();
         }
 
+        //Updating the Multiple License Request
         public void Update(List<UserLicenseRequest> reqList)
         {
             bool status = true;
@@ -88,6 +96,7 @@ namespace License.Logic.DataLogic
             return null;
         }
 
+        /// Get User license Request by team Id
         public List<UserLicenseRequest> GetRequestListByTeam(int teamId)
         {
             if(subList == null)
@@ -106,8 +115,8 @@ namespace License.Logic.DataLogic
                     foreach (var obj in licReqList)
                     {
                         var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
-                        var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
-                        tempObj.UserSubscripption.Subscription = new SubscriptionType() { Id = subscription.Id, Name = subscription.Name };
+                        var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscription.SubscriptionId);
+                        tempObj.UserSubscription.Subscription = new Subscription() { Id = subscription.Id, Name = subscription.Name };
                         tempObj.Product = subscription.Products.FirstOrDefault(p => p.Id == tempObj.ProductId);
                         userLicReq.Add(tempObj);
                     }
@@ -134,8 +143,8 @@ namespace License.Logic.DataLogic
                 foreach (var obj in licReqList)
                 {
                     var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
-                    var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscripption.SubscriptionId);
-                    tempObj.UserSubscripption.Subscription = new SubscriptionType() { Id = subscription.Id, Name = subscription.Name };
+                    var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscription.SubscriptionId);
+                    tempObj.UserSubscription.Subscription = new Subscription() { Id = subscription.Id, Name = subscription.Name };
                     tempObj.Product = subscription.Products.FirstOrDefault(p => p.Id == tempObj.ProductId);
                     userLicReq.Add(tempObj);
                 }
@@ -144,7 +153,7 @@ namespace License.Logic.DataLogic
             return null;
         }
 
-
+        /// Get User license by ID.
         public UserLicenseRequest GetById(int id)
         {
             var data = Work.UserLicenseRequestRepo.GetById(id);

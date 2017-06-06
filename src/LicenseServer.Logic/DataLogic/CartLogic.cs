@@ -20,17 +20,17 @@ namespace LicenseServer.Logic
             return cartItems;
         }
 
-        public bool CreateCartItem(CartItem item)
+        public CartItem CreateCartItem(CartItem item)
         {
             Core.Model.CartItem cartItem = AutoMapper.Mapper.Map<CartItem, Core.Model.CartItem>(item);
-            var obj = Work.SubscriptionRepository.GetById(item.SubscriptionTypeId);
+            var obj = Work.SubscriptionRepository.GetById(item.SubscriptionId);
             cartItem.Price = obj.Price;
             cartItem = Work.CartItemLicenseRepository.Create(cartItem);
             Work.CartItemLicenseRepository.Save();
-            return cartItem.Id > 0;
+            return AutoMapper.Mapper.Map<CartItem>(cartItem);
         }
 
-        public bool UpdateCartItem(CartItem item)
+        public CartItem UpdateCartItem(CartItem item)
         {
             Core.Model.CartItem cartItem = Work.CartItemLicenseRepository.GetById(item.Id);
             cartItem.Quantity = item.Quantity;
@@ -38,7 +38,7 @@ namespace LicenseServer.Logic
             cartItem.Price = item.Price;
             cartItem = Work.CartItemLicenseRepository.Update(cartItem);
             Work.CartItemLicenseRepository.Save();
-            return cartItem.Id > 0;
+            return AutoMapper.Mapper.Map<CartItem>(cartItem);
         }
 
         public CartItem GetCartItemById(int id)
@@ -52,8 +52,6 @@ namespace LicenseServer.Logic
             var obj = Work.CartItemLicenseRepository.Delete(id);
             Work.CartItemLicenseRepository.Save();
             return obj;
-        }
-
-       
+        }       
     }
 }

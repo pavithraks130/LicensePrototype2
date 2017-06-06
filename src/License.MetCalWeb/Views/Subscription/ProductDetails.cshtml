@@ -1,4 +1,4 @@
-﻿@model  License.MetCalWeb.Models.SubscriptionType
+﻿@model  License.MetCalWeb.Models.Subscription
 @{
     ViewBag.Title = "ProductDetails";
 }
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group col-md-12 ">
                         <label class="col-md-4"> Subscription Periode</label>
-                        @Html.DropDownListFor(m => m.ActivationMonth, ViewData["PeriodeList"] as List<SelectListItem>, new { @class = "form-control col-md-8 ddlActivationPeriode" })
+                        @Html.DropDownListFor(m => m.ActivationMonth, ViewBag.PeriodeList as List<SelectListItem>, new { @class = "form-control col-md-8 ddlActivationPeriode" })
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     <div style="margin-top:20px;">
                         <h3>1. Concurrent Users</h3>
                         <div class="form-input con_user col-md-12" style="margin:5px 20px ; ">
-                            @Html.DropDownListFor(Model => Model.NoOfUsers, ViewData["UserCount"] as List<SelectListItem>, new { @class = "form-control selected_user_count" })
+                            @Html.DropDownListFor(Model => Model.NoOfUsers, ViewBag.UserCount as List<SelectListItem>, new { @class = "form-control selected_user_count" })
                         </div>
                     </div>
                 </div>

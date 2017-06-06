@@ -21,7 +21,7 @@ namespace LicenseServer.Logic
             return null;
         }
 
-        public PurchaseOrder UpdatePurchaseOrder(int id,PurchaseOrder order)
+        public PurchaseOrder UpdatePurchaseOrder(int id, PurchaseOrder order)
         {
             var tempObj = Work.PurchaseOrderRepository.GetById(id);
             tempObj.IsApproved = order.IsApproved;
@@ -54,11 +54,7 @@ namespace LicenseServer.Logic
         {
             List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => poIdList.Contains(f.Id));
-            foreach (var item in listItem)
-            {
-                var obj = AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(item);
-                purchaseOrderList.Add(obj);
-            }
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();
             return purchaseOrderList;
         }
 
@@ -66,11 +62,7 @@ namespace LicenseServer.Logic
         {
             List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.IsApproved == false && string.IsNullOrEmpty(f.ApprovedBy));
-            foreach (var item in listItem)
-            {
-                var obj = AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(item);
-                purchaseOrderList.Add(obj);
-            }
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();          
             return purchaseOrderList;
         }
 
@@ -78,11 +70,7 @@ namespace LicenseServer.Logic
         {
             List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.UserId == userId);
-            foreach (var item in listItem)
-            {
-                var obj = AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(item);
-                purchaseOrderList.Add(obj);
-            }
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();
             return purchaseOrderList;
         }
 
@@ -90,11 +78,7 @@ namespace LicenseServer.Logic
         {
             List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.UserId == userId && f.IsApproved == true && f.IsSynched == false);
-            foreach (var item in listItem)
-            {
-                var obj = AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(item);
-                purchaseOrderList.Add(obj);
-            }
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();
             return purchaseOrderList;
         }
 
@@ -115,7 +99,7 @@ namespace LicenseServer.Logic
                 var POId = listData[listData.Count - 1].PurchaseOrderNo;
                 var dt = POId.Split(new char[] { '-' });
                 int data = Convert.ToInt32(dt[2]) + 1;
-                return "PO-SUB-" + data.ToString().PadLeft(5,'0');
+                return "PO-SUB-" + data.ToString().PadLeft(5, '0');
             }
             else
                 return "PO-SUB-00001";

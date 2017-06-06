@@ -7,8 +7,17 @@ using License.DataModel;
 using License.Logic.BusinessLogic;
 namespace License.Logic.DataLogic
 {
+    /// <summary>
+    /// History
+    /// Created By:
+    /// Created Date: 
+    /// Purpose:    Update the Product details on the ONPremise if any changes made in the centralized DB for the Products.
+    ///             1. Get the Product details from the ON Premise Json Files
+    ///             2. Update the Changes to the respect product json file which is stored in the system
+    /// </summary>
     public class ProductLogic : BaseLogic
     {
+        /// Gets the Product List from the local based on the admin Id. 
         public List<Product> GetProductbyAdmin(string adminId)
         {
             var userSubscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == adminId).ToList();
@@ -25,6 +34,7 @@ namespace License.Logic.DataLogic
             return null;
         }
 
+        /// Updates the Product changes to the Local Product json file.
         public void UpdateProducts(List<Product> products)
         {
             SubscriptionBO subLogic = new SubscriptionBO();

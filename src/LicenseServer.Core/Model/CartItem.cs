@@ -17,10 +17,10 @@ namespace LicenseServer.Core.Model
 
         public System.DateTime DateCreated { get; set; }
 
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
-        [ForeignKey("SubscriptionTypeId")]
-        public virtual SubscriptionType SubType { get; set; }
+        [ForeignKey("SubscriptionId")]
+        public virtual Subscription SubType { get; set; }
 
         public string UserId { get; set; }
         [ForeignKey("UserId")]

@@ -9,12 +9,12 @@ namespace LicenseServer.Logic
 {
     public class POItemLogic : BaseLogic
     {
-        public bool CreateItem(PurchaseOrderItem item)
+        public PurchaseOrderItem CreateItem(PurchaseOrderItem item)
         {
             var itemObj = AutoMapper.Mapper.Map<Core.Model.PurchaseOrderItem>(item);
             var obj = Work.POItemRepository.Create(itemObj);
             Work.POItemRepository.Save();
-            return obj.Id > 0;
+            return AutoMapper.Mapper.Map<PurchaseOrderItem>(obj);
         }
 
         public bool CreateItem(List<PurchaseOrderItem> itemlist, int poId)

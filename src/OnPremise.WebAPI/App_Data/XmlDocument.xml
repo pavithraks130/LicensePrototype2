@@ -481,6 +481,11 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:OnPremise.WebAPI.Controllers.AssetController">
+            <summary>
+            Asset Service 
+            </summary>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.AssetController.GetAssetes">
             <summary>
             Get Method to list all the Hardware assets
@@ -604,6 +609,27 @@
             <param name="teamId"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.DeleteTeamLicenses(License.DataModel.TeamLicenseDataMapping)">
+            <summary>
+            Delete Method : To delete the team License
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.ProductController.GetProductsByAdmin(System.String)">
+            <summary>
+            GET Method : Gets products based on the admin Id
+            </summary>
+            <param name="adminUserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.ProductController.UpdateProducts(System.Collections.Generic.List{License.DataModel.Product})">
+            <summary>
+            POST Method: Used to Update the products in bulk
+            </summary>
+            <param name="productList"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamController.GetTeamById(System.Int32)">
             <summary>
             Get Method. To get the Team along with Team Member details based on the TeamId.
@@ -648,11 +674,39 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamController.GetSubscriptionProduct">
+            <summary>
+            Get Method: Gets the list of the Subscribed Products
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamController.UpdateConcurentUser(License.DataModel.Team)">
+            <summary>
+            POST Method: To update the concurrent user to team 
+            and  update the product License if the products are mapped
+            </summary>
+            <param name="team"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateInvite(License.DataModel.TeamMember)">
             <summary>
             POST Method. To create the User Invite Request to the Team
             </summary>
             <param name="member"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateTeamMembers(System.Collections.Generic.List{License.DataModel.TeamMember})">
+            <summary>
+            POST Method: To Create the Team Member record
+            </summary>
+            <param name="teamMemList"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.RemoveTeamMembers(System.Collections.Generic.List{License.DataModel.TeamMember})">
+            <summary>
+            POST Method : To remove Team Members in Bulk
+            </summary>
+            <param name="teamMemList"></param>
             <returns></returns>
         </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.DeleteTeamMember(System.Int32)">
@@ -765,6 +819,36 @@
             <summary>
             GET Method. Check for the concurent user 
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.CreateSubscription(License.DataModel.SubscriptionList)">
+            <summary>
+            POST Method: Sync the subscription from Centralized to ON premise
+            </summary>
+            <param name="subscriptionData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.UpdateSubscriptionRenewal(License.DataModel.SubscriptionList,System.String)">
+            <summary>
+             POST Method: To update the renewal  subscription details
+            </summary>
+            <param name="subscriptionList"></param>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.GetSubscriptionDetails(System.String)">
+            <summary>
+            GET Method : to get the subscription details by admin ID
+            </summary>
+            <param name="adminId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.GetSubscriptionDetailsForLicenseMap(System.String,System.String)">
+            <summary>
+            Get Method: to get the subscription License based on the admin id and User Id  for the license Map
+            </summary>
+            <param name="adminId"></param>
+            <param name="userId"></param>
             <returns></returns>
         </member>
     </members>

@@ -8,8 +8,15 @@ using TeamAssetModel = License.DataModel.TeamAsset;
 
 namespace License.Logic.DataLogic
 {
+    /// <summary>
+    /// History:
+    ///         Created By :
+    ///         Created Date:
+    ///         Purpose:     Used to Perform CRUD  functionality ono team asset Table DB
+    /// </summary>
     public class TeamAssetLogic : BaseLogic
     {
+        // Create Teama Asset record 
         public TeamAssetModel CreateAsset(TeamAssetModel teamAsset)
         {
             TeamAsset convertedTeamAsset = AutoMapper.Mapper.Map<TeamAssetModel, TeamAsset>(teamAsset);
@@ -26,6 +33,7 @@ namespace License.Logic.DataLogic
            
         }
 
+        // Get List of all the Team Asset
         public List<TeamAssetModel> GetAssets()
         {
             List<TeamAssetModel> teamAssets = new List<TeamAssetModel>();
@@ -38,12 +46,14 @@ namespace License.Logic.DataLogic
             return teamAssets;
         }
 
+        // Get Team Asset by id 
         public TeamAssetModel GetAssetById(int id)
         {
             var obj = Work.TeamAssetRepository.GetById(id);
             return AutoMapper.Mapper.Map<TeamAssetModel>(obj);
         }
 
+        // Delete Team Asset by id
         public bool RemoveAsset(int id)
         {
             try
@@ -59,6 +69,7 @@ namespace License.Logic.DataLogic
             return false;
         }
 
+        // Update Team Asset by Id
         public TeamAssetModel UpdateAsset(int id, TeamAssetModel model)
         {
             var obj = Work.TeamAssetRepository.GetById(id);

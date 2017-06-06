@@ -13,14 +13,14 @@ namespace LicenseServer.Core.Model
         [Key]
         public int Id { get; set; }
 
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public int ProductId { get; set; }
 
         public int Quantity { get; set; }
 
-        [ForeignKey("SubscriptionTypeId")]
-        public SubscriptionType SubscriptyType { get; set; }
+        [ForeignKey("SubscriptionId")]
+        public Subscription Subscription { get; set; }
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }

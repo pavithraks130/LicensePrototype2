@@ -24,7 +24,7 @@ namespace Centralized.WebAPI.Controllers
             logic = new UserLogic();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             if (logic.UserManager == null)
                 logic.UserManager = UserManager;
