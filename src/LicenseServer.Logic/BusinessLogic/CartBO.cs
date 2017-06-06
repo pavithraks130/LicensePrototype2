@@ -143,7 +143,7 @@ namespace LicenseServer.Logic.BusinessLogic
 
         public bool CreateSubscriptionAddToCart(Subscription type)
         {
-            SubscriptionTypeLogic typeLOgic = new SubscriptionTypeLogic();
+            SubscriptionLogic typeLOgic = new SubscriptionLogic();
             Subscription subType = typeLOgic.CreateSubscriptionWithProduct(type);
             if (subType == null && String.IsNullOrEmpty(typeLOgic.ErrorMessage))
                 ErrorMessage = typeLOgic.ErrorMessage;

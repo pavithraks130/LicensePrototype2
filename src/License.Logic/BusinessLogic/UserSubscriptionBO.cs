@@ -89,6 +89,7 @@ namespace License.Logic.BusinessLogic
                         UserSubscriptionId = userSub.Id,
                         Name = subType.Name
                     };
+                    model.Products = new List<Product>();
                     ProductLicenseLogic licDataLogic = new ProductLicenseLogic();
                     var userlicList = licDataLogic.GetLicenseList(userSub.Id);
 

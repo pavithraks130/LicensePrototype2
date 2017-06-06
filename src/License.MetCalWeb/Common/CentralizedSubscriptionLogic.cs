@@ -51,30 +51,15 @@ namespace License.MetCalWeb.Common
         }
 
         /// <summary>
-        /// Updating the Subscription in the On Premise once the New Subscsription is purchased or renewed
+        /// Updating the Subscription in the On Premise once the New Subscsription is purchased or renewed.
+        /// Note:  Here for On Premise the user Id need to Be updated  with On Premise User Id as shown Below
         /// </summary>
         /// <param name="subs"></param>
         /// <param name="isRenewal"></param>
         public static void UpdateSubscriptionOnpremise(SubscriptionList subs, bool isRenewal = false)
         {
             string userId = string.Empty;
-            userId = LicenseSessionState.Instance.User.UserId;
-            //List<UserSubscription> subscriptionData = new List<UserSubscription>();
-            //foreach (var subDtls in subs.Subscriptions)
-            //{
-            //    //Code to save the user Subscription details to Database.
-            //    UserSubscription userSubscription = new UserSubscription()
-            //    {
-            //        SubscriptionDate = subDtls.SubscriptionDate,
-            //        RenewalDate = subDtls.RenewalDate,
-            //        SubscriptionId = subDtls.SubscriptionTypeId,
-            //        UserId = userId,
-            //        Quantity = subDtls.OrderdQuantity,
-            //        Subscription = subDtls,
-            //        LicenseKeys = subDtls.LicenseKeyProductMapping
-            //    };
-            //    subscriptionData.Add(userSubscription);
-            //}
+            subs.UserId = LicenseSessionState.Instance.User.UserId;            
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             string url = string.Empty;
             if (isRenewal)

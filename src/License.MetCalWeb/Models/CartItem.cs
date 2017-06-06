@@ -13,7 +13,7 @@ namespace License.MetCalWeb.Models
 
         public System.DateTime DateCreated { get; set; }
 
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
         public Subscription SubType { get; set; }
 
         public string UserId { get; set; }

@@ -25,7 +25,7 @@ namespace License.MetCalWeb.Models
 
     public class SubscriptionLicenseMapping
     {
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public DateTime SubscriptionDate { get; set; }
 

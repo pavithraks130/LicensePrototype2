@@ -255,11 +255,11 @@ namespace License.MetCalWeb.Controllers
             // Product creation based on the feature selection
             Product pro = new Product()
             {
-                AssociatedFeatures = new List<Feature>(),
+                Features = new List<Feature>(),
                 Quantity = type.NoOfUsers,
                 Categories = new List<SubscriptionCategory>() { type.Category }
             };
-            pro.AssociatedFeatures = selectedFeatures.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();           
+            pro.Features = selectedFeatures.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();           
             productCollection.Add(pro);
 
             // Creation of the Product for each cmms product selection 

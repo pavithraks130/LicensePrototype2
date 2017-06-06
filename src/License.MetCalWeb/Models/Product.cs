@@ -13,8 +13,8 @@ namespace License.MetCalWeb.Models
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
-        public ICollection<SubscriptionCategory> Categories { get; set; }
-        public ICollection<Feature> AssociatedFeatures { get; set; }
+        public List<SubscriptionCategory> Categories { get; set; }
+        public List<Feature> Features { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int ActivationMonth { get; set; }
@@ -24,7 +24,6 @@ namespace License.MetCalWeb.Models
         public bool IsSelected { get; set; }
         public bool IsDisabled { get; set; }
         public bool InitialState { get; set; }
-        public List<Feature> Features { get; set; }
         public DateTime ExpireDate { get; set; }
         public int AvailableProductCount { get { return TotalLicenseCount - UsedLicenseCount; } }
 

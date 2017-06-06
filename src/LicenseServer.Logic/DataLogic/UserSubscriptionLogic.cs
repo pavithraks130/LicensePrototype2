@@ -56,7 +56,7 @@ namespace LicenseServer.Logic
         {
             SubscriptionDetailLogic detailLogic = new SubscriptionDetailLogic();
             ProductLogic produLogic = new ProductLogic();
-            SubscriptionTypeLogic logic = new SubscriptionTypeLogic();
+            SubscriptionLogic logic = new SubscriptionLogic();
             Subscription type = logic.GetById(subs.SubscriptionId);
             List<SubscriptionDetails> details = detailLogic.GetSubscriptionDetails(subs.SubscriptionId);
             int qty = subs.Quantity;
@@ -126,7 +126,7 @@ namespace LicenseServer.Logic
         public SubscriptionLicenseMapping GetSubscriptionWithLicense(UserSubscription sub, int teamId)
         {
             SubscriptionLicenseMapping purchasedSubscription = new SubscriptionLicenseMapping();
-            SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
+            SubscriptionLogic typeLogic = new SubscriptionLogic();
             SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
 
             purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);

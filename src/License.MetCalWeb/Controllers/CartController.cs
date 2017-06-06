@@ -153,7 +153,7 @@ namespace License.MetCalWeb.Controllers
         {
             CartItem item = new CartItem()
             {
-                SubscriptionTypeId = Convert.ToInt32(Id),
+                SubscriptionId = Convert.ToInt32(Id),
                 Quantity = 1,
                 DateCreated = DateTime.Now,
                 UserId = LicenseSessionState.Instance.User.ServerUserId

@@ -75,7 +75,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 productDetails.Categories = rboCategory.ToList().Select(c => new SubscriptionCategory() { Id = Convert.ToInt32(c) }).ToList();
-                productDetails.AssociatedFeatures = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
+                productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
 
                 //Service call to save the data in Centralized DB
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -118,8 +118,8 @@ namespace License.MetCalWeb.Controllers
             GetFeatureList();
 
             // Updating the data 
-            if (pro.AssociatedFeatures.Count > 0)
-                foreach (var feature in pro.AssociatedFeatures)
+            if (pro.Features.Count > 0)
+                foreach (var feature in pro.Features)
                     (ViewBag.Features as List<Feature>).Find(p => p.Id == feature.Id).Selected = true;
 
             var objList = ViewBag.Categories as List<SubscriptionCategory>;
@@ -148,7 +148,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 productDetails.Categories = rboCategory.ToList().Select(categoryId => new SubscriptionCategory() { Id = Convert.ToInt32(categoryId) }).ToList();
-                productDetails.AssociatedFeatures = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
+                productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
                 productDetails.ModifiedDate = DateTime.Now;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = client.PutAsJsonAsync("api/product/update/" + id, productDetails).Result;

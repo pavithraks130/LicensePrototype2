@@ -41,8 +41,7 @@ namespace License.DataModel
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        [JsonIgnore]
+        
         public int UserSubscriptionId { get; set; }
         public virtual ICollection<Product> Products { get; set; }
 
@@ -59,20 +58,13 @@ namespace License.DataModel
         public int Quantity { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        [JsonIgnore]
         public int AvailableCount { get; set; }
-        [JsonIgnore]
         public int TotalLicenseCount { get; set; }
-        [JsonIgnore]
         public int UsedLicenseCount { get; set; }
-        [JsonIgnore]
         public bool IsSelected { get; set; }
-        [JsonIgnore]
         public bool IsDisabled { get; set; }
-        [JsonIgnore]
         public bool InitialState { get; set; }
         public List<Feature> Features { get; set; }
-        [JsonIgnore]
         public DateTime ExpireDate { get; set; }
         public Product()
         {
