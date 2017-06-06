@@ -191,7 +191,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_01",
                     Description = "biomedicalProduct_01",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 50,
                     ProductCode = "Pro_O1",
                     Features = new List<Feature> { biomedicalFeature_01 },
@@ -206,7 +206,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_02",
                     Description = "biomedicalProduct_02",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 100,
                     ProductCode = "Pro_O2",
                     Features = new List<Feature> { biomedicalFeature_02 },
@@ -221,7 +221,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_03",
                     Description = "biomedicalProduct_03",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 150,
                     ProductCode = "Pro_O3",
                     Features = new List<Feature> { biomedicalFeature_02, biomedicalFeature_01 },
@@ -236,7 +236,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_04",
                     Description = "biomedicalProduct_04",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 200,
                     ProductCode = "Pro_O4",
                     Features = new List<Feature> { biomedicalFeature_04 },
@@ -251,7 +251,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_05",
                     Description = "biomedicalProduct_05",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 250,
                     ProductCode = "Pro_O5",
                     Features = new List<Feature> { biomedicalFeature_04, biomedicalFeature_01 },
@@ -266,7 +266,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_06",
                     Description = "biomedicalProduct_06",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 300,
                     ProductCode = "Pro_O6",
                     Features = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02 },
@@ -281,7 +281,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_07",
                     Description = "biomedicalProduct_07",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 350,
                     ProductCode = "Pro_O7",
                     Features = new List<Feature> { biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 },
@@ -296,7 +296,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_08",
                     Description = "biomedicalProduct_08",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 400,
                     ProductCode = "Pro_O8",
                     Features = new List<Feature> { biomedicalFeature_08 },
@@ -311,7 +311,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_09",
                     Description = "biomedicalProduct_09",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 450,
                     ProductCode = "Pro_O9",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_01 },
@@ -326,7 +326,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_10",
                     Description = "biomedicalProduct_10",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 500,
                     ProductCode = "Pro_10",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02 },
@@ -341,7 +341,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_11",
                     Description = "biomedicalProduct_11",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 550,
                     ProductCode = "Pro_11",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_02, biomedicalFeature_01 },
@@ -356,7 +356,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_12",
                     Description = "biomedicalProduct_12",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 600,
                     ProductCode = "Pro_12",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04 },
@@ -371,7 +371,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_13",
                     Description = "biomedicalProduct_13",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 650,
                     ProductCode = "Pro_13",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_01 },
@@ -386,7 +386,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_14",
                     Description = "biomedicalProduct_14",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 700,
                     ProductCode = "Pro_14",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02 },
@@ -401,7 +401,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "biomedicalProduct_15",
                     Description = "biomedicalProduct_15",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 750,
                     ProductCode = "Pro_15",
                     Features = new List<Feature> { biomedicalFeature_08, biomedicalFeature_04, biomedicalFeature_02, biomedicalFeature_01 },
@@ -420,7 +420,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_01",
                     Description = "calibrationProduct_01",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 50,
                     ProductCode = "Pro_16",
                     Features = new List<Feature> { calibrationFeature_01 },
@@ -435,7 +435,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_02",
                     Description = "calibrationProduct_02",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 100,
                     ProductCode = "Pro_17",
                     Features = new List<Feature> { calibrationFeature_02 },
@@ -450,7 +450,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_03",
                     Description = "calibrationProduct_03",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 150,
                     ProductCode = "Pro_18",
                     Features = new List<Feature> { calibrationFeature_02, calibrationFeature_01 },
@@ -465,7 +465,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_04",
                     Description = "calibrationProduct_04",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 200,
                     ProductCode = "Pro_19",
                     Features = new List<Feature> { calibrationFeature_04 },
@@ -480,7 +480,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_05",
                     Description = "calibrationProduct_05",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 250,
                     ProductCode = "Pro_20",
                     Features = new List<Feature> { calibrationFeature_04, calibrationFeature_01 },
@@ -495,7 +495,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_06",
                     Description = "calibrationProduct_06",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 300,
                     ProductCode = "Pro_21",
                     Features = new List<Feature> { calibrationFeature_04, calibrationFeature_02 },
@@ -510,7 +510,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_07",
                     Description = "calibrationProduct_07",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 350,
                     ProductCode = "Pro_22",
                     Features = new List<Feature> { calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
@@ -525,7 +525,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_08",
                     Description = "calibrationProduct_08",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 400,
                     ProductCode = "Pro_23",
                     Features = new List<Feature> { calibrationFeature_08 },
@@ -540,7 +540,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_09",
                     Description = "calibrationProduct_09",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 450,
                     ProductCode = "Pro_24",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_01 },
@@ -555,7 +555,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_10",
                     Description = "calibrationProduct_10",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 500,
                     ProductCode = "Pro_25",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_02 },
@@ -570,7 +570,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_11",
                     Description = "calibrationProduct_11",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 550,
                     ProductCode = "Pro_26",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_02, calibrationFeature_01 },
@@ -585,7 +585,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_12",
                     Description = "calibrationProduct_12",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 600,
                     ProductCode = "Pro_27",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_04 },
@@ -600,7 +600,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_13",
                     Description = "calibrationProduct_13",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 650,
                     ProductCode = "Pro_28",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_01 },
@@ -615,7 +615,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_14",
                     Description = "calibrationProduct_14",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 700,
                     ProductCode = "Pro_29",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02 },
@@ -632,7 +632,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "calibrationProduct_15",
                     Description = "calibrationProduct_15",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 750,
                     ProductCode = "Pro_30",
                     Features = new List<Feature> { calibrationFeature_08, calibrationFeature_04, calibrationFeature_02, calibrationFeature_01 },
@@ -651,7 +651,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "CMMSSolutionAPI PlugIn",
                     Description = "CMMSSolution API PlugIn product",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 50,
                     ProductCode = "Pro_31",
                     Features = new List<Feature> { CMMSSolutionFeature_01 },
@@ -664,7 +664,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "CMMSSolution MET/TEAM",
                     Description = "CMMSSolution MET/TEAM product",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 100,
                     ProductCode = "Pro_32",
                     Features = new List<Feature> { CMMSSolutionFeature_02 },
@@ -677,7 +677,7 @@ namespace LicenseServer.Core.Migrations
                 {
                     Name = "CMMSSolutionEMaintLink",
                     Description = "CMMSSolution EMaint Link Product",
-                    ImagePath = "P1.png",
+                    ImagePath = "P_2.PNG",
                     Price = 150,
                     ProductCode = "Pro_33",
                     Features = new List<Feature> { CMMSSolutionFeature_02, CMMSSolutionFeature_01 },

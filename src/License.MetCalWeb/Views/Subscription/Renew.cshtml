@@ -1,43 +1,9 @@
 ﻿@model  License.MetCalWeb.Models.RenewSubscriptionList
+
 @{
     ViewBag.Title = "Renew";
 }
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.chkSubscription').click(function () {
-            calculatePrice();
-        });
-
-        function calculatePrice() {
-            var obj = $('.chkSubscription:checked').toArray();
-            var totalPrice = 0.0;
-            if (obj.length > 0) {
-                obj.forEach(function (e) {
-                    var tempObj = $(e).parents('tr');
-                    var tempprice = $(tempObj).find('.tdPrice .divPrice').text();
-                    totalPrice += parseFloat(tempprice);
-                });
-            }
-            $('#lblPayment').text(totalPrice);
-            $('.hdnPrice').val(totalPrice);
-        }
-
-
-        $('form').on('submit', function (e) {
-            var obj = $('input[type=checkbox][name=selectedSubscription]:checked');
-            console.log(obj);
-            if (obj.length == 0) {
-                $('#lblerror').text("select the subscription  which you would like to renew");
-                $('#lblerror').attr('style', 'display:inline;color:red !important');
-                return false;
-            }
-            return true;
-        })
-    })
-</script>
 <h3>Renew</h3>
-
 <div class="row">
     <div class="col-md-8">
         @using (Html.BeginForm("renew", "subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -88,5 +54,39 @@
             </div>
         }
     </div>
-
 </div>
+
+@* Javascript *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.chkSubscription').click(function () {
+            calculatePrice();
+        });
+
+        function calculatePrice() {
+            var obj = $('.chkSubscription:checked').toArray();
+            var totalPrice = 0.0;
+            if (obj.length > 0) {
+                obj.forEach(function (e) {
+                    var tempObj = $(e).parents('tr');
+                    var tempprice = $(tempObj).find('.tdPrice .divPrice').text();
+                    totalPrice += parseFloat(tempprice);
+                });
+            }
+            $('#lblPayment').text(totalPrice);
+            $('.hdnPrice').val(totalPrice);
+        }
+
+
+        $('form').on('submit', function (e) {
+            var obj = $('input[type=checkbox][name=selectedSubscription]:checked');
+            console.log(obj);
+            if (obj.length == 0) {
+                $('#lblerror').text("select the subscription  which you would like to renew");
+                $('#lblerror').attr('style', 'display:inline;color:red !important');
+                return false;
+            }
+            return true;
+        })
+    })
+</script>

@@ -3,28 +3,6 @@
 @{
     ViewBag.Title = "Product List";
 }
-<script>
-    $(function () {
-        $('.ancDelete').on('click', function (e) {
-            e.preventDefault();
-            console.log($(this).attr('href'));
-            $.ajax({
-                url: $(this).attr('href'),
-                method: "POST",
-                success: function (data) {
-                    if (data.status == false)
-                        alert(data.message);
-                    else
-                        window.location.reload();
-                },
-                error: function (data) {
-
-                }
-
-            });
-        });
-    });
-</script>
 <div class="row">
     <div class="col-md-12">
 
@@ -70,3 +48,27 @@
         </table>
     </div>
 </div>
+
+@* Javascript *@
+<script>
+    $(function () {
+        $('.ancDelete').on('click', function (e) {
+            e.preventDefault();
+            console.log($(this).attr('href'));
+            $.ajax({
+                url: $(this).attr('href'),
+                method: "POST",
+                success: function (data) {
+                    if (data.status == false)
+                        alert(data.message);
+                    else
+                        window.location.reload();
+                },
+                error: function (data) {
+
+                }
+
+            });
+        });
+    });
+</script>

@@ -1,8 +1,8 @@
 ﻿@model License.MetCalWeb.Models.User
+
 @{
     ViewBag.Title = "Profile";
 }
-
 <h2>Profile</h2>
 <div class="row">
     @using (Html.BeginForm("Profile", "User", new { userId = Model.UserId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))

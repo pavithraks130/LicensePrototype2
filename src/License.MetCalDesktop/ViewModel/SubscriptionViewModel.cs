@@ -80,7 +80,7 @@ namespace License.MetCalDesktop.ViewModel
                 var subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
                 foreach (var x in subscriptionList)
                 {
-                    x.ImagePath = @"..\ProductImages\" + x.ImagePath;
+                    x.ImagePath = @"..\Catalog\Products_Images\" + x.ImagePath;
                     _subscriptionList.Add(x);
                 }
             }

@@ -1,9 +1,72 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.Feature>
+
 @{
     ViewBag.Title = "Index";
 }
-
 <h2>Features</h2>
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                @if (Model == null || Model.Count() == 0)
+                {
+                    <div class="col-md-12">
+                        <label>Features not exist</label>
+                        <button class="btn btn-primary btn-custom addFeature">Create Feature</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-8">
+                        <table class="table">
+                            <tr>
+                                <th class="col-md-3">
+                                    Name
+                                </th>
+                                <th class="col-md-4">
+                                    Description
+                                </th>
+                                <th class="col-md-2">
+                                    Version
+                                </th>
+                                <th class="col-md-3">
+                                    Action
+                                </th>
+                            </tr>
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                <tr>
+                                    <td class="col-md-3">
+                                        @Html.DisplayFor(m => m.ElementAt(i).Name)
+                                    </td>
+                                    <td class="col-md-4">
+                                        @Html.DisplayFor(m => m.ElementAt(i).Description)
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Html.DisplayFor(m => m.ElementAt(i).Version)
+                                    </td>
+                                    <td class="col-md-3">
+                                        @Html.ActionLink("Edit", "Edit", "Feature", new { @data_id  = Model.ElementAt(i).Id, @class = "ancEdit" })  |
+                                        @Html.ActionLink("Delete", "Delete", "Feature", new { @data_id = Model.ElementAt(i).Id, @class = "ancDelete" })
+                                    </td>
+                                </tr>
+
+                            }
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-custom addFeature float-right">Create Feature</button>
+                    </div>
+
+                }
+            </div>
+        }
+    </div>
+</div>
+<div id='myModal' class='modal'>
+</div>
+@* Javascript *@
 <script>
     $(function () {
         $('.ancDelete').on('click', function (e) {
@@ -70,65 +133,3 @@
         });
     });
 </script>
-<div class="row">
-    <div class="col-md-12">
-        @using (Html.BeginForm())
-        {
-            <div class="form-group">
-                @if (Model == null || Model.Count() == 0)
-                {
-                    <div class="col-md-12">
-                        <label>Features not exist</label>
-                        <button class="btn btn-primary btn-custom addFeature">Create Feature</button>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-8">
-                        <table class="table">
-                            <tr>
-                                <th class="col-md-3">
-                                    Name
-                                </th>
-                                <th class="col-md-4">
-                                    Description
-                                </th>
-                                <th class="col-md-2">
-                                    Version
-                                </th>
-                                <th class="col-md-3">
-                                    Action
-                                </th>
-                            </tr>
-                            @for (int i = 0; i < Model.Count(); i++)
-                            {
-                                <tr>
-                                    <td class="col-md-3">
-                                        @Html.DisplayFor(m => m.ElementAt(i).Name)
-                                    </td>
-                                    <td class="col-md-4">
-                                        @Html.DisplayFor(m => m.ElementAt(i).Description)
-                                    </td>
-                                    <td class="col-md-2">
-                                        @Html.DisplayFor(m => m.ElementAt(i).Version)
-                                    </td>
-                                    <td class="col-md-3">
-                                        @Html.ActionLink("Edit", "Edit", "Feature", new { @data_id  = Model.ElementAt(i).Id, @class = "ancEdit" })  |
-                                        @Html.ActionLink("Delete", "Delete", "Feature", new { @data_id = Model.ElementAt(i).Id, @class = "ancDelete" })
-                                    </td>
-                                </tr>
-
-                            }
-                        </table>
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary btn-custom addFeature float-right">Create Feature</button>
-                    </div>
-
-                }
-            </div>
-        }
-    </div>
-</div>
-<div id='myModal' class='modal'>
-</div>

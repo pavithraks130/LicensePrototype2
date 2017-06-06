@@ -2,34 +2,8 @@
 @{
     Layout = null;
 }
-
 <h2>Edit</h2>
 
-<script>
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr('action'),
-                method: form.attr('method'),
-                data: form.serialize(),
-                success: function (data) {
-                    console.log(data);
-                    if (data.success) {
-                        window.location.reload();
-                    }
-                    else {
-                        $('#lblError').text(data.message);
-                        $('#lblError').attr('style', 'display:inline');
-                    }
-                   
-                },
-                error: function (data) { }
-            });
-        });
-    });
-</script>
 @using (Html.BeginForm("Create", "SubscriptionCategory", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -65,3 +39,29 @@
         </div>
     </div>
 }
+@* Javascript *@
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                    else {
+                        $('#lblError').text(data.message);
+                        $('#lblError').attr('style', 'display:inline');
+                    }
+
+                },
+                error: function (data) { }
+            });
+        });
+    });
+</script>

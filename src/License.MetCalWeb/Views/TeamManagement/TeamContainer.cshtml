@@ -1,58 +1,8 @@
 ﻿@model License.MetCalWeb.Models.TeamDetails
+
 @{
     ViewBag.Title = "TeamContainer";
 }
-<script>
-    $(function () {
-
-        $("#ddlTeamList").val(@ViewBag.SelectedTeamId);
-
-        if (@ViewBag.SelectedTeamId != "")
-        {
-            LoaadTeam(@ViewBag.SelectedTeamId);
-        }
-        $("body").on("click", ".btnInvite", function () {
-            var selectedValue = $('#ddlTeamList').val();
-            if (selectedValue == "")
-                return;
-            $.ajax({
-                type: "GET",
-                url: "/TeamManagement/Invite",
-                data: { "teamId": selectedValue },
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    $('#myModal').html(data);
-                    $('#myModal').modal('show');
-                },
-                error: function () {
-                    alert("Dynamic content load failed.");
-                }
-            });
-        });
-
-        $('#ddlTeamList').on('change', function () {
-            var selectedValue = $('#ddlTeamList').val();
-            if (selectedValue == "")
-                return;
-            LoaadTeam(selectedValue);
-        });
-
-        function LoaadTeam(selectedValue) {
-            $.ajax({
-                type: "GET",
-                url: "/TeamManagement/TeamMembers",
-                data: { "id": selectedValue },
-                contentType: "application/json",
-                success: function (data) {
-                    $('.dvTeamMember').html(data);
-                },
-                error: function () {
-                    alert("data couldn't be fetched");
-                }
-            });
-        }
-    });
-</script>
 <style>
     tr {
         border: none !important;
@@ -135,3 +85,56 @@
 </div>
 <div class="modal" id="myModal">
 </div>
+
+@* Javascript *@
+<script>
+    $(function () {
+
+        $("#ddlTeamList").val(@ViewBag.SelectedTeamId);
+
+        if (@ViewBag.SelectedTeamId != "")
+        {
+            LoaadTeam(@ViewBag.SelectedTeamId);
+        }
+        $("body").on("click", ".btnInvite", function () {
+            var selectedValue = $('#ddlTeamList').val();
+            if (selectedValue == "")
+                return;
+            $.ajax({
+                type: "GET",
+                url: "/TeamManagement/Invite",
+                data: { "teamId": selectedValue },
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $('#ddlTeamList').on('change', function () {
+            var selectedValue = $('#ddlTeamList').val();
+            if (selectedValue == "")
+                return;
+            LoaadTeam(selectedValue);
+        });
+
+        function LoaadTeam(selectedValue) {
+            $.ajax({
+                type: "GET",
+                url: "/TeamManagement/TeamMembers",
+                data: { "id": selectedValue },
+                contentType: "application/json",
+                success: function (data) {
+                    $('.dvTeamMember').html(data);
+                },
+                error: function () {
+                    alert("data couldn't be fetched");
+                }
+            });
+        }
+    });
+</script>

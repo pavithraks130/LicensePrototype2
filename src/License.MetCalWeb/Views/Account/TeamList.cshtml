@@ -1,31 +1,8 @@
 ﻿@{
     ViewBag.Title = "Team List";
 }
-<script>
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                method: form.attr('method'),
-                url: form.attr('action'),
-                data: { 'teamId': $('#ddlTeam').val() },
-                success: function (data) {
-                    if (data.success) {
-                        location.href = data.url;
-                    }
-                    else {
-                        alert(data.message);
-                        location.href = "@Url.Action("Login","Account")";
-                    }
-                }
-            });
-        });
-    });
-</script>
 
 <h2>Team List</h2>
-
 <div class="modal-dialog">
     <div class="modal-content">
         <div id='myModalContent'>
@@ -54,3 +31,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: { 'teamId': $('#ddlTeam').val() },
+                success: function (data) {
+                    if (data.success) {
+                        location.href = data.url;
+                    }
+                    else {
+                        alert(data.message);
+                        location.href = "@Url.Action("Login","Account")";
+                    }
+                }
+            });
+        });
+    });
+</script>

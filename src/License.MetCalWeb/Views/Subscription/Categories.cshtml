@@ -3,13 +3,10 @@
 @{
     ViewBag.Title = "Category";
 }
-
 <h4>Track and support</h4>
 @using (Html.BeginForm())
 {
     <table class="table" style="border:inset">
-
-
         @foreach (var item in Model)
         {
             <tr>
@@ -21,12 +18,11 @@
                 </td>
                 <td>
                     <button id="arrow-item" style="background-color:white;border:none" type="button" onclick="location.href='@Url.Action("ProductDetails", "Subscription", new { Id =  @item.Id, categoryName = @item.Name}, null)'">
-                        <img src="~/Images/arrowHead.png" width="50" height="50" />
+                        <img src="~/Catalog/Images/Arrow_Head.PNG" />
                     </button>
                 </td>
 
             </tr>
         }
-
     </table>
 }

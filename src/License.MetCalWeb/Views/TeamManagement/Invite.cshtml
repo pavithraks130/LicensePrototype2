@@ -2,30 +2,6 @@
 @{
     Layout = null;
 }
-<script>
-    $(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr("action"),
-                method: form.attr("method"),
-                data: form.serialize(),
-                success: function (partialResult) {
-                    if (partialResult.success == false) {
-                        $('#error').text(partialResult.message);
-                    }
-                    else {
-                        location.reload();
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-        });
-    });
-</script>
 
 @using (Html.BeginForm("Invite", "TeamManagement",new { teamId = ViewBag.TeamId } ,FormMethod.Post))
 {
@@ -60,3 +36,29 @@
         </div>
     </div>
 }
+
+@* Javascript *@
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+                    if (partialResult.success == false) {
+                        $('#error').text(partialResult.message);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+</script>

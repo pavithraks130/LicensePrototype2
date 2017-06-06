@@ -5,7 +5,7 @@
 }
 <script>
         $(function () {
-        if (@Convert.ToBoolean(ViewBag.IsTeamListPopupVisible).ToString().ToLower())
+        if (@Convert.ToBoolean(ViewData["IsTeamListPopupVisible"]).ToString().ToLower())
         {
             UpdateTeamContext();
         }
@@ -83,6 +83,31 @@
         </section>
     </div>
 </div>
-<div id="myModal" class="modal">
 
+<div id="myModal" class="modal">
 </div>
+
+<script>
+        $(function () {
+        if (@Convert.ToBoolean(ViewData["IsTeamListPopupVisible"]).ToString().ToLower())
+        {
+            UpdateTeamContext();
+        }
+
+        function UpdateTeamContext() {
+            $.ajax({
+                type: "GET",
+                url: "/Account/TeamList",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                }
+            });
+        }
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+    });
+</script>

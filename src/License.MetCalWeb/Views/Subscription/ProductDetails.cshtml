@@ -2,10 +2,8 @@
 @{
     ViewBag.Title = "ProductDetails";
 }
-
-<link type="text/css" href="~/Content/SubscriptionContainerStyle.css" rel="stylesheet" />
-<link href="~/Content/ProductCatalogDetails.css" rel=" stylesheet" type="text/css" />
-
+<link type="text/css" href="~/Content/subscription-container.css" rel="stylesheet" />
+<link href="~/Content/product-catalog-details.css" rel=" stylesheet" type="text/css" />
 <div class="row">
     <div class="col-md-12">
         @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -87,6 +85,7 @@
     </div>
 </div>
 
+@* Javascript *@
 <script>
     $(document).ready(function () {
         /// this code will be excuted only during page load

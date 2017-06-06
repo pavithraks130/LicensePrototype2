@@ -1,44 +1,5 @@
 ﻿@model License.MetCalWeb.Models.TeamDetails
-<script>
-    $(document).ready(function () {
-        $('.btn-save').click(function (e) {
-            e.preventDefault();
-            var isPostEnabled = true;
-            i = 0;
-            $('input[type=checkbox]:checked').each(function () {
-                i++;
-            });
-            if (i == 0) {
-                $('#lblError').attr('style', 'display:inline;color:red;');
-                isPostEnabled = isPostEnabled && false;
-            }
-            else {
-                $('#lblError').attr('style', 'display:none;');
-                isPostEnabled = isPostEnabled && true;
-            }
-            if (isPostEnabled) {
-                var form = $('form');
-                $.ajax({
-                    url: form.attr('action'),
-                    method: 'POST',
-                    data: form.serialize(),
-                    success: function (data) {
-                        if (data.success) {
-                            location.href = '@Url.Action("Index","Team")';
-                        }
-                        else {
-                            alert(data.message);
-                        }
-                    },
-                    error: function (data) {
 
-                    }
-                });
-            }
-            return false;
-        });
-    });
-</script>
 <h2>
     Product List
 </h2>
@@ -99,3 +60,45 @@
         }
     </div>
 </div>
+
+@* Javascript *@
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function (e) {
+            e.preventDefault();
+            var isPostEnabled = true;
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            if (isPostEnabled) {
+                var form = $('form');
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            location.href = '@Url.Action("Index","Team")';
+                        }
+                        else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>

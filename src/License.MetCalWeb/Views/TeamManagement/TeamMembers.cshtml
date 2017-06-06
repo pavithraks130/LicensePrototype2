@@ -1,10 +1,10 @@
-﻿@{
-    Layout = null;
-}
-@using License.MetCalWeb.Models
+﻿@using License.MetCalWeb.Models
 @using License.MetCalWeb.Helper
 @model TeamDetails
 
+@{
+    Layout = null;
+}
 <div class="row">
     <div class="form-group">
         <label style="font-size:18px;">Team Admin : @Model.Team.AdminUser.Name </label>
@@ -108,14 +108,14 @@
                                 @if (t.IsAdmin)
                                 {
                                     <div id="photos">
-                                        <img src="/Images/admin.png" />
+                                        <img src="~/Catalog/Images/Administrator.png" />
                                     </div>
                                 }
                                 else
                                 {
 
                                     <div id="photos">
-                                        <img src="/Images/Users-icon.png" />
+                                        <img src="~/Catalog/Images/Users_Icon.png" />
                                     </div>
                                 }
                             </td>
@@ -135,7 +135,7 @@
                                     <div class="dropdown">
                                         <button class="dropbtn">
                                             <span>
-                                                @Html.Image("/Images/down-arrow.png", "Admin", "33", "33", null)
+                                                @Html.Image("../Catalog/Images/Down_Arrow.png", "Admin", "33", "33", null)
                                             </span>
                                         </button>
                                         <div class="dropdown-content">

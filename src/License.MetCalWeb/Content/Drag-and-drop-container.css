@@ -1,29 +1,5 @@
 ﻿
-/*body {
-    margin: 30px;
-    font-family: "Georgia", serif;
-    line-height: 1.8em;
-    color: #333;
-}*/
-
-/* Give headings their own font */
-
-/*h1, h2, h3, h4 {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}*/
-
-/* Main content area */
-
-/*#content {
-    margin: 80px 70px;
-    text-align: end;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}*/
-
 /* Header/footer boxes */
-
 .wideBox {
     clear: both;
     text-align: center;

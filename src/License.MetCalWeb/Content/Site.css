@@ -944,7 +944,7 @@ a.wac-button {
 
 
     #delete-item {
-        background: url('../Resources/Delete Icon.png') no-repeat top left;
+        background: url('../Catalog/Images/Delete_Icon.png') no-repeat top left;
         display: block;
         width: 150px;
         height: 150px;

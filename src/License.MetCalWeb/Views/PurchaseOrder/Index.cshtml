@@ -1,11 +1,10 @@
 ﻿@model List<License.MetCalWeb.Models.PurchaseOrder>
+
 @{
     ViewBag.Title = "Purchase Order Request For Approval";
 }
 <div class="row">
     <div class="col-md-12">
-
-
         <h3>Purchase Order Approval</h3>
         <br />
         @if (Model == null || Model.Count == 0)
@@ -103,6 +102,8 @@
         }
     </div>
 </div>
+
+@* Javascript *@
 <script>
     $(document).ready(function () {
         $('.btn-save').click(function () {

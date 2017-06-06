@@ -1,34 +1,5 @@
 ﻿@model License.MetCalWeb.Models.TeamMappingDetails
-<script>
-    $(document).ready(function () {
-        $('.btn-save').click(function (e) {
-            var i = 0;
-            var isPostEnabled = true;
-            var concurrentUsertext = $('.hdnConcurentUser').val();
-            var concurentUser = parseInt(concurrentUsertext);
-            $('input[type=checkbox]:checked').each(function (e) {
-                var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
-                var ctrl = $(parentObj).find('.pro_count').find('.lblProCount');
-                if (ctrl.length > 0) {
-                    var availableQty = $(ctrl).text();
-                    var qty = parseInt(availableQty);
-                    isPostEnabled = isPostEnabled && qty >= concurentUser;
-                }
-                i++;
-            });
-            if (!isPostEnabled) {
-                $('#lblError').attr('style', 'display:inline');
-                $('#lblError').text('can not map license, required number of product license not exist');
-            }
-            if (i == 0) {
-                isPostEnabled = false;
-                $('#lblError').attr('style', "display:inline");
-                $('#lblError').text("License not selected");
-            }
-            return isPostEnabled;
-        });
-    });
-</script>
+
 <h2>
     Product List
 </h2>
@@ -98,3 +69,35 @@
         }
     </div>
 </div>
+
+@* Javascript *@
+<script>
+    $(document).ready(function () {
+        $('.btn-save').click(function (e) {
+            var i = 0;
+            var isPostEnabled = true;
+            var concurrentUsertext = $('.hdnConcurentUser').val();
+            var concurentUser = parseInt(concurrentUsertext);
+            $('input[type=checkbox]:checked').each(function (e) {
+                var parentObj = $($('input[type=checkbox]:checked')[e]).parent().parent();
+                var ctrl = $(parentObj).find('.pro_count').find('.lblProCount');
+                if (ctrl.length > 0) {
+                    var availableQty = $(ctrl).text();
+                    var qty = parseInt(availableQty);
+                    isPostEnabled = isPostEnabled && qty >= concurentUser;
+                }
+                i++;
+            });
+            if (!isPostEnabled) {
+                $('#lblError').attr('style', 'display:inline');
+                $('#lblError').text('can not map license, required number of product license not exist');
+            }
+            if (i == 0) {
+                isPostEnabled = false;
+                $('#lblError').attr('style', "display:inline");
+                $('#lblError').text("License not selected");
+            }
+            return isPostEnabled;
+        });
+    });
+</script>
