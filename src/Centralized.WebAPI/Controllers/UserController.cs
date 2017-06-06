@@ -61,10 +61,14 @@ namespace Centralized.WebAPI.Controllers
         public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
         {
             var user = UserManager.FindByEmail(model.Email);
+            if (user == null)
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "Invaalid Email Address");
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
-            ForgotPasswordToken passwordToken = new ForgotPasswordToken();
-            passwordToken.UserId = user.UserId;
-            passwordToken.Token = token;
+            ForgotPasswordToken passwordToken = new ForgotPasswordToken()
+            {
+                UserId = user.UserId,
+                Token = token
+            };
             return Request.CreateResponse(HttpStatusCode.OK, passwordToken);
         }
 

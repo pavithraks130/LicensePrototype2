@@ -98,6 +98,7 @@ namespace License.Logic.BusinessLogic
                         Name = subs.Name,
                         UserSubscriptionId = data.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
                     };
+                    mapModel.Products = new List<Product>();
                     foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
                     {
                         var objLic = userLicLicst.FirstOrDefault(f => f.License.ProductId == pro.Id);

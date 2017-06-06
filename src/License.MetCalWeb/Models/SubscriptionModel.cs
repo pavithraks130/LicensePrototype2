@@ -55,13 +55,13 @@ namespace License.MetCalWeb.Models
         public string Name { get; set; }
         public string ImagePath { get; set; }
         public int ActiveDays { get; set; }
-
         public int ActivationMonth { get; set; }
         public double Price { get; set; }
         public SubscriptionCategory Category { get; set; }
         public int NoOfUsers { get; set; }
         public string CreatedBy { get; set; }
         public List<Product> Products { get; set; }
+        public int UserSubscriptionId { get; set; }
     }
 
     public class RenewSubscriptionList
