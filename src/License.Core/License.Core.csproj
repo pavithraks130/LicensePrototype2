@@ -208,6 +208,10 @@
     <Compile Include="Migrations\201705281618321_ChangesToUserLicense1.Designer.cs">
       <DependentUpon>201705281618321_ChangesToUserLicense1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706060656079_CHangesToTableName.cs" />
+    <Compile Include="Migrations\201706060656079_CHangesToTableName.Designer.cs">
+      <DependentUpon>201706060656079_CHangesToTableName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\ProductLicense.cs" />
@@ -299,6 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705281618321_ChangesToUserLicense1.resx">
       <DependentUpon>201705281618321_ChangesToUserLicense1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706060656079_CHangesToTableName.resx">
+      <DependentUpon>201706060656079_CHangesToTableName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
