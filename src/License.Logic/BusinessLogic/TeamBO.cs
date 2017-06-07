@@ -216,7 +216,7 @@ namespace License.Logic.BusinessLogic
             if (teamLicenseIdList.Count > 0)
             {
                 var licenseData = licLogic.GetLicenseData();
-                productIdList = licenseData.Where(x => teamLicenseIdList.Contains(x.Id)).Select(p => p.ProductId).ToList().Distinct();
+                productIdList = licenseData.Where(x => teamLicenseIdList.Contains(x.Id)).Select(p => p.ProductId).Distinct().ToList();
                 ////Get distinct Product Id List, by license id 
                 //foreach (var liceId in teamLicenseIdList)
                 //{

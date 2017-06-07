@@ -1,7 +1,7 @@
 ﻿
 @model  License.MetCalWeb.Models.LoginViewModel
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Login";
 }
 <script>
         $(function () {
@@ -28,13 +28,13 @@
     });
 </script>
 <div class="row">
-    <h2>@ViewBag.Title.</h2>
-    <div class="col-md-12">
-        <p>
-            Registration / login is required to access certain content on flukecal.com.<b> We will not use your registration information for any purpose without your permission.</b>
-        </p>
+    <h2>@ViewBag.Title</h2>
+    <div>
+        <h5>
+            Registration / login is required to access certain content on flukecal.com.We will not use your registration information for any purpose without your permission.
+        </h5>
     </div>
-    <div class="col-md-8">
+    <div>
         <section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-offset-4 col-md-10">
                         <div class="checkbox">
                             @Html.CheckBoxFor(m => m.RememberMe)
                             @Html.LabelFor(m => m.RememberMe)
@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-offset-2 col-md-10 ">
                         @Html.ActionLink("Forgot Password", "ForgotPassword", "Account")
                     </div>
                 </div>

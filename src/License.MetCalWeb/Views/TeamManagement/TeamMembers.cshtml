@@ -7,7 +7,7 @@
 }
 <div class="row">
     <div class="form-group">
-        <label style="font-size:18px;">Team Admin : @Model.Team.AdminUser.Name </label>
+        <label style="font-size:14px;margin-left: 14px;">Team Admin : @Model.Team.AdminUser.Name </label>
         @if (LicenseSessionState.Instance.IsAdmin)
         {
             <div class="dropdown  float-right" style="margin-right:20px;">
@@ -20,7 +20,7 @@
                     <li>@Html.ActionLink("License Approval", "LicenseApproval", "License")</li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-primary btn-custom btnInvite float-right" style="margin-right:10px;">Invite Team Member</button>
+            <button type="button" class="btn btn-default btnInvite float-right" style="margin-right:10px;">Invite Team Member</button>
         }
         else
         {
@@ -35,7 +35,7 @@
         <div class="form-group">
             @if (Model.PendinigUsers.Count > 0)
             {
-                <h4>Pending Users</h4>
+                <h5>Pending Users</h5>
                 <table class="table" style="border: none">
                     @foreach (TeamMember t in Model.PendinigUsers)
                     {
@@ -77,7 +77,8 @@
         <div class="form-group">
             @if (Model.AcceptedUsers.Count > 0)
             {
-                <h4>Active Users</h4>
+               <label>
+                        Active Users</label> 
                 <table class="table" style="border: none">
                     @foreach (TeamMember t in Model.AcceptedUsers)
                     {
@@ -104,7 +105,7 @@
                                     <div>@t.InviteeEmail</div>
                                 }
                             </td>
-                            <td class="col-md-2">
+                            <td class="col-md-3">
                                 @if (t.IsAdmin)
                                 {
                                     <div id="photos">
@@ -119,16 +120,19 @@
                                     </div>
                                 }
                             </td>
-                            <td class="col-md-4">
-                                @if (LicenseSessionState.Instance.IsAdmin)
-                                {
-                                    <button class="alert-success">
-                                        @Html.ActionLink("Add License", "AssignLicense", "License", new { userId = @t.InviteeUserId, bulkLicenseAdd = false }, null)
-                                    </button>
-                                    <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "License", new { userId = @t.InviteeUserId }, null)</button>
 
-                                }
-                            </td>
+                            @if (LicenseSessionState.Instance.IsAdmin)
+                            {
+                                <td class="col-md-2">
+                                    <button class="btn btn-default">
+                                        @Html.ActionLink("Add License", "MapLicense", "License", new { userId = @t.InviteeUserId, bulkLicenseAdd = false }, null)
+                                    </button>
+                                </td>
+                                <td class="col-md-2">
+                                    <button class="btn btn-default">@Html.ActionLink("Revoke License", "RevokeLicense", "License", new { userId = @t.InviteeUserId }, null)</button>
+                                </td>
+                            }
+
                             <td class="col-md-1">
                                 @if (LicenseSessionState.Instance.IsAdmin && t.InviteeUserId != LicenseSessionState.Instance.User.UserId && t.InviteeUserId != Model.Team.AdminId)
                                 {

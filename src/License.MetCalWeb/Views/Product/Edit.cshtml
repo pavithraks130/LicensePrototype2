@@ -84,11 +84,11 @@
                                                         <span class="col-md-4">
                                                             @if (i + 1 == Model.Features.Count)
                                                             {
-                                                                <button type="button" class="btn btn-add btn-primary">+</button>
+                                                                <button type="button" class="btn btn-add btn-default">+</button>
                                                             }
                                                             else
                                                             {
-                                                                <button type="button" class="btn btn-remove btn-primary">X</button>
+                                                                <button type="button" class="btn btn-remove btn-default">X</button>
                                                             }
                                                         </span>
                                                     </div>
@@ -105,7 +105,7 @@
                                                         @Html.DropDownList("featuresList", new SelectList(ViewBag.Features, "Id", "Name"), "-- select Feature -- ", new { @class = "form-control" })
                                                     </div>
                                                     <span class="col-md-4">
-                                                        <button type="button" class="btn btn-primary btn-add">+</button>
+                                                        <button type="button" class="btn btn-default btn-add">+</button>
                                                     </span>
                                                 </div>
 

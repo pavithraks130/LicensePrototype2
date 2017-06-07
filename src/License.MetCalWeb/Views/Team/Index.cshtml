@@ -3,49 +3,44 @@
 @{
     ViewBag.Title = "Teams Listing";
 }
-<h2>Teams Listing</h2>
+<div class="form-group">
+    <h2>Team Details</h2>
+    <button class="btn btn-default btnCreate">Create Team</button>
+</div>
 <div class="row">
-    <div class="col-md-8">
+    <div>
         <div class="container">
-            <div class="form-group">
-                <button class="col-md-4 btn btn-primary btn-lg btn-custom btnCreate">Create Team</button>
-            </div>
-            <br />
-            <br />
             <table class="table" style="table-layout:fixed; padding:10px">
                 <tr>
-                    <th>Team Name</th>
-                    <th>Team Size</th>
-                    <th>Action</th>
-                    <th>Concurrent Users</th>
-                    <th colspan="2">Add/Remove License</th>
+                    <th class="col-md-2"><label> Team Name</label></th>
+                    <th class="col-md-2"><label style="margin-left:40px"> Team Size</label></th>
+                    <th class="col-md-3"><label style="margin-left:80px"> Action   </label> </th>
+                    <th class="col-md-2"><label> Concurrent Users</label></th>
+                    <th class="col-md-4"><label style="margin-left:20px">Add/Remove License</label></th>
                 </tr>
                 @foreach (var obj in Model)
                 {
                     <tr>
-                        <td class="col-md-4">@obj.Name</td>
-                        <td class="col-md-4">@(obj.TeamMembers == null ? 0 : obj.TeamMembers.Count)</td>
-                        <td class="col-md-4">
+                        <td class="col-md-1">@obj.Name</td>
+                        <td class="col-md-1" style="text-align:center">@(obj.TeamMembers == null ? 0 : obj.TeamMembers.Count)</td>
+                        <td class="col-md-3">
                             @if (obj.IsDefaultTeam == false && LicenseSessionState.Instance.IsSuperAdmin)
                             {
-                                <a href="javascript:void(0);" class="teamEdit" data-id="@obj.Id">Edit</a> <label>|</label>
-                                @Html.ActionLink("Delete", "DeleteTeam", "Team", new { id = obj.Id }, null)
+
+                                <a href="javascript:void(0);" class="btn btn-default teamEdit" data-id="@obj.Id">Edit</a>
+                                @Html.ActionLink("Delete", "DeleteTeam", "Team", new { id = obj.Id }, new { @class = "btn btn-default" })
+
                             }
                         </td>
-                        <td class="col-md-4">
+                        <td class="col-md-1">
                             @Html.DropDownList("user_count_dropdown", new SelectList(ViewData["UserCountList"] as IEnumerable<SelectListItem>, "Text", "Value", @obj.ConcurrentUserCount), "", new { @class = "ddlConcurentUser form-control", data_value = @obj.Id })
-                            @*<input type="text" name="con_count" value=@obj.ConcurrentUserCount style="width:40px" />*@
                         </td>
-                        <td class="col-md-4">
-                            <button class="alert-success">
-                                @Html.ActionLink("Add License", "AssignLicense", "Team", new { teamId = @obj.Id }, null)
-                            </button>
-                        </td>
-                        <td class="col-md-4">
-                            <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { teamId = @obj.Id }, null)</button>
+                        <td class="col-md-3">
+                            <button class="btn btn-default">@Html.ActionLink("Add License", "AssignLicense", "Team", new { teamId = @obj.Id }, null)</button>
+                            <button class="btn btn-default">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { teamId = @obj.Id }, null)</button>
                         </td>
                     </tr>
-    }
+                }
             </table>
         </div>
     </div>

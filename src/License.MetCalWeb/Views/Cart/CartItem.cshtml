@@ -1,6 +1,6 @@
 ﻿@model List<License.MetCalWeb.Models.CartItem>
 
-<div class="row">
+<div class="row"  style="overflow:scroll" >
     <div class="col-md-12">
         <h2>Cart</h2>
         @using (Html.BeginForm())
@@ -13,22 +13,18 @@
                 <table class="table" style="border: none">
                     <tr>
                         <th>
-                            <span style="font-weight:bold">Subscription Name</span>
+                           <label>Subscription Name</label>
                         </th>
                         <th>
-                            <span style="font-weight:bold">Price</span>
+                            <label>Price</label>
                         </th>
                         <th>
-                            <span style="font-weight:bold">
-                                Quantity
-                            </span>
+                           <label>Quantity</label>
                         </th>
                         <th>
-                            <span style="font-weight:bold">
-                                Amount
-                            </span>
+                            <label>Amount</label>
                         </th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
 
                     @for (var i = 0; i < Model.Count; i++)
@@ -47,7 +43,7 @@
                                 <label>@Model[i].TotalPrice</label>
                             </td>
                             <td>
-                                <button id="delete-item" class="alert-warning" type="button" onclick="location.href='@Url.Action("RemoveItem", "Cart", new { Id =  @Model[i].Id}, null)'">
+                                <button style="background-color:white" id="delete-item" type="button" onclick="location.href='@Url.Action("RemoveItem", "Cart", new { Id =  @Model[i].Id}, null)'">
                                     <img src="~/Catalog/Images/Delete_Icon.png" />
                                 </button>
                             </td>
@@ -68,8 +64,8 @@
 
                 </table>
                 <div class="float-right">
-                    <button class="alert-success"> @Html.ActionLink("Offline Payment", "OfflinePayment", "Cart", new { @class = "btnOffline" })</button>
-                    <button class="alert-success"> @Html.ActionLink("Online Payment", "PaymentGateway", "Cart", new { total = totalamount }, new { @class = "btnOnline" })</button>
+                    <button class="btn btn-default "> @Html.ActionLink("Offline Payment", "OfflinePayment", "Cart", new { @class = "btnOffline" })</button>
+                    <button class="btn btn-default"> @Html.ActionLink("Online Payment", "PaymentGateway", "Cart", new { total = totalamount }, new { @class = "btnOnline" })</button>
                 </div>
                 }
                 else
