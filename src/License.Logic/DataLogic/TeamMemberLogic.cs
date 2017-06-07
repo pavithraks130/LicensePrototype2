@@ -26,7 +26,7 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public DataModelTeamMember CreateInvite(DataModelTeamMember invit)
         {
-            License.Core.Model.TeamMember userinvit = AutoMapper.Mapper.Map<DataModel.TeamMember, License.Core.Model.TeamMember>(invit);
+            License.Core.Model.TeamMember userinvit = AutoMapper.Mapper.Map<Core.Model.TeamMember>(invit);
             var obj = Work.TeamMemberRepository.GetData(f => f.TeamId == invit.TeamId && f.InviteeEmail == invit.InviteeEmail).FirstOrDefault();
             if (obj == null)
             {
@@ -67,7 +67,7 @@ namespace License.Logic.DataLogic
         {
             Core.Model.TeamMember invite = Work.TeamMemberRepository.GetById(inviteId);
             invite.InviteeStatus = status;
-            Core.Model.TeamMember ember = Work.TeamMemberRepository.Update(invite);
+            Work.TeamMemberRepository.Update(invite);
             Work.TeamMemberRepository.Save();
         }
 

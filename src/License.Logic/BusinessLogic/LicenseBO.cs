@@ -78,9 +78,9 @@ namespace License.Logic.BusinessLogic
 
             List<UserLicense> data = null;
             if (model.TeamId == 0)
-                data = logic.GetUserLicense(model.UserId);
+                data = logic.GetUserLicenseByUserId(model.UserId);
             else
-                data = logic.GetUserLicense(model.UserId, model.TeamId);
+                data = logic.GetUserLicenseByUserIdTeamId(model.UserId, model.TeamId);
 
             var dataList = proSubLogic.GetSubscriptionFromFile();
 

@@ -110,7 +110,7 @@ namespace License.Logic.BusinessLogic
             if (!String.IsNullOrEmpty(userId))
             {
                 UserLicenseLogic logic = new UserLicenseLogic();
-                var data = logic.GetUserLicense(userId);
+                var data = logic.GetUserLicenseByUserId(userId);
                 if(data != null && data.Count >0)
                     data = data.Where(p => p.IsTeamLicense == false).ToList();
                 foreach (var obj in data)

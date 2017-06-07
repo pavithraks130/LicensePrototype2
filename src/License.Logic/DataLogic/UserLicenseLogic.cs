@@ -25,7 +25,11 @@ namespace License.Logic.DataLogic
             teamLicLogic = new TeamLicenseLogic();
             licLogic = new ProductLicenseLogic();
         }
-        /// Assigning the license to user and updating the License  status  to update the Mapped property
+        /// <summary>
+        ///  Assigning the license to user and updating the License  status  to update the Mapped property
+        /// </summary>
+        /// <param name="lic"></param>
+        /// <returns></returns>
         private bool CreateUserLicense(UserLicense lic)
         {
             var obj = AutoMapper.Mapper.Map<UserLicense, Core.Model.UserLicense>(lic);
@@ -39,14 +43,22 @@ namespace License.Logic.DataLogic
 
 
 
+        /// <summary>
         /// creating the UserLicense this can be used to update the single user.
+        /// </summary>
+        /// <param name="licList"></param>
+        /// <returns></returns>
         public bool CreataeUserLicense(List<UserLicense> licList)
         {
             foreach (var lic in licList)
             {
+                // Getting existing user license
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == lic.UserId).ToList();
+                // Getting Product License based on  the user subscription Id and Product id
                 var data = Work.ProductLicenseRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
+                //fetching the user License  which matches the  Product license Id 
                 var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
+                // if the record does not exist then user license record will be created for the Product
                 if (obj == null)
                 {
                     var licId = licLogic.GetUnassignedLicense(lic.License.ProductId).Id;
@@ -64,7 +76,12 @@ namespace License.Logic.DataLogic
         }
 
 
-        /// function to create the License  for multiple User . This function will be used for bulk license mapping to user. If the license is already mapped then it won't  readd the license
+        /// <summary>
+        /// function to create the License  for multiple User . This function will be used for bulk license mapping to user. 
+        /// If the license is already mapped then it won't  readd the license
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool CreateMultiUserLicense(UserLicenseDataMapping model)
         {
             foreach (var user in model.UserList)
@@ -92,7 +109,11 @@ namespace License.Logic.DataLogic
             return true;
         }
 
-        //  Removing the License mapping from user 
+        /// <summary>
+        /// Removing the License mapping from user 
+        /// </summary>
+        /// <param name="lic"></param>
+        /// <returns></returns>
         private bool RevokeUserLicense(Core.Model.UserLicense lic)
         {
             var obj = Work.UserLicenseRepository.GetData(r => r.LicenseId == lic.LicenseId && r.UserId == lic.UserId).FirstOrDefault();
@@ -104,7 +125,11 @@ namespace License.Logic.DataLogic
             return obj1 != null;
         }
 
-        //Removing the bulk License from user
+        /// <summary>
+        /// Removing the bulk License from user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool RevokeUserLicense(UserLicenseDataMapping model)
         {
             ProductLicenseLogic licLogic = new ProductLicenseLogic();
@@ -119,14 +144,12 @@ namespace License.Logic.DataLogic
             return true;
         }
 
-        //public int GetUserLicenseCount(int userSubscriptionId, int productId)
-        //{
-        //    var licenseIdList = Work.ProductLicenseRepository.GetData(l => l.UserSubscriptionId == userSubscriptionId && l.ProductId == productId).Select(l => l.Id).ToList();
-        //    return Work.UserLicenseRepository.GetData(ul => licenseIdList.Contains(ul.LicenseId)).Count();
-        //}
-
+        /// <summary>
         /// Get user licenses by User Id
-        public List<UserLicense> GetUserLicense(string userId)
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<UserLicense> GetUserLicenseByUserId(string userId)
         {
             List<UserLicense> licenses = new List<UserLicense>();
             var datas = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.IsTeamLicense == false);
@@ -134,8 +157,13 @@ namespace License.Logic.DataLogic
             return licenses;
         }
 
-        /// Get User license by Team id and User Id.
-        public List<UserLicense> GetUserLicense(string userId, int teamId)
+        /// <summary>
+        /// Get User license by Team id and User Id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
+        public List<UserLicense> GetUserLicenseByUserIdTeamId(string userId, int teamId)
         {
             List<UserLicense> licenses = new List<UserLicense>();
             var datas = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.TeamId == teamId);
@@ -143,19 +171,31 @@ namespace License.Logic.DataLogic
             return licenses;
         }
 
-        // Assign  team license  to user based on the teamID 
+        /// <summary>
+        /// Assign  team license  to user based on the teamID 
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <param name="userId"></param>
         public void AssignTeamLicenseToUser(int teamId, string userId)
         {
+            // Get Team License By TeamId
             var teamLicData = teamLicLogic.GetTeamLicense(teamId);
+            // Get User License Data based on the userId
             var userLicData = Work.UserLicenseRepository.GetData(l => l.UserId == userId && l.TeamId == teamId).ToList();
             if (teamLicData == null)
                 return;
+            // Getting list of Products from team License Data
             var productList = teamLicData.Select(l => l.ProductId).Distinct();
+            //  Adding each product Team License to User
             foreach (var proId in productList)
             {
+                // Fetching the mapped Team License Id
                 var mappedlic = teamLicData.Where(l => l.ProductId == proId && l.IsMapped == true).ToList().Select(l => l.Id).ToList();
+                // fetching unmapped license record
                 var data = teamLicData.FirstOrDefault(l => l.ProductId == proId && l.IsMapped == false);
+                // checking any of the team License is mapped to the User for the product
                 var licMapped = userLicData.Any(l => mappedlic.Contains(l.TeamLicenseId));
+                // If No license mapped and if any Team License Exist then the License will be assigned to user
                 if (licMapped == false && data != null)
                 {
                     UserLicense lic = new UserLicense()
@@ -173,12 +213,18 @@ namespace License.Logic.DataLogic
             }
         }
 
+        /// <summary>
         /// Revoke License from user, data is retrived based on the user Id and Team Id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="teamId"></param>
         public void RevokeTeamLicenseFromUser(string userId, int teamId)
         {
+            // Getting all the team License based on the team ID
             var licenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.TeamId == teamId && u.IsTeamLicense == true).ToList();
             if (licenseList == null)
                 return;
+            // Removing from the user License and updating Is mapped property to false in Team License to make the license is available for the next user
             foreach (var lic in licenseList)
             {
                 teamLicLogic.UpdateLicenseStatus(lic.TeamLicenseId, false);
@@ -187,7 +233,10 @@ namespace License.Logic.DataLogic
             }
         }
 
-        //Revoking the team License from User based on userId
+        /// <summary>
+        /// Revoking the team License from User based on userId
+        /// </summary>
+        /// <param name="userId"></param>
         public void RevokeTeamLicenseFromUser(string userId)
         {
             var teamLicenseList = Work.UserLicenseRepository.GetData(u => u.UserId == userId && u.IsTeamLicense == true).ToList();
@@ -199,7 +248,10 @@ namespace License.Logic.DataLogic
             }
         }
 
+        /// <summary>
         /// Revoking Team License from user based on the teamLicenseId
+        /// </summary>
+        /// <param name="teamLicenseId"></param>
         public void RevokeTeamLicenseFromUser(int teamLicenseId)
         {
             var lic = Work.UserLicenseRepository.GetData(l => l.TeamLicenseId == teamLicenseId).ToList();

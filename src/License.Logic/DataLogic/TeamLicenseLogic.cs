@@ -19,15 +19,16 @@ namespace License.Logic.DataLogic
         }
 
         /// <summary>
-        /// Function to create Team License
+        /// Function to create Team License, update the respect productLicense status to true for mapped filed
         /// </summary>
         /// <param name="teamLicense"></param>
         /// <returns></returns>
         private bool CreateTeamLicense(TeamLicense teamLicense)
         {
-            var obj = AutoMapper.Mapper.Map<TeamLicense, Core.Model.TeamLicense>(teamLicense);
+            var obj = AutoMapper.Mapper.Map<Core.Model.TeamLicense>(teamLicense);
             obj = Work.TeamLicenseRepository.Create(obj);
             Work.TeamLicenseRepository.Save();
+            // updating the product license is mapped to true
             proLicLogic.UpdateLicenseStatus(obj.LicenseId, true);
             return obj.Id > 0;
 

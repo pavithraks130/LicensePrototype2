@@ -45,11 +45,7 @@ namespace License.Logic.DataLogic
         {
             List<TeamAssetModel> teamAssets = new List<TeamAssetModel>();
             var listData = Work.TeamAssetRepository.GetData();
-            foreach (var assetItem in listData)
-            {
-                teamAssets.Add(AutoMapper.Mapper.Map<Core.Model.TeamAsset, TeamAssetModel>(assetItem));
-            }
-
+            teamAssets = listData.Select(assetItem =>AutoMapper.Mapper.Map<TeamAssetModel>(assetItem)).ToList();
             return teamAssets;
         }
 
