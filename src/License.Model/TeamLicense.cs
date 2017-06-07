@@ -13,31 +13,13 @@ namespace License.DataModel
         public int TeamId { get; set; }
         public int ProductId { get; set; }
         public bool IsMapped { get; set; }
-        public virtual LicenseData License { get; set; }
+        public virtual ProductLicense License { get; set; }
     }
 
     public class TeamLicenseDetails
     {
         public Team Team { get; set; }
 
-        public List<SubscriptionDetails> SubscriptionDetails { get; set; }
-    }
-
-    public class Products
-    {
-        public Product Product { get; set; }
-        public int AvailableProductCount { get; set; }
-        public bool IsSelected { get; set; }
-    }
-
-    public class DeleteTeamDetails
-    {
-        public string LogInUserId { get; set; }
-        public int TeamId { get; set; }
-        public List<int> productIdList { get; set; }
-        public DeleteTeamDetails()
-        {
-            productIdList = new List<int>();
-        }
+        public List<Subscription> SubscriptionDetails { get; set; }
     }
 }

@@ -37,8 +37,8 @@ namespace License.Logic
             cfg.CreateMap<License.Core.Model.UserSubscription, License.DataModel.UserSubscription>();
             cfg.CreateMap<License.DataModel.UserSubscription, License.Core.Model.UserSubscription>();
 
-            cfg.CreateMap<License.Core.Model.LicenseData, License.DataModel.LicenseData>();
-            cfg.CreateMap<License.DataModel.LicenseData, License.Core.Model.LicenseData>();
+            cfg.CreateMap<License.Core.Model.ProductLicense, License.DataModel.ProductLicense>();
+            cfg.CreateMap<License.DataModel.ProductLicense, License.Core.Model.ProductLicense>();
 
             cfg.CreateMap<License.Core.Model.UserLicense, License.DataModel.UserLicense>();
             cfg.CreateMap<License.DataModel.UserLicense, License.Core.Model.UserLicense>();
@@ -49,11 +49,11 @@ namespace License.Logic
 
             cfg.CreateMap<License.Core.Model.UserLicenseRequest, License.DataModel.UserLicenseRequest>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
-                .ForMember(dest => dest.UserSubscripption, opt => opt.MapFrom(src => src.UserSubscripption));
+                .ForMember(dest => dest.UserSubscription, opt => opt.MapFrom(src => src.UserSubscription));
 
             cfg.CreateMap<License.DataModel.UserLicenseRequest, License.Core.Model.UserLicenseRequest>()
                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
-               .ForMember(dest => dest.UserSubscripption, opt => opt.MapFrom(src => src.UserSubscripption));
+               .ForMember(dest => dest.UserSubscription, opt => opt.MapFrom(src => src.UserSubscription));
 
             cfg.CreateMap<License.DataModel.TeamAsset, License.Core.Model.TeamAsset>();
             cfg.CreateMap<License.Core.Model.TeamAsset, License.DataModel.TeamAsset>();

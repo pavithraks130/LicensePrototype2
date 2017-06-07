@@ -20,6 +20,11 @@ namespace OnPremise.WebAPI.Controllers
             productLogic = new ProductLogic();
         }
 
+        /// <summary>
+        /// GET Method : Gets products based on the admin Id
+        /// </summary>
+        /// <param name="adminUserId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetProductsByAdminId/{adminUserId}")]
         public IHttpActionResult GetProductsByAdmin(string adminUserId)
@@ -28,6 +33,11 @@ namespace OnPremise.WebAPI.Controllers
             return Ok(productList);
         }
 
+        /// <summary>
+        /// POST Method: Used to Update the products in bulk
+        /// </summary>
+        /// <param name="productList"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdateProducts")]
         public HttpResponseMessage UpdateProducts(List<Product> productList)

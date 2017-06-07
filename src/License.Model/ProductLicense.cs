@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace License.DataModel
 {
-    public class LicenseData
+    public class ProductLicense
     {
         public int Id { get; set; }
 
@@ -28,18 +28,17 @@ namespace License.DataModel
     public class UserLicenseDataMapping
     {
         public int TeamId { get; set; }
-        public List<string> UserList { get; set; }
 
-        public List<LicenseData> LicenseDataList { get; set; }
+        public List<User> UserList { get; set; }
+
+        public List<ProductLicense> LicenseDataList { get; set; }
     }
 
     public class TeamLicenseDataMapping
     {
-        public int ConcurrentUserCount { get; set; }
+        public List<Team> TeamList { get; set; }
 
-        public List<string> TeamList { get; set; }
-
-        public List<int> ProductIdList { get; set; }
+        public List<ProductLicense> LicenseDataList { get; set; }
     }
 
     public class FetchUserSubscription

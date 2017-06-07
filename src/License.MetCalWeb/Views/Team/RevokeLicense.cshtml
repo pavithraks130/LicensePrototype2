@@ -6,7 +6,7 @@
 <br />
 <div class="row">
     <div class="col-md-12">
-        @using (Html.BeginForm("RevokeTeamLicense", "Team", new { teamId = Model.Team.Id }, FormMethod.Post, null))
+        @using (Html.BeginForm("RevokeLicense", "Team", new { teamId = Model.Team.Id }, FormMethod.Post, null))
         {
             @Html.ValidationSummary()
             @Html.AntiForgeryToken()

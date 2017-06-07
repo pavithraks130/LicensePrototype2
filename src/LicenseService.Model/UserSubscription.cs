@@ -12,7 +12,7 @@ namespace LicenseServer.DataModel
 
         public string UserId { get; set; }
 
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public int Quantity { get; set; }
 
@@ -22,14 +22,8 @@ namespace LicenseServer.DataModel
 
         public DateTime RenewalDate { get;set; } = new DateTime(1900, 01, 01);
 
-        public SubscriptionType Subtype { get; set; }
+        public Subscription Subtype { get; set; }
        
     }
 
-    public class LicenseKeyProductMapping
-    {
-        public string LicenseKey { get; set; }
-        public int ProductId { get; set; }
-
-    }
 }

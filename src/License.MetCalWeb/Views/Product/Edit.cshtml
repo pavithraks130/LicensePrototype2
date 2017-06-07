@@ -1,6 +1,5 @@
-﻿@using License.MetCalWeb.Models
-@model Product
-
+﻿
+@model License.MetCalWeb.Models.Product
 @{
     ViewBag.Title = "Edit Product";
 }
@@ -72,18 +71,18 @@
                             <div class="col-md-10">
                                 <span class="field-validation-valid" id="lblFeature"> Select feature</span>
                                 <table id="table" data-toggle="table table-responsive" data-cache="false" data-height="299">
-                                    @if (Model.AssociatedFeatures != null && Model.AssociatedFeatures.Count > 0)
+                                    @if (Model.Features != null && Model.Features.Count > 0)
                                     {
-                                        for (int i = 0; i < Model.AssociatedFeatures.Count; i++)
+                                        for (int i = 0; i < Model.Features.Count; i++)
                                         {
                                             <tr>
                                                 <td class="col-md-8">
                                                     <div class="form-group">
                                                         <div class="col-md-8">
-                                                            @Html.DropDownList("featuresList", new SelectList(ViewBag.Features, "Id", "Name", Model.AssociatedFeatures.ElementAt(i).Id), new { @class = "form-control" })
+                                                            @Html.DropDownList("featuresList", new SelectList(ViewBag.Features, "Id", "Name", Model.Features.ElementAt(i).Id), new { @class = "form-control" })
                                                         </div>
                                                         <span class="col-md-4">
-                                                            @if (i + 1 == Model.AssociatedFeatures.Count)
+                                                            @if (i + 1 == Model.Features.Count)
                                                             {
                                                                 <button type="button" class="btn btn-add btn-default">+</button>
                                                             }

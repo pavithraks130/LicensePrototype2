@@ -208,16 +208,19 @@
     <Compile Include="Migrations\201705281618321_ChangesToUserLicense1.Designer.cs">
       <DependentUpon>201705281618321_ChangesToUserLicense1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706060656079_CHangesToTableName.cs" />
+    <Compile Include="Migrations\201706060656079_CHangesToTableName.Designer.cs">
+      <DependentUpon>201706060656079_CHangesToTableName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
-    <Compile Include="Model\LicenseData.cs" />
+    <Compile Include="Model\ProductLicense.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\Team.cs" />
     <Compile Include="Model\TeamAsset.cs" />
     <Compile Include="Model\TeamLicense.cs" />
     <Compile Include="Model\TeamMember.cs" />
     <Compile Include="Model\UserLicense.cs" />
-    <Compile Include="Model\UserLicenseRequest.cs" />
     <Compile Include="Model\UserSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -300,6 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705281618321_ChangesToUserLicense1.resx">
       <DependentUpon>201705281618321_ChangesToUserLicense1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706060656079_CHangesToTableName.resx">
+      <DependentUpon>201706060656079_CHangesToTableName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

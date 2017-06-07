@@ -66,7 +66,7 @@
     <Compile Include="ResetPassword.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="SubscriptionDetails.cs" />
-    <Compile Include="SubscriptionType.cs" />
+    <Compile Include="Subscription.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserSubscription.cs" />
     <Compile Include="UserSubscriptionList.cs" />

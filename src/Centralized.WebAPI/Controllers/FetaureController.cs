@@ -45,14 +45,14 @@ namespace Centralized.WebAPI.Controllers
         /// <summary>
         /// Create Feature Record in database
         /// </summary>
-        /// <param name="f"></param>
+        /// <param name="feature"></param>
         /// <returns></returns>
         [Route("Create")]
         [HttpPost]
-        public HttpResponseMessage CreataeFeature(Feature f)
+        public HttpResponseMessage CreataeFeature(Feature feature)
         {
-            bool status = logic.CreateFeature(f);
-            if (status)
+            feature = logic.CreateFeature(feature);
+            if (feature != null && feature.Id > 0)
                 return Request.CreateResponse(HttpStatusCode.Created, "success");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
@@ -68,8 +68,8 @@ namespace Centralized.WebAPI.Controllers
         [HttpPut]
         public HttpResponseMessage UpdateFeature(int id, Feature f)
         {
-            bool status = logic.Update(id, f);
-            if (status)
+            var feature = logic.Update(id, f);
+            if (feature != null && feature.Id > 0)
                 return Request.CreateResponse(HttpStatusCode.OK, "success");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);

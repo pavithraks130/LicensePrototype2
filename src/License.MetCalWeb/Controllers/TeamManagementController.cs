@@ -13,26 +13,34 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controller is responsible for performing the team member functionalities
+    /// </summary>
     [Authorize]
     [SessionExpire]
     public class TeamManagementController : Controller
     {
-        // GET: Team
+      /// <summary>
+      /// Get action return a main view Container which   display the team Selectcion option based on which the Team membere will de displayed. If initialy the team List is empty the the Team List will
+      /// be fetced from DB through service call
+      /// </summary>
+      /// <returns></returns>
         public ActionResult TeamContainer()
         {
             string userId = string.Empty;
-            List<Team> teamList = null;
+           
             if (!LicenseSessionState.Instance.IsSuperAdmin)
                 userId = LicenseSessionState.Instance.User.UserId;
             if (LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
             {
-                teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
-                LicenseSessionState.Instance.TeamList = teamList;
-            }
-            if(LicenseSessionState.Instance.TeamList == null || LicenseSessionState.Instance.TeamList.Count == 0)
-            {
-                ViewBag.SelectedTeamId = "";
-                return View();
+                var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+                if (teamList == null || teamList.Count == 0)
+                {
+                    ViewBag.SelectedTeamId = "";
+                    return View();
+                }
+                else
+                    LicenseSessionState.Instance.TeamList = teamList;
             }
             if (LicenseSessionState.Instance.SelectedTeam == null)
             {
@@ -45,13 +53,22 @@ namespace License.MetCalWeb.Controllers
                 ViewBag.SelectedTeamId = LicenseSessionState.Instance.SelectedTeam.Id;
             return View();
         }
-
+        
+        /// <summary>
+        /// Get ACtion returns view with list of team members based on the team ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult TeamMembers(int id)
         {
             TeamDetails model = LoadTeamMember(Convert.ToInt32(id));
             return View(model);
         }
-
+        /// <summary>
+        /// returns the team details with list of team members whoc has accepted te request.
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         private TeamDetails LoadTeamMember(int teamId)
         {
             TeamDetails model = null;
@@ -77,13 +94,24 @@ namespace License.MetCalWeb.Controllers
             return model;
         }
 
-
+        /// <summary>
+        /// GET Action returns view to invite user
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         public ActionResult Invite(int teamId)
         {
             ViewBag.TeamId = teamId;
             return View();
         }
 
+        /// <summary>
+        /// Post Action triggers when user submit the pop up window form to create the Invite record and user Record in DB through Service call . Once service response is success then 
+        /// the invitation mail sent to the user
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Invite(int teamId, UserInviteModel model)
@@ -143,6 +171,13 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        /// <summary>
+        /// Get Action which are called using ajax calls. To perform respective action based on the action Type and ,Based on the Team Member id and User Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="actionType"></param>
+        /// <returns></returns>
         public ActionResult UserConfiguration(int id, string userId, string actionType)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
@@ -170,15 +205,28 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("TeamContainer");
         }
 
+        /// <summary>
+        /// Return view with the list of Team for assiging user to multiple team or list of team for which he has assigned to  revoke from multiple team.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="actionType"></param>
+        /// <returns></returns>
         public ActionResult AssignRevokeTeam(string userId, string actionType)
         {
             var teamModel = LoadTeamsByUserId(userId, actionType);
-            ViewData["UserId"] = userId;
-            ViewData["actionType"] = actionType;
-            ViewData["UserEmail"] = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail;
+            ViewBag.UserId = userId;
+            ViewBag.actionType = actionType;
+            ViewBag.UserEmail = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail;
             return View("AssignRevokeTeam", teamModel);
         }
 
+        /// <summary>
+        /// POST action to perform respecctie assign or revoke to team based on the action Type
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="actionType"></param>
+        /// <param name="selectedTeams"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AssignRevokeTeam(string userId, string actionType, params string[] selectedTeams)
@@ -189,6 +237,10 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Return View with the Subscriptiion  with product details  and available license count
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Subscriptions()
         {
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
@@ -202,7 +254,12 @@ namespace License.MetCalWeb.Controllers
             var subscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
             return View(subscriptionList);
         }
-
+        /// <summary>
+        /// Function to list the Team based on the user Id and ACtion Type by making service Call
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="actiontype"></param>
+        /// <returns></returns>
         public List<Team> LoadTeamsByUserId(string userId, string actiontype)
         {
             List<Team> teamList = null;
@@ -215,6 +272,13 @@ namespace License.MetCalWeb.Controllers
             return teamList;
         }
 
+        /// <summary>
+        /// Updating the Assign or Revoke of team based on the userId and TeamId
+        /// </summary>
+        /// <param name="teamIds"></param>
+        /// <param name="userId"></param>
+        /// <param name="actionType"></param>
+        /// <returns></returns>
         public bool UpdateOrRevokeTeam(String[] teamIds, string userId, string actionType)
         {
             List<TeamMember> teamMembers = new List<TeamMember>();

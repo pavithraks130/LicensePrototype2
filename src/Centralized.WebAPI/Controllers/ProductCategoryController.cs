@@ -9,6 +9,9 @@ using LicenseServer.DataModel;
 
 namespace Centralized.WebAPI.Controllers
 {
+    /// <summary>
+    /// Cataegory Api Service Call for Getting the Subscription Category details.
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/ProductCategory")]
     public class ProductCategoryController : BaseController
@@ -19,7 +22,10 @@ namespace Centralized.WebAPI.Controllers
         {
             logic = new ProductCategoryLogic();
         }
-
+        /// <summary>
+        /// Get Method: Service is used to get the Subscription Categories.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("All")]
         public IHttpActionResult Getcategories()
@@ -27,17 +33,27 @@ namespace Centralized.WebAPI.Controllers
             return Ok(logic.GetAll());
         }
 
+        /// <summary>
+        /// POSt Method: Create Subscription Category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
-        public HttpResponseMessage CreateCategory(ProductCategory category)
+        public HttpResponseMessage CreateCategory(SubscriptionCategory category)
         {
-            bool status = logic.Create(category);
-            if (status)
+            var subCategory = logic.Create(category);
+            if (subCategory != null && subCategory.Id > 0)
                 return Request.CreateResponse(HttpStatusCode.Created, "Success");
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Get Method: Get Subscription category based on the id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetById/{id}")]
         public HttpResponseMessage GetCategoryById(int id)
@@ -49,17 +65,28 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// PUT Method: Updating the Category changes based on the categoryId.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("Update/{id}")]
-        public HttpResponseMessage UpdateCategory(int id, ProductCategory category)
+        public HttpResponseMessage UpdateCategory(int id, SubscriptionCategory category)
         {
-            bool status = logic.Update(id, category);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
+            var subCategory = logic.Update(id, category);
+            if (subCategory != null && subCategory.Id > 0)
+                return Request.CreateResponse(HttpStatusCode.OK, subCategory);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
 
+        /// <summary>
+        /// Delete Method: Delte the Subscription Category by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteCategory(int id)

@@ -10,7 +10,11 @@ namespace License.MetCalWeb.Common
 {
     public class OnPremiseSubscriptionLogic
     {
-        public static List<SubscriptionDetails> GetUserLicenseForUser()
+        /// <summary>
+        /// Get user license by user Id  with feature listing 
+        /// </summary>
+        /// <returns></returns>
+        public static List<Subscription> GetUserLicenseForUser()
         {
             string userId = LicenseSessionState.Instance.User.UserId;
             var userLicDetails = GetUserLicenseDetails(userId, true);
@@ -22,16 +26,16 @@ namespace License.MetCalWeb.Common
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static IList<SubscriptionDetails> GetSubscription(string adminId)
+        public static IList<Subscription> GetSubscription(string adminId)
         {
-            IList<SubscriptionDetails> subscriptionProList = new List<SubscriptionDetails>();
+            IList<Subscription> subscriptionProList = new List<Subscription>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/UserSubscription/SubscriptionDetils/" + adminId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsonData))
-                    subscriptionProList = JsonConvert.DeserializeObject<List<SubscriptionDetails>>(jsonData);
+                    subscriptionProList = JsonConvert.DeserializeObject<List<Subscription>>(jsonData);
             }
             return subscriptionProList;
         }
@@ -42,21 +46,22 @@ namespace License.MetCalWeb.Common
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static IList<Products> GetProductsFromSubscription()
+        public static IList<Product> GetProductsFromSubscription()
         {
-            IList<Products> productsList = new List<Products>();
+            IList<Product> productsList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/Team/GetSubscribedProducts/").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsonData))
-                    productsList = JsonConvert.DeserializeObject<IList<Products>>(jsonData);
+                    productsList = JsonConvert.DeserializeObject<IList<Product>>(jsonData);
             }
             return productsList;
         }
         /// <summary>
-        /// Function to get the User License with details  for which user is authorized
+        /// Function to get the User License with details  for which user is authorized. By default the fetchBasedonTeam is set true because moset of the time the 
+        /// licnese details based on the team context logged in.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="isFeatureRequired"></param>
@@ -99,17 +104,17 @@ namespace License.MetCalWeb.Common
             return distinctProductList;
         }
 
-        public static IList<SubscriptionDetails> GetSubscriptionForLicenseMap(string userId, string adminUserId)
+        public static IList<Subscription> GetSubscriptionForLicenseMap(string userId, string adminUserId)
         {
 
-            IList<SubscriptionDetails> subscriptionProList = new List<SubscriptionDetails>();
+            IList<Subscription> subscriptionProList = new List<Subscription>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/UserSubscription/GetSubscriptioDtlsForLicenseMap/" + adminUserId + "/" + userId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsonData))
-                    subscriptionProList = JsonConvert.DeserializeObject<List<SubscriptionDetails>>(jsonData);
+                    subscriptionProList = JsonConvert.DeserializeObject<List<Subscription>>(jsonData);
             }
             return subscriptionProList;
         }

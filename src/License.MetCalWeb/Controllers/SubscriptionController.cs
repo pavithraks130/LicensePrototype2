@@ -11,15 +11,21 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Conotroller for performing the functionality related to the Subscription.
+    /// </summary>
     [Authorize]
     [SessionExpire]
     public class SubscriptionController : Controller
     {
-
+        /// <summary>
+        ///  Get Aaction for listing all the subscription based on the user Id . Returns the view with the list of subscription display
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> Index()
         {
             TempData["CartCount"] = "";
-            List<SubscriptionType> typeList = new List<SubscriptionType>();
+            List<Subscription> typeList = new List<Subscription>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             HttpResponseMessage response;
             if (LicenseSessionState.Instance.IsGlobalAdmin)
@@ -29,7 +35,7 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                typeList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
+                typeList = JsonConvert.DeserializeObject<List<Subscription>>(data);
             }
             else
             {
@@ -42,11 +48,14 @@ namespace License.MetCalWeb.Controllers
             client.Dispose();
             return View(typeList);
         }
-
+        /// <summary>
+        /// GET action return view for the Subscription creation
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Create()
         {
-            SubscriptionType subType = new SubscriptionType();
+            Subscription subType = new Subscription();
             List<Product> productList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/Product/All").Result;
@@ -67,7 +76,10 @@ namespace License.MetCalWeb.Controllers
             TempData["ActivationMonth"] = LicenseSessionState.Instance.SubscriptionMonth;
             return View(subType);
         }
-
+        /// <summary>
+        /// Get Action returns view for the subscription creation. This view is used by the super admin.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult SubscriptionContainer()
         {
@@ -75,6 +87,9 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Function to get the Cart Items Count 
+        /// </summary>
         private void CartItemCount()
         {
             TempData["CartCount"] = "";
@@ -94,24 +109,33 @@ namespace License.MetCalWeb.Controllers
             client.Dispose();
         }
 
+        /// <summary>
+        /// GET action Return View for listing categories
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Categories()
         {
-            List<ProductCategory> category = null;
+            List<SubscriptionCategory> category = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/productCategory/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<List<ProductCategory>>(data);
+                category = JsonConvert.DeserializeObject<List<SubscriptionCategory>>(data);
             }
             else
             {
-                category = new List<ProductCategory>();
+                category = new List<SubscriptionCategory>();
             }
             return View(category);
         }
 
+        /// <summary>
+        /// Get Action. List Features based on the category Id  Selection
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Features(int id)
         {
@@ -126,6 +150,10 @@ namespace License.MetCalWeb.Controllers
             return View(featureList);
         }
 
+        /// <summary>
+        /// GET action return the view with CMMS Product listed
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CMMSProducts()
         {
             List<Product> cmmsProducts = new List<Product>();
@@ -139,18 +167,32 @@ namespace License.MetCalWeb.Controllers
             return View(cmmsProducts);
         }
 
+        /// <summary>
+        ///  Get Action. Returns the view for the feature selection and cmms product selectio.
+        ///  This screen is the master view Teamplate for listing Feature and CMMS Product views are the child view 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ProductDetails(int id, string categoryName)
         {
-            SubscriptionType type = new SubscriptionType();
-            type.Category = new ProductCategory();
-            type.Category.Id = id;
-            type.Category.Name = categoryName;
+            Subscription type = new Subscription()
+            {
+                Category = new SubscriptionCategory()
+                {
+                    Id = id,
+                    Name = categoryName
+                }
+            };
             DataInitialization();
             CartItemCount();
             return View(type);
         }
 
+        /// <summary>
+        /// Functionality to initialize the basic data
+        /// </summary>
         public void DataInitialization()
         {
             List<SelectListItem> listItems = new List<SelectListItem>
@@ -193,31 +235,34 @@ namespace License.MetCalWeb.Controllers
                     Value = "3"
                 }
             };
-            ViewData["UserCount"] = listItems;
-            ViewData["PeriodeList"] = periodList;
+            ViewBag.UserCount = listItems;
+            ViewBag.PeriodeList = periodList;
         }
 
+        /// <summary>
+        /// POST Action which is used bto create mthe Subscription by making the service call once succedded then redirected to the Index screen
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="addToCart"></param>
+        /// <param name="selectedFeatures"></param>
+        /// <param name="cmmsQty"></param>
+        /// <param name="selectedProducts"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Create(SubscriptionType type, string addToCart, string[] selectedFeatures, int[] cmmsQty, params string[] selectedProducts)
+        public async Task<ActionResult> Create(Subscription type, string addToCart, string[] selectedFeatures, int[] cmmsQty, params string[] selectedProducts)
         {
             IList<Product> productCollection = new List<Product>();
-
+            // Product creation based on the feature selection
             Product pro = new Product()
             {
-                AssociatedFeatures = new List<Feature>(),
+                Features = new List<Feature>(),
                 Quantity = type.NoOfUsers,
-                Categories = new List<ProductCategory>() { type.Category }
+                Categories = new List<SubscriptionCategory>() { type.Category }
             };
-            for (int i = 0; i < selectedFeatures.Length; i++)
-            {
-                Feature f = new Feature()
-                {
-                    Id = Convert.ToInt32(selectedFeatures[i])
-                };
-                pro.AssociatedFeatures.Add(f);
-            }
+            pro.Features = selectedFeatures.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();           
             productCollection.Add(pro);
 
+            // Creation of the Product for each cmms product selection 
             HttpResponseMessage response = null;
             if (selectedProducts != null)
                 for (int i = 0; i < selectedProducts.Length; i++)
@@ -230,12 +275,13 @@ namespace License.MetCalWeb.Controllers
                     productCollection.Add(p);
                 }
 
-            SubscriptionType subscriptionType = new SubscriptionType()
+            // Creation of the subscription Object
+            Subscription subscriptionType = new Subscription()
             {
                 Name = type.Name,
                 Price = type.Price,
                 Category = type.Category,
-                Products = productCollection.AsEnumerable()
+                Products = productCollection.ToList()
             };
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 subscriptionType.CreatedBy = LicenseSessionState.Instance.User.ServerUserId;
@@ -249,6 +295,7 @@ namespace License.MetCalWeb.Controllers
                 case 3: subscriptionType.ActiveDays = 365 * 3; break;
             }
 
+            // Service call to create the subscription  based on the 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             if (bool.Parse(addToCart))
                 response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
@@ -266,6 +313,10 @@ namespace License.MetCalWeb.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Get Action, returns view with subscription list which expires in a month
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Renew()
         {
@@ -274,17 +325,24 @@ namespace License.MetCalWeb.Controllers
             return View(renewSub);
         }
 
+        /// <summary>
+        /// POST action , triggers when the form subsmitted for the renewal , data is stored temporarly in temp data and
+        /// once payment is done the subscription will be updated  with latest expire details 
+        /// </summary>
+        /// <param name="renewSub"></param>
+        /// <param name="selectedSubscription"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Renew(RenewSubscriptionList renewSub, string[] selectedSubscription)
         {
-            renewSub.SubscriptionList = new List<SubscriptionType>();
+            renewSub.SubscriptionList = new List<Subscription>();
             renewSub.RenewalDate = DateTime.Now.Date;
             if (selectedSubscription.Count() > 0)
             {
                 foreach (var subId in selectedSubscription)
                 {
-                    renewSub.SubscriptionList.Add(new SubscriptionType() { Id = Convert.ToInt32(subId) });
+                    renewSub.SubscriptionList.Add(new Subscription() { Id = Convert.ToInt32(subId) });
                 }
                 TempData["RenewSubscription"] = renewSub;
                 return RedirectToAction("PaymentGateway", "Cart", new { total = renewSub.Price });

@@ -113,7 +113,7 @@
     <Compile Include="DataLogic\TeamLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataLogic\BaseLogic.cs" />
-    <Compile Include="DataLogic\LicenseLogic.cs" />
+    <Compile Include="DataLogic\ProductLicenseLogic.cs" />
     <Compile Include="BusinessLogic\ProductSubscriptionLogic.cs" />
     <Compile Include="DataLogic\RoleLogic.cs" />
     <Compile Include="DataLogic\TeamAssetLogic.cs" />

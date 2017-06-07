@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// User Management functionalities are performed in this controller
+    /// </summary>
     [Authorize]
     [SessionExpire]
     public class UserController : BaseController
@@ -21,6 +24,10 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        /// <summary>
+        /// GET Action to list all the User. Returns the View by passing te User List 
+        /// </summary>
+        /// <returns></returns>
         // GET: User
         public async Task<ActionResult> Index()
         {
@@ -43,13 +50,24 @@ namespace License.MetCalWeb.Controllers
             return View(users);
         }
 
-
+        /// <summary>
+        /// Get Action, display the profile screen to update the User Details, returns view with existing user data.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Profile()
         {
             var user = LicenseSessionState.Instance.User;
             return View(user);
         }
-
+        /// <summary>
+        /// POST Action to update the profile dat to db by making call using serveice  based on the Role the respective Service will be called to update the data.
+        /// 1. Global Admin : Centralized Service will be called.
+        /// 2. Super Admin : Centralized and On Premisse service both will be called 
+        /// 3. Team Member : only On Premise service will be called.
+        /// </summary>
+        /// <param name="usermodel"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Profile(User usermodel, string userId)
@@ -83,6 +101,11 @@ namespace License.MetCalWeb.Controllers
             return View(usermodel);
         }
 
+
+        /// <summary>
+        /// Get ACtion to display the change Password View
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public ActionResult ChangePassword()
         {
@@ -90,6 +113,14 @@ namespace License.MetCalWeb.Controllers
             return View(changePwdModel);
         }
 
+        /// <summary>
+        /// POST Action to update the password to db based on the Role the respective Service will be called to update the data.
+        /// 1. Global Admin : Centralized Service will be called.
+        /// 2. Super Admin : Centralized and On Premisse service both will be called 
+        /// 3. Team Member : only On Premise service will be called. 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePassword model)
@@ -121,6 +152,13 @@ namespace License.MetCalWeb.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// common function to invoke bothe On Premise and Centralized Service based on the type parameter
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="type"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateProfile(User model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);
@@ -136,6 +174,13 @@ namespace License.MetCalWeb.Controllers
             return false;
         }
 
+        /// <summary>
+        ///  common function to invoke bothe On Premise and Centralized Service based on the type parameter
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="type"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);

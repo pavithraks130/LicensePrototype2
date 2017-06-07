@@ -8,7 +8,7 @@
 
         <h2>@ViewBag.Title.</h2>
 
-        @if (!Convert.ToBoolean(ViewData["SucessMessageDisplay"]))
+        @if (!Convert.ToBoolean(ViewBag.SucessMessageDisplay))
         {
             using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {

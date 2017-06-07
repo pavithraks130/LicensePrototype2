@@ -9,6 +9,9 @@ using License.Logic.DataLogic;
 
 namespace OnPremise.WebAPI.Controllers
 {
+    /// <summary>
+    /// Asset Service 
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/Asset")]
     public class AssetController : BaseController

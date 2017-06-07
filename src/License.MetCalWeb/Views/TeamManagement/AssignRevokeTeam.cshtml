@@ -3,7 +3,7 @@
 <div class="row">
     <h2>
 
-        @if (ViewData["actionType"].ToString() == "RemoveTeam")
+        @if (ViewBag.actionType.ToString() == "RemoveTeam")
         {
             <label>Remove From Team</label>
         }
@@ -14,14 +14,14 @@
 
     </h2>
     <br />
-    @using (Html.BeginForm("AssignRevokeTeam", "TeamManagement", new { userId = ViewData["UserId"], actionType = ViewData["actionType"] }, FormMethod.Post))
+    @using (Html.BeginForm("AssignRevokeTeam", "TeamManagement", new { userId = ViewBag.UserId, actionType = ViewBag.actionType }, FormMethod.Post))
     {
         @Html.ValidationSummary()
         @Html.AntiForgeryToken()
         <div class="form-group">
             <div class="col-md-8">
                 <span>
-                    Team Member Email :   @ViewData["UserEmail"]
+                    Team Member Email :   @ViewBag.UserEmail
                 </span>
             </div>
         </div>
@@ -52,7 +52,7 @@
                         }
                     </table>
                     <label style="display:none;color:red;" id="lblError">Team  not selected</label>
-                    <input type="submit" value="@(ViewData["actionType"].ToString() == "RemoveTeam" ?"Revoke From Team(s)" :"Assign to Team(s)")" class="btn btn-default btn-custom btn-save" />
+                    <input type="submit" value="@(ViewBag.actionType.ToString() == "RemoveTeam" ?"Revoke From Team(s)" :"Assign to Team(s)")" class="btn btn-default btn-custom btn-save" />
 
                 </div>
             </div>

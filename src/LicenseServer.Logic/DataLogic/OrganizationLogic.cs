@@ -21,17 +21,14 @@ namespace LicenseServer.Logic
 
         public Organization GetOrganizationById(int id)
         {
-            var obj = Work.OrganizationRepository.GetById( id);
+            var obj = Work.OrganizationRepository.GetById(id);
             return AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(obj);
         }
 
         public Organization GetOrganizationByName(object name)
         {
-            var obj =
-                Work.OrganizationRepository.GetData().FirstOrDefault(t => t.Name.ToLower() == name.ToString().ToLower());
-            if (obj == null)
-                return null;
-            return AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(obj);
+            var obj = Work.OrganizationRepository.GetData().FirstOrDefault(t => t.Name.ToLower() == name.ToString().ToLower());
+            return AutoMapper.Mapper.Map<Organization>(obj);
         }
 
         public Organization CreateOrganization(Organization team)
@@ -39,7 +36,7 @@ namespace LicenseServer.Logic
             var _team = AutoMapper.Mapper.Map<Organization, LicenseServer.Core.Model.Organization>(team);
             _team = Work.OrganizationRepository.Create(_team);
             Work.OrganizationRepository.Save();
-            team = AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(_team);
+            team = AutoMapper.Mapper.Map<Organization>(_team);
             return team;
         }
 
@@ -48,7 +45,7 @@ namespace LicenseServer.Logic
             var _team = AutoMapper.Mapper.Map<Organization, LicenseServer.Core.Model.Organization>(team);
             _team = Work.OrganizationRepository.Update(_team);
             Work.OrganizationRepository.Save();
-            team = AutoMapper.Mapper.Map<LicenseServer.Core.Model.Organization, Organization>(_team);
+            team = AutoMapper.Mapper.Map<Organization>(_team);
             return team;
         }
 

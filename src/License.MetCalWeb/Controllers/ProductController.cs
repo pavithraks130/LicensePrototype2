@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controller is used to perform the action relataed to the Product
+    /// </summary>
     [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
     public class ProductController : BaseController
@@ -22,6 +25,10 @@ namespace License.MetCalWeb.Controllers
 
         }
 
+        /// <summary>
+        /// GET ACtion, returns View with list of products as the Model data to display the product List
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Index()
         {
@@ -43,6 +50,10 @@ namespace License.MetCalWeb.Controllers
             return View(productList);
         }
 
+        /// <summary>
+        /// GET Action , return view for the creation of product
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Create()
         {
@@ -50,25 +61,23 @@ namespace License.MetCalWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// POST Action, triggers when the create form is submitted. The product data with category and Feature will be sent to the 
+        /// Server for saving the Data using the Create Service call
+        /// </summary>
+        /// <param name="productDetails"></param>
+        /// <param name="rboCategory"></param>
+        /// <param name="featuresList"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(Product productDetails, string[] rboCategory, string[] featuresList)
         {
             if (ModelState.IsValid)
             {
-                if (rboCategory.Count() > 0)
-                {
-                    productDetails.Categories = new List<ProductCategory>();
-                    foreach (var categoryIds in rboCategory)
-                    {
-                        productDetails.Categories.Add(new ProductCategory() { Id = Convert.ToInt32(categoryIds) });
-                    }
-                }
-                productDetails.AssociatedFeatures = new List<Feature>();
+                productDetails.Categories = rboCategory.ToList().Select(c => new SubscriptionCategory() { Id = Convert.ToInt32(c) }).ToList();
+                productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
 
-                foreach (var featureId in featuresList)
-                {
-                    productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
-                }
+                //Service call to save the data in Centralized DB
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = client.PostAsJsonAsync("api/product/create", productDetails).Result;
                 if (response.IsSuccessStatusCode)
@@ -84,6 +93,11 @@ namespace License.MetCalWeb.Controllers
             return View(productDetails);
         }
 
+        /// <summary>
+        /// GET Action, Returns view with the existing data for the selected product Id for Modifying details if needed
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -102,16 +116,13 @@ namespace License.MetCalWeb.Controllers
                 ModelState.AddModelError("", errorRespoonse.Message);
             }
             GetFeatureList();
-            // Updating the data 
-            if (pro.AssociatedFeatures.Count > 0)
-            {
-                foreach (var feature in pro.AssociatedFeatures)
-                {
-                    (ViewBag.Features as List<Feature>).Find(p => p.Id == feature.Id).Selected = true;
-                }
-            }
 
-            var objList = ViewBag.Categories as List<ProductCategory>;
+            // Updating the data 
+            if (pro.Features.Count > 0)
+                foreach (var feature in pro.Features)
+                    (ViewBag.Features as List<Feature>).Find(p => p.Id == feature.Id).Selected = true;
+
+            var objList = ViewBag.Categories as List<SubscriptionCategory>;
             if (objList != null)
             {
                 foreach (var category in pro.Categories)
@@ -121,25 +132,23 @@ namespace License.MetCalWeb.Controllers
             return View(pro);
         }
 
+        /// <summary>
+        /// POST action. action triggered when user submits the Product edit screen.
+        /// Modified data is updated for the selected product id. using service call
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="productDetails"></param>
+        /// <param name="rboCategory"></param>
+        /// <param name="featuresList"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Product productDetails, string[] rboCategory, string[] featuresList)
         {
             if (ModelState.IsValid)
             {
-                if (rboCategory.Count() > 0)
-                {
-                    productDetails.Categories = new List<ProductCategory>();
-                    foreach (var categoryId in rboCategory)
-                        productDetails.Categories.Add(new ProductCategory() { Id = Convert.ToInt32(categoryId) });
-                }
-
-                if (featuresList.Count() > 0)
-                {
-                    productDetails.AssociatedFeatures = new List<Feature>();
-                    foreach (var featureId in featuresList)
-                        productDetails.AssociatedFeatures.Add(new Feature() { Id = Convert.ToInt32(featureId) });
-                }
+                productDetails.Categories = rboCategory.ToList().Select(categoryId => new SubscriptionCategory() { Id = Convert.ToInt32(categoryId) }).ToList();
+                productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
                 productDetails.ModifiedDate = DateTime.Now;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = client.PutAsJsonAsync("api/product/update/" + id, productDetails).Result;
@@ -156,6 +165,9 @@ namespace License.MetCalWeb.Controllers
             return View(productDetails);
         }
 
+        /// <summary>
+        /// Get the list of Features and Categories through service call
+        /// </summary>
         public void GetFeatureList()
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -169,10 +181,17 @@ namespace License.MetCalWeb.Controllers
             }
             else
             {
-                ViewBag.Categories = new List<ProductCategory>();
+                ViewBag.Categories = new List<SubscriptionCategory>();
                 ViewBag.Features = new List<Feature>();
             }
         }
+
+        /// <summary>
+        /// POST Action to delete the Product based on the Product Id 
+        /// and JSON Response is returned  with status and error  if error exist else empty string will be sent
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id)
         {

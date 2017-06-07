@@ -22,11 +22,11 @@ namespace License.MetCalWeb.Models
         public string ServerUserId { get; set; }
         public bool IsActive { get; set; }
         public string Password { get; set; }
-        public List<SubscriptionType> SubscriptionList { get; set; }
+        public List<Subscription> SubscriptionList { get; set; }
         public User()
         {
             Organization = new Organization();
-            SubscriptionList = new List<SubscriptionType>();
+            SubscriptionList = new List<Subscription>();
         }
     }
 

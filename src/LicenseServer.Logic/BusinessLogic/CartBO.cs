@@ -13,6 +13,7 @@ namespace LicenseServer.Logic.BusinessLogic
         public string ErrorMessage { get; set; }
         public LicUserManager UserManager { get; set; }
         public LicRoleManager RoleManager { get; set; }
+
         public PurchaseOrder OfflinePayment(string userId)
         {
             CartLogic cartLogic = new CartLogic();
@@ -33,7 +34,7 @@ namespace LicenseServer.Logic.BusinessLogic
                     PurchaseOrderItem poItem = new PurchaseOrderItem()
                     {
                         Quantity = item.Quantity,
-                        SubscriptionId = item.SubscriptionTypeId
+                        SubscriptionId = item.SubscriptionId
                     };
                     poItemList.Add(poItem);
                     total += item.Price;
@@ -81,7 +82,7 @@ namespace LicenseServer.Logic.BusinessLogic
                     UserSubscription usersubs = new UserSubscription()
                     {
                         UserId = userId,
-                        SubscriptionTypeId = item.SubscriptionTypeId,
+                        SubscriptionId = item.SubscriptionId,
                         ActivationDate = DateTime.Now.Date,
                         Quantity = item.Quantity
                     };
@@ -125,10 +126,11 @@ namespace LicenseServer.Logic.BusinessLogic
                     UserSubscription usersubs = new UserSubscription()
                     {
                         UserId = userId,
-                        SubscriptionTypeId = item.SubscriptionId,
+                        SubscriptionId = item.SubscriptionId,
                         ActivationDate = DateTime.Now.Date,
                         Quantity = item.Quantity
                     };
+                    usersubs.ExpireDate = usersubs.ActivationDate.AddDays(item.Subscription.ActiveDays).Date;
                     subsList.Add(usersubs);
                 }
                 var dataList = userSubLogic.CreateUserSubscriptionList(subsList, userId);
@@ -139,25 +141,25 @@ namespace LicenseServer.Logic.BusinessLogic
             return userSsubList;
         }
 
-        public bool CreateSubscriptionAddToCart(SubscriptionType type)
+        public bool CreateSubscriptionAddToCart(Subscription type)
         {
-            SubscriptionTypeLogic typeLOgic = new SubscriptionTypeLogic();
-            SubscriptionType subType = typeLOgic.CreateSubscriptionWithProduct(type);
+            SubscriptionLogic typeLOgic = new SubscriptionLogic();
+            Subscription subType = typeLOgic.CreateSubscriptionWithProduct(type);
             if (subType == null && String.IsNullOrEmpty(typeLOgic.ErrorMessage))
                 ErrorMessage = typeLOgic.ErrorMessage;
             else
             {
                 CartItem item = new CartItem()
                 {
-                    SubscriptionTypeId = subType.Id,
+                    SubscriptionId = subType.Id,
                     DateCreated = DateTime.Now.Date,
                     Quantity = 1,
                     UserId = type.CreatedBy,
                     Price = subType.Price
                 };
                 CartLogic logic = new CartLogic();
-                var status = logic.CreateCartItem(item);
-                if (!status)
+                var cartItem = logic.CreateCartItem(item);
+                if (cartItem == null || cartItem.Id == 0)
                     ErrorMessage = logic.ErrorMessage;
             }
             return String.IsNullOrEmpty(ErrorMessage);

@@ -16,11 +16,9 @@ namespace Centralized.WebAPI.Common
         public override void OnException(HttpActionExecutedContext context)
         {
             if (context.Exception is NotImplementedException)
-            {
-                context.Response = new HttpResponseMessage(HttpStatusCode.NotImplemented);
-            }
+                context.Request.CreateErrorResponse(HttpStatusCode.NotImplemented, context.Exception.Message);
             else
-                context.Response = new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
+                context.Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,context.Exception.Message);
         }
     }
 }

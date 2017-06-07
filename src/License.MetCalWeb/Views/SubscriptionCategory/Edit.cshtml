@@ -1,11 +1,11 @@
-﻿@model License.MetCalWeb.Models.ProductCategory
-
+﻿@model License.MetCalWeb.Models.SubscriptionCategory
 @{
     Layout = null;
 }
 
 <h2>Edit</h2>
-@using (Html.BeginForm("Edit", "ProductCategory", new { id = Model.Id }, FormMethod.Post))
+
+@using (Html.BeginForm("Edit", "SubscriptionCategory", new { id = Model.Id }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <div class="modal-dialog">

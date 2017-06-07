@@ -22,13 +22,13 @@ namespace License.DataModel
 
         public User User { get; set; }
         
-        public LicenseData License { get; set; }
+        public ProductLicense License { get; set; }
     }
 
     public class UserLicenseDetails
     {
         public User User { get; set; }
 
-        public List<SubscriptionDetails> SubscriptionDetails { get; set; }
+        public List<Subscription> SubscriptionDetails { get; set; }
     }
 }

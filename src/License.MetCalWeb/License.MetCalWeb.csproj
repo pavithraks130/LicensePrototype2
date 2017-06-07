@@ -53,34 +53,6 @@
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -125,12 +97,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WindowsAzure.Storage.8.0.1\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
@@ -266,7 +232,7 @@
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
-    <Compile Include="Controllers\ProductCategoryController.cs" />
+    <Compile Include="Controllers\SubscriptionCategoryController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\PurchaseNavigationController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
@@ -285,26 +251,24 @@
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\CartItem.cs" />
-    <Compile Include="Models\CartItemModel.cs" />
+    <Compile Include="Models\Feature.cs" />
     <Compile Include="Models\HardwareModel.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\SubscriptionCategory.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
-    <Compile Include="Models\RequestedLicense.cs" />
     <Compile Include="Models\ResponseFailure.cs" />
     <Compile Include="Models\SubscriptionModel.cs" />
-    <Compile Include="Models\TeamLicenseDetails.cs" />
+    <Compile Include="Models\TeamMember.cs" />
     <Compile Include="Models\TeamModel.cs" />
-    <Compile Include="Models\UserInfoModel.cs" />
     <Compile Include="Models\UserLicenseDataMapping.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionExpireAttribute.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -321,10 +285,9 @@
     <Content Include="Views\Cart\DoPayment.cshtml" />
     <Content Include="Views\Subscription\Index.cshtml" />
     <Content Include="Views\Cart\CartItem.cshtml" />
-    <Content Include="Views\License\MapLicense.cshtml" />
+    <Content Include="Views\License\AssignLicense.cshtml" />
     <Content Include="Views\License\RevokeLicense.cshtml" />
     <Content Include="Views\Dashboard\Home.cshtml" />
-    <Content Include="Views\License\LicenseCart.cshtml" />
     <Content Include="Views\UserToken\Index.cshtml" />
     <Content Include="Views\UserToken\CreateToken.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
@@ -366,13 +329,13 @@
     <Content Include="Views\Subscription\CMMSProducts.cshtml" />
     <Content Include="Views\Subscription\Features.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
-    <Content Include="Views\ProductCategory\Create.cshtml" />
-    <Content Include="Views\ProductCategory\Edit.cshtml" />
-    <Content Include="Views\ProductCategory\Index.cshtml" />
+    <Content Include="Views\SubscriptionCategory\Create.cshtml" />
+    <Content Include="Views\SubscriptionCategory\Edit.cshtml" />
+    <Content Include="Views\SubscriptionCategory\Index.cshtml" />
     <Content Include="Views\Subscription\Renew.cshtml" />
-    <Content Include="Views\License\SelectListOfUser.cshtml" />
-    <Content Include="Views\Team\TeamMapLicense.cshtml" />
-    <Content Include="Views\Team\RevokeTeamLicense.cshtml" />
+    <Content Include="Views\License\SelectUsers.cshtml" />
+    <Content Include="Views\Team\AssignLicense.cshtml" />
+    <Content Include="Views\Team\RevokeLicense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

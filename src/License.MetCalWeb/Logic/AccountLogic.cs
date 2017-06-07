@@ -12,8 +12,12 @@ using System.Text;
 
 namespace License.MetCalWeb.Logic
 {
+    /// <summary>
+    /// Logic class contaians the service call for the account controller for authentication, Reset password , Forgot Password
+    /// </summary>
     public class AccountLogic
     {
+
         private readonly string applicationCode = "kXtpZlZCESG7F8jo+uVuaA==";
         private readonly string applicationSecretPass = "WebPortal";
         public string ErrorMessage { get; set; }

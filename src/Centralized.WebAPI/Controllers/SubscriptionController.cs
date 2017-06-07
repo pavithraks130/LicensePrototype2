@@ -14,10 +14,10 @@ namespace Centralized.WebAPI.Controllers
     public class SubscriptionController : BaseController
     {
 
-        private SubscriptionTypeLogic logic = null;
+        private SubscriptionLogic logic = null;
         public SubscriptionController()
         {
-            logic = new SubscriptionTypeLogic();
+            logic = new SubscriptionLogic();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("All")]
         public IHttpActionResult GetAllSubscription()
         {
-            var subList = logic.GetSubscriptionType();
+            var subList = logic.GetSubscription();
             return Ok(subList);
         }
 
@@ -40,7 +40,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("All/{userId}")]
         public IHttpActionResult GetAllSubscription(string userId)
         {
-            var subList = logic.GetSubscriptionType(userId);
+            var subList = logic.GetSubscription(userId);
             return Ok(subList);
         }
 
@@ -51,7 +51,7 @@ namespace Centralized.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CreateSubscription")]
-        public HttpResponseMessage CreateSubscription(SubscriptionType type)
+        public HttpResponseMessage CreateSubscription(Subscription type)
         {
             var subscriptionType = logic.CreateSubscriptionWithProduct(type);
             if (subscriptionType != null)

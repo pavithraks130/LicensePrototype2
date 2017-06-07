@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.SubscriptionDetails>
+﻿@model List<License.MetCalWeb.Models.Subscription>
 
 <h2>
     License Mapping To User
@@ -6,7 +6,7 @@
 <br />
 <div class="row">
     <div class="col-md-12">
-        @{var user = (bool)TempData["CanAddBulk"] ? "SelectListOfUser" : "MapLicense";}
+        @{var user = (bool)TempData["CanAddBulk"] ? "SelectUsers" : "AssignLicense";}
         @using (Html.BeginForm(user, "License", FormMethod.Post))
         {
             @Html.ValidationSummary()
@@ -14,7 +14,7 @@
             <div class="form-group">
                 <div class="col-md-8">
                     <span>
-                        Team Member Name :  @ViewData["UserEmail"]
+                        Team Member Name :  @ViewBag.UserEmail
                     </span>
                 </div>
             </div>

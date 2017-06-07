@@ -13,12 +13,11 @@ namespace LicenseServer.Logic
         {
             List<UserSubscription> subscriptions = new List<UserSubscription>();
             var subscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == userId, null, "SubType");
-            foreach (var obj in subscriptionList)
-                subscriptions.Add(AutoMapper.Mapper.Map<LicenseServer.Core.Model.UserSubscription, DataModel.UserSubscription>(obj));
+            subscriptions = subscriptionList.Select(us => AutoMapper.Mapper.Map<DataModel.UserSubscription>(us)).ToList();
             return subscriptions;
         }
 
-        public Subscription CreateUserSubscription(UserSubscription subscription, int teamId)
+        public SubscriptionLicenseMapping CreateUserSubscription(UserSubscription subscription, int teamId)
         {
             Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<DataModel.UserSubscription, Core.Model.UserSubscription>(subscription);
             subs.ActivationDate = DateTime.Now.Date;
@@ -27,7 +26,7 @@ namespace LicenseServer.Logic
             UserSubscription sub = null;
             sub = AutoMapper.Mapper.Map<Core.Model.UserSubscription, UserSubscription>(obj);
             if (sub != null)
-                return GetSubscriptionWithLicense(sub,teamId);
+                return GetSubscriptionWithLicense(sub, teamId);
             return null;
         }
 
@@ -57,9 +56,9 @@ namespace LicenseServer.Logic
         {
             SubscriptionDetailLogic detailLogic = new SubscriptionDetailLogic();
             ProductLogic produLogic = new ProductLogic();
-            SubscriptionTypeLogic logic = new SubscriptionTypeLogic();
-            SubscriptionType type = logic.GetById(subs.SubscriptionTypeId);
-            List<SubscriptionDetails> details = detailLogic.GetSubscriptionDetails(subs.SubscriptionTypeId);
+            SubscriptionLogic logic = new SubscriptionLogic();
+            Subscription type = logic.GetById(subs.SubscriptionId);
+            List<SubscriptionDetails> details = detailLogic.GetSubscriptionDetails(subs.SubscriptionId);
             int qty = subs.Quantity;
             List<LicenseKeyProductMapping> licProductMapping = new List<LicenseKeyProductMapping>();
             List<string> chuksum = new List<string>();
@@ -89,34 +88,31 @@ namespace LicenseServer.Logic
             return licProductMapping;
         }
 
-        public List<SubscriptionType> GetExpiringSubscription(string userId)
+        public List<Subscription> GetExpiringSubscription(string userId)
         {
-            List<SubscriptionType> subType = null;
+            List<Subscription> subType = null;
             var subList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId).ToList();
             var subListObj = subList.Where(s => (s.ExpireDate.Date - DateTime.Now.Date).Days <= 30).ToList();
-            if (subListObj != null && subListObj.Count > 0)
-            {
-                subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.SubscriptionType>(s.Subtype)).ToList();
-            }
+            subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.Subscription>(s.Subtype)).ToList();
             return subType;
         }
 
         public SubscriptionList RenewSubscription(RenewSubscriptionList subList, string userId)
         {
             var user = UserManager.FindByIdAsync(userId).Result;
-            List<Subscription> subscriptionListWithLicense = new List<Subscription>();
+            List<SubscriptionLicenseMapping> subscriptionListWithLicense = new List<SubscriptionLicenseMapping>();
             var subIdList = subList.SubscriptionList.Select(s => s.Id).ToList();
-            var userSubList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId && subIdList.Contains(u.SubscriptionTypeId)).ToList();
+            var userSubList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId && subIdList.Contains(u.SubscriptionId)).ToList();
             foreach (var sub in userSubList)
             {
                 sub.RenewalDate = subList.RenewalDate;
                 sub.ExpireDate = sub.ExpireDate.AddDays(sub.Subtype.ActiveDays);
-                Work.UserSubscriptionRepository.Update(sub); 
+                Work.UserSubscriptionRepository.Update(sub);
             }
             Work.UserSubscriptionRepository.Save();
-            foreach(var sub in userSubList)
+            foreach (var sub in userSubList)
             {
-                
+
                 var subTemp = AutoMapper.Mapper.Map<UserSubscription>(sub);
                 var subObj = GetSubscriptionWithLicense(subTemp, user.OrganizationId);
                 subscriptionListWithLicense.Add(subObj);
@@ -126,20 +122,20 @@ namespace LicenseServer.Logic
             subListObj.Subscriptions = subscriptionListWithLicense;
             return subListObj;
         }
-        
-        public Subscription GetSubscriptionWithLicense(UserSubscription sub,int teamId)
+
+        public SubscriptionLicenseMapping GetSubscriptionWithLicense(UserSubscription sub, int teamId)
         {
-            Subscription purchasedSubscription = new Subscription();
-            SubscriptionTypeLogic typeLogic = new SubscriptionTypeLogic();
+            SubscriptionLicenseMapping purchasedSubscription = new SubscriptionLicenseMapping();
+            SubscriptionLogic typeLogic = new SubscriptionLogic();
             SubscriptionDetailLogic detailsLogic = new SubscriptionDetailLogic();
 
             purchasedSubscription.LicenseKeyProductMapping = GenerateLicenseKey(sub, teamId);
-            purchasedSubscription.SubscriptionTypeId = sub.SubscriptionTypeId;
+            purchasedSubscription.SubscriptionId = sub.SubscriptionId;
             purchasedSubscription.SubscriptionDate = sub.ActivationDate;
             purchasedSubscription.RenewalDate = sub.RenewalDate;
             purchasedSubscription.OrderdQuantity = sub.Quantity;
-            purchasedSubscription.SubscriptionType = typeLogic.GetById(sub.SubscriptionTypeId);
-            var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionTypeId);
+            purchasedSubscription.Subscription = typeLogic.GetById(sub.SubscriptionId);
+            var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionId);
             var proList = new List<Product>();
             foreach (var dt in details)
             {
@@ -147,7 +143,7 @@ namespace LicenseServer.Logic
                 pro.Quantity = dt.Quantity;
                 proList.Add(pro);
             }
-            purchasedSubscription.SubscriptionType.Products = proList;
+            purchasedSubscription.Subscription.Products = proList;
             return purchasedSubscription;
         }
     }

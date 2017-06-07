@@ -12,15 +12,14 @@ namespace LicenseServer.Logic
         public List<SubscriptionDetails> GetSubscriptionDetails(int subscriptionId)
         {
             List<SubscriptionDetails> details = new List<SubscriptionDetails>();
-            var subscriptionList = Work.SubscriptionDetailResitory.GetData(s => s.SubscriptionTypeId == subscriptionId);
-            foreach (var obj in subscriptionList)
-                details.Add(AutoMapper.Mapper.Map<Core.Model.SubscriptionDetail, DataModel.SubscriptionDetails>(obj));
+            var subscriptionList = Work.SubscriptionDetailResitory.GetData(s => s.SubscriptionId == subscriptionId);
+            details = subscriptionList.Select(obj => AutoMapper.Mapper.Map<SubscriptionDetails>(obj)).ToList();
             return details;
         }
 
         public bool CreateSubscriptionDetails(List<SubscriptionDetails> list)
         {
-            foreach(var obj in list)
+            foreach (var obj in list)
             {
                 var subscriptionDetail = AutoMapper.Mapper.Map<DataModel.SubscriptionDetails, Core.Model.SubscriptionDetail>(obj);
                 Work.SubscriptionDetailResitory.Create(subscriptionDetail);

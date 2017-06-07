@@ -19,6 +19,14 @@ namespace License.MetCalWeb.Models
         public ICollection<TeamMember> TeamMembers { get; set; }
     }
 
+    public class TeamMappingDetails
+    {
+        public int TeamID { get; set; }
+        public int ConcurrentUserCount { get; set; }
+        public string SelectedTeamName { get; set; }
+        
+        public List<Product> ProductList { get; set; }
+    }
     public class TeamDetails
     {
         public Team Team { get; set; }
@@ -34,40 +42,13 @@ namespace License.MetCalWeb.Models
         }
     }
 
-    public class DeleteTeamDetails
+    public class TeamLicenseDataMapping
     {
-        public string LogInUserId { get; set; }
-        public int TeamId { get; set; }
-        public List<int> productIdList { get; set; }
-        public DeleteTeamDetails()
-        {
-            productIdList = new List<int>();
-        }
+        public List<Team> TeamList { get; set; }
+
+        public List<ProductLicense> LicenseDataList { get; set; }
     }
 
-    public class TeamMember
-    {
-        public int Id { get; set; }
-        public int TeamId { get; set; }
-        public string InviteeEmail { get; set; }
-        public string InviteeUserId { get; set; }
-        public string InviteeStatus { get; set; }
-        public DateTime InvitationDate { get; set; }
-        public User InviteeUser { get; set; }
-        public bool IsAdmin { get; set; }
-        public bool IsSelected { get; set; }
-        public bool IsActive { get; set; }
-    }
-    
-    public class TeamMemberResponse
-    {
-        public string UserId { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-        public int TeamMemberId { get; set; }
-    }
 
     public class TeamConcurrentUserResponse
     {

@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.SubscriptionDetails>
+﻿@model List<License.MetCalWeb.Models.Subscription>
 @{
     ViewBag.Title = "RevokeLicense";
 }
@@ -9,7 +9,7 @@
         <div class="form-group">
             <div class="col-md-8">
                 <span>
-                    Team Member Name :  @ViewData["UserEmail"]
+                    Team Member Name :  @ViewBag.UserEmail
                 </span>
             </div>
         </div>

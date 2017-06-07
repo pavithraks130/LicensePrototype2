@@ -9,6 +9,12 @@ using License.Core.Manager;
 
 namespace License.Logic.BusinessLogic
 {
+    /// <summary>
+    /// History :
+    ///     Created By :
+    ///     Created Date :
+    ///     Purpose : 1. FUnctionality or Business logic for the User License, Subscription will be performed here.
+    /// </summary>
     public class LicenseBO
     {
         UserLicenseRequestLogic userLicenseRequestLogic = null;
@@ -27,32 +33,28 @@ namespace License.Logic.BusinessLogic
             _teamLogic = new TeamLogic();
         }
 
-
+        /// Updating the license Request Status
         public void ApproveOrRejectLicense(List<UserLicenseRequest> licReqList)
         {
             List<UserLicenseRequest> licenseRequestList = new List<UserLicenseRequest>();
             List<UserLicense> userLicenseList = new List<UserLicense>();
             foreach (var licReq in licReqList)
             {
-                var userlicReq = userLicenseRequestLogic.GetById(licReq.Id);
-                userlicReq.Comment = licReq.Comment;
-                userlicReq.ApprovedBy = licReq.ApprovedBy;
-                userlicReq.IsApproved = licReq.IsApproved;
-                userlicReq.IsRejected = licReq.IsRejected;
-                licenseRequestList.Add(userlicReq);
-                if (userlicReq.IsApproved)
+                // If Request is approved then creating the User License record and updating DB
+                if (licReq.IsApproved)
                 {
-                    UserLicense lic = new UserLicense();
-                    lic.UserId = userlicReq.Requested_UserId;
-                    lic.TeamId = userlicReq.TeamId;
-                    lic.License = new LicenseData();
-                    lic.License.ProductId = userlicReq.ProductId;
-                    lic.License.UserSubscriptionId = userlicReq.UserSubscriptionId;
-
+                    UserLicense lic = new UserLicense()
+                    {
+                        UserId = licReq.Requested_UserId,
+                        TeamId = licReq.TeamId,
+                        License = new ProductLicense()
+                    };
+                    lic.License.ProductId = licReq.ProductId;
+                    lic.License.UserSubscriptionId = licReq.UserSubscriptionId;
                     userLicenseList.Add(lic);
                 }
             }
-            userLicenseRequestLogic.Update(licenseRequestList);
+            userLicenseRequestLogic.Update(licReqList);
             ErrorMessage = userLicenseRequestLogic.ErrorMessage;
             if (userLicenseList.Count > 0 && String.IsNullOrEmpty(ErrorMessage))
             {
@@ -60,10 +62,12 @@ namespace License.Logic.BusinessLogic
                 ErrorMessage = licLogic.ErrorMessage;
             }
         }
+
+        /// Get User License with features based on the user id
         public UserLicenseDetails GetUserLicenseSubscriptionDetails(FetchUserSubscription model)
         {
             UserLicenseDetails licDetails = new UserLicenseDetails();
-            var licenseMapModelList = new List<SubscriptionDetails>();
+            var licenseMapModelList = new List<Subscription>();
             UserLicenseLogic logic = new UserLicenseLogic();
             SubscriptionBO proSubLogic = new SubscriptionBO();
             userLogic.UserManager = UserManager;
@@ -89,11 +93,12 @@ namespace License.Logic.BusinessLogic
                 {
                     var userLicLicst = data.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
                     var proList = userLicLicst.Select(u => u.License.ProductId).ToList();
-                    SubscriptionDetails mapModel = new SubscriptionDetails()
+                    Subscription mapModel = new Subscription()
                     {
                         Name = subs.Name,
                         UserSubscriptionId = data.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
                     };
+                    mapModel.Products = new List<Product>();
                     foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
                     {
                         var objLic = userLicLicst.FirstOrDefault(f => f.License.ProductId == pro.Id);
@@ -107,7 +112,7 @@ namespace License.Logic.BusinessLogic
                             var licdataList = decryptObj.Split(new char[] { '^' });
                             licExpireData = Convert.ToDateTime(licdataList[1]);
                         }
-                        ProductDetails prod = new ProductDetails()
+                        Product prod = new Product()
                         {
                             Id = pro.Id,
                             Name = pro.Name,
@@ -115,7 +120,7 @@ namespace License.Logic.BusinessLogic
                         };
                         if (model.IsFeatureRequired)
                         {
-                            foreach (var fet in pro.AssociatedFeatures)
+                            foreach (var fet in pro.Features)
                             {
                                 var feature = new Feature()
                                 {
@@ -135,10 +140,12 @@ namespace License.Logic.BusinessLogic
             licDetails.SubscriptionDetails = licenseMapModelList;
             return licDetails;
         }
+
+        // Get Team License based on the Team ID.
         public TeamLicenseDetails GetTeamLicenseSubscriptionDetails(string teamId)
         {
             TeamLicenseDetails licDetails = new TeamLicenseDetails();
-            var licenseMapModelList = new List<SubscriptionDetails>();
+            var licenseMapModelList = new List<Subscription>();
             TeamLicenseLogic teamLicenseLogic = new TeamLicenseLogic();
             SubscriptionBO proSubLogic = new SubscriptionBO();
             userLogic.UserManager = UserManager;
@@ -157,7 +164,7 @@ namespace License.Logic.BusinessLogic
                 {
                     var teamLicList = teamLicenseList.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
                     var proList = teamLicList.Select(u => u.License.ProductId).ToList();
-                    SubscriptionDetails mapModel = new SubscriptionDetails()
+                    Subscription mapModel = new Subscription()
                     {
                         Name = subs.Name,
                         UserSubscriptionId = teamLicenseList.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
@@ -175,13 +182,13 @@ namespace License.Logic.BusinessLogic
                             var licdataList = decryptObj.Split(new char[] { '^' });
                             licExpireData = Convert.ToDateTime(licdataList[1]);
                         }
-                        ProductDetails prod = new ProductDetails()
+                        Product prod = new Product()
                         {
                             Id = pro.Id,
                             Name = pro.Name,
                             ExpireDate = licExpireData
                         };
-                        foreach (var fet in pro.AssociatedFeatures)
+                        foreach (var fet in pro.Features)
                         {
                             var feature = new Feature()
                             {
@@ -201,6 +208,7 @@ namespace License.Logic.BusinessLogic
             return licDetails;
         }
 
+        // Validating the user Login for the concurrent user.
         public bool ValidateConcurrentUser(int teamId, string userId)
         {
             _teamLogic.UserManager = UserManager;
@@ -208,6 +216,7 @@ namespace License.Logic.BusinessLogic
             return status;
         }
 
+        // Assign team License to the Concurrent user whop has logged In.
         public void UpdateTeamLicenseToUser(int teamId, string userId)
         {
             licLogic.AssignTeamLicenseToUser(teamId, userId);

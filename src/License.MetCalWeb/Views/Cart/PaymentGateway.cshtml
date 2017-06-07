@@ -91,7 +91,7 @@
         @using (Html.BeginForm("DoPayment", "Cart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <div >
-                <button class="btn-success btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Pay @ViewData["Total"] $</button>
+                <button class="btn-success btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Pay @ViewBag.Total $</button>
             </div>
         }
     </div>

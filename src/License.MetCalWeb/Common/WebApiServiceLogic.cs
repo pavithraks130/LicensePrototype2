@@ -7,9 +7,11 @@ using System.Net.Http;
 
 namespace License.MetCalWeb.Common
 {
+    /// <summary>
+    /// Common class for the Creation of the client object for the service call and update the required attributeds for the Client object
+    /// </summary>
     public class WebApiServiceLogic
     {
-
         public static HttpClient CreateClient(ServiceType serviceType)
         {
             string url = string.Empty;
@@ -61,5 +63,6 @@ namespace License.MetCalWeb.Common
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             return client;
         }
+
     }
 }

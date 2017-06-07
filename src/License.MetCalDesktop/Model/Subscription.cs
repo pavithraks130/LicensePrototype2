@@ -119,7 +119,7 @@ namespace License.MetCalDesktop.Model
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
-        public ICollection<Feature> AssociatedFeatures { get; set; }
+        public ICollection<Feature> Features { get; set; }
 
     }
 }

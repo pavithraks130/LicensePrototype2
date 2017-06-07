@@ -48,6 +48,11 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBoObject.ErrorMessage);
         }
 
+        /// <summary>
+        /// POST Method: To Create the Team Member record
+        /// </summary>
+        /// <param name="teamMemList"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CreateTeamMember")]
         public HttpResponseMessage CreateTeamMembers(List<TeamMember> teamMemList)
@@ -57,6 +62,11 @@ namespace OnPremise.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.Created, "Success");
         }
 
+        /// <summary>
+        /// POST Method : To remove Team Members in Bulk
+        /// </summary>
+        /// <param name="teamMemList"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("RemoveTeamMember")]
         public HttpResponseMessage RemoveTeamMembers(List<TeamMember> teamMemList)

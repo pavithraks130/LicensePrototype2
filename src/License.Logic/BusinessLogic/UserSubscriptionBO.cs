@@ -18,27 +18,27 @@ namespace License.Logic.BusinessLogic
             userSubLogic = new UserSubscriptionLogic();
         }
 
-        public void UpdateUserSubscription(List<UserSubscriptionData> userSubscriptionData)
+        public void UpdateUserSubscription(SubscriptionList userSubscriptionData)
         {
-            List<SubscriptionType> typeList = new List<SubscriptionType>();
-            foreach (var data in userSubscriptionData)
+            List<Subscription> typeList = new List<Subscription>();
+            foreach (var data in userSubscriptionData.Subscriptions)
             {
-                var tempObj = data.Subscription.SubscriptionType;
+                var tempObj = data.Subscription;
                 tempObj.ProductIdList = tempObj.Products.Select(p => (dynamic)new { Id = p.Id, ProductCode = p.ProductCode }).ToList();
                 typeList.Add(tempObj);
 
                 UserSubscription sub = new UserSubscription();
-                sub.Quantity = data.Quantity;
+                sub.Quantity = data.OrderdQuantity;
                 sub.SubscriptionDate = data.SubscriptionDate;
                 sub.RenewalDate = data.RenewalDate;
                 sub.SubscriptionId = data.SubscriptionId;
-                sub.UserId = data.UserId;
+                sub.UserId = userSubscriptionData.UserId;
                 var userSubscriptionId = userSubLogic.CreateSubscription(sub);
 
-                List<License.DataModel.LicenseData> licenseDataList = new List<DataModel.LicenseData>();
-                foreach (var lic in data.LicenseKeys)
+                List<License.DataModel.ProductLicense> licenseDataList = new List<DataModel.ProductLicense>();
+                foreach (var lic in data.LicenseKeyProductMapping)
                 {
-                    License.DataModel.LicenseData licenseData = new DataModel.LicenseData()
+                    License.DataModel.ProductLicense licenseData = new DataModel.ProductLicense()
                     {
                         LicenseKey = lic.LicenseKey,
                         ProductId = lic.ProductId,
@@ -46,7 +46,7 @@ namespace License.Logic.BusinessLogic
                     };
                     licenseDataList.Add(licenseData);
                 }
-                LicenseLogic licenseLogic = new LicenseLogic();
+                ProductLicenseLogic licenseLogic = new ProductLicenseLogic();
                 licenseLogic.CreateLicenseData(licenseDataList);
             }
 
@@ -65,9 +65,9 @@ namespace License.Logic.BusinessLogic
 
         }
 
-        public List<SubscriptionDetails> GetSubscriptionList(string adminId, string userId = "")
+        public List<Subscription> GetSubscriptionList(string adminId, string userId = "")
         {
-            List<SubscriptionDetails> lstSsubscriptionDetail = new List<SubscriptionDetails>();
+            List<Subscription> lstSsubscriptionDetail = new List<Subscription>();
             var usersubList = userSubLogic.GetSubscription(adminId);
             SubscriptionBO psLogic = new SubscriptionBO();
             var subList = psLogic.GetSubscriptionFromFile();
@@ -83,13 +83,14 @@ namespace License.Logic.BusinessLogic
                 var subType = subList.FirstOrDefault(s => s.Id == userSub.SubscriptionId);
                 if (subType != null)
                 {
-                    SubscriptionDetails model = new SubscriptionDetails()
+                    Subscription model = new Subscription()
                     {
                         Id = subType.Id,
                         UserSubscriptionId = userSub.Id,
                         Name = subType.Name
                     };
-                    LicenseLogic licDataLogic = new LicenseLogic();
+                    model.Products = new List<Product>();
+                    ProductLicenseLogic licDataLogic = new ProductLicenseLogic();
                     var userlicList = licDataLogic.GetLicenseList(userSub.Id);
 
                     foreach (var pro in subType.Products)
@@ -97,7 +98,7 @@ namespace License.Logic.BusinessLogic
                         if (!proList.Contains(pro.Id))
                         {
                             var licList = userlicList.Where(p => p.ProductId == pro.Id).ToList();
-                            var proObj = new ProductDetails() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = licList.Count, UsedLicenseCount = licList.Where(l => l.IsMapped == true).Count() };
+                            var proObj = new Product() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = licList.Count, UsedLicenseCount = licList.Where(l => l.IsMapped == true).Count() };
                             proObj.IsDisabled = proObj.TotalLicenseCount == proObj.UsedLicenseCount;
                             model.Products.Add(proObj);
                         }
@@ -129,15 +130,15 @@ namespace License.Logic.BusinessLogic
             return lstSsubscriptionDetail;
         }
 
-        public void UpdateSubscriptionRenewal(List<UserSubscriptionData> subscriptionData, string userId)
+        public void UpdateSubscriptionRenewal(SubscriptionList subscriptionData, string userId)
         {
             var userSubscriptioList = userSubLogic.GetSubscription(userId);
             List<UserSubscription> userSubscriptions = new List<UserSubscription>();
-            foreach (var data in subscriptionData)
+            foreach (var data in subscriptionData.Subscriptions)
             {
                 var userSubscription = userSubscriptioList.FirstOrDefault(u => u.SubscriptionId == data.SubscriptionId);
-                LicenseLogic licenseLogic = new LicenseLogic();
-                licenseLogic.UpdateRenewalLicenseKeys(data.LicenseKeys, userSubscription.Id);
+                ProductLicenseLogic licenseLogic = new ProductLicenseLogic();
+                licenseLogic.UpdateRenewalLicenseKeys(data.LicenseKeyProductMapping, userSubscription.Id);
                 userSubscription.RenewalDate = data.RenewalDate;
                 userSubscriptions.Add(userSubscription);
             }

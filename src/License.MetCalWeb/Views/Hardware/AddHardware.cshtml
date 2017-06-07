@@ -1,7 +1,9 @@
 ﻿@model License.MetCalWeb.Models.TeamAsset
 
 @{
+    Layout = null;
     ViewBag.Title = "Add hardware";
+
 }
 <style>
     tr {
@@ -82,7 +84,7 @@
                                 <span>Asset Name</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.Name, new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.Name)
                                 @Html.ValidationMessageFor(model => model.Name)
                             </div>
                             <br />
@@ -94,7 +96,7 @@
                                 <span>Serial Number</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.SerialNumber, new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.SerialNumber)
                                 @Html.ValidationMessageFor(model => model.SerialNumber)
                             </div>
                             <br />
@@ -107,7 +109,7 @@
                                 <span>Model</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.Model, new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.Model)
                                 @Html.ValidationMessageFor(model => model.Model)
                             </div>
                             <br />
@@ -120,7 +122,7 @@
                                 <span>Description</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.Description, new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.Description)
                                 @Html.ValidationMessageFor(model => model.Description)
                             </div>
                             <br />
@@ -132,7 +134,7 @@
                                 <span>Type</span>
                             </div>
                             <div class="col-md-8">
-                                @Html.TextBoxFor(model => model.Type, new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.Type)
                                 @Html.ValidationMessageFor(model => model.Type)
                             </div>
                             <br />

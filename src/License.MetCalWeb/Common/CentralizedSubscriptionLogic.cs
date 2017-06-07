@@ -11,6 +11,10 @@ namespace License.MetCalWeb.Common
 {
     public class CentralizedSubscriptionLogic
     {
+        /// <summary>
+        /// Create the User Subscription  once the Payment is completed and get the  subscription  in the on premise with product and features
+        /// </summary>
+        /// <returns></returns>
         public static async Task UpdateUserSubscription()
         {
             SubscriptionList userSubscriptionList = null;
@@ -28,6 +32,11 @@ namespace License.MetCalWeb.Common
 
         }
 
+        /// <summary>
+        /// Once Payment is done the Subscription will be renewed and the New List of License Key  will returned to sync with the On Premise with the updated expiuire date
+        /// </summary>
+        /// <param name="subscriptions"></param>
+        /// <returns></returns>
         public static async Task RenewSubscription(RenewSubscriptionList subscriptions)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -41,43 +50,37 @@ namespace License.MetCalWeb.Common
             }
         }
 
+        /// <summary>
+        /// Updating the Subscription in the On Premise once the New Subscsription is purchased or renewed.
+        /// Note:  Here for On Premise the user Id need to Be updated  with On Premise User Id as shown Below
+        /// </summary>
+        /// <param name="subs"></param>
+        /// <param name="isRenewal"></param>
         public static void UpdateSubscriptionOnpremise(SubscriptionList subs, bool isRenewal = false)
         {
             string userId = string.Empty;
-            userId = LicenseSessionState.Instance.User.UserId;
-            List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
-            foreach (var subDtls in subs.Subscriptions)
-            {
-                //Code to save the user Subscription details to Database.
-                UserSubscriptionData userSubscription = new UserSubscriptionData()
-                {
-                    SubscriptionDate = subDtls.SubscriptionDate,
-                    RenewalDate = subDtls.RenewalDate,
-                    SubscriptionId = subDtls.SubscriptionTypeId,
-                    UserId = userId,
-                    Quantity = subDtls.OrderdQuantity,
-                    Subscription = subDtls,
-                    LicenseKeys = subDtls.LicenseKeyProductMapping
-                };
-                subscriptionData.Add(userSubscription);
-            }
+            subs.UserId = LicenseSessionState.Instance.User.UserId;            
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             string url = string.Empty;
             if (isRenewal)
                 url = "api/UserSubscription/UpdateSubscriptionRenewal/" + LicenseSessionState.Instance.User.UserId;
             else
                 url = "api/UserSubscription/SyncSubscription";
-            var response = client.PostAsJsonAsync(url, subscriptionData).Result;
+            var response = client.PostAsJsonAsync(url, subs).Result;
         }
 
-        public static List<SubscriptionType> GetExpireSubscription()
+        /// <summary>
+        /// Gets the list of SUbscription  which expires based on the User Id
+        /// </summary>
+        /// <returns></returns>
+        public static List<Subscription> GetExpireSubscription()
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/UserSubscription/ExpireSubscription/" + LicenseSessionState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var responseData = response.Content.ReadAsStringAsync().Result;
-                var expiredSubscriptipon = JsonConvert.DeserializeObject<List<SubscriptionType>>(responseData);
+                var expiredSubscriptipon = JsonConvert.DeserializeObject<List<Subscription>>(responseData);
                 return expiredSubscriptipon;
             }
             return null;

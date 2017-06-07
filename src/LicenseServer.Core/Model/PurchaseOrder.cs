@@ -38,6 +38,6 @@ namespace LicenseServer.Core.Model
         [ForeignKey("PurchaseOrderId")]
         public PurchaseOrder PurchaseOrder { get; set; }
         [ForeignKey("SubscriptionId")]
-        public virtual SubscriptionType Subscription { get; set; }
+        public virtual Subscription Subscription { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿@model IEnumerable<License.MetCalWeb.Models.ProductCategory>
-
+﻿@model IEnumerable<License.MetCalWeb.Models.SubscriptionCategory>
 @{
     ViewBag.Title = "Index";
 }
@@ -68,7 +67,7 @@
         $('.btnCreate').on('click', function (e) {
             e.preventDefault();
             $.ajax({
-                url: "/ProductCategory/Create",
+                url: "/SubscriptionCategory/Create",
                 method: "GET",
                 success: function (data) {
                     $('#myModal').html(data);

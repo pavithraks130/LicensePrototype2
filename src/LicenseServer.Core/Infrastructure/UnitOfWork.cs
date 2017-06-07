@@ -31,12 +31,12 @@ namespace LicenseServer.Core.Infrastructure
             }
         }
 
-        private GenericRepository<SubscriptionType> _subscriptionType = null;
-        public GenericRepository<SubscriptionType> SubscriptionRepository
+        private GenericRepository<Subscription> _subscriptionRepo = null;
+        public GenericRepository<Subscription> SubscriptionRepository
         {
             get
             {
-                return _subscriptionType ?? (_subscriptionType = new GenericRepository<SubscriptionType>(_context));
+                return _subscriptionRepo ?? (_subscriptionRepo = new GenericRepository<Subscription>(_context));
             }
         }
 
@@ -76,12 +76,12 @@ namespace LicenseServer.Core.Infrastructure
 
         }
 
-        private GenericRepository<ProductCategory> _productCategoryRepository;
-        public GenericRepository<ProductCategory> ProductCategoryRepository
+        private GenericRepository<SubscriptionCategory> _subscriptionCategoryRepo;
+        public GenericRepository<SubscriptionCategory> SubscriptionCategoryRepo
         {
             get
             {
-                return _productCategoryRepository ?? (_productCategoryRepository = new GenericRepository<ProductCategory>(_context));
+                return _subscriptionCategoryRepo ?? (_subscriptionCategoryRepo = new GenericRepository<SubscriptionCategory>(_context));
             }
         }
 

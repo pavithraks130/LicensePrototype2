@@ -9,20 +9,27 @@ using Newtonsoft.Json;
 
 namespace License.Logic.BusinessLogic
 {
+    /// <summary>
+    /// History:
+    ///     Created By : 
+    ///     Created date :
+    ///     Purpose: 1. Logic for reading the data from Json file.
+    ///              2. Saving the Subscription and product to the Json file.
+    /// </summary>
     public class SubscriptionBO
     {
 
-        public void SaveToFile(List<SubscriptionType> subscriptions)
+        public void SaveToFile(List<Subscription> subscriptions)
         {
 
-            List<SubscriptionType> subscriptionList;
+            List<Subscription> subscriptionList;
             if (Common.CommonFileIO.IsFileExist("SubscriptionDetails.txt"))
             {
                 var existingData = Common.CommonFileIO.GetJsonDataFromFile("SubscriptionDetails.txt");
-                subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(existingData);
+                subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(existingData);
             }
             else
-                subscriptionList = new List<SubscriptionType>();
+                subscriptionList = new List<Subscription>();
             bool isDataModified = false;
             foreach (var sub in subscriptions)
             {
@@ -66,13 +73,13 @@ namespace License.Logic.BusinessLogic
                 return null;
         }
 
-        public List<SubscriptionType> GetSubscriptionFromFile()
+        public List<Subscription> GetSubscriptionFromFile()
         {
-            List<SubscriptionType> subscriptionList;
+            List<Subscription> subscriptionList;
             if (Common.CommonFileIO.IsFileExist("SubscriptionDetails.txt"))
             {
                 var existingData = Common.CommonFileIO.GetJsonDataFromFile("SubscriptionDetails.txt");
-                subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(existingData);
+                subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(existingData);
 
                 foreach (var sub in subscriptionList)
                 {
@@ -86,7 +93,7 @@ namespace License.Logic.BusinessLogic
                 }
             }
             else
-                subscriptionList = new List<SubscriptionType>();
+                subscriptionList = new List<Subscription>();
             Common.CommonFileIO.DeleteTempFolder();
             return subscriptionList;
 

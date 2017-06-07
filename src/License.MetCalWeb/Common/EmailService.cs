@@ -5,6 +5,9 @@ using System.Net.Mail;
 
 namespace License.MetCalWeb.Common
 {
+    /// <summary>
+    /// COmmon class for the EMail Service
+    /// </summary>
     public class EmailService
     {
         public String UserName

@@ -10,45 +10,55 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// Controler consist of the functionality realted to Subscription category
+    /// </summary>
     [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
-    public class ProductCategoryController : BaseController
+    public class SubscriptionCategoryController : BaseController
     {
-        // GET: ProductCategory
+        /// <summary>
+        /// GET action which fetches list of all the SubscriptionCategory
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
-            List<ProductCategory> categories = new List<ProductCategory>();
+            List<SubscriptionCategory> categories = new List<SubscriptionCategory>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/ProductCategory/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                categories = JsonConvert.DeserializeObject<List<ProductCategory>>(jsonData);
-            }
-            else
-            {
-                categories = new List<ProductCategory>();
+                categories = JsonConvert.DeserializeObject<List<SubscriptionCategory>>(jsonData);
             }
             return View(categories);
         }
 
+        /// <summary>
+        /// Get Action, return the Create View
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
             return View();
         }
 
+        /// <summary>
+        /// POST Action, action gets triggered when user submit the create form , Invokes the service for subscription category creation 
+        /// and saves data to DB
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProductCategory category)
+        public ActionResult Create(SubscriptionCategory category)
         {
             if (ModelState.IsValid)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = client.PostAsJsonAsync("api/productcategory/create", category).Result;
                 if (response.IsSuccessStatusCode)
-                {
                     return Json(new { message = "success", success = true });
-                }
                 else
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -60,26 +70,33 @@ namespace License.MetCalWeb.Controllers
             return Json(new { message = _message, success = false });
         }
 
+        /// <summary>
+        /// GET Action , return Edit view with the existing data for selected Category Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Edit(int id)
         {
-            ProductCategory category = null;
+            SubscriptionCategory category = new SubscriptionCategory();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/productCategory/GetById/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<ProductCategory>(data);
-            }
-            else
-            {
-                category = new ProductCategory();
+                category = JsonConvert.DeserializeObject<SubscriptionCategory>(data);
             }
             return View(category);
         }
 
+        /// <summary>
+        /// POSt Action Saves the data changes to DB through the service call  for the selected category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, ProductCategory category)
+        public ActionResult Edit(int id, SubscriptionCategory category)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.PutAsJsonAsync("api/productCategory/update/" + id, category).Result;
@@ -93,6 +110,11 @@ namespace License.MetCalWeb.Controllers
                 return Json(new { message = "success", success = true });
         }
 
+        /// <summary>
+        /// POST ACtion , to delete the selected category using service call once the response Json Response returned based on the response.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id)
         {

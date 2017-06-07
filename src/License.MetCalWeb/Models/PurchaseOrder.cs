@@ -33,6 +33,6 @@ namespace License.MetCalWeb.Models
         public int SubscriptionId { get; set; }
         public int Quantity { get; set; }
         public int PurchaseOrderId { get; set; }
-        public SubscriptionType Subscription { get; set; }
+        public Subscription Subscription { get; set; }
     }
 }

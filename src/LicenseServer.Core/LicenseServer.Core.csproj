@@ -172,6 +172,10 @@
     <Compile Include="Migrations\201705241603309_DefaultValueUpdate.Designer.cs">
       <DependentUpon>201705241603309_DefaultValueUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706060706539_ChangesToTableName.cs" />
+    <Compile Include="Migrations\201706060706539_ChangesToTableName.Designer.cs">
+      <DependentUpon>201706060706539_ChangesToTableName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -181,7 +185,7 @@
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\PurchaseOrder.cs" />
     <Compile Include="Model\SubscriptionDetail.cs" />
-    <Compile Include="Model\SubscriptionType.cs" />
+    <Compile Include="Model\Subscription.cs" />
     <Compile Include="Model\UserSubscription.cs" />
     <Compile Include="Model\UserToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -244,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705241603309_DefaultValueUpdate.resx">
       <DependentUpon>201705241603309_DefaultValueUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706060706539_ChangesToTableName.resx">
+      <DependentUpon>201706060706539_ChangesToTableName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -22,12 +22,12 @@ namespace LicenseServer.Logic
             return featureList;
         }
 
-        public bool CreateFeature(FeatureDataModel f)
+        public FeatureDataModel CreateFeature(FeatureDataModel f)
         {
             Feature fet = AutoMapper.Mapper.Map<Feature>(f);
             fet = Work.FeaturesRepository.Create(fet);
             Work.FeaturesRepository.Save();
-            return fet.Id > 0;
+            return AutoMapper.Mapper.Map<FeatureDataModel>(fet);
         }
 
         public bool DeleteFeature(int id)
@@ -37,14 +37,14 @@ namespace LicenseServer.Logic
             return status;
         }
 
-        public bool Update(int id, FeatureDataModel f)
+        public FeatureDataModel Update(int id, FeatureDataModel f)
         {
             Feature fet = Work.FeaturesRepository.GetById(id);
             fet.Name = f.Name;
             fet.Description = f.Description;
             fet.Version = f.Version;
             Work.FeaturesRepository.Save();
-            return true;
+            return AutoMapper.Mapper.Map<FeatureDataModel>(fet);
         }
 
         public FeatureDataModel GetFeatureById(int id)
@@ -56,7 +56,7 @@ namespace LicenseServer.Logic
         public List<FeatureDataModel> GetFeatureByCategoryId(int categoryId)
         {
             List<FeatureDataModel> featureList = new List<FeatureDataModel>();
-            var category = Work.ProductCategoryRepository.GetById(categoryId);
+            var category = Work.SubscriptionCategoryRepo.GetById(categoryId);
             if (category != null)
             {
                 if (category.Features != null && category.Features.Count > 0)

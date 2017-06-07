@@ -1,6 +1,7 @@
 ﻿@model License.MetCalWeb.Models.Feature
 
 @{
+    Layout = null;
     ViewBag.Title = "Edit";
 }
 @using (Html.BeginForm("Edit", "Feature", new { id = Model.Id }, FormMethod.Post))

@@ -10,16 +10,27 @@ using Newtonsoft.Json;
 
 namespace License.MetCalWeb.Controllers
 {
+    /// <summary>
+    /// cOntroller for handling the Team/Hardware assets.
+    /// </summary>
     [Authorize]
     [SessionExpire]
     public class HardwareController : BaseController
     {
+        /// <summary>
+        /// Get Action to list the All the Assets.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult HardwareContainer()
         {
             HardwareModel model = LoadHardware();
             return View(model);
         }
 
+        /// <summary>
+        /// Service call to  get the List of assets which are created
+        /// </summary>
+        /// <returns></returns>
         private HardwareModel LoadHardware()
         {
             var hm = new HardwareModel();
@@ -40,6 +51,11 @@ namespace License.MetCalWeb.Controllers
             return hm;
         }
 
+        /// <summary>
+        /// Get Method to display the Edit view with the existing data for the selected asset
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult EditHardware(int id)
         {
             TeamAsset asset = null;
@@ -60,6 +76,11 @@ namespace License.MetCalWeb.Controllers
             return View(asset);
         }
 
+        /// <summary>
+        /// Post action to Updating the modified data to the asset for the selected Asset Id.
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditHardware(TeamAsset asset)
@@ -83,6 +104,14 @@ namespace License.MetCalWeb.Controllers
                                       .Select(x => x.ErrorMessage));
             return Json(new { success = false, message = _message });
         }
+
+        /// <summary>
+        /// Get actopn to perform action based on the action type for the selectd asset id. This is used as the Generic function which can used for performing anay action
+        /// for the selected asset
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="actionType"></param>
+        /// <returns></returns>
         public ActionResult AssetConfiguration(int id, string actionType)
         {
             switch (actionType)
@@ -105,11 +134,21 @@ namespace License.MetCalWeb.Controllers
             return RedirectToAction("HardwareContainer");
         }
 
+        /// <summary>
+        /// Get action to display the View to create new Asset
+        /// </summary>
+        /// <returns></returns>
         public ActionResult AddHardware()
         {
             return View();
         }
 
+        /// <summary>
+        /// Post Action to create the new asset record to DB by making a service call. The return data will be JSOn result to this action where the repose can handled in the Script
+        ///  and display error if any error exist.
+        /// </summary>
+        /// <param name="assetModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddHardware(TeamAsset assetModel)

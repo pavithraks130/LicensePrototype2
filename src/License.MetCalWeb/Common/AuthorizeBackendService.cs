@@ -9,6 +9,9 @@ using License.MetCalWeb.Models;
 
 namespace License.MetCalWeb.Common
 {
+    /// <summary>
+    /// Contains logic related to auathentication and AUthorization and process to be conduct once user logged in
+    /// </summary>
     public class AuthorizeBackendService
     {
         public string ErrorMessage { get; set; }
@@ -18,6 +21,9 @@ namespace License.MetCalWeb.Common
             SynchPurchaseOrder();
             SyncProductUpdates();
         }
+        /// <summary>
+        /// Sync Purchase Order which are approved from Centralized to On Premise
+        /// </summary>
         public void SynchPurchaseOrder()
         {
             ErrorMessage = string.Empty;
@@ -39,6 +45,9 @@ namespace License.MetCalWeb.Common
 
         }
 
+        /// <summary>
+        /// Function to Sync the Product update from Centralized to local on Premise if any changes made to the Products
+        /// </summary>
         public void SyncProductUpdates()
         {
 
@@ -49,6 +58,10 @@ namespace License.MetCalWeb.Common
                 UpdateProductUpdates(products);
         }
 
+        /// <summary>
+        /// Gets the list of Products which exist in the On premise to check if these products are modified in the Centralized 
+        /// </summary>
+        /// <returns></returns>
         public List<Product> GetOnPremiseProducts()
         {
             List<Product> products = null;
@@ -69,6 +82,11 @@ namespace License.MetCalWeb.Common
             return products;
         }
 
+        /// <summary>
+        /// Check for theh product updates for the specified products
+        /// </summary>
+        /// <param name="productDetails"></param>
+        /// <returns></returns>
         public List<Product> CheckProductUpdate(List<Product> productDetails)
         {
             List<Product> products = null;
@@ -89,6 +107,10 @@ namespace License.MetCalWeb.Common
             return products;
         }
 
+        /// <summary>
+        /// Updating the changed Products in the onpremise 
+        /// </summary>
+        /// <param name="productDetails"></param>
         public void UpdateProductUpdates(List<Product> productDetails)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);

@@ -17,6 +17,6 @@ namespace License.Core.Model
         public bool IsMapped { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("LicenseId")]
-        public virtual LicenseData License { get; set; }
+        public virtual ProductLicense License { get; set; }
     }
 }

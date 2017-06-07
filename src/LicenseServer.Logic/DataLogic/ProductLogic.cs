@@ -11,53 +11,40 @@ namespace LicenseServer.Logic
     {
         public List<Product> GetProducts()
         {
-            var obj = new List<Product>();
-            IEnumerable<Core.Model.Product> products = Work.ProductRepository.GetData(null, null, null);
-            foreach (var pro in products)
-                obj.Add(AutoMapper.Mapper.Map<Core.Model.Product, DataModel.Product>(pro));
-            return obj;
+            var products = new List<Product>();
+            IEnumerable<Core.Model.Product> data = Work.ProductRepository.GetData();
+            products = data.Select(p => AutoMapper.Mapper.Map<Product>(p)).ToList();
+            return products;
         }
 
         public Product GetProductById(int id)
         {
-            Core.Model.Product pro = Work.ProductRepository.GetData(f => f.Id == id, null, "Categories,AssociatedFeatures").FirstOrDefault();
-            return AutoMapper.Mapper.Map<Core.Model.Product, DataModel.Product>(pro);
+            Core.Model.Product pro = Work.ProductRepository.GetData(f => f.Id == id, null, "Categories,Features").FirstOrDefault();
+            return AutoMapper.Mapper.Map<DataModel.Product>(pro);
         }
 
         public List<Product> GetProductByCategoryId(int categoryId)
         {
             List<Product> products = new List<Product>();
-            var data = Work.ProductCategoryRepository.GetData(p => p.Id == categoryId).FirstOrDefault();
-            foreach (var pro in data.Products)
-            {
-                products.Add(AutoMapper.Mapper.Map<Product>(pro));
-            }
+            var data = Work.SubscriptionCategoryRepo.GetById(categoryId);
+            products = data.Products.Select(p => AutoMapper.Mapper.Map<Product>(p)).ToList();
             return products;
         }
 
-        public bool CreateProduct(Product pro)
+        public Product CreateProduct(Product pro)
         {
             Core.Model.Product obj = AutoMapper.Mapper.Map<Product, Core.Model.Product>(pro);
-            obj.Categories = new List<Core.Model.ProductCategory>();
-            foreach (var c in pro.Categories)
-            {
-                var category = Work.ProductCategoryRepository.GetById(c.Id);
-                obj.Categories.Add(category);
-            }
-            obj.AssociatedFeatures = new List<Core.Model.Feature>();
-            foreach (var f in pro.AssociatedFeatures)
-            {
-                var feature = Work.FeaturesRepository.GetById(f.Id);
-                obj.AssociatedFeatures.Add(feature);
-            }
+            obj.Categories = new List<Core.Model.SubscriptionCategory>();
+            obj.Categories = pro.Categories.Select(c => Work.SubscriptionCategoryRepo.GetById(c.Id)).ToList();
+            obj.Features = pro.Features.Select(f => Work.FeaturesRepository.GetById(f.Id)).ToList();           
             obj = Work.ProductRepository.Create(obj);
             Work.ProductRepository.Save();
-            return obj.Id > 0;
+            return AutoMapper.Mapper.Map<Product>(obj);
         }
 
-        public bool UpdateProduct(int id, Product pro)
+        public Product UpdateProduct(int id, Product pro)
         {
-            var obj = Work.ProductRepository.GetData(f => f.Id == id, null, "Categories,AssociatedFeatures").FirstOrDefault();
+            var obj = Work.ProductRepository.GetData(f => f.Id == id, null, "Categories,Features").FirstOrDefault();
             obj.Name = pro.Name;
             obj.Description = pro.Description;
             obj.Price = pro.Price;
@@ -82,48 +69,44 @@ namespace LicenseServer.Logic
             }
             foreach (var c in pro.Categories)
             {
-                var category = Work.ProductCategoryRepository.GetById(c.Id);
+                var category = Work.SubscriptionCategoryRepo.GetById(c.Id);
                 obj.Categories.Add(category);
             }
 
-            if (obj.AssociatedFeatures.Count > 0)
+            if (obj.Features.Count > 0)
             {
-                var idList = obj.AssociatedFeatures.Select(s => s.Id).ToList();
+                var idList = obj.Features.Select(s => s.Id).ToList();
                 foreach (int featureid in idList)
                 {
-                    if (!pro.AssociatedFeatures.Any(o => o.Id == featureid))
+                    if (!pro.Features.Any(o => o.Id == featureid))
                     {
-                        var featureObj = obj.AssociatedFeatures.FirstOrDefault(c => c.Id == featureid);
-                        obj.AssociatedFeatures.Remove(featureObj);
+                        var featureObj = obj.Features.FirstOrDefault(c => c.Id == featureid);
+                        obj.Features.Remove(featureObj);
                     }
                     else
                     {
-                        var featureObj = pro.AssociatedFeatures.FirstOrDefault(c => c.Id == featureid);
-                        pro.AssociatedFeatures.Remove(featureObj);
+                        var featureObj = pro.Features.FirstOrDefault(c => c.Id == featureid);
+                        pro.Features.Remove(featureObj);
                     }
                 }
-                foreach (var f in pro.AssociatedFeatures)
+                foreach (var f in pro.Features)
                 {
                     var feature = Work.FeaturesRepository.GetById(f.Id);
-                    obj.AssociatedFeatures.Add(feature);
+                    obj.Features.Add(feature);
                 }
             }
 
 
             obj = Work.ProductRepository.Update(obj);
             Work.ProductRepository.Save();
-            return obj.Id > 0;
+            return AutoMapper.Mapper.Map<Product>(obj);
         }
 
         public List<Product> GetCMMSProducts()
         {
             List<Product> products = new List<Product>();
             var proList = Work.ProductRepository.GetData(p => p.Categories.Count == 0).ToList();
-            foreach (var pro in proList)
-            {
-                var proObj = AutoMapper.Mapper.Map<Product>(pro);
-                products.Add(proObj);
-            }
+            products = proList.Select(p => AutoMapper.Mapper.Map<Product>(p)).ToList();
             return products;
         }
 

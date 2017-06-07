@@ -1,5 +1,4 @@
-﻿@model  List<License.MetCalWeb.Models.SubscriptionDetails>
-
+﻿@model  List<License.MetCalWeb.Models.Subscription>
 @{
     ViewBag.Title = "Home";
 }
@@ -106,7 +105,7 @@
             <div class="col-md-4">
                 @if (LicenseSessionState.Instance.IsSuperAdmin)
                 {
-                    if (Convert.ToInt32(ViewData["ExpiredSubCount"]) > 0)
+                    if (Convert.ToInt32(ViewBag.ExpiredSubCount) > 0)
                     {
                 <div class="col-md-12">
                     <div class="col-md-2">

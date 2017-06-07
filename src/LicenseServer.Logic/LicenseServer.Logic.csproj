@@ -121,7 +121,7 @@
     <Compile Include="DataLogic\PurchaseOrderLogic.cs" />
     <Compile Include="DataLogic\RoleLogic.cs" />
     <Compile Include="DataLogic\SubscriptionDetailLogic.cs" />
-    <Compile Include="DataLogic\SubscriptionTypeLogic.cs" />
+    <Compile Include="DataLogic\SubscriptionLogic.cs" />
     <Compile Include="DataLogic\UserLogic.cs" />
     <Compile Include="DataLogic\UserSubscriptionLogic.cs" />
     <Compile Include="DataLogic\UserTokenLogic.cs" />

@@ -26,19 +26,19 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.Appuser, LicenseServer.DataModel.User>();
             cfg.CreateMap<LicenseServer.DataModel.User, LicenseServer.Core.Model.Appuser>();
 
-            cfg.CreateMap<LicenseServer.Core.Model.ProductCategory, LicenseServer.DataModel.ProductCategory>();
-            cfg.CreateMap<LicenseServer.DataModel.ProductCategory, LicenseServer.Core.Model.ProductCategory>();
+            cfg.CreateMap<LicenseServer.Core.Model.SubscriptionCategory, LicenseServer.DataModel.SubscriptionCategory>();
+            cfg.CreateMap<LicenseServer.DataModel.SubscriptionCategory, LicenseServer.Core.Model.SubscriptionCategory>();
 
             cfg.CreateMap<LicenseServer.Core.Model.Product, LicenseServer.DataModel.Product>()
                 .ForMember(dest=> dest.Categories, opt=>opt.MapFrom(src=>src.Categories))
-                .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
+                .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features));
 
             cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>()
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories))
-                .ForMember(dest => dest.AssociatedFeatures, opt => opt.MapFrom(src => src.AssociatedFeatures));
+                .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features));
 
-            cfg.CreateMap<LicenseServer.Core.Model.SubscriptionType, LicenseServer.DataModel.SubscriptionType>();
-            cfg.CreateMap<LicenseServer.DataModel.SubscriptionType, LicenseServer.Core.Model.SubscriptionType>();
+            cfg.CreateMap<LicenseServer.Core.Model.Subscription, LicenseServer.DataModel.Subscription>();
+            cfg.CreateMap<LicenseServer.DataModel.Subscription, LicenseServer.Core.Model.Subscription>();
 
             cfg.CreateMap<LicenseServer.Core.Model.SubscriptionDetail, LicenseServer.DataModel.SubscriptionDetails>();
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionDetails, LicenseServer.Core.Model.SubscriptionDetail>();
