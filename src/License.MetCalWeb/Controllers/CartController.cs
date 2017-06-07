@@ -66,10 +66,14 @@ namespace License.MetCalWeb.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> DoPayment()
+        public async Task<ActionResult> DoPayment(string action)
         {
-            await Purchase();
-            return View();
+            if (action == string.Empty)
+            {
+                await Purchase();
+                return View();
+            }
+            return RedirectToAction("CartItem", "Cart");
         }
 
         // Async call to sync the data  by making a service call

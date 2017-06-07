@@ -5120,9 +5120,9 @@ a.list-group-item {
     font-size: 21px;
     font-weight: bold;
     line-height: 1;
-    color: #000;
+    color: #fff;
     text-shadow: 0 1px 0 #fff;
-    opacity: .2;
+    /*opacity: .2;*/
     filter: alpha(opacity=20);
 }
 
@@ -5137,9 +5137,10 @@ a.list-group-item {
 button.close {
     padding: 0;
     cursor: pointer;
-    background: transparent;
+    background: #205081;
     border: 0;
     -webkit-appearance: none;
+    min-width:20px;
 }
 
 .modal-open {
