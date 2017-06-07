@@ -16,7 +16,11 @@ namespace License.Logic.DataLogic
     /// </summary>
     public class UserSubscriptionLogic : BaseLogic
     {
-        // Get List of the User Subscription list based on the User ID
+        /// <summary>
+        /// Get List of the User Subscription list based on the User ID
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<UserSubscription> GetSubscription(string userId)
         {
             List<UserSubscription> subscriptionList = new List<UserSubscription>();
@@ -26,7 +30,11 @@ namespace License.Logic.DataLogic
             return subscriptionList;
         }
 
-        // Get User Subscription based on the user subscription Id
+        /// <summary>
+        /// Get User Subscription based on the user subscription Id
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <returns></returns>
         public List<UserSubscription> GetSubscriptionByIDList(List<int> idList)
         {
             List<UserSubscription> subscriptionList = new List<UserSubscription>();
@@ -36,7 +44,11 @@ namespace License.Logic.DataLogic
             return subscriptionList;
         }
 
-        //Create User Subscription
+        /// <summary>
+        /// Create User Subscription
+        /// </summary>
+        /// <param name="subs"></param>
+        /// <returns></returns>
         public int CreateSubscription(UserSubscription subs)
         {
             var obj = AutoMapper.Mapper.Map<UserSubscription, License.Core.Model.UserSubscription>(subs);
@@ -45,7 +57,10 @@ namespace License.Logic.DataLogic
             return obj.Id;
         }
 
-        // Update Bulk Subscriptions
+        /// <summary>
+        /// Update Bulk Subscriptions
+        /// </summary>
+        /// <param name="subs"></param>
         public void UpdateSubscriptions(List<UserSubscription> subs)
         {
             int i = 0;
