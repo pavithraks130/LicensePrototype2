@@ -28,7 +28,7 @@ namespace License.Logic.DataLogic
             var obj = AutoMapper.Mapper.Map<TeamLicense, Core.Model.TeamLicense>(teamLicense);
             obj = Work.TeamLicenseRepository.Create(obj);
             Work.TeamLicenseRepository.Save();
-            UpdateLicenseStatus(obj.LicenseId, true);
+            proLicLogic.UpdateLicenseStatus(obj.LicenseId, true);
             return obj.Id > 0;
 
         }
@@ -98,10 +98,10 @@ namespace License.Logic.DataLogic
         // Updating the License status if the license Mapped to user or Removed from user 
         public void UpdateLicenseStatus(int licId, bool status)
         {
-            var obj = Work.ProductLicenseRepository.GetById(licId);
+            var obj = Work.TeamLicenseRepository.GetById(licId);
             obj.IsMapped = status;
-            Work.ProductLicenseRepository.Update(obj);
-            Work.ProductLicenseRepository.Save();
+            Work.TeamLicenseRepository.Update(obj);
+            Work.TeamLicenseRepository.Save();
         }
 
         // Get the Team License based on the Team ID
@@ -109,7 +109,7 @@ namespace License.Logic.DataLogic
         {
             List<TeamLicense> teamLicenses = new List<TeamLicense>();
             var datas = Work.TeamLicenseRepository.GetData(t => t.TeamId == teamId);
-            teamLicenses = datas.Select(data => AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data)).ToList();            
+            teamLicenses = datas.Select(data => AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data)).ToList();
             return teamLicenses;
         }
 

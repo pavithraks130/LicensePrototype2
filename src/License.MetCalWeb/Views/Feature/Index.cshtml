@@ -13,25 +13,25 @@
                 {
                     <div class="col-md-12">
                         <label>Features not exist</label>
-                        <button class="btn btn-primary btn-custom addFeature">Create Feature</button>
+                        <button class="btn btn-default addFeature">Create Feature</button>
                     </div>
                 }
                 else
                 {
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <table class="table">
                             <tr>
                                 <th class="col-md-3">
-                                    Name
+                                   <label>Name</label> 
                                 </th>
                                 <th class="col-md-4">
-                                    Description
+                                    <label>Description</label>  
                                 </th>
-                                <th class="col-md-2">
-                                    Version
+                                <th class="col-md-1">
+                                    <label>Version</label> 
                                 </th>
-                                <th class="col-md-3">
-                                    Action
+                                <th class="col-md-4">
+                                    <label style="margin-left:90px">Action</label>
                                 </th>
                             </tr>
                             @for (int i = 0; i < Model.Count(); i++)
@@ -43,20 +43,20 @@
                                     <td class="col-md-4">
                                         @Html.DisplayFor(m => m.ElementAt(i).Description)
                                     </td>
-                                    <td class="col-md-2">
+                                    <td class="col-md-1">
                                         @Html.DisplayFor(m => m.ElementAt(i).Version)
                                     </td>
-                                    <td class="col-md-3">
-                                        @Html.ActionLink("Edit", "Edit", "Feature", new { @data_id  = Model.ElementAt(i).Id, @class = "ancEdit" })  |
-                                        @Html.ActionLink("Delete", "Delete", "Feature", new { @data_id = Model.ElementAt(i).Id, @class = "ancDelete" })
+                                    <td class="col-md-4">
+                                        @Html.ActionLink("Edit", "Edit", "Feature", new { @data_id  = Model.ElementAt(i).Id, @class = "btn btn-default ancEdit" })  
+                                        @Html.ActionLink("Delete", "Delete", "Feature", new { @data_id = Model.ElementAt(i).Id, @class = "btn btn-default ancDelete" })
                                     </td>
                                 </tr>
 
                             }
                         </table>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary btn-custom addFeature float-right">Create Feature</button>
+                    <div class="col-md-2">
+                        <button class="btn btn-default addFeature float-right">Create Feature</button>
                     </div>
 
                 }

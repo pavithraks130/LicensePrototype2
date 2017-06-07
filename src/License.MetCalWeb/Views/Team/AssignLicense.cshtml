@@ -43,14 +43,14 @@
 
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="selectedProducts" value="ProId:@pro.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableProductCount == 0 || pro.IsSelected ? "disabled='disabled'" : "")>
+                                        <input type="checkbox" name="selectedProducts" value="ProId:@pro.Id" checked="@pro.IsSelected" class="checkCombo checkbox-inline" @(pro.AvailableCount == 0 || pro.IsSelected ? "disabled='disabled'" : "")>
                                         <label class="control-label">
 
                                             @pro.Name
                                         </label>
                                     </td>
                                     <td class="pro_count">
-                                        <label class="lblProCount" name="avl_Qty">@pro.AvailableProductCount</label>
+                                        <label class="lblProCount" name="avl_Qty">@pro.AvailableCount</label>
                                     </td>
                                 </tr>
                             }

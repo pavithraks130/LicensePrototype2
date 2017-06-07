@@ -21,9 +21,9 @@
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
-            <h3>
-                Home
-            </h3>
+            <h2>
+                Product details:
+            </h2>
         </div>
 
         @using (Html.BeginForm())
@@ -43,9 +43,10 @@
                     foreach (var productLicense in Model)
                     {
                         <div class="row div-spacing" style="height:80px;">
-                            <h3>
-                                Available License Type:
-                            </h3>
+                            <h4>
+                                Available Subscriptions:
+                            </h4>
+                         
                             <div class="col-md-12" onmouseover="rotateYDIV()" id="rotate3D" style="transform: rotateY(360deg);"><h3>@productLicense.Name</h3></div>
                         </div>
 
@@ -58,7 +59,7 @@
                         {
                             <div class="row" style="margin-top:5%">
                                 <div class="col-md-12">
-                                    <h4><label>@product.Name</label></h4>
+                                    <h4>@product.Name</h4>
                                 </div>
                             </div>
                             <div class="row">
@@ -71,25 +72,25 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="col-md-4 animated_div"><label>Feature</label></div>
+                                <div class="col-md-11">
+                                    <div class="col-md-3 animated_div"><label>Feature</label></div>
                                     <div class="col-md-4 animated_div"><label>Version</label></div>
                                     <div class="col-md-4 animated_div"><label>Info</label></div>
                                 </div>
-                               
+
                             </div>
                             for (int i = 0; i < product.Features.Count; i++)
                             {
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <label>@product.Features[i].Name</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>@product.Features[i].Version</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>@product.Features[i].Description</label>
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label>@product.Features[i].Name</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@product.Features[i].Version</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@product.Features[i].Description</label>
+                                        </div>
                                 </div>
                             }
                         }
@@ -106,16 +107,16 @@
                 {
                     if (Convert.ToInt32(ViewBag.ExpiredSubCount) > 0)
                     {
-                        <div class="col-md-12">
-                            <div class="col-md-2">
-                                <div class="has-warning"></div>
-                            </div>
-                            <div class="col-md-8 text-warning">
-                                <b>You subscriptions are about to expire in few days. If you would like renew then click on below link.</b>
-                                <br />
-                                @Html.ActionLink("Renew Subscription", "Renew", "Subscription")
-                            </div>
-                        </div>
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <div class="has-warning"></div>
+                    </div>
+                    <div class="col-md-8 text-warning">
+                        <b>You subscriptions are about to expire in few days. If you would like renew then click on below link.</b>
+                        <br />
+                        @Html.ActionLink("Renew Subscription", "Renew", "Subscription")
+                    </div>
+                </div>
                     }
                 }
             </div>
@@ -154,6 +155,4 @@
             if (ny >= 45) { ny = 0 }
         }
     }
-
-
 </script>

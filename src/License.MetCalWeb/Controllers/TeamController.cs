@@ -119,9 +119,9 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AssignLicense(TeamMappingDetails teamMappingDetails, params string[] selectedSubscription)
+        public ActionResult AssignLicense(TeamMappingDetails teamMappingDetails, params string[] selectedProducts)
         {
-            var responseData = UpdateLicense(teamMappingDetails, selectedSubscription);
+            var responseData = UpdateLicense(teamMappingDetails, selectedProducts);
             if (!String.IsNullOrEmpty(responseData))
             {
                 ModelState.AddModelError("", responseData);
@@ -280,12 +280,12 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RevokeLicense(int teamId, params string[] SelectedSubscription)
+        public ActionResult RevokeLicense(int teamId, params string[] selectedProducts)
         {
             TeamLicenseDataMapping teamLicDataMapping = new TeamLicenseDataMapping()
             {
                 TeamList = new List<Team> { new Team() { Id = teamId } },
-                LicenseDataList = ExtractLicenseData(SelectedSubscription)
+                LicenseDataList = ExtractLicenseData(selectedProducts)
             };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/Delete", teamLicDataMapping).Result;

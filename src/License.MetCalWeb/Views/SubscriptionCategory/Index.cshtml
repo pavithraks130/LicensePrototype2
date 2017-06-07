@@ -12,45 +12,46 @@
                     <label>No Category exist</label>
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary btn-custom btnCreate">Create</button>
+                    <button class="btn btn-default btnCreate">Create</button>
                 </div>
             </div>
         }
         else
         {
             <div class="form-group">
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <table class="table">
                         <tr>
-                            <th class="col-md-4">
+                            <th class="col-md-2">
                                 <label>Category</label>
                             </th>
-                            <th class="col-md-6">
+                            <th class="col-md-4">
                                 <label>Description</label>
                             </th>
-                            <th class="col-md-2">
-                                <label>Action</label>
+                            <th class="col-md-4">
+                                <label style="margin-left:90px">Action</label>
                             </th>
                         </tr>
                         @for (int i = 0; i < Model.Count(); i++)
                         {
-                        <tr>
-                            <td class="col-md-4">
-                                @Html.DisplayTextFor(m => m.ElementAt(i).Name)
-                            </td>
-                            <td class="col-md-6">
-                                @Html.DisplayTextFor(m => m.ElementAt(i).Description)
-                            </td>
-                            <td class="col-md-2">
-                                @Html.ActionLink("Edit","Edit","ProductCategory",new { id= Model.ElementAt(i).Id } , new { @class="acnEdit"})|
-                                @Html.ActionLink("Delete", "Delete", "ProductCategory", new { id = Model.ElementAt(i).Id }, new { @class = "acnDelete" })
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="col-md-2">
+                                    @Html.DisplayTextFor(m => m.ElementAt(i).Name)
+                                </td>
+                                <td class="col-md-4">
+                                    @Html.DisplayTextFor(m => m.ElementAt(i).Description)
+                                </td>
+                                <td class="col-md-4">
+                                    @Html.ActionLink("Edit", "Edit", "ProductCategory", new { id = Model.ElementAt(i).Id }, new { @class = "btn btn-default acnEdit" })
+                                
+                                    @Html.ActionLink("Delete", "Delete", "ProductCategory", new { id = Model.ElementAt(i).Id }, new { @class = "btn btn-default acnDelete" })
+                                </td>
+                            </tr>
                         }
                     </table>
                 </div>
-                <div class="col-md-4">
-                    <button class="btn btn-primary btn-custom float-right btnCreate">Create</button>
+                <div class="col-md-2">
+                    <button class="btn btn-default float-right btnCreate">Create</button>
                 </div>
             </div>
         }

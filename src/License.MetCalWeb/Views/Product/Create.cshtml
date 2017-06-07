@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "AddProduct";
 }
-
 <div class="row">
     <div class="col-sm-12">
         <h3>Create Product</h3>
@@ -80,7 +79,7 @@
                                                     @Html.DropDownList("featuresList", new SelectList(ViewBag.Features, "Id", "Name"), "-- select Feature -- ", new { @class = "form-control" })
                                                 </div>
                                                 <span class="col-md-4">
-                                                    <button type="button" class="btn btn-primary btn-add">+</button>
+                                                    <button type="button" class="btn btn-default btn-add">+</button>
                                                 </span>
                                             </div>
 

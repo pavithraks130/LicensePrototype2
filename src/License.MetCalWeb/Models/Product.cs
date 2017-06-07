@@ -25,7 +25,7 @@ namespace License.MetCalWeb.Models
         public bool IsDisabled { get; set; }
         public bool InitialState { get; set; }
         public DateTime ExpireDate { get; set; }
-        public int AvailableProductCount { get { return TotalLicenseCount - UsedLicenseCount; } }
+        public int AvailableCount { get; set; }
 
     }
 
