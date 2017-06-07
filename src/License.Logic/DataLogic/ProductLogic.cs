@@ -17,7 +17,11 @@ namespace License.Logic.DataLogic
     /// </summary>
     public class ProductLogic : BaseLogic
     {
+        /// <summary>
         /// Gets the Product List from the local based on the admin Id. 
+        /// </summary>
+        /// <param name="adminId"></param>
+        /// <returns></returns>
         public List<Product> GetProductbyAdmin(string adminId)
         {
             var userSubscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == adminId).ToList();
@@ -34,7 +38,10 @@ namespace License.Logic.DataLogic
             return null;
         }
 
+        /// <summary>
         /// Updates the Product changes to the Local Product json file.
+        /// </summary>
+        /// <param name="products"></param>
         public void UpdateProducts(List<Product> products)
         {
             SubscriptionBO subLogic = new SubscriptionBO();
