@@ -1,63 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using LicenseServer.DataModel;
+using LicenseServer.Logic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using LicenseServer.Logic;
-using LicenseServer.DataModel;
 
 namespace Centralized.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller for Subscription
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/subscription")]
     public class SubscriptionController : BaseController
     {
 
-        private SubscriptionLogic logic = null;
+        private SubscriptionLogic subscriptionLogic = null;
+
+        /// <summary>
+        /// Constructor for Subscrtiption Controller
+        /// </summary>
         public SubscriptionController()
         {
-            logic = new SubscriptionLogic();
+            subscriptionLogic = new SubscriptionLogic();
         }
 
         /// <summary>
         /// GET Method. To get all the Subscriptions
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Subscription List</returns>
         [HttpGet]
         [Route("All")]
-        public IHttpActionResult GetAllSubscription()
+        public IHttpActionResult GetAllSubscriptions()
         {
-            var subList = logic.GetSubscription();
+            var subList = subscriptionLogic.GetAllSubscriptions();
             return Ok(subList);
         }
 
         /// <summary>
         /// Get List of Subscriptions Both Default and Custom Subscriptions
         /// </summary>
-        /// <returns></returns>
+        /// <param name="userId">User ID to include Custom Subscriptions</param>
+        /// <returns>Subscription List</returns>
         [HttpGet]
         [Route("All/{userId}")]
         public IHttpActionResult GetAllSubscription(string userId)
         {
-            var subList = logic.GetSubscription(userId);
+            var subList = subscriptionLogic.GetAllSubscriptions(userId);
             return Ok(subList);
         }
 
         /// <summary>
         /// POST method. Creates the Subscriptioon
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="subscriptionItem">Subscription Item to be Created</param>
+        /// <returns>On success returns created Subscription else returns error</returns>
         [HttpPost]
         [Route("CreateSubscription")]
-        public HttpResponseMessage CreateSubscription(Subscription type)
+        public HttpResponseMessage CreateSubscription(Subscription subscriptionItem)
         {
-            var subscriptionType = logic.CreateSubscriptionWithProduct(type);
+            var subscriptionType = subscriptionLogic.CreateSubscriptionWithProduct(subscriptionItem);
             if (subscriptionType != null)
                 return Request.CreateResponse(HttpStatusCode.Created, subscriptionType);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, subscriptionLogic.ErrorMessage);
         }
     }
 }

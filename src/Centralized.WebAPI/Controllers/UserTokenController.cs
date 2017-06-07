@@ -6,44 +6,51 @@ using System.Net.Http;
 using System.Web.Http;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
+using Centralized.WebAPI.Common;
 
 namespace Centralized.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller for User Token
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/UserToken")]
     public class UserTokenController : BaseController
     {
         private UserTokenLogic logic = null;
 
+        /// <summary>
+        /// Constructor for User Token
+        /// </summary>
         public UserTokenController()
         {
             logic = new UserTokenLogic();
         }
 
         /// <summary>
-        /// GET Method. Get List of all User Token.
+        /// GET Method. Get List of all User Tokens.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of All User Tokens</returns>
         [HttpGet]
         [Route("All")]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllUserTokens()
         {
-            var listToken = logic.GetUsertokenList();
-            return Ok(listToken);
+            var userTokenList = logic.GetUsertokenList();
+            return Ok(userTokenList);
         }
 
         /// <summary>
         /// POST Method. Create User Token for the specified Email
         /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="token">User Token</param>
+        /// <returns>On success returns created Token else returns error</returns>
         [HttpPost]
         [Route("Create")]
-        public HttpResponseMessage CreateUserToken(UserToken t)
+        public HttpResponseMessage CreateUserToken(UserToken token)
         {
-            var token = logic.CreateUserToken(t);
-            if (token != null)
-                return Request.CreateResponse(HttpStatusCode.OK, token);
+            var userToken = logic.CreateUserToken(token);
+            if (userToken != null)
+                return Request.CreateResponse(HttpStatusCode.OK, userToken);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
@@ -51,16 +58,16 @@ namespace Centralized.WebAPI.Controllers
         /// <summary>
         /// POST Method. Verify the User Token with Email  during User Registration
         /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="token">User Token</param>
+        /// <returns>Status Indicating if User Token is verified</returns>
         [HttpPost]
         [Route("VerifyToken")]
         [AllowAnonymous]
-        public HttpResponseMessage VerifyToken(UserToken t)
+        public HttpResponseMessage VerifyToken(UserToken token)
         {
-            bool status = logic.VerifyUserToken(t);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            bool isTokenVerified = logic.VerifyUserToken(token);
+            if (isTokenVerified)
+                return Request.CreateResponse(HttpStatusCode.OK, Constants.Success);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }

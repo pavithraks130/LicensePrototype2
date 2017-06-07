@@ -9,6 +9,10 @@ using System.Data.Entity;
 
 namespace LicenseServer.Core.Infrastructure
 {
+    /// <summary>
+    /// Generic Repository
+    /// </summary>
+    /// <typeparam name="T">Generic Type T</typeparam>
     public class GenericRepository<T> where T : class
     {
         private AppDbContext _context;

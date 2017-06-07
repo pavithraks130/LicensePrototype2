@@ -47,7 +47,10 @@ namespace License.Logic.DataLogic
             return obj != null;
         }
 
+        /// <summary>
         /// Creation of Multiple License Request for single user
+        /// </summary>
+        /// <param name="reqList"></param>
         public void Create(List<UserLicenseRequest> reqList)
         {
             bool status = true;
@@ -61,7 +64,10 @@ namespace License.Logic.DataLogic
                 Work.UserLicenseRequestRepo.Save();
         }
 
-        //Updating the Multiple License Request
+        /// <summary>
+        /// Updating the Multiple License Request
+        /// </summary>
+        /// <param name="reqList"></param>
         public void Update(List<UserLicenseRequest> reqList)
         {
             bool status = true;
@@ -96,7 +102,11 @@ namespace License.Logic.DataLogic
             return null;
         }
 
+        /// <summary>
         /// Get User license Request by team Id
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         public List<UserLicenseRequest> GetRequestListByTeam(int teamId)
         {
             if(subList == null)
@@ -153,7 +163,11 @@ namespace License.Logic.DataLogic
             return null;
         }
 
+        /// <summary>
         /// Get User license by ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public UserLicenseRequest GetById(int id)
         {
             var data = Work.UserLicenseRequestRepo.GetById(id);

@@ -22,7 +22,10 @@ namespace License.Logic.DataLogic
 
         }
 
-        // Gets All Teams
+        /// <summary>
+        ///  Gets All Teams
+        /// </summary>
+        /// <returns></returns>
         public List<DataModel.Team> GetTeam()
         {
             var objList = Work.TeamRepository.GetData();
@@ -30,7 +33,11 @@ namespace License.Logic.DataLogic
             return teamList;
         }
 
-        // Get Team List based on the Admin Id
+        /// <summary>
+        /// Get Team List based on the Admin Id
+        /// </summary>
+        /// <param name="adminId"></param>
+        /// <returns></returns>
         public List<DataModel.Team> GetTeamsByAdmin(string adminId)
         {
             var objList = Work.TeamRepository.GetData(t => t.AdminId == adminId).ToList();
@@ -38,7 +45,11 @@ namespace License.Logic.DataLogic
             return teamList;
         }
 
-        // GGet Team List Based on the User Id
+        /// <summary>
+        /// Get Team List Based on the User Id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<DataModel.Team> GetTeamsByUser(string userId)
         {
             var teamIdList = Work.TeamMemberRepository.GetData(tm => tm.InviteeUserId == userId).ToList().Select(t => t.TeamId).ToList();
@@ -47,7 +58,11 @@ namespace License.Logic.DataLogic
             return teamList;
         }
 
-        // Get  Team by Id
+        /// <summary>
+        /// Get Team by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public DataModel.Team GetTeamById(int id)
         {
             TeamMemberLogic memLogic = new TeamMemberLogic();
@@ -57,7 +72,11 @@ namespace License.Logic.DataLogic
             return teamObj;
         }
 
-        // Create New Team in DB
+        /// <summary>
+        /// Create New Team in DB
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public DataModel.Team CreateTeam(DataModel.Team model)
         {
             var obj = AutoMapper.Mapper.Map<Core.Model.Team>(model);
@@ -79,7 +98,12 @@ namespace License.Logic.DataLogic
             return model;
         }
 
-        // Update Team details  based on the team Id
+        /// <summary>
+        /// Update Team details  based on the team Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public DataModel.Team UpdateTeam(int id, DataModel.Team model)
         {
             var obj = Work.TeamRepository.GetById(id);
@@ -97,8 +121,12 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<DataModel.Team>(obj);
         }
 
-        // Delete Team based on the Team ID.  If any users exist in the team which is being deleted then the User from the existing team will be moved under default team 
-        // and Team License will be deleted.
+        /// <summary>
+        /// Delete Team based on the Team ID.  If any users exist in the team which is being deleted then the User from the existing team will be moved under default team 
+        /// and Team License will be deleted.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool DeleteTeam(int id)
         {
             var tempObj = Work.TeamRepository.GetById(id);
@@ -132,7 +160,12 @@ namespace License.Logic.DataLogic
             return deletestatus;
         }
 
-        // Used to Authenticate the Concurrent user log in  once the user authentication is success
+        /// <summary>
+        /// Used to Authenticate the Concurrent user log in  once the user authentication is success
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public bool AllowTeamMemberLogin(int teamId, string userId)
         {
             var team = Work.TeamRepository.GetById(teamId);
@@ -151,7 +184,11 @@ namespace License.Logic.DataLogic
 
         }
 
-        // Used to update the concurrent user count for the team.
+        /// <summary>
+        /// Used to update the concurrent user count for the team.
+        /// </summary>
+        /// <param name="teamObj"></param>
+        /// <returns></returns>
         public DataModel.Team UpdateConcurrentUser(DataModel.Team teamObj)
         {
             var team = Work.TeamRepository.GetById(teamObj.Id);

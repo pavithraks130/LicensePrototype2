@@ -16,7 +16,10 @@ namespace License.Logic.DataLogic
     /// </summary>
     public class RoleLogic : BaseLogic
     {
-        // Lists all the role in DB
+        /// <summary>
+        /// Lists all the role in DB
+        /// </summary>
+        /// <returns></returns>
         public ICollection<Role> GetRoles()
         {
             List<Role> listRoles = new List<Role>();
@@ -28,7 +31,11 @@ namespace License.Logic.DataLogic
             return listRoles;
         }
 
-        // Create New role 
+        /// <summary>
+        /// Create New role 
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public IdentityResult CreateRole(Role r)
         {
             try
@@ -44,14 +51,22 @@ namespace License.Logic.DataLogic
             }
         }
 
-        //Updating Existing Role
+        /// <summary>
+        /// Updating Existing Role
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public IdentityResult UpdateRole(Role r)
         {
             var role = AutoMapper.Mapper.Map<DataModel.Role, Core.Model.Role>(r);
             return RoleManager.Update(role);
         }
 
-        // Get Role based on ID
+        /// <summary>
+        ///  Get Role based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public Role GetRoleById(string id)
         {
@@ -59,7 +74,11 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<Core.Model.Role, DataModel.Role>(r);
         }
 
-        // Delete Role By id
+        /// <summary>
+        /// Delete Role By id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IdentityResult DeleteRole(string id)
         {
             var r = RoleManager.FindById(id);

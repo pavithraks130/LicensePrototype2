@@ -19,7 +19,11 @@ namespace License.Logic.DataLogic
 
     public class ProductLicenseLogic : BaseLogic
     {
+        /// <summary>
         /// Gets the License keys based on the usersubscription Id
+        /// </summary>
+        /// <param name="userSubscriptionId"></param>
+        /// <returns></returns>
         public List<ProductLicense> GetLicenseList(int userSubscriptionId)
         {
             List<ProductLicense> dataList = new List<ProductLicense>();
@@ -28,14 +32,22 @@ namespace License.Logic.DataLogic
             return dataList;
         }
 
-        //  Gets the unassigned product License keys based on the product id
+        /// <summary>
+        /// Gets the unassigned product License keys based on the product id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public ProductLicense GetUnassignedLicense(int productId)
         {
             var obj = Work.ProductLicenseRepository.GetData(f => f.ProductId == productId && f.IsMapped == false).FirstOrDefault();
             return AutoMapper.Mapper.Map<ProductLicense>(obj);
         }
 
-        //Updating the Available status for the existing license Id. 
+        /// <summary>
+        /// Updating the Available status for the existing license Id. 
+        /// </summary>
+        /// <param name="licId"></param>
+        /// <param name="status"></param>
         public void UpdateLicenseStatus(int licId, bool status)
         {
             var obj = Work.ProductLicenseRepository.GetById(licId);
@@ -44,7 +56,11 @@ namespace License.Logic.DataLogic
             Work.ProductLicenseRepository.Save();
         }
 
-        //Creating Product License record in db
+        /// <summary>
+        /// Creating Product License record in db
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public ProductLicense CreateLicenseData(ProductLicense data)
         {
             var obj = AutoMapper.Mapper.Map<License.Core.Model.ProductLicense>(data);
@@ -53,7 +69,10 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<ProductLicense>(obj);
         }
 
-        //Creating the Bulk Product License in DB 
+        /// <summary>
+        /// Creating the Bulk Product License in DB 
+        /// </summary>
+        /// <param name="dataList"></param>
         public void CreateLicenseData(List<ProductLicense> dataList)
         {
             foreach (var data in dataList)
@@ -61,14 +80,22 @@ namespace License.Logic.DataLogic
         }
 
 
-        // Get Product License based on id
+        /// <summary>
+        /// Get Product License based on id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ProductLicense GetLicenseById(int id)
         {
             var obj = Work.ProductLicenseRepository.GetById(id);
             return AutoMapper.Mapper.Map<ProductLicense>(obj);
         }
 
-        //Updating the License Keys with new set of license Keys after Renewel of the subscription
+        /// <summary>
+        /// Updating the License Keys with new set of license Keys after Renewel of the subscription
+        /// </summary>
+        /// <param name="licKeysMapping"></param>
+        /// <param name="userSubscriptionId"></param>
         public void UpdateRenewalLicenseKeys(List<LicenseKeyProductMapping> licKeysMapping, int userSubscriptionId)
         {
             // Get existing license Key for the User Subscription and get the Product Ids.
@@ -113,7 +140,11 @@ namespace License.Logic.DataLogic
 
         }
 
-        //Get the Available License Count based on the product Id
+        /// <summary>
+        /// Get the Available License Count based on the product Id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public int GetAvailableLicenseCountByProduct(int productId)
         {
             var licList = Work.ProductLicenseRepository.GetData(l => l.ProductId == productId && l.IsMapped == false).ToList();

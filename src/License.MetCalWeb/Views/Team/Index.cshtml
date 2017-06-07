@@ -36,8 +36,8 @@
                             @Html.DropDownList("user_count_dropdown", new SelectList(ViewData["UserCountList"] as IEnumerable<SelectListItem>, "Text", "Value", @obj.ConcurrentUserCount), "", new { @class = "ddlConcurentUser form-control", data_value = @obj.Id })
                         </td>
                         <td class="col-md-3">
-                            <button class="btn btn-default">@Html.ActionLink("Add License", "TeamMapLicense", "Team", new { teamId = @obj.Id }, null)</button>
-                            <button class="btn btn-default">@Html.ActionLink("Revoke License", "RevokeTeamLicense", "Team", new { teamId = @obj.Id }, null)</button>
+                            <button class="btn btn-default">@Html.ActionLink("Add License", "AssignLicense", "Team", new { teamId = @obj.Id }, null)</button>
+                            <button class="btn btn-default">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { teamId = @obj.Id }, null)</button>
                         </td>
                     </tr>
                 }

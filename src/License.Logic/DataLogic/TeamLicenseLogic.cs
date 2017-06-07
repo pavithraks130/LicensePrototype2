@@ -19,16 +19,17 @@ namespace License.Logic.DataLogic
         }
 
         /// <summary>
-        /// Function to create Team License
+        /// Function to create Team License, update the respect productLicense status to true for mapped filed
         /// </summary>
         /// <param name="teamLicense"></param>
         /// <returns></returns>
         private bool CreateTeamLicense(TeamLicense teamLicense)
         {
-            var obj = AutoMapper.Mapper.Map<TeamLicense, Core.Model.TeamLicense>(teamLicense);
+            var obj = AutoMapper.Mapper.Map<Core.Model.TeamLicense>(teamLicense);
             obj = Work.TeamLicenseRepository.Create(obj);
             Work.TeamLicenseRepository.Save();
-            UpdateLicenseStatus(obj.LicenseId, true);
+            // updating the product license is mapped to true
+            proLicLogic.UpdateLicenseStatus(obj.LicenseId, true);
             return obj.Id > 0;
 
         }
@@ -69,7 +70,10 @@ namespace License.Logic.DataLogic
             return true;
         }
 
+        /// <summary>
         /// Get the product list based on the Availablity of the License for the Product and Expire Date of the Product
+        /// </summary>
+        /// <returns></returns>
         public List<Product> GetProductFromLicenseData()
         {
             //ListOut the product with IsMap is false;
@@ -95,25 +99,37 @@ namespace License.Logic.DataLogic
             return prodList;
         }
 
-        // Updating the License status if the license Mapped to user or Removed from user 
+        /// <summary>
+        ///  Updating the License status if the license Mapped to user or Removed from user 
+        /// </summary>
+        /// <param name="licId"></param>
+        /// <param name="status"></param>
         public void UpdateLicenseStatus(int licId, bool status)
         {
-            var obj = Work.ProductLicenseRepository.GetById(licId);
+            var obj = Work.TeamLicenseRepository.GetById(licId);
             obj.IsMapped = status;
-            Work.ProductLicenseRepository.Update(obj);
-            Work.ProductLicenseRepository.Save();
+            Work.TeamLicenseRepository.Update(obj);
+            Work.TeamLicenseRepository.Save();
         }
 
-        // Get the Team License based on the Team ID
+        /// <summary>
+        /// Get the Team License based on the Team ID
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         public List<TeamLicense> GetTeamLicense(int teamId)
         {
             List<TeamLicense> teamLicenses = new List<TeamLicense>();
             var datas = Work.TeamLicenseRepository.GetData(t => t.TeamId == teamId);
-            teamLicenses = datas.Select(data => AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data)).ToList();            
+            teamLicenses = datas.Select(data => AutoMapper.Mapper.Map<Core.Model.TeamLicense, TeamLicense>(data)).ToList();
             return teamLicenses;
         }
 
-        //Remove License by Team . to delete all the Team License deltion when user deletes the team
+        /// <summary>
+        /// Remove License by Team . to delete all the Team License deltion when user deletes the team
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <returns></returns>
         public bool RemoveLicenseByTeam(int teamId)
         {
             var status = true;
@@ -125,7 +141,12 @@ namespace License.Logic.DataLogic
             return status;
         }
 
-        // Removing the Team License based on the Product Id  when user Revoke the Product from team 
+        /// <summary>
+        /// Removing the Team License based on the Product Id  when user Revoke the Product from team 
+        /// </summary>
+        /// <param name="teamId"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public bool RemoveLicenseByProduct(int teamId, int productId)
         {
             var teamLicense = Work.TeamLicenseRepository.GetData(tl => tl.TeamId == teamId && tl.ProductId == productId).ToList();
@@ -133,7 +154,12 @@ namespace License.Logic.DataLogic
             return true;
         }
 
-        // Removing the Team License based on the Id. Id : Team lIcense Id 
+        /// <summary>
+        ///  Removing the Team License based on the Id. Id : Team lIcense Id 
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="licenseId"></param>
+        /// <returns></returns>
         public bool RemoveTeamLicenseById(int Id, int licenseId)
         {
             var deletestatus = Work.TeamLicenseRepository.Delete(Id);

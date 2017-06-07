@@ -12,9 +12,16 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Centralized.WebAPI.Controllers
 {
+    /// <summary>
+    /// Base Controller Class
+    /// </summary>
     public class BaseController : ApiController
     {
         private LicUserManager _userManager = null;
+
+        /// <summary>
+        /// User Manager Instance
+        /// </summary>
         public LicUserManager UserManager
         {
             get
@@ -26,6 +33,10 @@ namespace Centralized.WebAPI.Controllers
         }
 
         private LicRoleManager _roleManager = null;
+
+        /// <summary>
+        /// Role Manager Instance
+        /// </summary>
         public LicRoleManager RoleManager
         {
             get

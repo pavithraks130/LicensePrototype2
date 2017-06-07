@@ -16,7 +16,11 @@ namespace License.Logic.DataLogic
     /// </summary>
     public class TeamAssetLogic : BaseLogic
     {
-        // Create Teama Asset record 
+        /// <summary>
+        /// Create Teama Asset record 
+        /// </summary>
+        /// <param name="teamAsset"></param>
+        /// <returns></returns>
         public TeamAssetModel CreateAsset(TeamAssetModel teamAsset)
         {
             TeamAsset convertedTeamAsset = AutoMapper.Mapper.Map<TeamAssetModel, TeamAsset>(teamAsset);
@@ -33,27 +37,34 @@ namespace License.Logic.DataLogic
            
         }
 
-        // Get List of all the Team Asset
+        /// <summary>
+        /// Get List of all the Team Asset
+        /// </summary>
+        /// <returns></returns>
         public List<TeamAssetModel> GetAssets()
         {
             List<TeamAssetModel> teamAssets = new List<TeamAssetModel>();
             var listData = Work.TeamAssetRepository.GetData();
-            foreach (var assetItem in listData)
-            {
-                teamAssets.Add(AutoMapper.Mapper.Map<Core.Model.TeamAsset, TeamAssetModel>(assetItem));
-            }
-
+            teamAssets = listData.Select(assetItem =>AutoMapper.Mapper.Map<TeamAssetModel>(assetItem)).ToList();
             return teamAssets;
         }
 
-        // Get Team Asset by id 
+        /// <summary>
+        /// Get Team Asset by id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public TeamAssetModel GetAssetById(int id)
         {
             var obj = Work.TeamAssetRepository.GetById(id);
             return AutoMapper.Mapper.Map<TeamAssetModel>(obj);
         }
 
-        // Delete Team Asset by id
+        /// <summary>
+        /// Delete Team Asset by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool RemoveAsset(int id)
         {
             try
@@ -69,7 +80,12 @@ namespace License.Logic.DataLogic
             return false;
         }
 
-        // Update Team Asset by Id
+        /// <summary>
+        /// Update Team Asset by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public TeamAssetModel UpdateAsset(int id, TeamAssetModel model)
         {
             var obj = Work.TeamAssetRepository.GetById(id);

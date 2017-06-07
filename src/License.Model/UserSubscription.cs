@@ -49,28 +49,7 @@ namespace License.DataModel
 
     }
 
-    public class Product
-    {
-        public int Id { get; set; }
-        public string ProductCode { get; set; }
-        public string Name { get; set; }
-        public String Description { get; set; }
-        public int Quantity { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public int AvailableCount { get; set; }
-        public int TotalLicenseCount { get; set; }
-        public int UsedLicenseCount { get; set; }
-        public bool IsSelected { get; set; }
-        public bool IsDisabled { get; set; }
-        public bool InitialState { get; set; }
-        public List<Feature> Features { get; set; }
-        public DateTime ExpireDate { get; set; }
-        public Product()
-        {
-            Features = new List<Feature>();
-        }
-    }
+   
 
     public class Feature
     {

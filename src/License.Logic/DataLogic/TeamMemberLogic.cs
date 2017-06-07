@@ -19,10 +19,14 @@ namespace License.Logic.DataLogic
     /// </summary>
     public class TeamMemberLogic : BaseLogic
     {
-        // Create Team Member Record if the invitation exist then the record won't be created else record will be created in DB.
+        /// <summary>
+        /// Create Team Member Record if the invitation exist then the record won't be created else record will be created in DB.
+        /// </summary>
+        /// <param name="invit"></param>
+        /// <returns></returns>
         public DataModelTeamMember CreateInvite(DataModelTeamMember invit)
         {
-            License.Core.Model.TeamMember userinvit = AutoMapper.Mapper.Map<DataModel.TeamMember, License.Core.Model.TeamMember>(invit);
+            License.Core.Model.TeamMember userinvit = AutoMapper.Mapper.Map<Core.Model.TeamMember>(invit);
             var obj = Work.TeamMemberRepository.GetData(f => f.TeamId == invit.TeamId && f.InviteeEmail == invit.InviteeEmail).FirstOrDefault();
             if (obj == null)
             {
@@ -32,7 +36,11 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMember, DataModelTeamMember>(obj);
         }
 
-        //Get team member list based on the Team ID
+        /// <summary>
+        /// Get team member list based on the Team ID
+        /// </summary>
+        /// <param name="TeamId"></param>
+        /// <returns></returns>
         public List<DataModelTeamMember> GetTeamMembers(int TeamId)
         {
             List<DataModelTeamMember> teamMembers = new List<DataModelTeamMember>();
@@ -50,24 +58,37 @@ namespace License.Logic.DataLogic
             return AutoMapper.Mapper.Map<License.Core.Model.TeamMember, DataModelTeamMember>(obj);
         }
 
-        // Updating the user invite status when user accepts or Reject the Invitation
+        /// <summary>
+        ///  Updating the user invite status when user accepts or Reject the Invitation
+        /// </summary>
+        /// <param name="inviteId"></param>
+        /// <param name="status"></param>
         public void UpdateInviteStatus(object inviteId, string status)
         {
             Core.Model.TeamMember invite = Work.TeamMemberRepository.GetById(inviteId);
             invite.InviteeStatus = status;
-            Core.Model.TeamMember ember = Work.TeamMemberRepository.Update(invite);
+            Work.TeamMemberRepository.Update(invite);
             Work.TeamMemberRepository.Save();
         }
 
-        // Gettin all the team Mber Record based on the InviteeUser Id.
+        /// <summary>
+        /// Gettin all the team Mber Record based on the InviteeUser Id.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<DataModel.TeamMember> GetTeamMemberDetailsByUserId(string userId)
         {
             var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId).ToList();
             return AutoMapper.Mapper.Map<List<DataModel.TeamMember>>(obj);
         }
 
-        // Updating the partial adminaccess or removing the partial admin access for the User (Team Meber). If the user set as partial admin then along with updating Is Admin 
-        // in the TeamMember the Admin role will be added to the User role or removed from the user role.
+        /// <summary>
+        ///  Updating the partial adminaccess or removing the partial admin access for the User (Team Meber). If the user set as partial admin then along with updating Is Admin 
+        /// in the TeamMember the Admin role will be added to the User role or removed from the user role.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="adminStatus"></param>
         public void SetAsAdmin(int id, string userId, bool adminStatus)
         {
 
@@ -93,7 +114,11 @@ namespace License.Logic.DataLogic
                 Work.TeamMemberRepository.Save();
         }
 
-        // Deleteing the the Team Meber based on the user id and team id. along with the Team Member record deletion te License mapped to the User will also be removed.
+        /// <summary>
+        /// Deleteing the the Team Meber based on the user id and team id. along with the Team Member record deletion te License mapped to the User will also be removed.
+        /// </summary>
+        /// <param name="teamMember"></param>
+        /// <returns></returns>
         public bool DeleteTeamMember(DataModelTeamMember teamMember)
         {
             var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamMember.InviteeUserId && t.TeamId == teamMember.TeamId).FirstOrDefault();
@@ -102,7 +127,11 @@ namespace License.Logic.DataLogic
             return false;
         }
 
-        // Deleting the Team Mmeber , User license and if any team License mapped to deleting b user then the team license will also be deleted.
+        /// <summary>
+        ///  Deleting the Team Mmeber , User license and if any team License mapped to deleting b user then the team license will also be deleted.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool DeleteTeamMember(int id)
         {
             try
