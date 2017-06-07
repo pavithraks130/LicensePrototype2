@@ -62,21 +62,19 @@
             height: 100%;
         }
 </style>
-<div class="row">
-    <div class="col-md-12">
+<div class="row form-group">
+    <div class="col-md-12 ">
         <div class="row">
             <h2>Team Details</h2>
             <br />
-            <div class="form-group">
                 @if (LicenseSessionState.Instance.TeamList != null && LicenseSessionState.Instance.TeamList.Count > 0)
                 {
-                    <label class="col-md-2">Chosen Team Context :</label> @Html.DropDownList("TeamList", new SelectList(LicenseSessionState.Instance.TeamList, "Id", "Name"), "Select Team", new { @id = "ddlTeamList", @class = "form-control" })
+                    <label class="col-md-2" style="margin-top: 8px;">Chosen Team Context :</label> @Html.DropDownList("TeamList", new SelectList(LicenseSessionState.Instance.TeamList, "Id", "Name"), "Select Team", new { @id = "ddlTeamList", @class = "form-control" })
                 }
                 else
                 {
                     <label class="col-md-12">You are not assigned to any Team</label>
                 }
-            </div>
         </div>
         <br />
         <div class="dvTeamMember">

@@ -10,7 +10,7 @@
         <h2>CreateAndUpdateProduct</h2>
 
         <p>
-            @Html.ActionLink("Add Product", "Create", "Product",new { @class="btn btn-primary btn-lg btn-custom" })
+            @Html.ActionLink("Add Product", "Create", "Product",new { @class="btn btn-default" })
         </p>
         <table class="table">
             <tr>
@@ -23,7 +23,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.ProductCode)
                 </th>
-                <th></th>
+                <th><label style="margin-left:90px"> Action</label></th>
             </tr>
 
             @foreach (var item in Model)
@@ -39,8 +39,8 @@
                         @Html.DisplayFor(modelItem => item.ProductCode)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })  |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "ancDelete"})
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" }) 
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default ancDelete"})
                     </td>
                 </tr>
             }
