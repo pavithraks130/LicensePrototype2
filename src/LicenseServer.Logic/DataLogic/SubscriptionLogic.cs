@@ -10,7 +10,7 @@ namespace LicenseServer.Logic
 {
     public class SubscriptionLogic : BaseLogic
     {
-        public List<Subscription> GetSubscription(string userId = "")
+        public List<Subscription> GetAllSubscriptions(string userId = "")
         {
             List<Subscription> subscriptionTypes = new List<Subscription>();
             List<Core.Model.Subscription> listSubscription = null;

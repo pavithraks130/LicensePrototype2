@@ -10,12 +10,12 @@ namespace LicenseServer.Logic.BusinessLogic
     public class ProductBO
     {
         private FeaturesLogic featureLogic = null;
-        private ProductCategoryLogic productCategoryLogic = null;
+        private SubscriptionCategoryLogic productCategoryLogic = null;
 
         public ProductBO()
         {
             featureLogic = new FeaturesLogic();
-            productCategoryLogic = new ProductCategoryLogic();
+            productCategoryLogic = new SubscriptionCategoryLogic();
         }
 
         public ProductDependency GetDependencyDetails()

@@ -7,6 +7,7 @@ using System.Web.Http;
 using LicenseServer.Logic;
 using LicenseServer.DataModel;
 using LicenseServer.Logic.BusinessLogic;
+using Centralized.WebAPI.Common;
 
 namespace Centralized.WebAPI.Controllers
 {
@@ -73,7 +74,7 @@ namespace Centralized.WebAPI.Controllers
         {
             var status = logic.DeletePurchaseOrder(id);
             if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+                return Request.CreateResponse(HttpStatusCode.OK, Constants.Success);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
@@ -106,7 +107,7 @@ namespace Centralized.WebAPI.Controllers
         {
             logic.UpdatePurchaseOrder(orders);
             if (String.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateResponse(HttpStatusCode.OK, "success");
+                return Request.CreateResponse(HttpStatusCode.OK, Constants.Success);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }

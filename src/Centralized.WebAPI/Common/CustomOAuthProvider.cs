@@ -16,8 +16,16 @@ using Microsoft.Owin.Security.Cookies;
 
 namespace Centralized.WebAPI.Common
 {
+    /// <summary>
+    /// Custom Auth Provider
+    /// </summary>
     public class CustomOAuthProvider : OAuthAuthorizationServerProvider
     {
+        /// <summary>
+        /// Validates Token Authentication
+        /// </summary>
+        /// <param name="context">Authentication Context</param>
+        /// <returns>Status indicating Client Authenticity</returns>
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             if (context.ClientId == null)
@@ -28,6 +36,11 @@ namespace Centralized.WebAPI.Common
 
         }
 
+        /// <summary>
+        /// Grants Resource Owner Credentials
+        /// </summary>
+        /// <param name="context">Credentials Context</param>
+        /// <returns>Resource Owner Credentials if Successful</returns>
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
 
@@ -53,6 +66,12 @@ namespace Centralized.WebAPI.Common
             // context.Request.Context.Authentication.SignIn(identity1);
 
         }
+
+        /// <summary>
+        /// Adds Additional Response Parameters
+        /// </summary>
+        /// <param name="context">Token Endpoint Context</param>
+        /// <returns></returns>
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
             foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
@@ -63,6 +82,11 @@ namespace Centralized.WebAPI.Common
             return Task.FromResult<object>(null);
         }
 
+        /// <summary>
+        /// Creates Properties
+        /// </summary>
+        /// <param name="userObj">User Object</param>
+        /// <returns>Authentication Properties</returns>
         public static AuthenticationProperties CreateProperties(User userObj)
         {
             IDictionary<string, string> data = new Dictionary<string, string>

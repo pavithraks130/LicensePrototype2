@@ -1,68 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using LicenseServer.DataModel;
 using LicenseServer.Logic;
+using Microsoft.AspNet.Identity;
+using System;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Net;
-using LicenseServer.DataModel;
-using LicenseServer.Core.Manager;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Common = Centralized.WebAPI.Common;
 
 namespace Centralized.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller for User
+    /// </summary>
     [RoutePrefix("api/user")]
     [Authorize]
     public class UserController : BaseController
     {
-        UserLogic logic = null;
+        UserLogic userLogic = null;
+
+        /// <summary>
+        /// Constructor for User Controller
+        /// </summary>
         public UserController()
         {
-            logic = new UserLogic();
+            userLogic = new UserLogic();
         }
 
         private void Initialize()
         {
-            if (logic.UserManager == null)
-                logic.UserManager = UserManager;
-            if (logic.RoleManager == null)
-                logic.RoleManager = RoleManager;
+            if (userLogic.UserManager == null)
+                userLogic.UserManager = UserManager;
+            if (userLogic.RoleManager == null)
+                userLogic.RoleManager = RoleManager;
         }
 
         /// <summary>
         /// POST Method. Create User record with Super Admin Role 
         /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
+        /// <param name="user">User Registration</param>
+        /// <returns>On success returns created User else returns error</returns>
         [HttpPost]
         [Route("Create")]
         [AllowAnonymous]
         public HttpResponseMessage Create(Registration user)
         {
             Initialize();
-            var userModel = logic.CreateUser(user, "SuperAdmin");
-            if (userModel != null)
-                return Request.CreateResponse<User>(HttpStatusCode.OK, userModel);
+            var createdUser = userLogic.CreateUser(user, "SuperAdmin");
+            if (createdUser != null)
+                return Request.CreateResponse<User>(HttpStatusCode.OK, createdUser);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }
 
         /// <summary>
         /// POST Method. Gets Reset Token for the Forgot Password Functionality
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="userName">User Name</param>
+        /// <returns>Password Reset Token if Successful</returns>
         [HttpPost]
         [Route("GetResetToken")]
         [AllowAnonymous]
-        public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
+        public HttpResponseMessage GetPasswordResetToken(ForgotPassword userName)
         {
-            var user = UserManager.FindByEmail(model.Email);
+            var user = UserManager.FindByEmail(userName.Email);
             if (user == null)
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "Invaalid Email Address");
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "Invalid Email Address");
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
             ForgotPasswordToken passwordToken = new ForgotPasswordToken()
             {
@@ -75,21 +78,21 @@ namespace Centralized.WebAPI.Controllers
         /// <summary>
         /// POST Method. Reset the Password with New password based on validating the Reset Token
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="resetPasswordModel">Reset Password Object</param>
+        /// <returns>Status Indicating Password Change</returns>
         [HttpPost]
         [Route("ResetPassword")]
         [AllowAnonymous]
-        public HttpResponseMessage ResetuserPassword(ResetPassword model)
+        public HttpResponseMessage ResetUserPassword(ResetPassword resetPasswordModel)
         {
             Initialize();
             string token = string.Empty;
-            if (string.IsNullOrEmpty(model.Token))
-                token = UserManager.GeneratePasswordResetToken(model.UserId);
+            if (string.IsNullOrEmpty(resetPasswordModel.Token))
+                token = UserManager.GeneratePasswordResetToken(resetPasswordModel.UserId);
             else
-                token = model.Token;
-            var result = UserManager.ResetPassword(model.UserId, token, model.Password);
-            var user = logic.GetUserById(model.UserId);
+                token = resetPasswordModel.Token;
+            var result = UserManager.ResetPassword(resetPasswordModel.UserId, token, resetPasswordModel.Password);
+            var user = userLogic.GetUserById(resetPasswordModel.UserId);
             if (result.Succeeded)
                 return Request.CreateResponse(HttpStatusCode.OK, user);
             else
@@ -99,114 +102,114 @@ namespace Centralized.WebAPI.Controllers
         /// <summary>
         /// Put Method. Updating the User Status once user logIn or Log Out
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="userModel">User Object</param>
+        /// <returns>Status indicating if User is Active</returns>
         [HttpPut]
         [Route("UpdateActiveStatus")]
         [AllowAnonymous]
-        public HttpResponseMessage UpdateActiveStatus(User model)
+        public HttpResponseMessage UpdateActiveStatus(User userModel)
         {
             Initialize();
-            logic.UpdateLogInStatus(model.UserId, model.IsActive);
-            if (!String.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+            userLogic.UpdateLogInStatus(userModel.UserId, userModel.IsActive);
+            if (!String.IsNullOrEmpty(userLogic.ErrorMessage))
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
             else
-                return Request.CreateResponse(HttpStatusCode.OK, "updated");
+                return Request.CreateResponse(HttpStatusCode.OK, Common.Constants.Updated);
         }
 
         /// <summary>
-        /// Get Method. Get all the Users
+        /// Get Method. Gets all the Users
         /// </summary>
-        /// <returns></returns>
+        /// <returns>All Users List</returns>
         [HttpGet]
         [Route("All")]
-        public IHttpActionResult GetUsers()
+        public IHttpActionResult GetAllUsers()
         {
             Initialize();
-            var userList = logic.GetUsers();
+            var userList = userLogic.GetUsers();
             return Ok(userList);
         }
 
         /// <summary>
         /// GET Method. Get User by  user Id
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">User ID</param>
+        /// <returns>User if Exists</returns>
         [HttpGet]
         [Route("UserById/{id}")]
         public IHttpActionResult GetUserById(string id)
         {
             Initialize();
-            var user = logic.GetUserById(id);
+            var user = userLogic.GetUserById(id);
             return Ok(user);
         }
 
         /// <summary>
         /// GET Method. To Get User By EMail
         /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
+        /// <param name="email">Email ID</param>
+        /// <returns>User if Exists</returns>
         [HttpGet]
         [Route("UserByEmail/{email}")]
         public IHttpActionResult GetUserByEMail(string email)
         {
             Initialize();
-            var user = logic.GetUserByEmail(email);
+            var user = userLogic.GetUserByEmail(email);
             return Ok(user);
         }
 
         /// <summary>
         /// PUT Method. Update the User Data based on the User Id
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="user"></param>
-        /// <returns></returns>
+        /// <param name="id">User ID</param>
+        /// <param name="user">User to Update</param>
+        /// <returns>Status indicating if User is updated</returns>
         [HttpPut]
         [Route("Update/{id}")]
         public HttpResponseMessage UpdateUser(string id, User user)
         {
             Initialize();
-            bool status = logic.UpdateUser(id, user);
+            bool status = userLogic.UpdateUser(id, user);
             if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
+                return Request.CreateResponse(HttpStatusCode.OK, Common.Constants.Updated);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }
 
         /// <summary>
         /// Delete Method. Delete User by User ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">User ID</param>
+        /// <returns>Status indicating whther User is Deleted</returns>
         [HttpDelete]
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteUser(string id)
         {
             Initialize();
-            bool status = logic.DeleteUser(id);
+            bool status = userLogic.DeleteUser(id);
             if (status)
-                return Request.CreateResponse<string>("Deleted");
+                return Request.CreateResponse<string>(Common.Constants.Deleted);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }
 
         /// <summary>
         /// PUT Method. Change Password of the user based on the User ID and Previous Password Validation
         /// which is sent in the CHangePassword Object
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="userId">User ID</param>
+        /// <param name="passwordUpdateModel">Password Update Model</param>
+        /// <returns>Status Indicating if Password is Updated</returns>
         [HttpPut]
         [Route("ChangePassword/{userId}")]
-        public HttpResponseMessage UpdatePassword(string userId, ChangePassword model)
+        public HttpResponseMessage UpdatePassword(string userId, ChangePassword passwordUpdateModel)
         {
             Initialize();
-            var status = logic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
+            var status = userLogic.ChangePassword(userId, passwordUpdateModel.CurrentPassword, passwordUpdateModel.NewPassword);
             if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
+                return Request.CreateResponse(HttpStatusCode.OK, Common.Constants.Updated);
             else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }
 
     }

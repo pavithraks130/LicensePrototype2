@@ -6,6 +6,9 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace LicenseServer.Core.DbContext
 {
+    /// <summary>
+    /// App DB Context
+    /// </summary>
     public class AppDbContext : IdentityDbContext<Appuser>
     {
         public AppDbContext() : base("LicenseDBConnectionString")

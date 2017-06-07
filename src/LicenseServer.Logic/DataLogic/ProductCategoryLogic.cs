@@ -7,7 +7,7 @@ using LicenseServer.DataModel;
 
 namespace LicenseServer.Logic
 {
-    public class ProductCategoryLogic : BaseLogic
+    public class SubscriptionCategoryLogic : BaseLogic
     {
         public List<SubscriptionCategory> GetAll()
         {

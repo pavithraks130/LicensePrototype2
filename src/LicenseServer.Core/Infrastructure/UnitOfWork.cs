@@ -8,6 +8,9 @@ using LicenseServer.Core.DbContext;
 
 namespace LicenseServer.Core.Infrastructure
 {
+    /// <summary>
+    /// Unit of Work
+    /// </summary>
     public class UnitOfWork
     {
         private AppDbContext _context = new AppDbContext();
