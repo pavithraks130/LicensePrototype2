@@ -38,11 +38,11 @@
                         </td>
                         <td class="col-md-4">
                             <button class="alert-success">
-                                @Html.ActionLink("Add License", "TeamMapLicense", "Team", new { teamId = @obj.Id }, null)
+                                @Html.ActionLink("Add License", "AssignLicense", "Team", new { teamId = @obj.Id }, null)
                             </button>
                         </td>
                         <td class="col-md-4">
-                            <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeTeamLicense", "Team", new { teamId = @obj.Id }, null)</button>
+                            <button class="alert-success">@Html.ActionLink("Revoke License", "RevokeLicense", "Team", new { teamId = @obj.Id }, null)</button>
                         </td>
                     </tr>
     }
