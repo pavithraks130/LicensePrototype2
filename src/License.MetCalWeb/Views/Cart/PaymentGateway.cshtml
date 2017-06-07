@@ -1,99 +1,73 @@
-﻿<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>PaymentGateway</title>
-</head>
-<body>
-    <div id="cc-input" class="col-lg-4 col-sm-5 col-xs-12" style="padding-top: 40px; box-sizing: border-box;">
-
-        <h2><span class="subtitle">Payment Information</span></h2>
-
-        <div class="cc-container" id="accepted-cards">
-            <label>Accepted credit card types:</label>
-            <span class="credit-card-icon visa"></span>
-            <span class="credit-card-icon mastercard"></span>
-            <span class="credit-card-icon american-express"></span>
-            <!--<span class="credit-card-icon discover" ></span>-->
-
-            <div style="clear:both;"></div>
-        </div>
-
-        <div class="cc-container" id="cc-container-name">
-            <label>Name</label>
-            <span class="details">As it appears on card</span>
-            <input type="text" id="cc-name" name="cc-name">
-        </div>
-
-        <div class="cc-container" id="cc-container-number">
-            <label>Credit card number</label>
-            <span class="details">No spaces or dashes</span>
-
-
-            <!--<input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="cc-number" name="cc-number" maxlength="16" />-->
-            <input type="text" id="cc-number" name="cc-number" maxlength="16">
-
-            <span class="credit-card-icon visa hidden"></span>
-            <span class="credit-card-icon mastercard hidden"></span>
-            <span class="credit-card-icon american-express hidden"></span>
-            <!--<span class="credit-card-icon discover hidden" ></span>-->
-
-            <input type="hidden" id="cc-type" name="cc-type">
-        </div>
-
-        <div class="cc-split-container-left purchase-expdt-style purchase-expdt-style-xxs" id="cc-container-expiry">
-            <p>
-                <label>Expiration date</label>
-            </p>
-
-            <select id="cc-month" name="cc-month">
-                <option disabled="" selected="">Month</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-            <select id="cc-year" name="cc-year">
-                <option selected="" disabled="">Year</option>
-                <option value="17">2017</option>
-                <option value="18">2018</option>
-                <option value="19">2019</option>
-                <option value="20">2020</option>
-                <option value="21">2021</option>
-                <option value="22">2022</option>
-                <option value="23">2023</option>
-                <option value="24">2024</option>
-                <option value="25">2025</option>
-                <option value="26">2026</option>
-                <option value="27">2027</option>
-            </select>
-        </div>
-
-        <div class="cc-split-container-right  purchase-cvv-style purchase-cvv-style-xxs" id="cc-container-cvc">
-            <p>
-                <label>Security code</label>
-            </p>
-
-            <!--<input type="text" id="cc-cvc" name="cc-cvc" maxlength="4" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="width: 60%;" />-->
-            <input type="text" id="cc-cvc" name="cc-cvc" maxlength="4" style="width: 60%;">
-
-            <span class="credit-card-icon security pull-right"></span>
-        </div>
-
-        <div class="clear"></div>
-        @using (Html.BeginForm("DoPayment", "Cart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            <div >
-                <button class="btn-success btn-lg btn-custom" data-toggle="modal" data-target="#myModal">Pay @ViewBag.Total $</button>
-            </div>
-        }
+﻿
+@{
+    ViewBag.Title = "PaymentGateway";
+}
+<div class="form-group">
+    <div>
+       <h3><label style="margin-top:30px">Online credit card transaction details</label></h3> 
+        <hr />
     </div>
-</body>
-</html>
+
+    <div class="col-md-8 form-group">
+        <label class="col-md-4">Amount to pay:</label>
+        <input class="col-md-4" type="text" style="font-weight:bold" name="text_amount" value="@ViewBag.Total $" readonly="readonly" />
+    </div>
+
+    <div class="col-md-8 form-group">
+        <label class="col-md-4">Card number:</label>
+        <input class="col-md-4" type="text" name="text_card_number" value="" maxlength="16" />
+    </div>
+
+    <div class="col-md-8 form-group">
+        <label class="col-md-4">Name on the card:</label>
+        <input class="col-md-4" type="text" name="text_person_name" value="" />
+    </div>
+
+    <div class="col-md-8 form-group">
+        <label class="col-md-4">Expiration date:</label>
+        <select class="col-md-2" name="cc_month" style="margin-right: 3px;height: 28px;border-color: lightgray;">
+            <option disabled="" selected="">Month</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        <select class="col-md-2" name="cc_year" style="height: 28px;border-color: lightgray;">
+            <option selected="" disabled="">Year</option>
+            <option value="17">2017</option>
+            <option value="18">2018</option>
+            <option value="19">2019</option>
+            <option value="20">2020</option>
+            <option value="21">2021</option>
+            <option value="22">2022</option>
+            <option value="23">2023</option>
+            <option value="24">2024</option>
+            <option value="25">2025</option>
+            <option value="26">2026</option>
+            <option value="27">2027</option>
+        </select>
+    </div>
+
+    <div class="col-md-8 form-group">
+        <label class="col-md-4">Card security code:</label>
+        <input class="col-md-4" type="text" id="cc-cvc" name="security_code" maxlength="4" style="width: 60%;">
+    </div>
+
+    @using (Html.BeginForm("DoPayment", "Cart", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="col-md-8 form-group" style="margin-left:13px">
+            <button class="btn btn-default col-md-4" style="margin-right: 3px;width: 120px;" data-toggle="modal" name="action" data-target="#myModal">Pay</button>
+            <button type="submit" class="btn btn-default col-md-4" style="width:120px" name="action" value="cancel">Cancel</button>
+        </div>
+    }
+</div>
+
+
