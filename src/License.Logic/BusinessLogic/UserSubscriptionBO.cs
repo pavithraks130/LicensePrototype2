@@ -13,6 +13,7 @@ namespace License.Logic.BusinessLogic
     public class UserSubscriptionBO
     {
         UserSubscriptionLogic userSubLogic = null;
+
         public UserSubscriptionBO()
         {
             userSubLogic = new UserSubscriptionLogic();
@@ -33,6 +34,8 @@ namespace License.Logic.BusinessLogic
                 sub.RenewalDate = data.RenewalDate;
                 sub.SubscriptionId = data.SubscriptionId;
                 sub.UserId = userSubscriptionData.UserId;
+                sub.ExpireDate = data.ExpireDate;
+                sub.ServerUserSubscriptionId = data.UserSubscriptionId;
                 var userSubscriptionId = userSubLogic.CreateSubscription(sub);
 
                 List<License.DataModel.ProductLicense> licenseDataList = new List<DataModel.ProductLicense>();
@@ -136,10 +139,11 @@ namespace License.Logic.BusinessLogic
             List<UserSubscription> userSubscriptions = new List<UserSubscription>();
             foreach (var data in subscriptionData.Subscriptions)
             {
-                var userSubscription = userSubscriptioList.FirstOrDefault(u => u.SubscriptionId == data.SubscriptionId);
+                var userSubscription = userSubscriptioList.FirstOrDefault(u => u.ServerUserSubscriptionId == data.UserSubscriptionId);
                 ProductLicenseLogic licenseLogic = new ProductLicenseLogic();
                 licenseLogic.UpdateRenewalLicenseKeys(data.LicenseKeyProductMapping, userSubscription.Id);
                 userSubscription.RenewalDate = data.RenewalDate;
+                userSubscription.ExpireDate = data.ExpireDate;
                 userSubscriptions.Add(userSubscription);
             }
             if (userSubscriptions.Count > 0)

@@ -336,13 +336,13 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Renew(RenewSubscriptionList renewSub, string[] selectedSubscription)
         {
-            renewSub.SubscriptionList = new List<Subscription>();
+            renewSub.SubscriptionList = new List<UserSubscription>();
             renewSub.RenewalDate = DateTime.Now.Date;
             if (selectedSubscription.Count() > 0)
             {
                 foreach (var subId in selectedSubscription)
                 {
-                    renewSub.SubscriptionList.Add(new Subscription() { Id = Convert.ToInt32(subId) });
+                    renewSub.SubscriptionList.Add(new UserSubscription() { Id = Convert.ToInt32(subId) });
                 }
                 TempData["RenewSubscription"] = renewSub;
                 return RedirectToAction("PaymentGateway", "Cart", new { total = renewSub.Price });

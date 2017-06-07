@@ -17,7 +17,7 @@ namespace License.MetCalWeb.Models
 
         public DateTime RenewalDate { get; set; }
 
-        public Subscription Subscription { get; set; }
+        public Subscription Subtype { get; set; }
         public User User { get; set; }
 
         public int Quantity { get; set; }

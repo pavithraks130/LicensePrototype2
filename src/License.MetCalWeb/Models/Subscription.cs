@@ -31,7 +31,8 @@ namespace License.MetCalWeb.Models
 
         public DateTime RenewalDate { get; set; }
         public Subscription Subscription { get; set; }
-
+        public DateTime ExpireDate { get; set; }
+        public int UserSubscriptionId { get; set; }
         public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
 
         public SubscriptionLicenseMapping()
@@ -72,52 +73,6 @@ namespace License.MetCalWeb.Models
 
         public int RenewDuration { get; set; }
 
-        public List<Subscription> SubscriptionList { get; set; }
+        public List<UserSubscription> SubscriptionList { get; set; }
     }
-
-    //public class SubscriptionDetails
-    //{
-    //    public int Id { get; set; }
-    //    public string Name { get; set; }
-    //    public int UserSubscriptionId { get; set; }
-    //    public List<ProductDetails> Products { get; set; }
-    //    public SubscriptionDetails()
-    //    {
-    //        Products = new List<ProductDetails>();
-    //    }
-    //}
-
-    //public class Products
-    //{
-    //    public Product Product{ get; set; }
-    //    public int AvailableProductCount { get; set; }
-    //    public bool IsSelected { get; set; }
-    //}
-
-    //public class TeamMappingDetails
-    //{
-    //    public int ConcurrentUserCount { get; set; }
-    //    public string SelectedTeamName { get; set; }
-    //    public List<Products> ProductList { get; set; }
-    //    public TeamMappingDetails()
-    //    {
-    //        ProductList = new List<Products>();
-    //    }
-    //}
-
-    //public class TeamDetails
-    //{
-    //    public string SelectedTeamName { get; set; }
-    //    public List<Product> ProductList { get; set; }
-    //    public TeamDetails()
-    //    {
-    //        ProductList = new List<Product>();
-    //    }
-    //}
-
-
-
-
-
-
 }
