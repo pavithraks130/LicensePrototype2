@@ -35,7 +35,10 @@ namespace License.Logic.BusinessLogic
             {
                 // To remove the Products duplication in  both subscription and indivdual file.             
                 foreach (var pro in sub.Products)
+                {
+                    pro.IsLocal = true;
                     SaveProductToJson(pro);
+                }
                 sub.Products = null;
 
                 if (!subscriptionList.Any(s => s.Id == sub.Id))
