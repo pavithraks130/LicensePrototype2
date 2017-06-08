@@ -60,15 +60,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangePassword.cs" />
+    <Compile Include="ConcurrentUserLogin.cs" />
+    <Compile Include="FetchUserSubscription.cs" />
+    <Compile Include="ForgotPassword.cs" />
+    <Compile Include="ForgotPasswordToken.cs" />
     <Compile Include="ProductLicense.cs" />
     <Compile Include="Produdct.cs" />
     <Compile Include="Registration.cs" />
+    <Compile Include="ResetPassword.cs" />
     <Compile Include="Role.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="TeamAsset.cs" />
+    <Compile Include="TeamConcurrentUserResponse.cs" />
+    <Compile Include="TeamDetails.cs" />
     <Compile Include="TeamLicense.cs" />
+    <Compile Include="TeamLicenseDataMapping.cs" />
+    <Compile Include="TeamLicenseDetails.cs" />
+    <Compile Include="TeamMemberResponse.cs" />
     <Compile Include="User.cs" />
     <Compile Include="TeamMembers.cs" />
     <Compile Include="UserLicense.cs" />
+    <Compile Include="UserLicenseDataMapping.cs" />
+    <Compile Include="UserLicenseDetails.cs" />
     <Compile Include="UserLicenseRequest.cs" />
     <Compile Include="UserSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

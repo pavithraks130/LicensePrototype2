@@ -20,48 +20,4 @@ namespace License.DataModel
         public string ServerUserId { get; set; }
         public bool IsActive { get; set; }
     }
-
-    public class ChangePassword
-    {
-        public string UserId { get; set; }
-        public string Email { get; set; }
-
-        public string CurrentPassword { get; set; }
-
-        public string NewPassword { get; set; }
-    }
-
-    public class ResetPassword
-    {
-        public string Password { get; set; }
-
-        public string ConfirmPassword { get; set; }
-
-        public string UserId { get; set; }
-
-        public string Token { get; set; }
-    }
-
-    public class ForgotPasswordToken
-    {
-        public string UserId { get; set; }
-
-        public string Token { get; set; }
-    }
-
-    public class ForgotPassword
-    {
-        public string Email { get; set; }
-    }
-
-    public class ConcurrentUserLogin
-    {
-        public int TeamId { get; set; }
-
-        public string UserId { get; set; }
-
-        public bool IsUserLoggedIn { get; set; }
-
-        public string ErrorOrNotificationMessage { get; set; }
-    }
 }

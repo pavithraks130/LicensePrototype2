@@ -1890,7 +1890,7 @@ textarea.input-lg {
     color: #333;
     background-color: #E9B316;
     border-color: #ccc;
-    min-width:120px;
+    min-width: 120px;
 }
 
     .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
@@ -5140,7 +5140,7 @@ button.close {
     background: #205081;
     border: 0;
     -webkit-appearance: none;
-    min-width:20px;
+    min-width: 20px;
 }
 
 .modal-open {
@@ -6368,4 +6368,17 @@ th.visible-print, td.visible-print {
     th.hidden-print, td.hidden-print {
         display: none !important;
     }
+}
+
+.custom-body {
+    margin-top: 20px !important;
+    margin-bottom: 25px !important;
+}
+
+tr {
+    border: none !important;
+}
+
+label {
+    font-weight: normal !important;
 }

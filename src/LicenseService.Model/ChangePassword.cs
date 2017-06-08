@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.DataModel
 {
-    public class ResetPassword
+    public class ChangePassword
     {
-        public string Password { get; set; }
-        
-        public string ConfirmPassword { get; set; }
-
         public string UserId { get; set; }
-
-        public string Token { get; set; }
+        public string Email { get; set; }
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
     }
 
 }

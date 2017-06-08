@@ -25,10 +25,4 @@ namespace License.DataModel
         public ProductLicense License { get; set; }
     }
 
-    public class UserLicenseDetails
-    {
-        public User User { get; set; }
-
-        public List<Subscription> SubscriptionDetails { get; set; }
-    }
 }

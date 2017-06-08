@@ -21,17 +21,4 @@ namespace LicenseServer.DataModel
         public DateTime ModifiedDate { get; set; }
 
     }
-
-    public class SubscriptionCategory
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-    }
-
-    public class ProductDependency
-    {
-        public List<SubscriptionCategory> Categories { get; set; }
-        public List<Feature> Features { get; set; }
-    }
 }

@@ -38,20 +38,4 @@ namespace LicenseServer.DataModel
         }
 
     }
-
-    public class ChangePassword
-    {
-        public string UserId { get; set; }
-        public string Email { get; set; }
-
-        public string CurrentPassword { get; set; }
-
-        public string NewPassword { get; set; }
-    }
-
-
-    public class ForgotPassword
-    {
-        public string Email { get; set; }
-    }
 }
