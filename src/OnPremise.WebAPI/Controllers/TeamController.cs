@@ -127,19 +127,7 @@ namespace OnPremise.WebAPI.Controllers
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamLogic.ErrorMessage);
         }
-
-        /// <summary>
-        /// Get Method: Gets the list of the Subscribed Products
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetSubscribedProducts")]
-        public HttpResponseMessage GetSubscriptionProduct()
-        {
-            var data = teamLicenseLogic.GetProductFromLicenseData();
-            return Request.CreateResponse(HttpStatusCode.OK, data);
-        }     
-
+        
         /// <summary>
         /// POST Method: To update the concurrent user to team 
         /// and  update the product License if the products are mapped

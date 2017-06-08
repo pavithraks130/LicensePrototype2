@@ -14,11 +14,11 @@ namespace License.MetCalWeb.Common
         /// Get user license by user Id  with feature listing 
         /// </summary>
         /// <returns></returns>
-        public static List<Subscription> GetUserLicenseForUser()
+        public static List<Product> GetUserLicenseForUser()
         {
             string userId = LicenseSessionState.Instance.User.UserId;
             var userLicDetails = GetUserLicenseDetails(userId, true);
-            return userLicDetails.SubscriptionDetails;
+            return userLicDetails.Products;
         }
 
         /// <summary>
@@ -42,15 +42,26 @@ namespace License.MetCalWeb.Common
 
 
         /// <summary>
-        /// Function to get the Product Subscription based on the Admin Id  with count for which admin subscribed. UserId is the Admin UserId
+        /// Function to get the Product Subscription based on the Admin Id  with count for which admin subscribed.UserId is oprtional. 
+        /// If we want to get the mapped Product  Data specific to user with product list then need to pass the userId of the user.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static IList<Product> GetProductsFromSubscription()
+        public static IList<Product> GetProductsFromSubscription(string userId = "")
         {
             IList<Product> productsList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/Team/GetSubscribedProducts/").Result;
+            string adminId = string.Empty;
+            if (LicenseSessionState.Instance.IsSuperAdmin)
+                adminId = LicenseSessionState.Instance.User.UserId;
+            else
+                adminId = LicenseSessionState.Instance.SelectedTeam.AdminId;
+            var url = string.Empty;
+            if (!String.IsNullOrEmpty(userId))
+                url = "api/Product/GetProductsWithUserMappedProduct/" + adminId + "/" + userId;
+            else
+                url = "api/Product/GetProducts/" + adminId;
+            var response = client.GetAsync(url).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -59,6 +70,7 @@ namespace License.MetCalWeb.Common
             }
             return productsList;
         }
+        
         /// <summary>
         /// Function to get the User License with details  for which user is authorized. By default the fetchBasedonTeam is set true because moset of the time the 
         /// licnese details based on the team context logged in.
@@ -66,7 +78,7 @@ namespace License.MetCalWeb.Common
         /// <param name="userId"></param>
         /// <param name="isFeatureRequired"></param>
         /// <returns></returns>
-        public static UserLicenseDetails GetUserLicenseDetails(string userId, bool isFeatureRequired,bool fetchBasedonTeam = true)
+        public static UserLicenseDetails GetUserLicenseDetails(string userId, bool isFeatureRequired, bool fetchBasedonTeam = true)
         {
             var licenseMapModelList = new UserLicenseDetails();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
@@ -94,8 +106,8 @@ namespace License.MetCalWeb.Common
         public static List<Product> GetTeamLicenseDetails(int teamId)
         {
             var distinctProductList = new List<Product>();
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/License/GetSubscriptionLicenseByTeamId/"+ teamId).Result;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            var response = client.GetAsync("api/License/GetSubscriptionLicenseByTeamId/" + teamId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

@@ -62,7 +62,6 @@ namespace License.MetCalWeb.Models
         public int NoOfUsers { get; set; }
         public string CreatedBy { get; set; }
         public List<Product> Products { get; set; }
-        public int UserSubscriptionId { get; set; }
     }
 
     public class RenewSubscriptionList

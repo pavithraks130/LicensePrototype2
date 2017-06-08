@@ -248,9 +248,7 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.IsSuperAdmin)
                 adminUserId = LicenseSessionState.Instance.User.UserId;
             else
-            {
                 adminUserId = LicenseSessionState.Instance.SelectedTeam.AdminId;
-            }
             var subscriptionList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId).AsEnumerable();
             return View(subscriptionList);
         }

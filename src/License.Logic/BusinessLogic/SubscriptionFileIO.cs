@@ -16,7 +16,7 @@ namespace License.Logic.BusinessLogic
     ///     Purpose: 1. Logic for reading the data from Json file.
     ///              2. Saving the Subscription and product to the Json file.
     /// </summary>
-    public class SubscriptionBO
+    public class SubscriptionFileIO
     {
 
         public void SaveToFile(List<Subscription> subscriptions)

@@ -57,7 +57,7 @@ namespace License.Logic.BusinessLogic
             {
                 if (typeList.Count > 0)
                 {
-                    Logic.BusinessLogic.SubscriptionBO proSubLogic = new Logic.BusinessLogic.SubscriptionBO();
+                    Logic.BusinessLogic.SubscriptionFileIO proSubLogic = new Logic.BusinessLogic.SubscriptionFileIO();
                     proSubLogic.SaveToFile(typeList);
                 }
             }
@@ -72,7 +72,7 @@ namespace License.Logic.BusinessLogic
         {
             List<Subscription> lstSsubscriptionDetail = new List<Subscription>();
             var usersubList = userSubLogic.GetSubscription(adminId);
-            SubscriptionBO psLogic = new SubscriptionBO();
+            SubscriptionFileIO psLogic = new SubscriptionFileIO();
             var subList = psLogic.GetSubscriptionFromFile();
             List<int> proList = new List<int>();
             if (!String.IsNullOrEmpty(userId))
@@ -101,8 +101,8 @@ namespace License.Logic.BusinessLogic
                         if (!proList.Contains(pro.Id))
                         {
                             var licList = userlicList.Where(p => p.ProductId == pro.Id).ToList();
-                            var proObj = new Product() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, TotalLicenseCount = licList.Count, UsedLicenseCount = licList.Where(l => l.IsMapped == true).Count() };
-                            proObj.IsDisabled = proObj.TotalLicenseCount == proObj.UsedLicenseCount;
+                            var proObj = new Product() { Id = pro.Id, Name = pro.Name, ProductCode = pro.ProductCode, AvailableCount = licList.Where(l=>l.IsMapped == false).Count() };
+                            proObj.IsDisabled = proObj.AvailableCount == 0;
                             model.Products.Add(proObj);
                         }
                     }

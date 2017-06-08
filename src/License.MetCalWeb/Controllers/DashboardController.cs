@@ -32,8 +32,8 @@ namespace License.MetCalWeb.Controllers
             else
                 ViewBag.ExpiredSubCount = "";
 
-            if (LicenseSessionState.Instance.UserSubscriptionList != null)
-                return View(LicenseSessionState.Instance.UserSubscriptionList);
+            if (LicenseSessionState.Instance.UserSubscribedProducts != null)
+                return View(LicenseSessionState.Instance.UserSubscribedProducts);
             return View();
         }
 
@@ -50,8 +50,8 @@ namespace License.MetCalWeb.Controllers
                 AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId,
                 Name = LicenseSessionState.Instance.SelectedTeam.Name
             };
-            var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-            LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
+            var productDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+            LicenseSessionState.Instance.UserSubscribedProducts = productDetails;
             return string.Empty;
         }
 

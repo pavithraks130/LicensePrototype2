@@ -25,7 +25,7 @@
                         @foreach (var pro in obj.Products)
                         {
                             <h5>@pro.Name</h5>
-                            <spean>Avialable License: @(pro.TotalLicenseCount - pro.UsedLicenseCount)</spean>
+                            <spean>Avialable License: @(pro.AvailableCount)</spean>
                             <br />
                             <span>@pro.ProductCode</span>
                         }

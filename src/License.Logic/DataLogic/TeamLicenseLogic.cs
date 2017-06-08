@@ -69,35 +69,7 @@ namespace License.Logic.DataLogic
             }
             return true;
         }
-
-        /// <summary>
-        /// Get the product list based on the Availablity of the License for the Product and Expire Date of the Product
-        /// </summary>
-        /// <returns></returns>
-        public List<Product> GetProductFromLicenseData()
-        {
-            //ListOut the product with IsMap is false;
-            //Retrieve prodcut from Json File.
-
-            List<Product> prodList = new List<Product>();
-            SubscriptionBO subscriptionBO = new SubscriptionBO();
-
-            var productIdList = Work.ProductLicenseRepository.GetData(ld => ld.IsMapped == false).ToList().Select(l => l.ProductId).ToList();
-            var prodIdList = (from id in productIdList
-                              group id by id into list
-                              select new { list.Key, Count = list.Count() }).ToList();
-
-            for (int index = 0; index < prodIdList.Count; index++)
-            {
-                var product = subscriptionBO.GetProductFromJsonFile(prodIdList[index].Key);
-                if (product != null)
-                {
-                    product.AvailableCount = prodIdList[index].Count;
-                    prodList.Add(product);
-                }
-            }
-            return prodList;
-        }
+        
 
         /// <summary>
         ///  Updating the License status if the license Mapped to user or Removed from user 

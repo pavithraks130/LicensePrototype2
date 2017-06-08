@@ -57,7 +57,7 @@ namespace License.MetCalWeb
         /// </summary>
         public Team AppTeamContext { get; set; }
 
-        public List<Subscription> UserSubscriptionList { get; set; }
+        public List<Product> UserSubscribedProducts { get; set; }
 
         public List<dynamic> SubscriptionMonth = new List<dynamic>() {
             new { Value = 1, Name="12 Months" },

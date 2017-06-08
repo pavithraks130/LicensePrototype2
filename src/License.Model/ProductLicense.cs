@@ -27,6 +27,7 @@ namespace License.DataModel
 
     public class UserLicenseDataMapping
     {
+        public string AdminID { get; set; }
         public int TeamId { get; set; }
 
         public List<User> UserList { get; set; }
@@ -36,6 +37,7 @@ namespace License.DataModel
 
     public class TeamLicenseDataMapping
     {
+        public string AdminID { get; set; }
         public List<Team> TeamList { get; set; }
 
         public List<ProductLicense> LicenseDataList { get; set; }

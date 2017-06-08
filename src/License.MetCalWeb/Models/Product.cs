@@ -19,8 +19,6 @@ namespace License.MetCalWeb.Models
         public DateTime ModifiedDate { get; set; }
         public int ActivationMonth { get; set; }
         public string Type { get; set; }
-        public int TotalLicenseCount { get; set; }
-        public int UsedLicenseCount { get; set; }
         public bool IsSelected { get; set; }
         public bool IsDisabled { get; set; }
         public bool InitialState { get; set; }

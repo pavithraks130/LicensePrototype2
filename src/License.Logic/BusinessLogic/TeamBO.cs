@@ -160,7 +160,7 @@ namespace License.Logic.BusinessLogic
         /// <returns>List of products</returns>
         public List<Product> GetTeamLicenseProductByTeamId(int teamId)
         {
-            SubscriptionBO subscriptionBO = new SubscriptionBO();
+            SubscriptionFileIO subscriptionBO = new SubscriptionFileIO();
             List<Product> productList = new List<Product>();
             var productIdList = GetProductByTeamId(teamId);
             for (int index = 0; index < productIdList.Count; index++)
