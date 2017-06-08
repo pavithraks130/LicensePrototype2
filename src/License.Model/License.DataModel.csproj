@@ -61,8 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Feature.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="ProductLicense.cs" />
-    <Compile Include="Produdct.cs" />
     <Compile Include="Registration.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="TeamAsset.cs" />
