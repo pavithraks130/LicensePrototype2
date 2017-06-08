@@ -191,7 +191,7 @@ namespace License.MetCalWeb.Controllers
                     if (teamList.Count == 0)
                     {
                         ViewBag.IsTeamListPopupVisible = false;
-                        return View();
+                        return RedirectToAction("Home", "Dashboard");
                     }
 
                     // if the user belongs to the single team then the user logged in using the  team context to which he belongs.
@@ -436,6 +436,12 @@ namespace License.MetCalWeb.Controllers
         //  Service call to Verify is Authenticated User can loggin in the Selected Team Context for the concurrent user Aauthentcation
         public ConcurrentUserLogin IsConcurrentUserLoggedIn()
         {
+            LicenseSessionState.Instance.AppTeamContext = new Team()
+            {
+                Id = LicenseSessionState.Instance.SelectedTeam.Id,
+                AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId,
+                Name = LicenseSessionState.Instance.SelectedTeam.Name
+            };
             ConcurrentUserLogin userLogin = new ConcurrentUserLogin()
             {
                 TeamId = LicenseSessionState.Instance.SelectedTeam.Id,
@@ -445,7 +451,18 @@ namespace License.MetCalWeb.Controllers
             var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
             var jsonData = response.Content.ReadAsStringAsync().Result;
             var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+            LicenseSessionState.Instance.UserSubscribedProducts = userLoginObj.Products;
             return userLoginObj;
+
+
+        }
+
+        public string LoadUserLicense()
+        {
+          
+            var productDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+            LicenseSessionState.Instance.UserSubscribedProducts = productDetails;
+            return string.Empty;
         }
     }
 }

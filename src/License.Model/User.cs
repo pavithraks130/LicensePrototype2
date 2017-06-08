@@ -63,5 +63,6 @@ namespace License.DataModel
         public bool IsUserLoggedIn { get; set; }
 
         public string ErrorOrNotificationMessage { get; set; }
+        public List<Product> Products { get; set; }
     }
 }
