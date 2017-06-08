@@ -4,13 +4,13 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <div class="row">
-    <h2>RevokeLicense</h2>
+    <h2>Revoke License</h2>
     <div class="col-md-12">
         <div class="form-group">
             <div class="col-md-8">
-                <span>
+                <label>
                     Team Member Name :  @ViewBag.UserEmail
-                </span>
+                </label>
             </div>
         </div>
         @if (Model.Count == 0)
@@ -26,20 +26,22 @@
             using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-                <div class="form-group">
-                    <span>Below are the List of License for which team member is  subscribed.</span>
+                <div class="row form-group">
                     <div class="col-md-8">
-                        <table class="table" style="border: none">
+                        <label style="margin-left: 15px;">Below are the List of License for which team member is  subscribed.</label>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table" style="border: none;margin-left:8px;">
                             @for (int i = 0; i < Model.Count; i++)
                        {
-                        <tr style="">
+                        <tr>
                             <td>
                                 @Model[i].Name
                                 <table class="table">
                                     @for (int j = 0; j < Model[i].Products.Count; j++)
                                     {
                                     <tr>
-                                        <td>
+                                        <td style="padding-left:0px;">
                                             <label class="control-label">
                                                 <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline">
                                                 @Model[i].Products[j].Name
