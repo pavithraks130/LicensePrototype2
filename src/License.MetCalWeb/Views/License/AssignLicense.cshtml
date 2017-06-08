@@ -1,16 +1,18 @@
 ﻿@model List<License.MetCalWeb.Models.Product>
 
 <h2>
-    License Mapping To User
+    Select product
 </h2>
 <br />
-<div class="row">
-    <div class="col-md-12">
+<div class="row form-group">
+    <div class="col-md-12 form-group">
         @{var user = (bool)TempData["CanAddBulk"] ? "SelectUsers" : "AssignLicense";}
         @using (Html.BeginForm(user, "License", FormMethod.Post))
         {
             @Html.ValidationSummary()
             @Html.AntiForgeryToken()
+            if (!(bool)TempData["CanAddBulk"])
+            {
             <div class="form-group">
                 <div class="col-md-8">
                     <span>
@@ -18,6 +20,7 @@
                     </span>
                 </div>
             </div>
+            }
             if (Model == null || Model.Count == 0)
             {
                 <div class="form-group">
@@ -57,7 +60,7 @@
                     else
                     {
                         <div class="col-md-8">
-                            <input type="submit" value="Select Team Members" class=" col-md-4 btn btn-default btn-custom btn-save" />
+                            <input type="submit" value="Next" class=" col-md-4 btn btn-default btn-custom btn-save" />
                         </div>
                     }
                 </div>

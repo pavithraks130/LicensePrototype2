@@ -1,8 +1,12 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
-<body background="~/Catalog/Page_Background_Images/Background_1.PNG">
-    <div>
+<style>
+    body {
+        background-image: url('../Catalog/Page_Background_Images/Background_1.PNG');
+    }
+</style>
+<div>
         <!--Marquee Section-->
         <div>
             <table border="0" cellspacing="0" cellpadding="0" class="Breadcrumbh_Bar">
@@ -27,7 +31,7 @@
     </div>
     <div><h2 style="color:white"> Fluke Calibration Store</h2></div>
     <div class="float-left" id="SlideshowImages">
-        <img id="imageSlide" alt="" src="~/Catalog/Slide_Images/6003440-96270-video-212x100.jpg"  height="300" width="600"/>
+        <img id="imageSlide" alt="" src="~/Catalog/Slide_Images/6003440-96270-video-212x100.jpg" height="300" width="600" />
     </div>
     <div class="float-right col-md-13">
         <img />
@@ -35,7 +39,6 @@
         <div> <img src="~/Catalog/Images/Content_3.PNG" height="300" width="300"> </div>
         <div> <img src="~/Catalog/Images/Content_2.PNG" height="300" width="300"> </div>
     </div>
-
     @* Javascript *@
     <script type="text/javascript">
             var imgs = [
@@ -59,5 +62,5 @@
                 });
             }
     </script>
-</body>
+
 
