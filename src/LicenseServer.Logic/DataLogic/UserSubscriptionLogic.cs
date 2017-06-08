@@ -88,12 +88,12 @@ namespace LicenseServer.Logic
             return licProductMapping;
         }
 
-        public List<Subscription> GetExpiringSubscription(string userId)
+        public List<UserSubscription> GetExpiringSubscription(string userId)
         {
-            List<Subscription> subType = null;
+            List<UserSubscription> subType = null;
             var subList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId).ToList();
             var subListObj = subList.Where(s => (s.ExpireDate.Date - DateTime.Now.Date).Days <= 30).ToList();
-            subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.Subscription>(s.Subtype)).ToList();
+            subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.UserSubscription>(s)).ToList();
             return subType;
         }
 
@@ -102,7 +102,7 @@ namespace LicenseServer.Logic
             var user = UserManager.FindByIdAsync(userId).Result;
             List<SubscriptionLicenseMapping> subscriptionListWithLicense = new List<SubscriptionLicenseMapping>();
             var subIdList = subList.SubscriptionList.Select(s => s.Id).ToList();
-            var userSubList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId && subIdList.Contains(u.SubscriptionId)).ToList();
+            var userSubList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId && subIdList.Contains(u.Id)).ToList();
             foreach (var sub in userSubList)
             {
                 sub.RenewalDate = subList.RenewalDate;
@@ -135,6 +135,8 @@ namespace LicenseServer.Logic
             purchasedSubscription.RenewalDate = sub.RenewalDate;
             purchasedSubscription.OrderdQuantity = sub.Quantity;
             purchasedSubscription.Subscription = typeLogic.GetById(sub.SubscriptionId);
+            purchasedSubscription.ExpireDate = sub.ExpireDate;
+            purchasedSubscription.UserSubscriptionId = sub.Id;
             var details = detailsLogic.GetSubscriptionDetails(purchasedSubscription.SubscriptionId);
             var proList = new List<Product>();
             foreach (var dt in details)

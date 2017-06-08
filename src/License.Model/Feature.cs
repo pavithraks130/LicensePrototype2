@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.Model.Model
+namespace License.DataModel
 {
-    public class Organization
-    {
 
+    public class Feature
+    {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string GroupEmail { get; set; }
-        public string ContactNumber { get; set; }
+        public string Description { get; set; }
+        public string Version { get; set; }
     }
 }

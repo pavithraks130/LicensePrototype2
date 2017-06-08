@@ -63,7 +63,7 @@ namespace License.MetCalWeb.Models
     {
         public User User { get; set; }
 
-        public List<Subscription> SubscriptionDetails { get; set; }
+        public List<Product> Products { get; set; }
     }
 
     public class FetchUserSubscription

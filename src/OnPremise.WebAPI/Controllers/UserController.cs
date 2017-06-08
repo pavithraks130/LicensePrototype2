@@ -137,7 +137,7 @@ namespace OnPremise.WebAPI.Controllers
         [AllowAnonymous]
         public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
         {
-            
+
             var user = UserManager.FindByEmail(model.Email);
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
             ForgotPasswordToken passwordToken = new ForgotPasswordToken();
@@ -225,7 +225,14 @@ namespace OnPremise.WebAPI.Controllers
             var status = licBO.ValidateConcurrentUser(userLogin.TeamId, userLogin.UserId);
             if (status)
             {
+                // Assigning the Team License to users  if user has logged In
                 licBO.UpdateTeamLicenseToUser(userLogin.TeamId, userLogin.UserId);
+
+                // fetching the User Subscribed Product license   once the concurrent user Loggin is succesful.
+                FetchUserSubscription model = new FetchUserSubscription() { IsFeatureRequired = true, TeamId = userLogin.TeamId, UserId = userLogin.UserId };
+                var licenseDtlsObj = licBO.GetUserLicenseSubscriptionDetails(model);
+                userLogin.Products = licenseDtlsObj.Products;
+                
                 statusCode = HttpStatusCode.OK;
                 userLogin.IsUserLoggedIn = true;
             }

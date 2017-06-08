@@ -28,7 +28,7 @@ namespace License.Logic.DataLogic
             if (userSubscriptionList != null && userSubscriptionList.Count > 0)
             {
                 var subscriptionIds = userSubscriptionList.Select(u => u.SubscriptionId);
-                SubscriptionBO subscriptionLogic = new SubscriptionBO();
+                SubscriptionFileIO subscriptionLogic = new SubscriptionFileIO();
                 var subList = subscriptionLogic.GetSubscriptionFromFile().Where(s => subscriptionIds.Contains(s.Id));
                 List<Product> productList = new List<Product>();
                 foreach (var sub in subList)
@@ -44,9 +44,11 @@ namespace License.Logic.DataLogic
         /// <param name="products"></param>
         public void UpdateProducts(List<Product> products)
         {
-            SubscriptionBO subLogic = new SubscriptionBO();
+            SubscriptionFileIO subLogic = new SubscriptionFileIO();
             foreach (var pro in products)
                 subLogic.SaveProductToJson(pro);
         }
+
+        
     }
 }

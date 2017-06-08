@@ -8,6 +8,7 @@ namespace License.DataModel
 {
     public class UserLicenseDataMapping
     {
+        public string AdminID { get; set; }
         public int TeamId { get; set; }
         public List<User> UserList { get; set; }
         public List<ProductLicense> LicenseDataList { get; set; }

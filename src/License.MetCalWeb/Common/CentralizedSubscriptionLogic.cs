@@ -73,14 +73,14 @@ namespace License.MetCalWeb.Common
         /// Gets the list of SUbscription  which expires based on the User Id
         /// </summary>
         /// <returns></returns>
-        public static List<Subscription> GetExpireSubscription()
+        public static List<UserSubscription> GetExpireSubscription()
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/UserSubscription/ExpireSubscription/" + LicenseSessionState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var responseData = response.Content.ReadAsStringAsync().Result;
-                var expiredSubscriptipon = JsonConvert.DeserializeObject<List<Subscription>>(responseData);
+                var expiredSubscriptipon = JsonConvert.DeserializeObject<List<UserSubscription>>(responseData);
                 return expiredSubscriptipon;
             }
             return null;

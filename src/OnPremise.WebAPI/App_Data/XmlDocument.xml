@@ -630,6 +630,20 @@
             <param name="productList"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.ProductController.GetSubscriptionProduct(System.String)">
+            <summary>
+            Get Method: Gets the list of the Subscribed Products
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.ProductController.GetProductsWithUserMappedProduct(System.String,System.String)">
+            <summary>
+            Get Method, To fetchc the Products list along with user products which is already mapped to the User.
+            </summary>
+            <param name="adminId"></param>
+            <param name="userId"></param>
+            <returns>List of Products</returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamController.GetTeamById(System.Int32)">
             <summary>
             Get Method. To get the Team along with Team Member details based on the TeamId.
@@ -672,12 +686,6 @@
             updated to the default team .
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamController.GetSubscriptionProduct">
-            <summary>
-            Get Method: Gets the list of the Subscribed Products
-            </summary>
             <returns></returns>
         </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamController.UpdateConcurentUser(License.DataModel.Team)">

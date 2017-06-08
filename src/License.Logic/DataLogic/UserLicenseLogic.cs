@@ -84,20 +84,29 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public bool CreateMultiUserLicense(UserLicenseDataMapping model)
         {
+            UserSubscriptionLogic userSubscriptionLogic = new UserSubscriptionLogic();
+            var userSubscriptionList = userSubscriptionLogic.GetSubscription(model.AdminID);
+
+            // Fetches the Subscription Id Which are not expired and get the ID List
+            userSubscriptionList = userSubscriptionList.Where(l => (l.ExpireDate.Date - DateTime.Today).Days < 0).ToList();
+            List<int> userSubIds = new List<int>();
+            userSubIds.AddRange(userSubscriptionList.Select(us => us.Id).ToList());
+
             foreach (var user in model.UserList)
             {
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == user.UserId).ToList();
                 foreach (var lic in model.LicenseDataList)
                 {
-                    var data = Work.ProductLicenseRepository.GetData(l => l.ProductId == lic.ProductId && l.UserSubscriptionId == lic.UserSubscriptionId).ToList().Select(l => l.Id);
+                    var licenseDataList = Work.ProductLicenseRepository.GetData(l => l.ProductId == lic.ProductId && !userSubIds.Contains(l.UserSubscriptionId)).ToList();
+                    var data = licenseDataList.Select(l => l.Id);
                     var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
                     if (obj == null)
                     {
-                        var licId = licLogic.GetUnassignedLicense(lic.ProductId).Id;
+                        var licObj = licenseDataList.FirstOrDefault(l => l.ProductId == lic.ProductId && l.IsMapped == false);
                         UserLicense ul = new UserLicense()
                         {
                             UserId = user.UserId,
-                            LicenseId = licId,
+                            LicenseId = licObj.Id,
                             TeamId = model.TeamId
                         };
                         CreateUserLicense(ul);
@@ -137,7 +146,7 @@ namespace License.Logic.DataLogic
             {
                 foreach (var lic in model.LicenseDataList)
                 {
-                    var obj = Work.UserLicenseRepository.GetData(l => l.UserId == user.UserId && l.License.ProductId == lic.ProductId && l.License.UserSubscriptionId == lic.UserSubscriptionId && l.TeamId == model.TeamId).FirstOrDefault();
+                    var obj = Work.UserLicenseRepository.GetData(l => l.UserId == user.UserId && l.License.ProductId == lic.ProductId && l.TeamId == model.TeamId).FirstOrDefault();
                     RevokeUserLicense(obj);
                 }
             }

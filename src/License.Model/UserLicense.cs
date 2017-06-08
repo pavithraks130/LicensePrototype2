@@ -25,4 +25,5 @@ namespace License.DataModel
         public ProductLicense License { get; set; }
     }
 
+   
 }

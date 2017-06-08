@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.Subscription>
+﻿@model List<License.MetCalWeb.Models.Product>
 
 <h2>
     Select product
@@ -38,21 +38,11 @@
                             {
                                 <tr style="">
                                     <td>
-                                        @Model[i].Name
-                                        <table class="table">
-                                            @for (int j = 0; j < Model[i].Products.Count; j++)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <label class="control-label">
-                                                            <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" checked="@Model[i].Products[j].IsSelected" class="checkbox-inline" @((Model[i].Products[j].TotalLicenseCount - Model[i].Products[j].UsedLicenseCount) == 0 ? "disabled='disabled'" : "")>
-                                                            @Model[i].Products[j].Name
-                                                        </label>
-                                                    </td>
-                                                </tr>
-                                            }
+                                        <label class="control-label">
+                                            <input type="checkbox" name="selectedProduct" value="@Model[i].Id" checked="@Model[i].IsSelected" class="checkbox-inline" @(Model[i].AvailableCount == 0? "disabled=disabled":"") />
+                                            @Model[i].Name
+                                        </label>
 
-                                        </table>
                                     </td>
                                 </tr>
                             }

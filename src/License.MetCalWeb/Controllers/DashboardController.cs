@@ -22,8 +22,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult Home()
         {
-            if (LicenseSessionState.Instance.SelectedTeam != null)
-                LoadUserLicense();
+      
             if (LicenseSessionState.Instance.IsSuperAdmin)
             {
                 var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
@@ -32,8 +31,8 @@ namespace License.MetCalWeb.Controllers
             else
                 ViewBag.ExpiredSubCount = "";
 
-            if (LicenseSessionState.Instance.UserSubscriptionList != null)
-                return View(LicenseSessionState.Instance.UserSubscriptionList);
+            if (LicenseSessionState.Instance.UserSubscribedProducts != null)
+                return View(LicenseSessionState.Instance.UserSubscribedProducts);
             return View();
         }
 
@@ -42,18 +41,7 @@ namespace License.MetCalWeb.Controllers
         /// Function to make te Service call to get the data related to the Logged In User.
         /// </summary>
         /// <returns></returns>
-        public string LoadUserLicense()
-        {
-            LicenseSessionState.Instance.AppTeamContext = new Team()
-            {
-                Id = LicenseSessionState.Instance.SelectedTeam.Id,
-                AdminId = LicenseSessionState.Instance.SelectedTeam.AdminId,
-                Name = LicenseSessionState.Instance.SelectedTeam.Name
-            };
-            var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-            LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
-            return string.Empty;
-        }
+     
 
         // GET: Tab
         public ActionResult About()

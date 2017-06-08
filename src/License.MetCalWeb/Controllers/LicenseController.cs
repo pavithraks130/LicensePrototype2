@@ -137,13 +137,31 @@ namespace License.MetCalWeb.Controllers
         }
 
         /// <summary>
+        /// POST action to update/map the license to user for the selected products. 
+        /// </summary>
+        /// <param name="selectedProduct"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AssignLicense(params string[] selectedProduct)
+        {
+            var responseData = UpdateLicense(selectedProduct);
+            if (!String.IsNullOrEmpty(responseData))
+            {
+                ModelState.AddModelError("", responseData);
+                return View("TeamContainer", "TeamManagement");
+            }
+            return RedirectToAction("TeamContainer", "TeamManagement");
+        }
+        
+        /// <summary>
         /// Get the Subscription with product list based on the user ID. bulkLicenseAdd is to differentiate the  screen data which is being fetched
         ///  if this is set to false then the  exist user license mapped details will also be fetched along with subscription list.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="bulkLicenseAdd"></param>
         /// <returns></returns>
-        public IList<Subscription> GetLicenseListBySubscription(string userId, bool bulkLicenseAdd)
+        public IList<Product> GetLicenseListBySubscription(string userId, bool bulkLicenseAdd)
         {
             TempData["UserId"] = userId;
             TempData["CanAddBulk"] = bulkLicenseAdd;
@@ -155,32 +173,16 @@ namespace License.MetCalWeb.Controllers
             if (LicenseSessionState.Instance.SelectedTeam != null)
                 adminUserId = LicenseSessionState.Instance.SelectedTeam.AdminId;
 
-            // If the license map is the bulk license Map then only the License List will be fetched else if the license map is for the
-            // single user then along with subscription data already assigned list will also be fetched 
-            IList<Subscription> licenseMapModelList = null;
-            if (bulkLicenseAdd)
-                licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscription(adminUserId);
-            else
-                licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscriptionForLicenseMap(userId, adminUserId);
-            return licenseMapModelList;
-        }
+            // If the license map is the bulk license Map then only the Product List will be fetched else if the license map is for the
+            // single user then along with Product data already assigned products details  will also be fetched  for the user
 
-        /// <summary>
-        /// POST action to update/map the license to user for the selected products. 
-        /// </summary>
-        /// <param name="SelectedSubscription"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AssignLicense(params string[] SelectedSubscription)
-        {
-            var responseData = UpdateLicense(SelectedSubscription);
-            if (!String.IsNullOrEmpty(responseData))
-            {
-                ModelState.AddModelError("", responseData);
-                return View("TeamContainer", "TeamManagement");
-            }
-            return RedirectToAction("TeamContainer", "TeamManagement");
+            IList<Product> productList = null;
+            if (bulkLicenseAdd)
+                productList = OnPremiseSubscriptionLogic.GetProductsFromSubscription();
+            else
+                productList = OnPremiseSubscriptionLogic.GetProductsFromSubscription(userId);
+
+            return productList;
         }
 
         /// <summary>
@@ -193,7 +195,7 @@ namespace License.MetCalWeb.Controllers
             TempData["UserId"] = userId;
             UserLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetUserLicenseDetails(userId, false, false);
             ViewBag.UserEmail = licDetails.User.Email;
-            return View(licDetails.SubscriptionDetails);
+            return View(licDetails.Products);
         }
 
         /// <summary>
@@ -203,9 +205,9 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RevokeLicense(params string[] SelectedSubscription)
+        public ActionResult RevokeLicense(params string[] selectedproduct)
         {
-            var responseData = RevokeLicenseFromUser(SelectedSubscription);
+            var responseData = RevokeLicenseFromUser(selectedproduct);
             if (!String.IsNullOrEmpty(responseData))
             {
                 ModelState.AddModelError("", responseData);
@@ -254,21 +256,25 @@ namespace License.MetCalWeb.Controllers
         /// <param name="SelectedUserIdList"></param>
         /// <param name="canAddBulkLicense"></param>
         /// <returns></returns>
-        public string UpdateLicense(string[] SelectedSubscription, string action = "Add", string[] SelectedUserIdList = null, bool canAddBulkLicense = false)
+        public string UpdateLicense(string[] selectedProduct, string action = "Add", string[] SelectedUserIdList = null, bool canAddBulkLicense = false)
         {
             List<User> userList = new List<User>();
             if (canAddBulkLicense)
                 userList = SelectedUserIdList.Select(u => new User() { UserId = u }).ToList();
             else
                 userList.Add(new User() { UserId = Convert.ToString(TempData["UserId"]) });
+           
+            // Converting the selected Product to the Product License Object which need to be mapped to the user 
+            List<ProductLicense> lstLicData = selectedProduct.ToList().Select(id => new ProductLicense() {ProductId = Convert.ToInt32(id) }).ToList();
 
-            List<ProductLicense> lstLicData = ExtractLicenseData(SelectedSubscription);
+            // service call to map the product to license.
             UserLicenseDataMapping mapping = new UserLicenseDataMapping()
             {
                 TeamId = LicenseSessionState.Instance.SelectedTeam.Id,
                 LicenseDataList = lstLicData,
                 UserList = userList
             };
+
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/License/CreateUserLicence", mapping).Result;
             if (!response.IsSuccessStatusCode)
@@ -281,36 +287,11 @@ namespace License.MetCalWeb.Controllers
             {
                 if (userList.Any(u => u.UserId == LicenseSessionState.Instance.User.UserId))
                 {
-                    var subscriptionDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-                    LicenseSessionState.Instance.UserSubscriptionList = subscriptionDetails;
+                    var productDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
+                    LicenseSessionState.Instance.UserSubscribedProducts = productDetails;
                 }
             }
             return String.Empty;
-        }
-
-        /// <summary>
-        /// Function to  create the ProductLicense List which need to be sent to service for the product license Map. 
-        /// The input to this function is posted while form submission.
-        /// </summary>
-        /// <param name="SelectedSubscription"></param>
-        /// <returns></returns>
-        private static List<ProductLicense> ExtractLicenseData(string[] SelectedSubscription)
-        {
-            List<ProductLicense> lstLicData = new List<ProductLicense>();
-            foreach (var data in SelectedSubscription)
-            {
-                var splitValue = data.Split(new char[] { '-' });
-                var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-                ProductLicense licData = new ProductLicense()
-                {
-                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
-                    ProductId = Convert.ToInt32(prodId)
-                };
-                lstLicData.Add(licData);
-            }
-
-            return lstLicData;
         }
 
         /// <summary>  
@@ -318,26 +299,12 @@ namespace License.MetCalWeb.Controllers
         /// </summary>
         /// <param name="SelectedSubscription"></param>
         /// <returns></returns>
-        public string RevokeLicenseFromUser(string[] SelectedSubscription)
+        public string RevokeLicenseFromUser(string[] selectedproduct)
         {
             List<User> userList = new List<User>();
             userList.Add(new User() { UserId = Convert.ToString(TempData["UserId"]) });
             // Creation of Product License List based on the Product Selection
-            List<ProductLicense> lstLicData = new List<ProductLicense>();
-            foreach (var data in SelectedSubscription)
-            {
-                var splitValue = data.Split(new char[] { '-' });
-                var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-
-                ProductLicense licData = new ProductLicense()
-                {
-                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
-                    ProductId = Convert.ToInt32(prodId)
-                };
-                lstLicData.Add(licData);
-            }
-
+            var lstLicData = selectedproduct.ToList().Select(prodId => new ProductLicense() { ProductId = Convert.ToInt32(prodId) }).ToList();            
             // Service call to revoke license from user
             UserLicenseDataMapping mapping = new UserLicenseDataMapping()
             {

@@ -25,13 +25,13 @@
                             <input type="checkbox" class="chkSubscription" value="@m.Id" name="selectedSubscription" />
                         </td>
                         <td class="col-md-4">
-                            @m.Name
+                            @m.Subtype.Name
                         </td>
                         <td class="col-md-3">
-                            @m.ActiveDays Days
+                            @m.Subtype.ActiveDays Days
                         </td>
                         <td class="col-md-4 tdPrice">
-                            <label class="divPrice">@m.Price</label>
+                            <label class="divPrice">@m.Subtype.Price</label>
                         </td>
                     </tr>
                 }

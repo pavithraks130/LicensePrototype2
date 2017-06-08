@@ -43,7 +43,8 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.Core.Model.SubscriptionDetail, LicenseServer.DataModel.SubscriptionDetails>();
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionDetails, LicenseServer.Core.Model.SubscriptionDetail>();
 
-            cfg.CreateMap<LicenseServer.Core.Model.UserSubscription, LicenseServer.DataModel.UserSubscription>();
+            cfg.CreateMap<LicenseServer.Core.Model.UserSubscription, LicenseServer.DataModel.UserSubscription>()
+                .ForMember(dest=>dest.Subtype,opt=>opt.MapFrom(src=>src.Subtype));
             cfg.CreateMap<LicenseServer.DataModel.UserSubscription, LicenseServer.Core.Model.UserSubscription>();
 
             cfg.CreateMap<LicenseServer.Core.Model.CartItem, LicenseServer.DataModel.CartItem>();

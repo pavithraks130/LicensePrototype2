@@ -9,6 +9,7 @@ namespace License.DataModel
     public class ForgotPasswordToken
     {
         public string UserId { get; set; }
+
         public string Token { get; set; }
     }
 }
