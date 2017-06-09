@@ -1,32 +1,9 @@
 ﻿
 @model  License.MetCalWeb.Models.LoginViewModel
+
 @{
     ViewBag.Title = "Login";
 }
-<script>
-        $(function () {
-        if (@Convert.ToBoolean(ViewData["IsTeamListPopupVisible"]).ToString().ToLower())
-        {
-            UpdateTeamContext();
-        }
-
-        function UpdateTeamContext() {
-            $.ajax({
-                type: "GET",
-                url: "/Account/TeamList",
-                success: function (data) {
-                    $('#myModal').html(data);
-                    $('#myModal').modal('show');
-                },
-                error: function () {
-                }
-            });
-        }
-        $("#closbtn").click(function () {
-            $('#myModal').modal('hide');
-        });
-    });
-</script>
 <div class="row">
     <h2>@ViewBag.Title</h2>
     <div>
