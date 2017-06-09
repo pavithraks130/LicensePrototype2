@@ -5,7 +5,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class PurchaseOrder
+    public class PurchaseOrderDeatils
     {
         public int Id { get; set; }
         public string UserId { get; set; }
@@ -18,21 +18,12 @@ namespace License.MetCalWeb.Models
         public User User { get; set; }
         public string Comment { get; set; }
         public double Total { get; set; }
-        public ICollection<PurchaseOrderItem> OrderItems { get; set; }
+        public ICollection<PurchaseOrderItemDeatils> OrderItems { get; set; }
 
-        public PurchaseOrder()
+        public PurchaseOrderDeatils()
         {
             CreatedDate = new DateTime(1900, 1, 1);
             UpdatedDate = new DateTime(1900, 1, 1);
         }
-    }
-
-    public class PurchaseOrderItem
-    {
-        public int Id { get; set; }
-        public int SubscriptionId { get; set; }
-        public int Quantity { get; set; }
-        public int PurchaseOrderId { get; set; }
-        public Subscription Subscription { get; set; }
     }
 }

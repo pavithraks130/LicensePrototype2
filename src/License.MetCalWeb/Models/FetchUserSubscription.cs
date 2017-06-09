@@ -5,12 +5,10 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class UserLicenseDataMapping
+    public class FetchUserSubscription
     {
         public int TeamId { get; set; }
-        public List<User> UserList { get; set; }
-
-        public List<ProductLicense> LicenseDataList { get; set; }
+        public string UserId { get; set; }
+        public bool IsFeatureRequired { get; set; }
     }
-    
 }

@@ -56,14 +56,14 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Create()
         {
             Subscription subType = new Subscription();
-            List<Product> productList = new List<Product>();
+            List<ProductDetails> productList = new List<ProductDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/Product/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsondata = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsondata))
-                    productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
+                    productList = JsonConvert.DeserializeObject<List<ProductDetails>>(jsondata);
                 subType.Products = productList;
             }
             else
@@ -156,13 +156,13 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult CMMSProducts()
         {
-            List<Product> cmmsProducts = new List<Product>();
+            List<ProductDetails> cmmsProducts = new List<ProductDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/Product/GetCMMSProducts").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                cmmsProducts = JsonConvert.DeserializeObject<List<Product>>(jsonData);
+                cmmsProducts = JsonConvert.DeserializeObject<List<ProductDetails>>(jsonData);
             }
             return View(cmmsProducts);
         }
@@ -251,9 +251,9 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(Subscription type, string addToCart, string[] selectedFeatures, int[] cmmsQty, params string[] selectedProducts)
         {
-            IList<Product> productCollection = new List<Product>();
+            IList<ProductDetails> productCollection = new List<ProductDetails>();
             // Product creation based on the feature selection
-            Product pro = new Product()
+            ProductDetails pro = new ProductDetails()
             {
                 Features = new List<Feature>(),
                 Quantity = type.NoOfUsers,
@@ -267,7 +267,7 @@ namespace License.MetCalWeb.Controllers
             if (selectedProducts != null)
                 for (int i = 0; i < selectedProducts.Length; i++)
                 {
-                    Product p = new Product()
+                    ProductDetails p = new ProductDetails()
                     {
                         Id = Convert.ToInt32(selectedProducts[i]),
                         Quantity = Convert.ToInt32(cmmsQty[i])

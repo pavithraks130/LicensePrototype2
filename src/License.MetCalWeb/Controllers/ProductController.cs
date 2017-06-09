@@ -32,14 +32,14 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            List<Product> productList = new List<Product>();
+            List<ProductDetails> productList = new List<ProductDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/Product/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsondata = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsondata))
-                    productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
+                    productList = JsonConvert.DeserializeObject<List<ProductDetails>>(jsondata);
             }
             else
             {
@@ -70,7 +70,7 @@ namespace License.MetCalWeb.Controllers
         /// <param name="featuresList"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(Product productDetails, string[] rboCategory, string[] featuresList)
+        public ActionResult Create(ProductDetails productDetails, string[] rboCategory, string[] featuresList)
         {
             if (ModelState.IsValid)
             {
@@ -101,13 +101,13 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            Product pro = null;
+            ProductDetails pro = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/product/GetById/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsondata = response.Content.ReadAsStringAsync().Result;
-                pro = JsonConvert.DeserializeObject<Product>(jsondata);
+                pro = JsonConvert.DeserializeObject<ProductDetails>(jsondata);
             }
             else
             {
@@ -143,7 +143,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Product productDetails, string[] rboCategory, string[] featuresList)
+        public ActionResult Edit(int id, ProductDetails productDetails, string[] rboCategory, string[] featuresList)
         {
             if (ModelState.IsValid)
             {
@@ -175,7 +175,7 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                ProductDependency dependencyObj = JsonConvert.DeserializeObject<ProductDependency>(jsonData);
+                ProductDependencyDetails dependencyObj = JsonConvert.DeserializeObject<ProductDependencyDetails>(jsonData);
                 ViewBag.Categories = dependencyObj.Categories;
                 ViewBag.Features = dependencyObj.Features;
             }

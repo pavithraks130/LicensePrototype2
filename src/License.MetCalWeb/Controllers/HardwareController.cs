@@ -23,7 +23,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult HardwareContainer()
         {
-            HardwareModel model = LoadHardware();
+            HardwareDetails model = LoadHardware();
             return View(model);
         }
 
@@ -31,16 +31,16 @@ namespace License.MetCalWeb.Controllers
         /// Service call to  get the List of assets which are created
         /// </summary>
         /// <returns></returns>
-        private HardwareModel LoadHardware()
+        private HardwareDetails LoadHardware()
         {
-            var hm = new HardwareModel();
+            var hm = new HardwareDetails();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/asset/GetAll").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
-                    hm.Assets = JsonConvert.DeserializeObject<List<TeamAsset>>(jsonData);
+                    hm.Assets = JsonConvert.DeserializeObject<List<TeamAssetDetails>>(jsonData);
             }
             else
             {
@@ -58,14 +58,14 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult EditHardware(int id)
         {
-            TeamAsset asset = null;
+            TeamAssetDetails asset = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
-                    asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+                    asset = JsonConvert.DeserializeObject<TeamAssetDetails>(jsonData);
             }
             else
             {
@@ -83,7 +83,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditHardware(TeamAsset asset)
+        public ActionResult EditHardware(TeamAssetDetails asset)
         {
             if (ModelState.IsValid)
             {
@@ -151,18 +151,18 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddHardware(TeamAsset assetModel)
+        public ActionResult AddHardware(TeamAssetDetails assetModel)
         {
             if (ModelState.IsValid)
             {
-                TeamAsset asset = null;
+                TeamAssetDetails asset = null;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                 var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     if (!String.IsNullOrEmpty(jsonData))
-                        asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
+                        asset = JsonConvert.DeserializeObject<TeamAssetDetails>(jsonData);
                     return RedirectToAction("HardwareContainer");
                 }
                 else

@@ -18,15 +18,4 @@ namespace License.MetCalWeb.Models
         public bool IsSelected { get; set; }
         public bool IsActive { get; set; }
     }
-
-    public class TeamMemberResponse
-    {
-        public string UserId { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-        public int TeamMemberId { get; set; }
-    }
-
 }

@@ -105,14 +105,14 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public async Task<ActionResult> OfflinePayment()
         {
-            PurchaseOrder poOrder = new PurchaseOrder();
+            PurchaseOrderDeatils poOrder = new PurchaseOrderDeatils();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = await client.PostAsync("api/cart/offlinepayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsonData))
-                    poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+                    poOrder = JsonConvert.DeserializeObject<PurchaseOrderDeatils>(jsonData);
             }
             else
             {
