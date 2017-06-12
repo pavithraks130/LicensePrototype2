@@ -6,15 +6,19 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class UserInviteDetails
+    public class Login
     {
         [Required]
-        [EmailAddress]
         [Display(Name = "Email")]
+        [EmailAddress]
         public string Email { get; set; }
-        public string Password
-        {
-            get; set;
-        }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace License.MetCalWeb.Models
 
         public string ErrorOrNotificationMessage { get; set; }
 
-        public List<ProductDetails> Products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

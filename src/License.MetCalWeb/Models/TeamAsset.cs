@@ -6,7 +6,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class TeamAssetDetails
+    public class TeamAsset
     {
         public int Id { get; set; }
         public string AdminId { get; set; }

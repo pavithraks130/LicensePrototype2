@@ -161,7 +161,7 @@ namespace License.MetCalWeb.Controllers
         /// <param name="userId"></param>
         /// <param name="bulkLicenseAdd"></param>
         /// <returns></returns>
-        public IList<ProductDetails> GetLicenseListBySubscription(string userId, bool bulkLicenseAdd)
+        public IList<Product> GetLicenseListBySubscription(string userId, bool bulkLicenseAdd)
         {
             TempData["UserId"] = userId;
             TempData["CanAddBulk"] = bulkLicenseAdd;
@@ -176,7 +176,7 @@ namespace License.MetCalWeb.Controllers
             // If the license map is the bulk license Map then only the Product List will be fetched else if the license map is for the
             // single user then along with Product data already assigned products details  will also be fetched  for the user
 
-            IList<ProductDetails> productList = null;
+            IList<Product> productList = null;
             if (bulkLicenseAdd)
                 productList = OnPremiseSubscriptionLogic.GetProductsFromSubscription();
             else

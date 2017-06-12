@@ -5,7 +5,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class PurchaseOrderDeatils
+    public class PurchaseOrder
     {
         public int Id { get; set; }
         public string UserId { get; set; }
@@ -18,9 +18,9 @@ namespace License.MetCalWeb.Models
         public User User { get; set; }
         public string Comment { get; set; }
         public double Total { get; set; }
-        public ICollection<PurchaseOrderItemDeatils> OrderItems { get; set; }
+        public ICollection<PurchaseOrderItem> OrderItems { get; set; }
 
-        public PurchaseOrderDeatils()
+        public PurchaseOrder()
         {
             CreatedDate = new DateTime(1900, 1, 1);
             UpdatedDate = new DateTime(1900, 1, 1);

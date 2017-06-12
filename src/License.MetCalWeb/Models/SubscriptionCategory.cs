@@ -11,7 +11,7 @@ namespace License.MetCalWeb.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsSelected { get; set; }
-        public ICollection<ProductDetails> Products { get; set; }
+        public ICollection<Product> Products { get; set; }
         public int ActivationMonth { get; set; }
         public double Price { get; set; }
     }

@@ -17,7 +17,7 @@ namespace License.MetCalWeb.Models
         public string ApprovedBy { get; set; }
         public User User { get; set; }
         public UserSubscription UserSubscription { get; set; }
-        public ProductDetails Product { get; set; }
+        public Product Product { get; set; }
         public String Comment { get; set; }
         public int TeamId { get; set; }
     }

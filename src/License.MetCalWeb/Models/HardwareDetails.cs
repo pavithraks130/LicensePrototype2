@@ -7,11 +7,11 @@ namespace License.MetCalWeb.Models
 {
     public class HardwareDetails
     {
-        public List<TeamAssetDetails> Assets { get; set; }
+        public List<TeamAsset> Assets { get; set; }
 
         public HardwareDetails()
         {
-            Assets = new List<TeamAssetDetails>();
+            Assets = new List<TeamAsset>();
         }
     }
 }

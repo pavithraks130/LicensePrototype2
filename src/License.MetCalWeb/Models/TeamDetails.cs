@@ -11,12 +11,12 @@ namespace License.MetCalWeb.Models
         public List<TeamMember> PendinigUsers { get; set; }
         public List<TeamMember> AcceptedUsers { get; set; }
 
-        public List<ProductDetails> ProductList { get; set; }
+        public List<Product> ProductList { get; set; }
 
         public List<UserLicenseRequest> LicenseRequestList { get; set; }
         public TeamDetails()
         {
-            ProductList = new List<ProductDetails>();
+            ProductList = new List<Product>();
         }
     }
 }

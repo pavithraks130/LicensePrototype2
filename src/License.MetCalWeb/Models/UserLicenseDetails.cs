@@ -8,6 +8,6 @@ namespace License.MetCalWeb.Models
     public class UserLicenseDetails
     {
         public User User { get; set; }
-        public List<ProductDetails> Products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class ResetPasswordDetails
+    public class ResetPassword
     {
         [Display(Name = "New Password")]
         public string Password { get; set; }

@@ -11,6 +11,6 @@ namespace License.MetCalWeb.Models
         public int ConcurrentUserCount { get; set; }
         public string SelectedTeamName { get; set; }
 
-        public List<ProductDetails> ProductList { get; set; }
+        public List<Product> ProductList { get; set; }
     }
 }

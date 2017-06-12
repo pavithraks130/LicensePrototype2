@@ -40,7 +40,7 @@ namespace License.MetCalWeb.Controllers
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
-                    hm.Assets = JsonConvert.DeserializeObject<List<TeamAssetDetails>>(jsonData);
+                    hm.Assets = JsonConvert.DeserializeObject<List<TeamAsset>>(jsonData);
             }
             else
             {
@@ -58,14 +58,14 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult EditHardware(int id)
         {
-            TeamAssetDetails asset = null;
+            TeamAsset asset = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!String.IsNullOrEmpty(jsonData))
-                    asset = JsonConvert.DeserializeObject<TeamAssetDetails>(jsonData);
+                    asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
             }
             else
             {
@@ -83,7 +83,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditHardware(TeamAssetDetails asset)
+        public ActionResult EditHardware(TeamAsset asset)
         {
             if (ModelState.IsValid)
             {
@@ -151,18 +151,18 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddHardware(TeamAssetDetails assetModel)
+        public ActionResult AddHardware(TeamAsset assetModel)
         {
             if (ModelState.IsValid)
             {
-                TeamAssetDetails asset = null;
+                TeamAsset asset = null;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                 var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     if (!String.IsNullOrEmpty(jsonData))
-                        asset = JsonConvert.DeserializeObject<TeamAssetDetails>(jsonData);
+                        asset = JsonConvert.DeserializeObject<TeamAsset>(jsonData);
                     return RedirectToAction("HardwareContainer");
                 }
                 else

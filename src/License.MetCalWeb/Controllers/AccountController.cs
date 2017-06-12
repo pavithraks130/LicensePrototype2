@@ -57,7 +57,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegistrationDetails model)
+        public async Task<ActionResult> Register(Registration model)
         {
             ViewBag.SucessMessageDisplay = false;
             if (ModelState.IsValid)
@@ -112,7 +112,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> LogIn(LoginDetails model)
+        public async Task<ActionResult> LogIn(Login model)
         {
             User user = null;
             if (ModelState.IsValid)
@@ -259,7 +259,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ForgotPassword(ForgotPasswordDetails model)
+        public ActionResult ForgotPassword(ForgotPassword model)
         {
             if (ModelState.IsValid)
             {
@@ -283,7 +283,7 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult ResetPassword(string userId, string code)
         {
-            License.MetCalWeb.Models.ResetPasswordDetails model = new ResetPasswordDetails()
+            License.MetCalWeb.Models.ResetPassword model = new ResetPassword()
             {
                 Token = code,
                 UserId = userId
@@ -301,7 +301,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetPassword(ResetPasswordDetails model, string userId, string code)
+        public ActionResult ResetPassword(ResetPassword model, string userId, string code)
         {
             string email = string.Empty;
             if (ModelState.IsValid)

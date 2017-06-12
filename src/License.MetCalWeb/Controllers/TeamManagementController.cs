@@ -114,7 +114,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Invite(int teamId, UserInviteDetails model)
+        public ActionResult Invite(int teamId, UserInvite model)
         {
             bool status = false;
             if (ModelState.IsValid)

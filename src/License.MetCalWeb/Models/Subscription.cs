@@ -16,6 +16,6 @@ namespace License.MetCalWeb.Models
         public SubscriptionCategory Category { get; set; }
         public int NoOfUsers { get; set; }
         public string CreatedBy { get; set; }
-        public List<ProductDetails> Products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

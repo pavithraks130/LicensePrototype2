@@ -62,15 +62,15 @@ namespace License.MetCalWeb.Common
         /// Gets the list of Products which exist in the On premise to check if these products are modified in the Centralized 
         /// </summary>
         /// <returns></returns>
-        public List<ProductDetails> GetOnPremiseProducts()
+        public List<Product> GetOnPremiseProducts()
         {
-            List<ProductDetails> products = null;
+            List<Product> products = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/Product/GetProductsByAdminId/" + LicenseSessionState.Instance.User.UserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                products = JsonConvert.DeserializeObject<List<ProductDetails>>(jsonData);
+                products = JsonConvert.DeserializeObject<List<Product>>(jsonData);
             }
             else
             {
@@ -87,15 +87,15 @@ namespace License.MetCalWeb.Common
         /// </summary>
         /// <param name="productDetails"></param>
         /// <returns></returns>
-        public List<ProductDetails> CheckProductUpdate(List<ProductDetails> productDetails)
+        public List<Product> CheckProductUpdate(List<Product> productDetails)
         {
-            List<ProductDetails> products = null;
+            List<Product> products = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.PostAsJsonAsync("api/Product/CheckProductUpdates", productDetails).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                products = JsonConvert.DeserializeObject<List<ProductDetails>>(jsonData);
+                products = JsonConvert.DeserializeObject<List<Product>>(jsonData);
             }
             else
             {
@@ -111,7 +111,7 @@ namespace License.MetCalWeb.Common
         /// Updating the changed Products in the onpremise 
         /// </summary>
         /// <param name="productDetails"></param>
-        public void UpdateProductUpdates(List<ProductDetails> productDetails)
+        public void UpdateProductUpdates(List<Product> productDetails)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/Product/UpdateProducts", productDetails).Result;

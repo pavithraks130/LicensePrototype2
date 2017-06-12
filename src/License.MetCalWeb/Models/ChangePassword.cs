@@ -5,7 +5,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class ChangePasswordDetails
+    public class ChangePassword
     {
         public string UserId { get; set; }
         public string CurrentPassword { get; set; }

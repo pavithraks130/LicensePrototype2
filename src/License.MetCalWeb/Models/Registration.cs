@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace License.MetCalWeb.Models
 {
-    public class RegistrationDetails
+    public class Registration
     {
         [Required]
         [Display(Name = "FirstName")]

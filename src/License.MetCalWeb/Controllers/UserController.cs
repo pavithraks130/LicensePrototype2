@@ -109,7 +109,7 @@ namespace License.MetCalWeb.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            var changePwdModel = new Models.ChangePasswordDetails();
+            var changePwdModel = new Models.ChangePassword();
             return View(changePwdModel);
         }
 
@@ -123,7 +123,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordDetails model)
+        public async Task<ActionResult> ChangePassword(ChangePassword model)
         {
             bool status = false;
             if (ModelState.IsValid)
@@ -181,7 +181,7 @@ namespace License.MetCalWeb.Controllers
         /// <param name="type"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<bool> UpdatePassword(ChangePasswordDetails model, ServiceType type, string userId)
+        public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);
            

@@ -6,9 +6,15 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class ForgotPasswordDetails
+    public class UserInvite
     {
+        [Required]
+        [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        public string Password
+        {
+            get; set;
+        }
     }
 }
