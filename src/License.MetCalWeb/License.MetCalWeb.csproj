@@ -257,6 +257,7 @@
     <Compile Include="Models\LicenseKeyProductMapping.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Organization.cs" />
+    <Compile Include="Models\ProductAdditionalOption.cs" />
     <Compile Include="Models\ProductDependencyDetails.cs" />
     <Compile Include="Models\ProductLicense.cs" />
     <Compile Include="Models\PurchaseOrderItem.cs" />

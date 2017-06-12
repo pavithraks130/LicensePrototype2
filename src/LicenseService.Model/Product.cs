@@ -18,6 +18,7 @@ namespace LicenseServer.DataModel
         public double Price { get; set; }
         public ICollection<SubscriptionCategory> Categories { get; set; }
         public ICollection<Feature> Features { get; set; }
+        public List<ProductAdditionalOption> AdditionalOption { get; set; }
         public DateTime ModifiedDate { get; set; }
 
     }

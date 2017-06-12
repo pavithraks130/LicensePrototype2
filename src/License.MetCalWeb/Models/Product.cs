@@ -24,6 +24,7 @@ namespace License.MetCalWeb.Models
         public bool InitialState { get; set; }
         public DateTime ExpireDate { get; set; }
         public int AvailableCount { get; set; }
+        public List<ProductAdditionalOption> AdditionalOption { get; set; }
 
     }
 

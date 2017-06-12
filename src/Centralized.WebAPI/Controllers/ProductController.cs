@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using LicenseServer.Logic.BusinessLogic;
 
 namespace Centralized.WebAPI.Controllers
 {
@@ -12,9 +13,11 @@ namespace Centralized.WebAPI.Controllers
     public class ProductController : BaseController
     {
         ProductLogic logic = null;
+        ProductBO productBOLogic = null;
         public ProductController()
         {
             logic = new ProductLogic();
+            productBOLogic = new ProductBO();
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("Create")]
         public HttpResponseMessage CreateProduct(Product model)
         {
-            var pro = logic.CreateProduct(model);
+            var pro = productBOLogic.Creat(model);
             if (pro != null && pro.Id > 0)
                 return Request.CreateResponse(HttpStatusCode.Created, pro);
             else
@@ -55,7 +58,7 @@ namespace Centralized.WebAPI.Controllers
         [Route("update/{id}")]
         public HttpResponseMessage UpdateProduct(int id, Product model)
         {
-            var pro = logic.UpdateProduct(id, model);
+            var pro = productBOLogic.Update(id, model);
             if (pro != null && pro.Id > 0)
                 return Request.CreateResponse(HttpStatusCode.OK, pro);
             else

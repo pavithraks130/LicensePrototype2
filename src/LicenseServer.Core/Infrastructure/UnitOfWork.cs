@@ -113,6 +113,12 @@ namespace LicenseServer.Core.Infrastructure
             get { return _poItemRepository ?? (_poItemRepository = new GenericRepository<PurchaseOrderItem>(_context)); }
         }
 
+        public GenericRepository<ProductAdditionalOption> _prodAdditionalOptionRepoository;
+        public GenericRepository<ProductAdditionalOption> ProdAdditionalOptionRepository
+        {
+            get { return _prodAdditionalOptionRepoository ?? (_prodAdditionalOptionRepoository = new GenericRepository<ProductAdditionalOption>(_context)); }
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

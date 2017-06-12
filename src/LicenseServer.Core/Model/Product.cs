@@ -20,6 +20,7 @@ namespace LicenseServer.Core.Model
         public virtual ICollection<SubscriptionCategory> Categories { get; set; }
         public virtual ICollection<Feature> Features { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public ICollection<ProductAdditionalOption> AdditionalOption { get; set; }
     }
 
     public class SubscriptionCategory
@@ -29,6 +30,7 @@ namespace LicenseServer.Core.Model
         public string Description { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Feature> Features { get; set; }
+        public ICollection<ProductAdditionalOption> AdditionalOption { get; set; }
 
     }
 }

@@ -36,6 +36,8 @@ namespace LicenseServer.Core.DbContext
 
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
+
+        public DbSet<ProductAdditionalOption> ProductAdditionalOption { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

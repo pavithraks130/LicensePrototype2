@@ -23,7 +23,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult HardwareContainer()
         {
-            HardwareDetails model = LoadHardware();
+            Hardware model = LoadHardware();
             return View(model);
         }
 
@@ -31,11 +31,11 @@ namespace License.MetCalWeb.Controllers
         /// Service call to  get the List of assets which are created
         /// </summary>
         /// <returns></returns>
-        private HardwareDetails LoadHardware()
+        private Hardware LoadHardware()
         {
-            var hm = new HardwareDetails();
+            var hm = new Hardware();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/asset/GetAll").Result;
+            var response = client.GetAsync("api/asset/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -60,7 +60,7 @@ namespace License.MetCalWeb.Controllers
         {
             TeamAsset asset = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/asset/GetAssetById/" + id.ToString()).Result;
+            var response = client.GetAsync("api/asset/GetById/" + id.ToString()).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -89,7 +89,7 @@ namespace License.MetCalWeb.Controllers
             {
 
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                var response = client.PutAsJsonAsync("api/asset/UpdateAsset/" + asset.Id, asset).Result;
+                var response = client.PutAsJsonAsync("api/asset/Update/" + asset.Id, asset).Result;
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("HardwareContainer");
                 else
@@ -118,7 +118,7 @@ namespace License.MetCalWeb.Controllers
             {
                 case "Remove":
                     HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                    var response = client.DeleteAsync("api/asset/DeleteAsset/" + id.ToString()).Result;
+                    var response = client.DeleteAsync("api/asset/Delete/" + id.ToString()).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         return RedirectToAction("HardwareContainer");
@@ -157,7 +157,7 @@ namespace License.MetCalWeb.Controllers
             {
                 TeamAsset asset = null;
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                var response = client.PostAsJsonAsync("api/asset/CreateAsset", assetModel).Result;
+                var response = client.PostAsJsonAsync("api/asset/Create", assetModel).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;

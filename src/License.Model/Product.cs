@@ -24,6 +24,7 @@ namespace License.DataModel
         public bool InitialState { get; set; }
         public List<Feature> Features { get; set; }
         public DateTime ExpireDate { get; set; }
+        public List<ProductAdditionalOption> AdditionalOption { get; set; }
         public Product()
         {
             Features = new List<Feature>();

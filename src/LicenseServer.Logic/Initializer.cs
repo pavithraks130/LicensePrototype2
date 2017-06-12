@@ -30,8 +30,9 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionCategory, LicenseServer.Core.Model.SubscriptionCategory>();
 
             cfg.CreateMap<LicenseServer.Core.Model.Product, LicenseServer.DataModel.Product>()
-                .ForMember(dest=> dest.Categories, opt=>opt.MapFrom(src=>src.Categories))
-                .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features));
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories))
+                .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features))
+                .ForMember(dest => dest.AdditionalOption, opt => opt.MapFrom(src => src.AdditionalOption));
 
             cfg.CreateMap<LicenseServer.DataModel.Product, LicenseServer.Core.Model.Product>()
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories))
@@ -44,7 +45,7 @@ namespace LicenseServer.Logic
             cfg.CreateMap<LicenseServer.DataModel.SubscriptionDetails, LicenseServer.Core.Model.SubscriptionDetail>();
 
             cfg.CreateMap<LicenseServer.Core.Model.UserSubscription, LicenseServer.DataModel.UserSubscription>()
-                .ForMember(dest=>dest.Subtype,opt=>opt.MapFrom(src=>src.Subtype));
+                .ForMember(dest => dest.Subtype, opt => opt.MapFrom(src => src.Subtype));
             cfg.CreateMap<LicenseServer.DataModel.UserSubscription, LicenseServer.Core.Model.UserSubscription>();
 
             cfg.CreateMap<LicenseServer.Core.Model.CartItem, LicenseServer.DataModel.CartItem>();
@@ -69,6 +70,11 @@ namespace LicenseServer.Logic
 
             cfg.CreateMap<LicenseServer.Core.Model.PurchaseOrderItem, DataModel.PurchaseOrderItem>()
                 .ForMember(dest => dest.Subscription, opt => opt.MapFrom(src => src.Subscription));
+
+            cfg.CreateMap<Core.Model.ProductAdditionalOption, DataModel.ProductAdditionalOption>();
+            cfg.CreateMap<DataModel.ProductAdditionalOption, Core.Model.ProductAdditionalOption>();
+
+
 
         }
 

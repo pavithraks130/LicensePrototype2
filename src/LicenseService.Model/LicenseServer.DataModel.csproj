@@ -63,6 +63,7 @@
     <Compile Include="ForgotPasswordToken.cs" />
     <Compile Include="Organization.cs" />
     <Compile Include="Product.cs" />
+    <Compile Include="ProductAdditionalOption.cs" />
     <Compile Include="ProductDependency.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PurchaseOrder.cs" />

@@ -183,6 +183,7 @@
     <Compile Include="Model\Feature.cs" />
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\Product.cs" />
+    <Compile Include="Model\ProductAdditionalOption.cs" />
     <Compile Include="Model\PurchaseOrder.cs" />
     <Compile Include="Model\SubscriptionDetail.cs" />
     <Compile Include="Model\Subscription.cs" />
