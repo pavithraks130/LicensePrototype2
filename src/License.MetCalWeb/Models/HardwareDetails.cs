@@ -5,11 +5,11 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 namespace License.MetCalWeb.Models
 {
-    public class HardwareDetails
+    public class Hardware
     {
         public List<TeamAsset> Assets { get; set; }
 
-        public HardwareDetails()
+        public Hardware()
         {
             Assets = new List<TeamAsset>();
         }
