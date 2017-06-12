@@ -486,20 +486,20 @@
             Asset Service 
             </summary>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.GetAssetes">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Get">
             <summary>
             Get Method to list all the Hardware assets
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.CreateAsset(License.DataModel.TeamAsset)">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Create(License.DataModel.TeamAsset)">
             <summary>
             Post Method to create the Asset
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.GetAssetById(System.Int32)">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.GetById(System.Int32)">
             <summary>
             Get Method to get the asset/Hardware details based on Id
             </summary>
@@ -507,7 +507,7 @@
             <returns></returns>
             
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.UpdateAsset(System.Int32,License.DataModel.TeamAsset)">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Update(System.Int32,License.DataModel.TeamAsset)">
             <summary>
             Put Method to Update the asset changes based on the Asset Id
             </summary>
@@ -515,49 +515,42 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.DeleteAsset(System.Int32)">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Delete(System.Int32)">
             <summary>
             Delete Method. Delete the asset by Id
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.AddUserLicense(License.DataModel.UserLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.AddUserLicense(License.DataModel.UserLicenseDataMapping)">
             <summary>
             Post method. Map the License to the User. The license will be fetched based on the subscription and Product Id
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.AddTeamLicense(License.DataModel.TeamLicenseDataMapping)">
-            <summary>
-            Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.RemoveUserLicense(License.DataModel.UserLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.RemoveUserLicense(License.DataModel.UserLicenseDataMapping)">
             <summary>
             Post Method. To remove the Mapped License from User.
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetLicensesRequestByUser(System.String)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.GetLicensesRequestByUser(System.String)">
             <summary>
             Get Method. To get all the Requested license for the User based on UserId to check the status of the license Request.
             </summary>
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetRequestedLicnses(System.String)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.GetRequestedLicnses(System.String)">
             <summary>
             Get Method. To Get the License Request of all the team members irrespective of the Team based on the admin ID.
             </summary>
             <param name="adminId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetRequestedLicnses(System.Int32)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.GetRequestedLicnses(System.Int32)">
             <summary>
             Method to get the License Request for the Approval or the Rejection based on the TeamId. Here 
             Perticular Team Member request will be fetched based on the Team Id
@@ -565,7 +558,7 @@
             <param name="teamId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.ApproveLicense(System.Collections.Generic.List{License.DataModel.UserLicenseRequest})">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.ApproveRejectLicense(System.Collections.Generic.List{License.DataModel.UserLicenseRequest})">
             <summary>
             Post Method. To update the approve or Rejection status of the License Request. 
             Multiple request will be updated. Input to this Service is List of UserLicenseRequest Object which contains 
@@ -573,23 +566,14 @@
             <param name="licReqList"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.RequestLicense(System.Collections.Generic.List{License.DataModel.UserLicenseRequest})">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.RequestLicense(System.Collections.Generic.List{License.DataModel.UserLicenseRequest})">
             <summary>
             Post Method. Used for the License Request. Multiple License will be requested
             </summary>
             <param name="licReqList"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetUserSubscripedLicense(System.String,System.Boolean)">
-            <summary>
-            Get Method.Used to fetch the UserSubscribed License List with Features based on the userId 
-            Irrespective of the Team
-            </summary>
-            <param name="userId"></param>
-            <param name="isFeatureRequired"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetUserSubscripedLicense(License.DataModel.FetchUserSubscription)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.GetUserSubscripedLicense(License.DataModel.FetchUserSubscription)">
             <summary>
             Post Method. Used to fetch the User Subscribed License List based on the Team Id and User Id.
             Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
@@ -599,28 +583,11 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.GetTeamSubscritionLicense(System.Int32)">
-            <summary>
-            Post Method. Used to fetch the Team Subscribed License List based on the Team Id .
-            Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
-            which contains UserId, TeamId and IsFeatureRequired Property.
-            This request can be used to fetch the User License details based on the Teama Id .
-            </summary>
-            <param name="teamId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnPremise.WebAPI.Controllers.LicenseController.DeleteTeamLicenses(License.DataModel.TeamLicenseDataMapping)">
-            <summary>
-            Delete Method : To delete the team License
-            </summary>
-            <param name="data"></param>
-            <returns></returns>
-        </member>
         <member name="M:OnPremise.WebAPI.Controllers.ProductController.GetProductsByAdmin(System.String)">
             <summary>
             GET Method : Gets products based on the admin Id
             </summary>
-            <param name="adminUserId"></param>
+            <param name="adminId"></param>
             <returns></returns>
         </member>
         <member name="M:OnPremise.WebAPI.Controllers.ProductController.UpdateProducts(System.Collections.Generic.List{License.DataModel.Product})">
@@ -694,6 +661,30 @@
             and  update the product License if the products are mapped
             </summary>
             <param name="team"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.AddTeamLicense(License.DataModel.TeamLicenseDataMapping)">
+            <summary>
+            Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.DeleteTeamLicenses(License.DataModel.TeamLicenseDataMapping)">
+            <summary>
+            Delete Method : To delete the team License
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.GetTeamSubscritionLicense(System.Int32)">
+            <summary>
+            Post Method. Used to fetch the Team Subscribed License List based on the Team Id .
+            Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
+            which contains UserId, TeamId and IsFeatureRequired Property.
+            This request can be used to fetch the User License details based on the Teama Id .
+            </summary>
+            <param name="teamId"></param>
             <returns></returns>
         </member>
         <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateInvite(License.DataModel.TeamMember)">

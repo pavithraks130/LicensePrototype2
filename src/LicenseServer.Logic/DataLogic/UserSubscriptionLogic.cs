@@ -88,11 +88,11 @@ namespace LicenseServer.Logic
             return licProductMapping;
         }
 
-        public List<UserSubscription> GetExpiringSubscription(string userId)
+        public List<UserSubscription> GetExpiringSubscription(string userId,int duration = 30)
         {
             List<UserSubscription> subType = null;
             var subList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId).ToList();
-            var subListObj = subList.Where(s => (s.ExpireDate.Date - DateTime.Now.Date).Days <= 30).ToList();
+            var subListObj = subList.Where(s => (s.ExpireDate.Date - DateTime.Now.Date).Days <= duration).ToList();
             subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.UserSubscription>(s)).ToList();
             return subType;
         }

@@ -1,4 +1,5 @@
-﻿@model License.MetCalWeb.Models.Product
+﻿@using License.MetCalWeb.Models;
+@model License.MetCalWeb.Models.Product
 @{
     ViewBag.Title = "AddProduct";
 }
@@ -52,7 +53,7 @@
                         <div class="form-group">
                             <div class="col-md-2"><label> Category</label></div>
                             <div class="col-md-10">
-                                @foreach (var cat in (List<ProductCategory>)ViewBag.Categories)
+                                @foreach (var cat in (List<SubscriptionCategory>)ViewBag.Categories)
                                 {
                                         <input type="checkbox" name="rboCategory" value="@cat.Id" />
                                         <label style="margin-right:10px;">@cat.Name</label>                                         

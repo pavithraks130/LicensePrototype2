@@ -33,7 +33,8 @@ namespace License.MetCalWeb.Common
         }
 
         /// <summary>
-        /// Once Payment is done the Subscription will be renewed and the New List of License Key  will returned to sync with the On Premise with the updated expiuire date
+        /// Once Payment is done the Subscription will be renewed and the New List of License Key  will returned to sync 
+        /// with the On Premise with the updated expiuire date
         /// </summary>
         /// <param name="subscriptions"></param>
         /// <returns></returns>
@@ -59,7 +60,7 @@ namespace License.MetCalWeb.Common
         public static void UpdateSubscriptionOnpremise(SubscriptionList subs, bool isRenewal = false)
         {
             string userId = string.Empty;
-            subs.UserId = LicenseSessionState.Instance.User.UserId;            
+            subs.UserId = LicenseSessionState.Instance.User.UserId;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             string url = string.Empty;
             if (isRenewal)
@@ -76,7 +77,8 @@ namespace License.MetCalWeb.Common
         public static List<UserSubscription> GetExpireSubscription()
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/UserSubscription/ExpireSubscription/" + LicenseSessionState.Instance.User.ServerUserId).Result;
+            int duration = 30;
+            var response = client.GetAsync("api/UserSubscription/ExpireSubscription/" + duration + "/" + LicenseSessionState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var responseData = response.Content.ReadAsStringAsync().Result;

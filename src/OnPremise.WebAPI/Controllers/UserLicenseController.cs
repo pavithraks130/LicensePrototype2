@@ -11,14 +11,14 @@ using License.Logic.BusinessLogic;
 namespace OnPremise.WebAPI.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/License")]
-    public class LicenseController : BaseController
+    [RoutePrefix("api/UserLicense")]
+    public class UserLicenseController : BaseController
     {
         UserLicenseLogic userLicenselogic = null;
         TeamLicenseLogic teamLicenselogic = null;
         UserLicenseRequestLogic reqLogic = null;
 
-        public LicenseController()
+        public UserLicenseController()
         {
             userLicenselogic = new UserLicenseLogic();
             teamLicenselogic = new TeamLicenseLogic();
@@ -31,7 +31,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("CreateUserLicence")]
+        [Route("Create")]
         public HttpResponseMessage AddUserLicense(UserLicenseDataMapping model)
         {
             var status = userLicenselogic.CreateMultiUserLicense(model);
@@ -39,23 +39,7 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, "Success");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLicenselogic.ErrorMessage);
-        }
-
-        /// <summary>
-        /// Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("CreateTeamLicence")]
-        public HttpResponseMessage AddTeamLicense(TeamLicenseDataMapping model)
-        {
-            var status = teamLicenselogic.CreateTeamLicense(model);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLicenselogic.ErrorMessage);
-        }
+        }       
 
         /// <summary>
         /// Post Method. To remove the Mapped License from User.
@@ -63,7 +47,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("RevokeUserLicence")]
+        [Route("Revoke")]
         public HttpResponseMessage RemoveUserLicense(UserLicenseDataMapping model)
         {
             var status = userLicenselogic.RevokeUserLicense(model);
@@ -79,7 +63,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetLicenseRequestStatus/{userId}")]
+        [Route("GetRequestStatus/{userId}")]
         public IHttpActionResult GetLicensesRequestByUser(string userId)
         {
             var listlic = reqLogic.GetLicenseRequest(userId);
@@ -92,7 +76,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="adminId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAllRequestedLicense/{adminId}")]
+        [Route("GetAllRequest/{adminId}")]
         public IHttpActionResult GetRequestedLicnses(string adminId)
         {
             var lstLicenseRequest = reqLogic.GetAllRequestList(adminId);
@@ -106,13 +90,12 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="teamId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetRequestedLicenseByTeam/{teamId}")]
+        [Route("GetRequestByTeam/{teamId}")]
         public IHttpActionResult GetRequestedLicnses(int teamId)
         {
             var lstLicenseRequest = reqLogic.GetRequestListByTeam(teamId);
             return Ok(lstLicenseRequest);
         }
-
 
         /// <summary>
         /// Post Method. To update the approve or Rejection status of the License Request. 
@@ -121,8 +104,8 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="licReqList"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("ApproveRejectLicense")]
-        public HttpResponseMessage ApproveLicense(List<UserLicenseRequest> licReqList)
+        [Route("ApproveReject")]
+        public HttpResponseMessage ApproveRejectLicense(List<UserLicenseRequest> licReqList)
         {
             LicenseBO licBOLogic = new LicenseBO();
             licBOLogic.UserManager = UserManager;
@@ -141,7 +124,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost]
-        [Route("RequestLicense")]
+        [Route("LicenseRequest")]
         public HttpResponseMessage RequestLicense(List<UserLicenseRequest> licReqList)
         {
             reqLogic.Create(licReqList);
@@ -151,24 +134,24 @@ namespace OnPremise.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, reqLogic.ErrorMessage);
         }
 
-        /// <summary>
-        /// Get Method.Used to fetch the UserSubscribed License List with Features based on the userId 
-        /// Irrespective of the Team
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="isFeatureRequired"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetSubscriptionLicense/{userId}/{isFeatureRequired}")]
-        public HttpResponseMessage GetUserSubscripedLicense(string userId, bool isFeatureRequired)
-        {
-            LicenseBO licBOLogic = new LicenseBO();
-            licBOLogic.UserManager = UserManager;
-            licBOLogic.RoleManager = RoleManager;
-            FetchUserSubscription model = new FetchUserSubscription() { UserId = userId, IsFeatureRequired = isFeatureRequired };
-            var data = licBOLogic.GetUserLicenseSubscriptionDetails(model);
-            return Request.CreateResponse(HttpStatusCode.OK, data);
-        }
+        ///// <summary>
+        ///// Get Method.Used to fetch the UserSubscribed License List with Features based on the userId 
+        ///// Irrespective of the Team
+        ///// </summary>
+        ///// <param name="userId"></param>
+        ///// <param name="isFeatureRequired"></param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //[Route("GetProductLicense/{userId}/{isFeatureRequired}")]
+        //public HttpResponseMessage GetUserSubscripedLicense(string userId, bool isFeatureRequired)
+        //{
+        //    LicenseBO licBOLogic = new LicenseBO();
+        //    licBOLogic.UserManager = UserManager;
+        //    licBOLogic.RoleManager = RoleManager;
+        //    FetchUserSubscription model = new FetchUserSubscription() { UserId = userId, IsFeatureRequired = isFeatureRequired };
+        //    var data = licBOLogic.GetUserLicenseSubscriptionDetails(model);
+        //    return Request.CreateResponse(HttpStatusCode.OK, data);
+        //}
 
         /// <summary>
         /// Post Method. Used to fetch the User Subscribed License List based on the Team Id and User Id.
@@ -179,7 +162,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("GetSubscriptionLicenseByTeam")]
+        [Route("GetUserLicenseByUser")]
         public HttpResponseMessage GetUserSubscripedLicense(FetchUserSubscription model)
         {
             LicenseBO licBOLogic = new LicenseBO();
@@ -187,41 +170,6 @@ namespace OnPremise.WebAPI.Controllers
             licBOLogic.RoleManager = RoleManager;
             var data = licBOLogic.GetUserLicenseSubscriptionDetails(model);
             return Request.CreateResponse(HttpStatusCode.OK, data);
-        }
-
-        /// <summary>
-        /// Post Method. Used to fetch the Team Subscribed License List based on the Team Id .
-        /// Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
-        /// which contains UserId, TeamId and IsFeatureRequired Property.
-        /// This request can be used to fetch the User License details based on the Teama Id .
-        /// </summary>
-        /// <param name="teamId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetSubscriptionLicenseByTeamId/{teamId}")]
-        public HttpResponseMessage GetTeamSubscritionLicense(int teamId)
-        {
-            TeamBO teamBOLogic = new TeamBO();
-            var data = teamBOLogic.GetTeamLicenseProductByTeamId(teamId);
-            return Request.CreateResponse(HttpStatusCode.OK, data);
-        }
-
-        /// <summary>
-        /// Delete Method : To delete the team License
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("Delete")]
-        public HttpResponseMessage DeleteTeamLicenses(TeamLicenseDataMapping data)
-        {
-            TeamBO teamBOLogic = new TeamBO();
-            var status = teamBOLogic.DeleteTeamLicense(data);
-            if (status)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
-            }
-            return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, teamBOLogic.ErrorMessage);
-        }
+        }      
     }
 }

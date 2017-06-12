@@ -953,10 +953,11 @@
             Constructor for User Subscription
             </summary>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserSubscriptionController.GetExpireSubscription(System.String)">
+        <member name="M:Centralized.WebAPI.Controllers.UserSubscriptionController.GetExpireSubscription(System.Int32,System.String)">
             <summary>
             Get Method: To the subscription which expires in month  based on the userId
             </summary>
+            <param name="duration">No  of Days</param>
             <param name="userId">User ID</param>
             <returns>List of Subscriptions which are set to Expire</returns>
         </member>

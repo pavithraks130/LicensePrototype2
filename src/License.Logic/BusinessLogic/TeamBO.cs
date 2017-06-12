@@ -163,24 +163,18 @@ namespace License.Logic.BusinessLogic
             SubscriptionFileIO subscriptionBO = new SubscriptionFileIO();
             List<Product> productList = new List<Product>();
             var productIdList = GetProductByTeamId(teamId);
-            for (int index = 0; index < productIdList.Count; index++)
-            {
-                var product = subscriptionBO.GetProductFromJsonFile(productIdList[index]);
-                if (product != null)
-                {
-                    productList.Add(product);
-                }
-            }
+            productList = productIdList.ToList().Select(id => subscriptionBO.GetProductFromJsonFile(id)).ToList();
             return productList;
         }
-        
+
         /// Deleting listed products from selected team.
-        public bool DeleteTeamLicense(TeamLicenseDataMapping teamObj)
+        public bool DeleteTeamLicense(TeamLicenseDataMapping teamLicenseDataMappingObj)
         {
             var proceedDelete = true;
             List<int> collectionOfprodIdToDelete = new List<int>();//It contains same product id multiple times.
-            foreach (var team in teamObj.TeamList)
+            foreach (var team in teamLicenseDataMappingObj.TeamList)
             {
+                var teamObj = teamLogic.GetTeamById(team.Id);
                 // Checks if any team Member is logged In if Yes the the error response will be sent.
                 var userList = logic.GetTeamMembers(team.Id).Where(tm => tm.InviteeUser.IsActive == true).ToList();
                 if (userList != null && userList.Count > 0)
@@ -192,10 +186,10 @@ namespace License.Logic.BusinessLogic
                 // mapped Team license will be deleted for the admin
                 if (proceedDelete)
                 {
-                    userLicLogic.RevokeTeamLicenseFromUser(team.AdminUser.UserId, team.Id);
+                    userLicLogic.RevokeTeamLicenseFromUser(teamObj.AdminUser.UserId, team.Id);
                     // Team License will be deleted here and license status will be updated in the Product License DB.
                     var teamLicList = teamLicenseLogic.GetTeamLicense(team.Id);
-                    foreach (var pro in teamObj.LicenseDataList)
+                    foreach (var pro in teamLicenseDataMappingObj.LicenseDataList)
                     {
                         var teamLicListByPro = teamLicList.Where(tl => tl.ProductId == pro.ProductId).ToList();
                         teamLicListByPro.ForEach(teamlic => { teamLicenseLogic.RemoveTeamLicenseById(teamlic.Id, teamlic.LicenseId); });

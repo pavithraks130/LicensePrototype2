@@ -147,7 +147,7 @@ namespace License.MetCalWeb.Controllers
             List<ProductLicense> proLicList = ExtractLicenseData(selectedProducts);
             TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { LicenseDataList = proLicList, TeamList = new List<Team>() { team } };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/License/CreateTeamLicence", mapping).Result;
+            var response = client.PostAsJsonAsync("api/TeamLicense/Create", mapping).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -287,8 +287,9 @@ namespace License.MetCalWeb.Controllers
                 TeamList = new List<Team> { new Team() { Id = teamId } },
                 LicenseDataList = ExtractLicenseData(selectedProducts)
             };
+            
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/License/Delete", teamLicDataMapping).Result;
+            var response = client.PostAsJsonAsync("api/TeamLicense/Revoke", teamLicDataMapping).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var jsondata = response.Content.ReadAsStringAsync().Result;

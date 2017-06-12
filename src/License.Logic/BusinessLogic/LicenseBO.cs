@@ -101,71 +101,71 @@ namespace License.Logic.BusinessLogic
             return licDetails;
         }
 
-        // Get Team License based on the Team ID.
-        public TeamLicenseDetails GetTeamLicenseSubscriptionDetails(string teamId)
-        {
-            TeamLicenseDetails licDetails = new TeamLicenseDetails();
-            var licenseMapModelList = new List<Subscription>();
-            TeamLicenseLogic teamLicenseLogic = new TeamLicenseLogic();
-            userLogic.UserManager = UserManager;
-            userLogic.RoleManager = RoleManager;
+        //// Get Team License based on the Team ID.
+        //public TeamLicenseDetails GetTeamLicenseSubscriptionDetails(string teamId)
+        //{
+        //    TeamLicenseDetails licDetails = new TeamLicenseDetails();
+        //    var licenseMapModelList = new List<Subscription>();
+        //    TeamLicenseLogic teamLicenseLogic = new TeamLicenseLogic();
+        //    userLogic.UserManager = UserManager;
+        //    userLogic.RoleManager = RoleManager;
 
-            List<TeamLicense> teamLicenseList = teamLicenseLogic.GetTeamLicense(Convert.ToInt32(teamId));
+        //    List<TeamLicense> teamLicenseList = teamLicenseLogic.GetTeamLicense(Convert.ToInt32(teamId));
 
-            var subscriptionTypeList = proSubLogic.GetSubscriptionFromFile();
+        //    var subscriptionTypeList = proSubLogic.GetSubscriptionFromFile();
 
-            if (teamLicenseList.Count > 0)
-            {
-                var subsIdList = teamLicenseList.Select(l => l.License.Subscription.SubscriptionId);
-                var subscriptionList = subscriptionTypeList.Where(s => subsIdList.Contains(s.Id)).ToList();
-                DateTime licExpireData = DateTime.MinValue;
-                foreach (var subs in subscriptionList)
-                {
-                    var teamLicList = teamLicenseList.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
-                    var proList = teamLicList.Select(u => u.License.ProductId).ToList();
-                    Subscription mapModel = new Subscription()
-                    {
-                        Name = subs.Name,
-                        UserSubscriptionId = teamLicenseList.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
-                    };
-                    foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
-                    {
-                        var objLic = teamLicList.FirstOrDefault(f => f.License.ProductId == pro.Id);
-                        if (objLic != null)
-                        {
-                            string licenseKeydata = String.Empty;
-                            licenseKeydata = objLic.License.LicenseKey;
-                            var splitData = licenseKeydata.Split(new char[] { '-' });
-                            var datakey = splitData[0];
-                            var decryptObj = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(datakey, true);
-                            var licdataList = decryptObj.Split(new char[] { '^' });
-                            licExpireData = Convert.ToDateTime(licdataList[1]);
-                        }
-                        Product prod = new Product()
-                        {
-                            Id = pro.Id,
-                            Name = pro.Name,
-                            ExpireDate = licExpireData
-                        };
-                        foreach (var fet in pro.Features)
-                        {
-                            var feature = new Feature()
-                            {
-                                Id = fet.Id,
-                                Name = fet.Name,
-                                Description = fet.Description,
-                                Version = fet.Version
-                            };
-                            prod.Features.Add(feature);
-                        }
-                        mapModel.Products.Add(prod);
-                    }
-                    licenseMapModelList.Add(mapModel);
-                }
-            }
-            licDetails.SubscriptionDetails = licenseMapModelList;
-            return licDetails;
-        }
+        //    if (teamLicenseList.Count > 0)
+        //    {
+        //        var subsIdList = teamLicenseList.Select(l => l.License.Subscription.SubscriptionId);
+        //        var subscriptionList = subscriptionTypeList.Where(s => subsIdList.Contains(s.Id)).ToList();
+        //        DateTime licExpireData = DateTime.MinValue;
+        //        foreach (var subs in subscriptionList)
+        //        {
+        //            var teamLicList = teamLicenseList.Where(ul => ul.License.Subscription.SubscriptionId == subs.Id).ToList();
+        //            var proList = teamLicList.Select(u => u.License.ProductId).ToList();
+        //            Subscription mapModel = new Subscription()
+        //            {
+        //                Name = subs.Name,
+        //                UserSubscriptionId = teamLicenseList.FirstOrDefault(us => us.License.Subscription.SubscriptionId == subs.Id).License.UserSubscriptionId
+        //            };
+        //            foreach (var pro in subs.Products.Where(p => proList.Contains(p.Id)))
+        //            {
+        //                var objLic = teamLicList.FirstOrDefault(f => f.License.ProductId == pro.Id);
+        //                if (objLic != null)
+        //                {
+        //                    string licenseKeydata = String.Empty;
+        //                    licenseKeydata = objLic.License.LicenseKey;
+        //                    var splitData = licenseKeydata.Split(new char[] { '-' });
+        //                    var datakey = splitData[0];
+        //                    var decryptObj = LicenseKey.LicenseKeyGen.CryptoEngine.Decrypt(datakey, true);
+        //                    var licdataList = decryptObj.Split(new char[] { '^' });
+        //                    licExpireData = Convert.ToDateTime(licdataList[1]);
+        //                }
+        //                Product prod = new Product()
+        //                {
+        //                    Id = pro.Id,
+        //                    Name = pro.Name,
+        //                    ExpireDate = licExpireData
+        //                };
+        //                foreach (var fet in pro.Features)
+        //                {
+        //                    var feature = new Feature()
+        //                    {
+        //                        Id = fet.Id,
+        //                        Name = fet.Name,
+        //                        Description = fet.Description,
+        //                        Version = fet.Version
+        //                    };
+        //                    prod.Features.Add(feature);
+        //                }
+        //                mapModel.Products.Add(prod);
+        //            }
+        //            licenseMapModelList.Add(mapModel);
+        //        }
+        //    }
+        //    licDetails.SubscriptionDetails = licenseMapModelList;
+        //    return licDetails;
+        //}
 
         // Validating the user Login for the concurrent user.
         public bool ValidateConcurrentUser(int teamId, string userId)

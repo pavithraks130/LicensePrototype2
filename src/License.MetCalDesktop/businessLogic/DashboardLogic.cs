@@ -22,7 +22,7 @@ namespace License.MetCalDesktop.businessLogic
             userSub.TeamId = AppState.Instance.SelectedTeam.Id;
             userSub.IsFeatureRequired = true;
             userSub.UserId = AppState.Instance.User.UserId;
-            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeam", userSub).Result;
+            var response = client.PostAsJsonAsync("api/UserLicense/GetUserLicenseByUser", userSub).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

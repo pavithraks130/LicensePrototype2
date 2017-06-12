@@ -11,7 +11,7 @@ namespace Centralized.WebAPI.Controllers
     /// Controller for Subscription Category
     /// </summary>
     [Authorize]
-    [RoutePrefix("api/ProductCategory")]
+    [RoutePrefix("api/SubscriptionCategory")]
     public class SubscriptionCategoryController : BaseController
     {
         private SubscriptionCategoryLogic subscriptionCategoryLogic = null;

@@ -203,7 +203,7 @@ namespace License.Logic.DataLogic
                 // fetching unmapped license record
                 var data = teamLicData.FirstOrDefault(l => l.ProductId == proId && l.IsMapped == false);
                 // checking any of the team License is mapped to the User for the product
-                var licMapped = userLicData.Any(l => mappedlic.Contains(l.TeamLicenseId));
+                var licMapped = userLicData.Any(l => mappedlic.Contains(l.TeamLicenseId));                
                 // If No license mapped and if any Team License Exist then the License will be assigned to user
                 if (licMapped == false && data != null)
                 {

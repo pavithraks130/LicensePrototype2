@@ -25,7 +25,7 @@ namespace License.MetCalWeb.Controllers
         {
             List<SubscriptionCategory> categories = new List<SubscriptionCategory>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/ProductCategory/All").Result;
+            var response = client.GetAsync("api/SubscriptionCategory/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -56,7 +56,7 @@ namespace License.MetCalWeb.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = client.PostAsJsonAsync("api/productcategory/create", category).Result;
+                var response = client.PostAsJsonAsync("api/SubscriptionCategory/create", category).Result;
                 if (response.IsSuccessStatusCode)
                     return Json(new { message = "success", success = true });
                 else
@@ -79,7 +79,7 @@ namespace License.MetCalWeb.Controllers
         {
             SubscriptionCategory category = new SubscriptionCategory();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/productCategory/GetById/" + id).Result;
+            var response = client.GetAsync("api/SubscriptionCategory/GetById/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
@@ -99,7 +99,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Edit(int id, SubscriptionCategory category)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.PutAsJsonAsync("api/productCategory/update/" + id, category).Result;
+            var response = client.PutAsJsonAsync("api/SubscriptionCategory/update/" + id, category).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
@@ -119,7 +119,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Delete(int id)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.DeleteAsync("api/productCategory/Delete/" + id).Result;
+            var response = client.DeleteAsync("api/SubscriptionCategory/Delete/" + id).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;

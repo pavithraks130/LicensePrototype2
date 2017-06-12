@@ -85,18 +85,18 @@ namespace License.MetCalWeb.Controllers
                 await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();
         }
 
-        /// <summary>
-        /// Async function  call to synch the Renewed subscription
-        /// </summary>
-        public void SyncRenewData()
-        {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.PostAsJsonAsync("api/UserSubscription/RenewSubscription/" + LicenseSessionState.Instance.User.ServerUserId, TempData["RenewSubscription"]).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-            }
-        }
+        ///// <summary>
+        ///// Async function  call to synch the Renewed subscription
+        ///// </summary>
+        //public void SyncRenewData()
+        //{
+        //    HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+        //    var response = client.PostAsJsonAsync("api/UserSubscription/RenewSubscription/" + LicenseSessionState.Instance.User.ServerUserId, TempData["RenewSubscription"]).Result;
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var jsonData = response.Content.ReadAsStringAsync().Result;
+        //    }
+        //}
 
         /// <summary>
         /// Action to perform the Offline Paymentonce the data submitted to the offline payment the Purchase Order Id is 

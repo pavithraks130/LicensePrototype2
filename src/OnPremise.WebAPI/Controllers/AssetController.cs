@@ -28,8 +28,8 @@ namespace OnPremise.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAll")]
-        public IHttpActionResult GetAssetes()
+        [Route("All")]
+        public IHttpActionResult Get()
         {
             var listAsset = logic.GetAssets();
             return Ok(listAsset);
@@ -43,8 +43,8 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("CreateAsset")]
-        public HttpResponseMessage CreateAsset(TeamAsset model)
+        [Route("Create")]
+        public HttpResponseMessage Create(TeamAsset model)
         {
             var asset = logic.CreateAsset(model);
             if (asset != null)
@@ -62,8 +62,8 @@ namespace OnPremise.WebAPI.Controllers
         /// <returns></returns>
         /// 
         [HttpGet]
-        [Route("GetAssetById/{id}")]
-        public HttpResponseMessage GetAssetById(int id)
+        [Route("GetById/{id}")]
+        public HttpResponseMessage GetById(int id)
         {
             var asset = logic.GetAssetById(id);
             if (asset != null)
@@ -79,8 +79,8 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("UpdateAsset/{id}")]
-        public HttpResponseMessage UpdateAsset(int id, TeamAsset model)
+        [Route("Update/{id}")]
+        public HttpResponseMessage Update(int id, TeamAsset model)
         {
             var asset = logic.UpdateAsset(id, model);
             if (asset != null)
@@ -95,8 +95,8 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("DeleteAsset/{id}")]
-        public HttpResponseMessage DeleteAsset(int id)
+        [Route("Delete/{id}")]
+        public HttpResponseMessage Delete(int id)
         {
             var status = logic.RemoveAsset(id);
             if (status)

@@ -21,12 +21,19 @@ namespace License.Logic.BusinessLogic
             SubscriptionFileIO subscriptionBO = new SubscriptionFileIO();
             ProductLicenseLogic proLicenseLogic = new ProductLicenseLogic();
             var productIdList = new List<int>();
-            //ListOut the product with IsMap is false;
-            //Retrieve prodcut from Json File.
+
+            // Get The Products which are  team License Products to exclude these products from the listing in the Product for the User Assign
+            List<int> proList = new List<int>();
+            if (!String.IsNullOrEmpty(userId))
+            {
+                bool isAdmin = adminId == userId;
+                TeamBO teamBo = new TeamBO();
+                proList = teamBo.GetTeamProductByUserId(userId, isAdmin);
+            }
 
             // Get the list of user Subscription by admin Id.
             var userSubscriptionList = userSubscriptionLogic.GetSubscription(adminId);
-          
+
             // Fetches the Subscription Id Which are not expired and get the ID List
             userSubscriptionList = userSubscriptionList.Where(l => (l.ExpireDate.Date - DateTime.Today).Days >= 0).ToList();
 
@@ -34,7 +41,7 @@ namespace License.Logic.BusinessLogic
             if (userSubscriptionList == null || userSubscriptionList.Count == 0)
                 return new List<Product>();
 
-            var userSubscriptionIdList = userSubscriptionList.Select(us => us.Id).ToList();           
+            var userSubscriptionIdList = userSubscriptionList.Select(us => us.Id).ToList();
 
             userSubscriptionList.ForEach(us =>
             {
@@ -46,27 +53,35 @@ namespace License.Logic.BusinessLogic
             if (productIdList == null || productIdList.Count == 0)
                 return new List<Product>();
 
+
             var prodIdList = (from id in productIdList
                               group id by id into list
                               select new { list.Key, Count = list.Count() }).ToList();
 
             for (int index = 0; index < prodIdList.Count; index++)
             {
-                var product = subscriptionBO.GetProductFromJsonFile(prodIdList[index].Key);
-                if (product != null)
+                if (!proList.Contains(prodIdList[index].Key))
                 {
-                    product.AvailableCount = prodIdList[index].Count;
-                    prodList.Add(product);
+                    var product = subscriptionBO.GetProductFromJsonFile(prodIdList[index].Key);
+                    if (product != null)
+                    {
+                        product.AvailableCount = prodIdList[index].Count;
+                        prodList.Add(product);
+                    }
                 }
             }
             if (!string.IsNullOrEmpty(userId))
             {
                 UserLicenseLogic userLicLogic = new UserLicenseLogic();
                 var userLicense = userLicLogic.GetUserLicenseByUserId(userId);
-                userLicense.ForEach(ul =>
+                var productIds = userLicense.Select(l => l.License.ProductId).ToList();
+                prodList.ForEach(p =>
                 {
-                    prodList.FirstOrDefault(p => p.Id == ul.License.ProductId).IsSelected = true;
+                    if (productIds.Contains(p.Id))
+                        p.IsSelected = true;
+
                 });
+
             }
             return prodList;
         }

@@ -33,13 +33,14 @@ namespace Centralized.WebAPI.Controllers
         /// <summary>
         /// Get Method: To the subscription which expires in month  based on the userId
         /// </summary>
+        /// <param name="duration">No  of Days</param>
         /// <param name="userId">User ID</param>
         /// <returns>List of Subscriptions which are set to Expire</returns>
         [HttpGet]
-        [Route("ExpireSubscription/{userId}")]
-        public HttpResponseMessage GetExpireSubscription(string userId)
+        [Route("ExpireSubscription/{duration}/{userId}")]
+        public HttpResponseMessage GetExpireSubscription(int duration,string userId)
         {
-            var subList = userSubscriptionLogic.GetExpiringSubscription(userId);
+            var subList = userSubscriptionLogic.GetExpiringSubscription(userId, duration);
             if (!String.IsNullOrEmpty(userSubscriptionLogic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userSubscriptionLogic.ErrorMessage);
             else

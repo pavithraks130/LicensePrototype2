@@ -64,7 +64,7 @@ namespace License.MetCalWeb.Controllers
         {
             List<UserLicenseRequest> requestList = new List<UserLicenseRequest>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/License/GetRequestedLicenseByTeam/" + teamId).Result;
+            var response = client.GetAsync("api/UserLicense/GetRequestByTeam/" + teamId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -108,7 +108,7 @@ namespace License.MetCalWeb.Controllers
             if (licReqList.Count > 0)
             {
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                var response = client.PostAsJsonAsync("api/license/ApproveRejectLicense", licReqList).Result;
+                var response = client.PostAsJsonAsync("api/UserLicense/ApproveReject", licReqList).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -276,7 +276,7 @@ namespace License.MetCalWeb.Controllers
             };
 
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/License/CreateUserLicence", mapping).Result;
+            var response = client.PostAsJsonAsync("api/UserLicense/Create", mapping).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -313,7 +313,7 @@ namespace License.MetCalWeb.Controllers
                 UserList = userList
             };
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/License/RevokeUserLicence", mapping).Result;
+            var response = client.PostAsJsonAsync("api/UserLicense/Revoke", mapping).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -365,7 +365,7 @@ namespace License.MetCalWeb.Controllers
             }
             // Service call to create the License Request  
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/License/RequestLicense", licReqList).Result;
+            var response = client.PostAsJsonAsync("api/UserLicense/LicenseRequest", licReqList).Result;
             if (!response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -386,7 +386,7 @@ namespace License.MetCalWeb.Controllers
         {
             List<UserLicenseRequest> listlic = new List<UserLicenseRequest>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/License/GetLicenseRequestStatus/" + LicenseSessionState.Instance.User.UserId).Result;
+            var response = client.GetAsync("api/UserLicense/GetRequestStatus/" + LicenseSessionState.Instance.User.UserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

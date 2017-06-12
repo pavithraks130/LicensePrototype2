@@ -42,9 +42,9 @@
                                     @Html.DisplayTextFor(m => m.ElementAt(i).Description)
                                 </td>
                                 <td class="col-md-4">
-                                    @Html.ActionLink("Edit", "Edit", "ProductCategory", new { id = Model.ElementAt(i).Id }, new { @class = "btn btn-default acnEdit" })
+                                    @Html.ActionLink("Edit", "Edit", "SubscriptionCategory", new { id = Model.ElementAt(i).Id }, new { @class = "btn btn-default acnEdit" })
                                 
-                                    @Html.ActionLink("Delete", "Delete", "ProductCategory", new { id = Model.ElementAt(i).Id }, new { @class = "btn btn-default acnDelete" })
+                                    @Html.ActionLink("Delete", "Delete", "SubscriptionCategory", new { id = Model.ElementAt(i).Id }, new { @class = "btn btn-default acnDelete" })
                                 </td>
                             </tr>
                         }

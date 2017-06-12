@@ -337,14 +337,14 @@ namespace License.MetCalWeb.Controllers
         public ActionResult LogOut()
         {
             if (LicenseSessionState.Instance.IsGlobalAdmin)
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.CentralizeWebApi);
+                _accountLogic.UpdateLogoutStatus(LicenseSessionState.UserId, ServiceType.CentralizeWebApi);
             else if (LicenseSessionState.Instance.IsSuperAdmin)
             {
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
+                _accountLogic.UpdateLogoutStatus(LicenseSessionState.UserId, ServiceType.OnPremiseWebApi);
+                _accountLogic.UpdateLogoutStatus(LicenseSessionState.ServerUserId, ServiceType.CentralizeWebApi);
             }
             else
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
+                _accountLogic.UpdateLogoutStatus(LicenseSessionState.UserId, ServiceType.OnPremiseWebApi);
             ClearSession();
             return RedirectToAction("LogIn");
         }
@@ -454,15 +454,6 @@ namespace License.MetCalWeb.Controllers
             LicenseSessionState.Instance.UserSubscribedProducts = userLoginObj.Products;
             return userLoginObj;
 
-
-        }
-
-        public string LoadUserLicense()
-        {
-          
-            var productDetails = OnPremiseSubscriptionLogic.GetUserLicenseForUser();
-            LicenseSessionState.Instance.UserSubscribedProducts = productDetails;
-            return string.Empty;
         }
     }
 }

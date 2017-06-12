@@ -70,6 +70,10 @@ namespace License.MetCalWeb.Common
             }
             return productsList;
         }
+
+
+
+      
         
         /// <summary>
         /// Function to get the User License with details  for which user is authorized. By default the fetchBasedonTeam is set true because moset of the time the 
@@ -87,7 +91,7 @@ namespace License.MetCalWeb.Common
                 subs.TeamId = LicenseSessionState.Instance.AppTeamContext.Id;
             subs.UserId = userId;
             subs.IsFeatureRequired = isFeatureRequired;
-            var response = client.PostAsJsonAsync("api/License/GetSubscriptionLicenseByTeam", subs).Result;
+            var response = client.PostAsJsonAsync("api/UserLicense/GetUserLicenseByUser", subs).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
@@ -107,7 +111,7 @@ namespace License.MetCalWeb.Common
         {
             var distinctProductList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/License/GetSubscriptionLicenseByTeamId/" + teamId).Result;
+            var response = client.GetAsync("api/TeamLicense/GetTeamLicenseByTeam/" + teamId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;

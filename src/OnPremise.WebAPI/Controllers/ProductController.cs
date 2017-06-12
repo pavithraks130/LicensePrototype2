@@ -25,13 +25,13 @@ namespace OnPremise.WebAPI.Controllers
         /// <summary>
         /// GET Method : Gets products based on the admin Id
         /// </summary>
-        /// <param name="adminUserId"></param>
+        /// <param name="adminId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetProductsByAdminId/{adminUserId}")]
-        public IHttpActionResult GetProductsByAdmin(string adminUserId)
+        [Route("GetProductsByAdminId/{adminId}")]
+        public IHttpActionResult GetProductsByAdmin(string adminId)
         {
-            var productList = productLogic.GetProductbyAdmin(adminUserId);
+            var productList = productLogic.GetProductbyAdmin(adminId);
             return Ok(productList);
         }
 

@@ -118,7 +118,7 @@ namespace License.MetCalWeb.Controllers
         {
             List<SubscriptionCategory> category = null;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/productCategory/All").Result;
+            var response = client.GetAsync("api/SubscriptionCategory/All").Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
