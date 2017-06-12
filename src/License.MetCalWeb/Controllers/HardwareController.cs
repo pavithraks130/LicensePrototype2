@@ -23,7 +23,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult HardwareContainer()
         {
-            HardwareDetails model = LoadHardware();
+            Hardware model = LoadHardware();
             return View(model);
         }
 
@@ -31,9 +31,9 @@ namespace License.MetCalWeb.Controllers
         /// Service call to  get the List of assets which are created
         /// </summary>
         /// <returns></returns>
-        private HardwareDetails LoadHardware()
+        private Hardware LoadHardware()
         {
-            var hm = new HardwareDetails();
+            var hm = new Hardware();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/asset/GetAll").Result;
             if (response.IsSuccessStatusCode)
