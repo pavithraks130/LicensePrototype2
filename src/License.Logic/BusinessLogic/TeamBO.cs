@@ -303,7 +303,7 @@ namespace License.Logic.BusinessLogic
                 // If not available then the error Response will be sent else the  required license will be  added to the team License.
                 if (!isLicenseAvailable)
                 {
-                    concurentUserResponse.ErrorMessage = "Not much license Exist";
+                    concurentUserResponse.ErrorMessage = "Concurrent User exceeds the Available license count";
                     concurentUserResponse.UserUpdateStatus = false;
                     concurentUserResponse.OldUserCount = dbTeamObj.ConcurrentUserCount;
                     return concurentUserResponse;
