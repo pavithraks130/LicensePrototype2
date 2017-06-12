@@ -14,7 +14,7 @@ namespace License.MetCalWeb.Common
         /// Get user license by user Id  with feature listing 
         /// </summary>
         /// <returns></returns>
-        public static List<Product> GetUserLicenseForUser()
+        public static List<ProductDetails> GetUserLicenseForUser()
         {
             string userId = LicenseSessionState.Instance.User.UserId;
             var userLicDetails = GetUserLicenseDetails(userId, true);
@@ -47,9 +47,9 @@ namespace License.MetCalWeb.Common
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static IList<Product> GetProductsFromSubscription(string userId = "")
+        public static IList<ProductDetails> GetProductsFromSubscription(string userId = "")
         {
-            IList<Product> productsList = new List<Product>();
+            IList<ProductDetails> productsList = new List<ProductDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             string adminId = string.Empty;
             if (LicenseSessionState.Instance.IsSuperAdmin)
@@ -66,7 +66,7 @@ namespace License.MetCalWeb.Common
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 if (!string.IsNullOrEmpty(jsonData))
-                    productsList = JsonConvert.DeserializeObject<IList<Product>>(jsonData);
+                    productsList = JsonConvert.DeserializeObject<IList<ProductDetails>>(jsonData);
             }
             return productsList;
         }
@@ -107,15 +107,15 @@ namespace License.MetCalWeb.Common
         /// <param name="userId"></param>
         /// <param name="isFeatureRequired"></param>
         /// <returns></returns>
-        public static List<Product> GetTeamLicenseDetails(int teamId)
+        public static List<ProductDetails> GetTeamLicenseDetails(int teamId)
         {
-            var distinctProductList = new List<Product>();
+            var distinctProductList = new List<ProductDetails>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/TeamLicense/GetTeamLicenseByTeam/" + teamId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                distinctProductList = JsonConvert.DeserializeObject<List<Product>>(jsonData);
+                distinctProductList = JsonConvert.DeserializeObject<List<ProductDetails>>(jsonData);
             }
             return distinctProductList;
         }

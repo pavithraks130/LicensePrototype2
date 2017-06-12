@@ -29,34 +29,5 @@ namespace License.MetCalWeb.Models
             SubscriptionList = new List<Subscription>();
         }
     }
-
-    public class Organization
-    {
-        public int Id { get; set; }
-        [DisplayName("Organization Name")]
-        public string Name { get; set; }
-
-    }
-
-    public class UserToken
-    {
-        public int Id { get; set; }
-        [Required]
-        public string Email { get; set; }
-        public string Token { get; set; }
-    }
-
-    public class ConcurrentUserLogin
-    {
-        public int TeamId { get; set; }
-
-        public string UserId { get; set; }
-
-        public bool IsUserLoggedIn { get; set; }
-
-        public string ErrorOrNotificationMessage { get; set; }
-
-        public List<Product> Products { get; set; }
-    }
 }
 

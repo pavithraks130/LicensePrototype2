@@ -5,7 +5,7 @@ using System.Web;
 
 namespace License.MetCalWeb.Models
 {
-    public class Product
+    public class ProductDetails
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -27,11 +27,4 @@ namespace License.MetCalWeb.Models
 
     }
 
-
-    public class ProductDependency
-    {
-        public List<SubscriptionCategory> Categories { get; set; }
-
-        public List<Feature> Features { get; set; }
-    }
 }

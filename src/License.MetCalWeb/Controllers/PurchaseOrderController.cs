@@ -30,13 +30,13 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public async Task<ActionResult> Index()
         {
-            List<PurchaseOrder> orderList = new List<PurchaseOrder>();
+            List<PurchaseOrderDeatils> orderList = new List<PurchaseOrderDeatils>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = await client.GetAsync("api/purchaseorder/All");
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
+                orderList = JsonConvert.DeserializeObject<List<PurchaseOrderDeatils>>(data);
             }
             else
             {
@@ -64,7 +64,7 @@ namespace License.MetCalWeb.Controllers
                 case "Approve": isApproved = true; break;
                 case "Reject": isApproved = false; break;
             }
-            var orderList = selectedPurchaseOrder.ToList().Select(poId => new PurchaseOrder()
+            var orderList = selectedPurchaseOrder.ToList().Select(poId => new PurchaseOrderDeatils()
             {
                 Id = Convert.ToInt32(poId),
                 IsApproved = isApproved,
@@ -93,13 +93,13 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public async Task<ActionResult> OrderStatus()
         {
-            List<PurchaseOrder> poList = new List<PurchaseOrder>();
+            List<PurchaseOrderDeatils> poList = new List<PurchaseOrderDeatils>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = await client.GetAsync("api/purchaseorder/OrderByUser/" + LicenseSessionState.Instance.User.ServerUserId);
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                poList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(jsonData);
+                poList = JsonConvert.DeserializeObject<List<PurchaseOrderDeatils>>(jsonData);
             }
             else
             {
@@ -118,13 +118,13 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public async Task<ActionResult> OrderDetail(int id)
         {
-            PurchaseOrder order = new PurchaseOrder();
+            PurchaseOrderDeatils order = new PurchaseOrderDeatils();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = await client.GetAsync("api/purchaseorder/OrderById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                order = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+                order = JsonConvert.DeserializeObject<PurchaseOrderDeatils>(jsonData);
             }
             else
             {

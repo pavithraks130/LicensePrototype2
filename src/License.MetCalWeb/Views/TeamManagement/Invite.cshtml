@@ -1,8 +1,8 @@
 ﻿@model License.MetCalWeb.Models.UserInviteModel
+
 @{
     Layout = null;
 }
-
 @using (Html.BeginForm("Invite", "TeamManagement",new { teamId = ViewBag.TeamId } ,FormMethod.Post))
 {
     <div class="modal-dialog " style="position: static!important">

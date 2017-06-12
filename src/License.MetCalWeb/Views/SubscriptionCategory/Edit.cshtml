@@ -1,10 +1,9 @@
 ﻿@model License.MetCalWeb.Models.SubscriptionCategory
+
 @{
     Layout = null;
 }
-
 <h2>Edit</h2>
-
 @using (Html.BeginForm("Edit", "SubscriptionCategory", new { id = Model.Id }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()

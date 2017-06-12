@@ -22,7 +22,7 @@ namespace License.MetCalWeb.Logic
         private readonly string applicationSecretPass = "WebPortal";
         public string ErrorMessage { get; set; }
 
-        public User ResetUserPassword(ResetPassword model, ServiceType type)
+        public User ResetUserPassword(ResetPasswordDetails model, ServiceType type)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);
             var response = client.PostAsJsonAsync("api/user/ResetPassword", model).Result;
@@ -40,7 +40,7 @@ namespace License.MetCalWeb.Logic
             }
             return null;
         }
-        public ForgotPasswordToken GetForgotPasswordToken(ForgotPassword model, ServiceType type)
+        public ForgotPasswordTokenDetails GetForgotPasswordToken(ForgotPasswordDetails model, ServiceType type)
         {
             ErrorMessage = string.Empty;
             HttpClient client = WebApiServiceLogic.CreateClient(type);
@@ -48,7 +48,7 @@ namespace License.MetCalWeb.Logic
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                var passwordtoken = JsonConvert.DeserializeObject<ForgotPasswordToken>(jsonData);
+                var passwordtoken = JsonConvert.DeserializeObject<ForgotPasswordTokenDetails>(jsonData);
                 return passwordtoken;
             }
             else
@@ -100,7 +100,7 @@ namespace License.MetCalWeb.Logic
             return null;
         }
 
-        public async Task<bool> AuthenticateUser(LoginViewModel model, ServiceType webApiType)
+        public async Task<bool> AuthenticateUser(LoginDetails model, ServiceType webApiType)
         {
             ErrorMessage = string.Empty;
             HttpClient client = WebApiServiceLogic.CreateClient(webApiType);
