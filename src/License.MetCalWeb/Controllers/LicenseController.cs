@@ -220,12 +220,12 @@ namespace License.MetCalWeb.Controllers
         /// once the products are selected then the user will redirected to the users screen for selecting the users.
         /// This action is responsible for listing the Users based on the Team for assigning the license to multiple user.
         /// </summary>
-        /// <param name="SelectedSubscription"></param>
+        /// <param name="SelectedProduct"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult SelectUsers(params string[] SelectedSubscription)
+        public ActionResult SelectUsers(params string[] selectedProduct)
         {
-            TempData["SelectedSubscription"] = SelectedSubscription;
+            TempData["SelectedProduct"] = selectedProduct;
             List<TeamMember> teamMember = new List<TeamMember>();
             if (LicenseSessionState.Instance.SelectedTeam != null)
                 teamMember = LicenseSessionState.Instance.SelectedTeam.TeamMembers.ToList();
@@ -243,7 +243,7 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult SelectedUsers(params string[] SelectedUser)
         {
-            string[] temp = TempData["SelectedSubscription"] as string[];
+            string[] temp = TempData["SelectedProduct"] as string[];
             UpdateLicense(temp, "Add", SelectedUser, true);
             return RedirectToAction("TeamContainer", "TeamManagement");
         }
@@ -251,7 +251,7 @@ namespace License.MetCalWeb.Controllers
         /// <summary>
         /// Function responsible for calling the  service to update the License to multiple users.
         /// </summary>
-        /// <param name="SelectedSubscription"></param>
+        /// <param name="SelectedProduct"></param>
         /// <param name="action"></param>
         /// <param name="SelectedUserIdList"></param>
         /// <param name="canAddBulkLicense"></param>
@@ -297,7 +297,7 @@ namespace License.MetCalWeb.Controllers
         /// <summary>  
         /// Function to make service call to revoke single or multple Product License from user by making a service call
         /// </summary>
-        /// <param name="SelectedSubscription"></param>
+        /// <param name="SelectedProduct"></param>
         /// <returns></returns>
         public string RevokeLicenseFromUser(string[] selectedproduct)
         {
