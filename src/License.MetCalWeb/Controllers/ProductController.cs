@@ -70,12 +70,22 @@ namespace License.MetCalWeb.Controllers
         /// <param name="featuresList"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(Product productDetails, string[] rboCategory, string[] featuresList)
+        public ActionResult Create(Product productDetails, string[] rboCategory, string[] featuresList, string[] optionKey, string[] optionValue)
         {
             if (ModelState.IsValid)
             {
                 productDetails.Categories = rboCategory.ToList().Select(c => new SubscriptionCategory() { Id = Convert.ToInt32(c) }).ToList();
                 productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
+                productDetails.CreatedDate = DateTime.Today;
+                productDetails.ModifiedDate = new DateTime(1900, 01, 01);
+                productDetails.AdditionalOption = new List<ProductAdditionalOption>();
+                for(int i = 0; i < optionKey.Length; i++)
+                {
+                    ProductAdditionalOption option = new ProductAdditionalOption();
+                    option.Key = optionKey[i];
+                    option.Value = optionValue[i];
+                    productDetails.AdditionalOption.Add(option);
+                }
 
                 //Service call to save the data in Centralized DB
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -143,13 +153,23 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Product productDetails, string[] rboCategory, string[] featuresList)
+        public ActionResult Edit(int id, Product productDetails, string[] rboCategory, string[] featuresList, string[] optionKey, string[] optionValue)
         {
             if (ModelState.IsValid)
             {
                 productDetails.Categories = rboCategory.ToList().Select(categoryId => new SubscriptionCategory() { Id = Convert.ToInt32(categoryId) }).ToList();
                 productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
-                productDetails.ModifiedDate = DateTime.Now;
+                productDetails.ModifiedDate = DateTime.Today;
+                productDetails.AdditionalOption = new List<ProductAdditionalOption>();
+                for (int i = 0; i < optionKey.Length; i++)
+                {
+                    ProductAdditionalOption option = new ProductAdditionalOption()
+                    {
+                        Key = optionKey[i],
+                        Value = optionValue[i]
+                    };
+                    productDetails.AdditionalOption.Add(option);
+                }
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
                 var response = client.PutAsJsonAsync("api/product/update/" + id, productDetails).Result;
                 if (response.IsSuccessStatusCode)

@@ -140,5 +140,19 @@ namespace Centralized.WebAPI.Controllers
             return Ok(data);
         }
 
+        /// <summary>
+        /// Get Method to get Category and Feature List
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("ProductDependency")]
+        public HttpResponseMessage GetProductDependency()
+        {
+            var data = productBOLogic.GetDependencyDetails();
+            if (data != null )
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            else
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
+        }
     }
 }

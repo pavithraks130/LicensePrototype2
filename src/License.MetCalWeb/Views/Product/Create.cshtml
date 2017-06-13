@@ -3,8 +3,17 @@
 @{
     ViewBag.Title = "AddProduct";
 }
+<style type="text/css">
+    .hide-table{
+        display: none;
+    }
+
+    .show-table{
+        display:inline;
+    }
+</style>
 <div class="row">
-    <div class="col-sm-12">
+    <div class="form-group">
         <h3>Create Product</h3>
         <hr />
         <section>
@@ -55,8 +64,8 @@
                             <div class="col-md-10">
                                 @foreach (var cat in (List<SubscriptionCategory>)ViewBag.Categories)
                                 {
-                                        <input type="checkbox" name="rboCategory" value="@cat.Id" />
-                                        <label style="margin-right:10px;">@cat.Name</label>                                         
+                                    <input type="checkbox" name="rboCategory" value="@cat.Id" />
+                                    <label style="margin-right:10px;">@cat.Name</label>
                                 }
                             </div>
                             <div class="col-md-2">
@@ -90,6 +99,43 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <div class="col-md-2">
+                                <label>Additional Option</label>
+                            </div>
+                            <div class="col-md-10">
+                                <label class="control-label">
+                                    <input type="checkbox" class="checkbox-inline chkEnable" />
+                                    Enable Additional Option
+                                </label>
+                                <table id="tblAddionalOption" class="hide-table" data-toggle="table table-responsive" data-cache="false" data-height="299">
+                                    <tr>
+                                        <td class="col-md-3">
+                                            Key
+                                        </td>
+                                        <td class="col-md-5">
+                                            Value
+                                        </td>
+                                        <td class="col-md-2 float-left">
+                                            Action
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="col-md-3">
+                                            <input type="text" class="form-control" name="optionKey" />
+                                        </td>
+                                        <td class="col-md-5">
+                                            <input type="text" class="form-control" name="optionValue" />
+                                        </td>
+                                        <td class="col-md-2 float-left">
+                                            <button type="button" class="btn btn-default btn-add">+</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <label id="lblOptionError" class="field-validation-error"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <input type="submit" class="btn btn-default" data-dismis="model" value="Create" />
                         </div>
                     </div>
@@ -102,6 +148,18 @@
 @* Javascript *@
 <script>
     $(function () {
+
+        $('.chkEnable').change(function () {
+            var status = $(this).is(':checked');
+            if (status) {
+                $('#tblAddionalOption').removeClass('hide-table');
+                $('#tblAddionalOption').addClass('show-table');
+            }
+            else {
+                $('#tblAddionalOption').removeClass('show-table');
+                $('#tblAddionalOption').addClass('hide-table');
+            }
+        });
         var data = @Html.Raw(Json.Encode(ViewBag.Features));
         $('#table').on('click', '.btn-add', function (e) {
             var target = e.target;
@@ -119,7 +177,7 @@
             str += "</select>";
             str += "</div>";
             str += '<span class="col-md-4">';
-            str += '<button type="button" class="btn btn-primary btn-add">+</button>';
+            str += '<button type="button" class="btn btn-default btn-add">+</button>';
             str += '</span>';
             str += '</div>';
             str += '</td>';
@@ -130,6 +188,29 @@
             $(str).appendTo('#table');
         });
 
+        $('#tblAddionalOption').on('click', '.btn-add', function (e) {
+            var target = e.target;
+            var str = "";
+            str += '<tr>';
+            str += '<td class="col-md-5">';
+                str += '<input type="text" class="form-control" name="optionKey" />';
+                str += '</td>';
+                str += '<td class="col-md-5">';
+                str += '<input type="text" class="form-control" name="optionValue" />';
+                str += '</td>';
+                str += '<td class="col-md-2 float-left">';
+                str += '<button type="button" class="btn btn-default btn-add">+</button>';
+                str += '</td>';
+                str += "</tr>";
+                $(target).removeClass('btn-add');
+                $(target).addClass('btn-remove');
+                $(target).text('X');
+                $(str).appendTo('#tblAddionalOption');
+        });
+
+        $('#tblAddionalOption').on('click', '.btn-remove', function (e) {
+            $(this).parents('tr').remove();
+        });
         $('#table').on('click', '.btn-remove',function () {
             $(this).parents('tr').remove();
         });
@@ -205,18 +286,16 @@
                 $('#lblCategory').removeClass('field-validation-error');
                 isPostEnabled = isPostEnabled && true;
             }
-            var i = 0;
+            var j = 0;
             var count = $('select[name=featuresList]').length;
-            for (var i =0; i < count; i++) {
-                if ($($('select[name=featuresList]')[i]).value.length == 0) {
-                    i++;
+            for (var i = 0; i < count; i++) {
+                console.log($('select[name=featuresList]')[i].value);
+                console.log($('select[name=featuresList]')[i].value.length);
+                if ($('select[name=featuresList]')[i].value.length == 0) {
+                    j++;
                 }
             }
-
-            console.log(i);
-
-
-            if (i > 0) {
+            if (j > 0) {
                 isPostEnabled = isPostEnabled && false;
                 $('#lblFeature').addClass('field-validation-error');
                 $('#lblFeature').removeClass("field-validation-valid");
@@ -225,6 +304,24 @@
                 isPostEnabled = isPostEnabled && true;
                 $('#lblFeature').addClass("field-validation-valid");
                 $('#lblFeature').removeClass('field-validation-error');
+            }
+            var errorMsg = "";
+            if ($('.chkEnable').is(':checked')) {
+                var optionKeyLength = $('input[name=optionKey]').length;
+                var optionValueLength = $('input[name=optionValue]').length;
+                for (var i = 0; i < optionKeyLength; i++) {
+                    if ($('input[name=optionKey]')[i].value.length == 0 || $('input[name=optionValue]')[i].value.length == 0) {
+                        errorMsg = "Specify Key and value for the Addition Option";
+                        isPostEnabled = isPostEnabled && false;
+                        break;
+                    }
+                }
+                if (errorMsg != "") {
+                    $('#lblOptionError').text(errorMsg);
+                }
+                else {
+                    $('#lblOptionError').text("");
+                }
             }
             return isPostEnabled;
         });

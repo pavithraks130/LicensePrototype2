@@ -59,10 +59,11 @@ namespace LicenseServer.Logic.BusinessLogic
         public Product Update(int id, Product pro)
         {
             var dbPro = proLogic.UpdateProduct(id, pro);
+            pro.AdditionalOption.ToList().ForEach(o => o.ProductId = dbPro.Id);
             if (pro.AdditionalOption != null || pro.AdditionalOption.Count != 0)
             {
                 proOptionLogic.DeleteByProductId(dbPro.Id);
-                dbPro.AdditionalOption = proOptionLogic.Update(pro.AdditionalOption.ToList());
+                dbPro.AdditionalOption = proOptionLogic.Create(pro.AdditionalOption.ToList());
             }
             return dbPro;
         }

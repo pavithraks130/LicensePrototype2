@@ -773,6 +773,12 @@
             <param name="products"></param>
             <returns></returns>
         </member>
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetProductDependency">
+            <summary>
+            Get Method to get Category and Feature List
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.GetPurchaseOrder">
              <summary>
             Get Method.  Get All the Purchase Order

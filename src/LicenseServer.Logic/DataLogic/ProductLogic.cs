@@ -19,7 +19,7 @@ namespace LicenseServer.Logic
 
         public Product GetProductById(int id)
         {
-            Core.Model.Product pro = Work.ProductRepository.GetData(f => f.Id == id).FirstOrDefault();
+            Core.Model.Product pro = Work.ProductRepository.GetById(id);
             return AutoMapper.Mapper.Map<DataModel.Product>(pro);
         }
 
@@ -44,7 +44,7 @@ namespace LicenseServer.Logic
 
         public Product UpdateProduct(int id, Product pro)
         {
-            var obj = Work.ProductRepository.GetData(f => f.Id == id, null, "Categories,Features").FirstOrDefault();
+            var obj = Work.ProductRepository.GetById(id);
             obj.Name = pro.Name;
             obj.Description = pro.Description;
             obj.Price = pro.Price;

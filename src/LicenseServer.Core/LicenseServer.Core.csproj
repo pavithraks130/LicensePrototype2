@@ -176,6 +176,14 @@
     <Compile Include="Migrations\201706060706539_ChangesToTableName.Designer.cs">
       <DependentUpon>201706060706539_ChangesToTableName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706121630467_AddedProductAdditionalOptionTable.cs" />
+    <Compile Include="Migrations\201706121630467_AddedProductAdditionalOptionTable.Designer.cs">
+      <DependentUpon>201706121630467_AddedProductAdditionalOptionTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs" />
+    <Compile Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.Designer.cs">
+      <DependentUpon>201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
@@ -252,6 +260,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706060706539_ChangesToTableName.resx">
       <DependentUpon>201706060706539_ChangesToTableName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706121630467_AddedProductAdditionalOptionTable.resx">
+      <DependentUpon>201706121630467_AddedProductAdditionalOptionTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.resx">
+      <DependentUpon>201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
