@@ -74,12 +74,19 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                var length = optionKey.ToList().Select(f => f.ToLower()).Distinct().ToList().Count;
+                var actualLength = optionKey.Length;
+                if (length < actualLength)
+                {
+                    ModelState.AddModelError("", "OptionKeys should be uniqu");
+                    return View(productDetails);
+                }
                 productDetails.Categories = rboCategory.ToList().Select(c => new SubscriptionCategory() { Id = Convert.ToInt32(c) }).ToList();
                 productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
                 productDetails.CreatedDate = DateTime.Today;
                 productDetails.ModifiedDate = new DateTime(1900, 01, 01);
                 productDetails.AdditionalOption = new List<ProductAdditionalOption>();
-                for(int i = 0; i < optionKey.Length; i++)
+                for (int i = 0; i < optionKey.Length; i++)
                 {
                     ProductAdditionalOption option = new ProductAdditionalOption();
                     option.Key = optionKey[i];
@@ -157,6 +164,13 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                var length = optionKey.ToList().Select(f=>f.ToLower()).Distinct().ToList().Count;
+                var actualLength = optionKey.Length;
+                if(length < actualLength)
+                {
+                    ModelState.AddModelError("", "OptionKeys should be uniqu");
+                    return View(productDetails);
+                }
                 productDetails.Categories = rboCategory.ToList().Select(categoryId => new SubscriptionCategory() { Id = Convert.ToInt32(categoryId) }).ToList();
                 productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
                 productDetails.ModifiedDate = DateTime.Now;
