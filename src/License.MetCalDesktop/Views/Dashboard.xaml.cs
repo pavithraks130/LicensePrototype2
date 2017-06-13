@@ -39,10 +39,10 @@ namespace License.MetCalDesktop.Views
                     break;
             }
         }
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if((sender as TabControl).SelectedIndex ==(int)Tab.Subscription)
-            this.NavigationService.Navigate(new Subscriptions());
-        }
+        //private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if((sender as TabControl).SelectedIndex ==(int)Tab.Subscription)
+        //    this.NavigationService.Navigate(new Subscriptions());
+        //}
     }
 }

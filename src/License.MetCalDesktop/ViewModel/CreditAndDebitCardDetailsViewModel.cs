@@ -289,7 +289,7 @@ namespace License.MetCalDesktop.ViewModel
         {
             //Add to cart
             CartItems item = new CartItems();
-            item.SubscriptionTypeId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
+            item.SubscriptionId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
             item.Quantity = 1;
             item.DateCreated = DateTime.Now;
             item.UserId = AppState.Instance.User.ServerUserId;
@@ -354,7 +354,7 @@ namespace License.MetCalDesktop.ViewModel
             {
                 //Add to cart
                 CartItems item = new CartItems();
-                item.SubscriptionTypeId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
+                item.SubscriptionId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
                 item.Quantity = 1;
                 item.DateCreated = DateTime.Now;
                 item.UserId = AppState.Instance.User.ServerUserId;
@@ -375,25 +375,10 @@ namespace License.MetCalDesktop.ViewModel
                     if (!string.IsNullOrEmpty(jsondata))
                     {
                         userSubscriptionList = JsonConvert.DeserializeObject<SubscriptionList>(jsondata);
-                        string userId = string.Empty;
-                        userId = AppState.Instance.User.UserId;
-                        List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
-                        foreach (var subDtls in userSubscriptionList.Subscriptions)
-                        {
-                            //Code to save the user Subscription details to Database.
-                            UserSubscriptionData userSubscription = new UserSubscriptionData();
-                            userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
-                            userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
-                            userSubscription.UserId = userId;
-                            userSubscription.Quantity = subDtls.OrderdQuantity;
-                            userSubscription.Subscription = subDtls;
-                            userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
-                            subscriptionData.Add(userSubscription);
-                        }
-                        client.Dispose();
                         HttpClient client1 = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                         client1.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-                        var response1 = client1.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
+                        userSubscriptionList.UserId = AppState.Instance.User.UserId;
+                        var response1 = client1.PostAsJsonAsync("api/UserSubscription/SyncSubscription", userSubscriptionList).Result;
                         client1.Dispose();
                     }
                 }

@@ -40,7 +40,7 @@
         </Grid>
         <Grid Grid.Row="1" Grid.RowSpan="2" Background="Black" >
 
-            <TabControl SelectionChanged="TabControl_SelectionChanged">
+            <TabControl>
                 <TabItem Header="Home">
                     <ListBox Name="lstFeatureList" ItemsSource="{Binding FeataureList}">
                         <ListBox.ItemTemplate>
@@ -58,7 +58,9 @@
                     </ListBox>
                 </TabItem>
                 <TabItem Header="Subscription" IsEnabled="{Binding IsSuperAdmin}" >
-                    <!--<local:Subscriptions/>-->
+                    <StackPanel>
+                        <local:Subscriptions />
+                    </StackPanel>                       
                 </TabItem>
             </TabControl>
         </Grid>

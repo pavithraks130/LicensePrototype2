@@ -27,7 +27,7 @@ namespace License.MetCalDesktop.businessLogic
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var details = JsonConvert.DeserializeObject<UserLicenseDetails>(jsonData);
-                AppState.Instance.UserLicenseList = details.SubscriptionDetails;
+                AppState.Instance.UserLicenseList = details.Products;
                 UpdateFeatureToFile();
             }
         }
@@ -39,7 +39,7 @@ namespace License.MetCalDesktop.businessLogic
                 var featuresList = FileIO.GetJsonDataFromFile(featurefileName);
                 var licenseDetails = JsonConvert.DeserializeObject<List<UserLicenseDetails>>(featuresList);
                 var userLisense = licenseDetails.FirstOrDefault(l => l.UserId == AppState.Instance.User.UserId);
-                AppState.Instance.UserLicenseList = userLisense.SubscriptionDetails;
+                AppState.Instance.UserLicenseList = userLisense.Products;
             }
         }
 
@@ -52,12 +52,13 @@ namespace License.MetCalDesktop.businessLogic
                 var licenseDetails = JsonConvert.DeserializeObject<List<UserLicenseDetails>>(featuresList);
                 var userLisense = licenseDetails.FirstOrDefault(l => l.UserId == AppState.Instance.User.UserId);
                 if (userLisense == null)
-                    licenseDetails.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, SubscriptionDetails = AppState.Instance.UserLicenseList });
+                    licenseDetails.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, Products = AppState.Instance.UserLicenseList });
                 else
-                    userLisense.SubscriptionDetails = AppState.Instance.UserLicenseList;
+                    userLisense.Products = AppState.Instance.UserLicenseList;
+                userlicdtls = licenseDetails;
             }
             else
-                userlicdtls.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, SubscriptionDetails = AppState.Instance.UserLicenseList });
+                userlicdtls.Add(new UserLicenseDetails() { UserId = AppState.Instance.User.UserId, Products = AppState.Instance.UserLicenseList });
             var jsonData = JsonConvert.SerializeObject(userlicdtls);
             FileIO.SaveDatatoFile(jsonData, featurefileName);
         }

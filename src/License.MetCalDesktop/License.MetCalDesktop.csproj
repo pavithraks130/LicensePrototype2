@@ -123,14 +123,13 @@
     <Compile Include="Model\AccessToken.cs" />
     <Compile Include="Model\Team.cs" />
     <Compile Include="Model\User.cs" />
-    <Compile Include="Model\UserLicense.cs" />
+    <Compile Include="Model\UserLicenseDetails.cs" />
     <Compile Include="ViewModel\BaseEntity.cs" />
     <Compile Include="ViewModel\CreditAndDebitCardDetailsViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\OfflinePaymentViewModel.cs" />
     <Compile Include="ViewModel\RedirectToAmountPaymentPageViewModel.cs" />
-    <Compile Include="ViewModel\SubscriptionDetailsViewModel.cs" />
     <Compile Include="ViewModel\SubscriptionViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
     <Compile Include="Views\CreditAndDebitCardDetails.xaml.cs">
@@ -147,9 +146,6 @@
     </Compile>
     <Compile Include="Views\RedirectToAmountPaymentPage.xaml.cs">
       <DependentUpon>RedirectToAmountPaymentPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SubscriptionDetails.xaml.cs">
-      <DependentUpon>SubscriptionDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Subscriptions.xaml.cs">
       <DependentUpon>Subscriptions.xaml</DependentUpon>
@@ -190,10 +186,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RedirectToAmountPaymentPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SubscriptionDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

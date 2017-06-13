@@ -22,7 +22,7 @@ namespace License.MetCalDesktop.Common
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var productList = (ICollection<ProductDetails>)value;
+            var productList = (ICollection<Product>)value;
             if (productList != null && productList.Count > 0)
             {
                 StringBuilder str = new StringBuilder();

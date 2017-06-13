@@ -33,10 +33,9 @@ namespace License.MetCalDesktop.ViewModel
             LogoutCommand = new RelayCommand(LogOut);
             LoggedInUser = AppState.Instance.User.FirstName + ", " + AppState.Instance.User.LastName;
             isSuperAdmin = AppState.Instance.IsSuperAdmin;
-
             LoadFeatures();
         }
-       
+
         public void LoadFeatures()
         {
             DashboardLogic logic = new DashboardLogic();
@@ -49,12 +48,9 @@ namespace License.MetCalDesktop.ViewModel
             {
                 foreach (var data in AppState.Instance.UserLicenseList)
                 {
-                    foreach (var pro in data.Products)
+                    foreach (var fet in data.Features)
                     {
-                        foreach (var fet in pro.Features)
-                        {
-                            FeataureList.Add(fet);
-                        }
+                        FeataureList.Add(fet);
                     }
                 }
             }
@@ -62,9 +58,13 @@ namespace License.MetCalDesktop.ViewModel
 
         public void LogOut(object param)
         {
-            UpdateLogoutStatus(AppState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
-            if (AppState.Instance.IsSuperAdmin)
-                UpdateLogoutStatus(AppState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
+            if (AppState.Instance.IsNetworkAvilable())
+            {
+                UpdateLogoutStatus(AppState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
+                if (AppState.Instance.IsSuperAdmin)
+                    UpdateLogoutStatus(AppState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
+            }
+            
             AppState.Instance.User = null;
             AppState.Instance.UserLicenseList = null;
             AppState.Instance.IsUserLoggedIn = false;

@@ -1,5 +1,4 @@
-﻿using License.MetCalDesktop.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using License.MetCalDesktop.ViewModel;
 
 namespace License.MetCalDesktop.Views
 {
     /// <summary>
     /// Interaction logic for Subscriptions.xaml
     /// </summary>
-    public partial class Subscriptions : Page
+    public partial class Subscriptions : UserControl
     {
         public Subscriptions()
         {
@@ -32,14 +32,10 @@ namespace License.MetCalDesktop.Views
 
         private void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
         {
+            NavigationWindow windowTemp = (NavigationWindow)Window.GetWindow(this);
             if (screenName == "CreditAndDebitCardDetails")
-            {
-                this.NavigationService.Navigate(new CreditAndDebitCardDetails());
-            }
-            if (screenName == "SubscriptionDetails")
-            {
-                this.NavigationService.Navigate(new SubscriptionDetails());
-            }
+                windowTemp.NavigationService.Navigate(new CreditAndDebitCardDetails());            
         }
+
     }
 }

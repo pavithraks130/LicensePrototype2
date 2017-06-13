@@ -18,7 +18,7 @@ namespace License.MetCalDesktop.Common
             get { return _instance ?? (_instance = new AppState()); }
         }
 
-        public List<SubscriptionDetails> UserLicenseList { get; set; }
+        public List<Product> UserLicenseList { get; set; }
 
         public bool IsUserLoggedIn { get; set; }
         public bool IsSuperAdmin { get; set; }
@@ -48,7 +48,7 @@ namespace License.MetCalDesktop.Common
         public List<Team> TeamList { get; set; }
 
         public Team SelectedTeam { get; set; }
-        public SubscriptionType SelectedSubscription { get; set; }
+        public Subscription SelectedSubscription { get; set; }
 
         public ConcurrentUserLogin UserLogin { get; set; }
         public static HttpClient CreateClient(string serviceType)

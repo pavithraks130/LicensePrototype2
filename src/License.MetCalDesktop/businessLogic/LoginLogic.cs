@@ -195,23 +195,12 @@ namespace License.MetCalDesktop.businessLogic
         {
             string userId = string.Empty;
             userId = AppState.Instance.User.UserId;
-            List<UserSubscriptionData> subscriptionData = new List<UserSubscriptionData>();
-            foreach (var subDtls in subs.Subscriptions)
-            {
-                //Code to save the user Subscription details to Database.
-                UserSubscriptionData userSubscription = new UserSubscriptionData();
-                userSubscription.SubscriptionDate = subDtls.SubscriptionDate;
-                userSubscription.SubscriptionId = subDtls.SubscriptionTypeId;
-                userSubscription.UserId = userId;
-                userSubscription.Quantity = subDtls.OrderdQuantity;
-                userSubscription.Subscription = subDtls;
-                userSubscription.LicenseKeys = subDtls.LicenseKeyProductMapping;
-                subscriptionData.Add(userSubscription);
-            }
+            
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subscriptionData).Result;
+            var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subs).Result;
         }
+
         private static string EncodeToBase64(string value)
         {
             var toEncodeAsBytes = Encoding.UTF8.GetBytes(value);

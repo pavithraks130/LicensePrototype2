@@ -72,7 +72,7 @@ namespace License.MetCalDesktop.Views
             statusBarPayment.Visibility = Visibility.Visible;
             System.Threading.Thread.Sleep(1000);
             if (AppState.Instance.IsUserLoggedIn)
-                this.NavigationService.Navigate(new SubscriptionDetails());
+                this.NavigationService.Navigate(new Dashboard());
 
         }
 

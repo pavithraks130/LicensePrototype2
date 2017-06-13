@@ -29,6 +29,10 @@ namespace License.MetCalDesktop.Common
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] key = UE.GetBytes(password);
 
+                //To Delete the existing encrypted file and create new file
+                if (File.Exists(outputFile))
+                    File.Delete(outputFile);
+
                 string cryptFile = outputFile;
                 FileStream fsCrypt = new FileStream(cryptFile, FileMode.Create);
 
@@ -37,6 +41,8 @@ namespace License.MetCalDesktop.Common
                 CryptoStream cs = new CryptoStream(fsCrypt,
                     RMCrypto.CreateEncryptor(key, key),
                     CryptoStreamMode.Write);
+
+                
 
                 FileStream fsIn = new FileStream(inputFile, FileMode.Open);
 
@@ -70,6 +76,9 @@ namespace License.MetCalDesktop.Common
                 RMCrypto.CreateDecryptor(key, key),
                 CryptoStreamMode.Read);
 
+            // Delete the existing Json Deserialized file and create New
+            if (File.Exists(outputFile))
+               File.Delete(outputFile);
             FileStream fsOut = new FileStream(outputFile, FileMode.Create);
 
             int data;
@@ -90,11 +99,13 @@ namespace License.MetCalDesktop.Common
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
-
+            var sourceFile = Path.Combine(tempFolderPath, fileName);
+            if (File.Exists(sourceFile))
+                File.Delete(sourceFile);
             //Saving the license file
             byte[] serializedata = Encoding.UTF8.GetBytes(jsonData);
             var serializerdatastring = System.Text.Encoding.UTF8.GetString(serializedata, 0, serializedata.Length);
-            var bw = new BinaryWriter(File.Open(Path.Combine(tempFolderPath, fileName), FileMode.OpenOrCreate));
+            var bw = new BinaryWriter(File.Open(sourceFile, FileMode.OpenOrCreate));
             bw.Write(serializedata.ToArray());
             bw.Dispose();
             EncryptFile(Path.Combine(tempFolderPath, fileName), Path.Combine(folderPath, fileName));
@@ -109,7 +120,9 @@ namespace License.MetCalDesktop.Common
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
+
             string jsonData = String.Empty;
+
             DecryptFile(Path.Combine(folderPath, fileName), Path.Combine(tempFolderPath, fileName));
             if (File.Exists(Path.Combine(tempFolderPath, fileName)))
             {

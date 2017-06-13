@@ -5,27 +5,34 @@ using System.Web;
 
 namespace License.MetCalDesktop.Model
 {
+    /// <summary>
+    /// This entire region is used to sync the subscription details between 2 servers.
+    /// </summary>
+    ///   
     public class SubscriptionList
     {
         public string UserId { get; set; }
 
-        public List<Subscription> Subscriptions { get; set; }
+        public List<SubscriptionLicenseMapping> Subscriptions { get; set; }
 
         public SubscriptionList()
         {
-            Subscriptions = new List<Subscription>();
+            Subscriptions = new List<SubscriptionLicenseMapping>();
         }
     }
-    public class Subscription
+    public class SubscriptionLicenseMapping
     {
-        public int SubscriptionTypeId { get; set; }
+        public int SubscriptionId { get; set; }
 
         public DateTime SubscriptionDate { get; set; }
-        public SubscriptionType SubscriptionType { get; set; }
 
+        public DateTime RenewalDate { get; set; }
+        public Subscription Subscription { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public int UserSubscriptionId { get; set; }
         public List<LicenseKeyProductMapping> LicenseKeyProductMapping { get; set; }
 
-        public Subscription()
+        public SubscriptionLicenseMapping()
         {
             LicenseKeyProductMapping = new List<LicenseKeyProductMapping>();
         }
@@ -39,8 +46,9 @@ namespace License.MetCalDesktop.Model
 
     }
 
-    public class UserSubscriptionData
+    public class UserSubscription
     {
+        public int Id { get; set; }
 
         public string UserId { get; set; }
 
@@ -48,42 +56,15 @@ namespace License.MetCalDesktop.Model
 
         public DateTime SubscriptionDate { get; set; }
 
-        public Subscription Subscription { get; set; }
+        public DateTime RenewalDate { get; set; }
+
+        public Subscription Subtype { get; set; }
+        public User User { get; set; }
 
         public int Quantity { get; set; }
 
-        public List<LicenseKeyProductMapping> LicenseKeys { get; set; }
-    }
-    public class SubscriptionDetails
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int UserSubscriptionId { get; set; }
-        public List<ProductDetails> Products { get; set; }
-        public SubscriptionDetails()
-        {
-            Products = new List<ProductDetails>();
-        }
     }
 
-    public class ProductDetails
-    {
-        public int Id { get; set; }
-        public string ProductCode { get; set; }
-        public string Name { get; set; }
-        public String Description { get; set; }
-        public int TotalLicenseCount { get; set; }
-        public int UsedLicenseCount { get; set; }
-        public bool IsSelected { get; set; }
-        public bool IsDisabled { get; set; }
-        public bool InitialState { get; set; }
-        public List<Feature> Features { get; set; }
-        public DateTime ExpireDate { get; set; }
-        public ProductDetails()
-        {
-            Features = new List<Feature>();
-        }
-    }
 
     public class Feature
     {
@@ -98,18 +79,37 @@ namespace License.MetCalDesktop.Model
         public string UserId { get; set; }
         public bool IsFeatureRequired { get; set; }
     }
-    public class SubscriptionType
+    public class Subscription
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string ImagePath { get; set; }
         public int ActiveDays { get; set; }
-
         public int ActivationMonth { get; set; }
         public double Price { get; set; }
-
+        public SubscriptionCategory Category { get; set; }
+        public int NoOfUsers { get; set; }
         public string CreatedBy { get; set; }
-        public IEnumerable<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
+    }
+    public class SubscriptionCategory
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsSelected { get; set; }
+        public ICollection<Product> Products { get; set; }
+        public int ActivationMonth { get; set; }
+        public double Price { get; set; }
+    }
+
+    public class ProductAdditionalOption
+    {
+        public int Id { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public string ValueType { get; set; }
+        public int ProductId { get; set; }
     }
     public class Product
     {
@@ -119,7 +119,19 @@ namespace License.MetCalDesktop.Model
         public string ProductCode { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
-        public ICollection<Feature> Features { get; set; }
+        public List<SubscriptionCategory> Categories { get; set; }
+        public List<Feature> Features { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public int ActivationMonth { get; set; }
+        public string Type { get; set; }
+        public bool IsSelected { get; set; }
+        public bool IsDisabled { get; set; }
+        public bool InitialState { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public int AvailableCount { get; set; }
+        public List<ProductAdditionalOption> AdditionalOption { get; set; }
 
     }
+
 }

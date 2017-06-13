@@ -56,13 +56,8 @@ namespace License.MetCalDesktop.ViewModel
             var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
             var jsonData = response.Content.ReadAsStringAsync().Result;
             var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+            AppState.Instance.UserLicenseList = userLoginObj.Products;
             AppState.Instance.UserLogin = userLoginObj;
-            //CustomEventArgs e = new CustomEventArgs();
-            //e.IsConcurrentuserLoggedIn = userLoginObj.IsUserLoggedIn;
-            //if (userLoginObj.IsUserLoggedIn)
-            //    e.ErrorMessage = "";
-            //else
-            //    e.ErrorMessage = userLoginObj.ErrorOrNotificationMessage;
             ClosepoupWindow?.Invoke(this,new EventArgs());
         }
 

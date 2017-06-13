@@ -159,7 +159,7 @@ namespace License.MetCalWeb.Controllers
             {
                 productDetails.Categories = rboCategory.ToList().Select(categoryId => new SubscriptionCategory() { Id = Convert.ToInt32(categoryId) }).ToList();
                 productDetails.Features = featuresList.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
-                productDetails.ModifiedDate = DateTime.Today;
+                productDetails.ModifiedDate = DateTime.Now;
                 productDetails.AdditionalOption = new List<ProductAdditionalOption>();
                 for (int i = 0; i < optionKey.Length; i++)
                 {

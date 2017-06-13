@@ -180,6 +180,11 @@ namespace License.MetCalDesktop.ViewModel
                 AppState.Instance.IsUserLoggedIn = true;
                 if (AppState.Instance.IsNetworkAvilable())
                     LoadTeams();
+                else
+                {
+                    if (AppState.Instance.IsUserLoggedIn)
+                        NavigateNextPage?.Invoke("Dashboard", null);
+                }
                 IsEnableLogin = true;
             }
         }
@@ -215,6 +220,7 @@ namespace License.MetCalDesktop.ViewModel
                     response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
                     jsonData = response.Content.ReadAsStringAsync().Result;
                     var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+                    AppState.Instance.UserLicenseList = userLoginObj.Products;
                     if (userLoginObj.IsUserLoggedIn)
                         NavigateNextPage?.Invoke("Dashboard", null);
                     else

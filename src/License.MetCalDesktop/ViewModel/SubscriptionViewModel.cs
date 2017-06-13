@@ -15,7 +15,7 @@ namespace License.MetCalDesktop.ViewModel
     class SubscriptionViewModel : BaseEntity
     {
 
-        private List<SubscriptionType> _subscriptionList = new List<SubscriptionType>();
+        private List<Subscription> _subscriptionList = new List<Subscription>();
         /// <summary>
         ///performing the license purchase  action
         /// </summary>
@@ -24,7 +24,7 @@ namespace License.MetCalDesktop.ViewModel
         /// <summary>
         /// SubscriptionList collection
         /// </summary>
-        public List<SubscriptionType> SubscriptionList
+        public List<Subscription> SubscriptionList
         {
             get
             {
@@ -47,14 +47,15 @@ namespace License.MetCalDesktop.ViewModel
         public SubscriptionViewModel()
         {
             BuyCommand = new RelayCommand(RedirectToPayment);
-            RedirectToSubscriptionDetailsCommand = new RelayCommand(RedirectToSubscriptionDetails);
-            LoadSubscriptionList();
+            RedirectToSubscriptionDetailsCommand = new RelayCommand(RedirectToMain);
+            if (AppState.Instance.IsNetworkAvilable())
+                LoadSubscriptionList();
         }
 
-        private void RedirectToSubscriptionDetails(object obj)
+        public void RedirectToMain(object param)
         {
             if (NavigateNextPage != null)
-                NavigateNextPage("SubscriptionDetails", null);
+                NavigateNextPage("Home", null);
         }
 
         /// <summary>
@@ -65,19 +66,13 @@ namespace License.MetCalDesktop.ViewModel
 
             HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
-            HttpResponseMessage response;
+            HttpResponseMessage response = null;
             if (AppState.Instance.IsSuperAdmin)
-            {
-                response = client.GetAsync("api/subscription/All").Result;
-            }
-            else
-            {
                 response = client.GetAsync("api/subscription/All/" + AppState.Instance.User.ServerUserId).Result;
-            }
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var subscriptionList = JsonConvert.DeserializeObject<List<SubscriptionType>>(data);
+                var subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(data);
                 foreach (var x in subscriptionList)
                 {
                     x.ImagePath = @"..\Catalog\Products_Images\" + x.ImagePath;
@@ -102,10 +97,6 @@ namespace License.MetCalDesktop.ViewModel
             int id = Convert.ToInt32(param);
             var typeObj = SubscriptionList.FirstOrDefault(l => l.Id == id);
             AppState.Instance.SelectedSubscription = typeObj;
-
-
-           
-
             if (NavigateNextPage != null)
                 NavigateNextPage("CreditAndDebitCardDetails", null);
         }

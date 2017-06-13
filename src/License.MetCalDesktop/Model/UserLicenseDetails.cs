@@ -9,7 +9,6 @@ namespace License.MetCalDesktop.Model
     {
         public User User { get; set; }
         public string UserId { get; set; }
-
-        public List<SubscriptionDetails> SubscriptionDetails { get; set; }
+        public List<Product> Products { get; set; }
     }
 }
