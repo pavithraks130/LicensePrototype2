@@ -45,8 +45,8 @@
                         <li class="dropdown">
                             @Html.ActionLink("Purchases", "", "")
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("View Subscriptions", "Index", "Subscription")</li>
-                                <li>@Html.ActionLink("Create Subscription", "Create", "Subscription")</li>
+                                @*<li>@Html.ActionLink("View Subscriptions", "Index", "Subscription")</li>
+                                <li>@Html.ActionLink("Create Subscription", "Create", "Subscription")</li>*@
                                 <li>@Html.ActionLink("Orders", "Index", "PurchaseOrder")</li>
                             </ul>
                         </li>
@@ -81,9 +81,9 @@
                     else if (LicenseSessionState.Instance.IsAdmin)
                     {
                         <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
-                        <li class="dropdown">
+                        @*<li class="dropdown">
                             @Html.ActionLink("Teams", "Index", "Team")
-                        </li>
+                        </li>*@
                         <li class="dropdown">
                             @Html.ActionLink("Users", "TeamContainer", "TeamManagement")
                         </li>

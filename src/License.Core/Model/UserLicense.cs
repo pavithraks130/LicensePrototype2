@@ -34,7 +34,6 @@ namespace License.Core.Model
     {
         public int Id { get; set; }
         public string Requested_UserId { get; set; }
-        public int UserSubscriptionId { get; set; }
         public int ProductId { get; set; }
         public DateTime RequestedDate { get; set; }
         public bool IsApproved { get; set; }
@@ -43,9 +42,7 @@ namespace License.Core.Model
 
         [ForeignKey("Requested_UserId")]
         public virtual AppUser User { get; set; }
-
-        [ForeignKey("UserSubscriptionId")]
-        public virtual UserSubscription UserSubscription { get; set; }
+        
         public String Comment { get; set; }
         public int TeamId { get; set; }
     }

@@ -69,7 +69,11 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.AdminId = LicenseSessionState.Instance.User.UserId;
+                if (LicenseSessionState.Instance.IsSuperAdmin)
+                    model.AdminId = LicenseSessionState.Instance.User.UserId;
+                else if (LicenseSessionState.Instance.IsAdmin)
+                    model.AdminId = LicenseSessionState.Instance.AppTeamContext.AdminId;
+                    
                 HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
                 var response = client.PostAsJsonAsync("api/Team/Create", model).Result;
                 if (response.IsSuccessStatusCode)
@@ -287,7 +291,7 @@ namespace License.MetCalWeb.Controllers
                 TeamList = new List<Team> { new Team() { Id = teamId } },
                 LicenseDataList = ExtractLicenseData(selectedProducts)
             };
-            
+
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.PostAsJsonAsync("api/TeamLicense/Revoke", teamLicDataMapping).Result;
             if (!response.IsSuccessStatusCode)

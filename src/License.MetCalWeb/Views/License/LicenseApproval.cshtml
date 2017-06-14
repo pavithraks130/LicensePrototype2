@@ -29,7 +29,6 @@
                 type: "GET",
                 url: "/License/LicenseApprovalByTeam",
                 data: { "teamId": teamId },
-                contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     $(".dvApprovalList").html(data);
                 },

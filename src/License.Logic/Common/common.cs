@@ -42,7 +42,8 @@ namespace License.Logic.Common
                 //string password = @"CalibrationLicense"; // Your Key Here
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] key = UE.GetBytes(password);
-
+                if (File.Exists(outputFile))
+                    File.Delete(outputFile);
                 string cryptFile = outputFile;
                 FileStream fsCrypt = new FileStream(cryptFile, FileMode.Create);
 
@@ -88,7 +89,8 @@ namespace License.Logic.Common
 
                 if (!Directory.Exists(tempFolderPath))
                     Directory.CreateDirectory(tempFolderPath);
-
+                if (File.Exists(outputFile))
+                    File.Delete(outputFile);
                 FileStream fsOut = new FileStream(outputFile, FileMode.Create);
 
                 int data;
@@ -107,18 +109,20 @@ namespace License.Logic.Common
             Logger.Logger.Info("Save Data to file");
             Logger.Logger.Info("destination Path " + folderPath);
             Logger.Logger.Info("source Path " + tempFolderPath);
-            
+
             if (!Directory.Exists(tempFolderPath))
                 Directory.CreateDirectory(tempFolderPath);
 
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
-
+            var sourcePath = Path.Combine(tempFolderPath, fileName);
+            if (File.Exists(sourcePath))
+                File.Delete(sourcePath);
             //Saving the license file
             byte[] serializedata = Encoding.UTF8.GetBytes(jsonData);
             var serializerdatastring = System.Text.Encoding.UTF8.GetString(serializedata, 0, serializedata.Length);
-            var bw = new BinaryWriter(File.Open(Path.Combine(tempFolderPath, fileName), FileMode.OpenOrCreate));
+            var bw = new BinaryWriter(File.Open(sourcePath, FileMode.OpenOrCreate));
             bw.Write(serializedata.ToArray());
             bw.Dispose();
             Common.CommonFileIO.EncryptFile(Path.Combine(tempFolderPath, fileName), Path.Combine(folderPath, fileName));

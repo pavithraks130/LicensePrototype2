@@ -322,12 +322,12 @@ namespace License.MetCalWeb.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("", _accountLogic.ErrorMessage);
-                    return View();
+                    return View(model);
                 }
                 ViewBag.Display = "inline";
                 ViewBag.ResetMessage = "Success";
             }
-            return View();
+            return View(model);
         }
 
         /// <summary>

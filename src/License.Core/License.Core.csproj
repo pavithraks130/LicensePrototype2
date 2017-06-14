@@ -216,6 +216,10 @@
     <Compile Include="Migrations\201706071049063_AddedColumnToUserSubscription.Designer.cs">
       <DependentUpon>201706071049063_AddedColumnToUserSubscription.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706140739356_RemoveUserSubscriptionTable.cs" />
+    <Compile Include="Migrations\201706140739356_RemoveUserSubscriptionTable.Designer.cs">
+      <DependentUpon>201706140739356_RemoveUserSubscriptionTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\ProductLicense.cs" />
@@ -313,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706071049063_AddedColumnToUserSubscription.resx">
       <DependentUpon>201706071049063_AddedColumnToUserSubscription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706140739356_RemoveUserSubscriptionTable.resx">
+      <DependentUpon>201706140739356_RemoveUserSubscriptionTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

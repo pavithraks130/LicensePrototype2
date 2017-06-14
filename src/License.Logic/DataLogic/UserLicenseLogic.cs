@@ -50,12 +50,23 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public bool CreataeUserLicense(List<UserLicense> licList)
         {
+            TeamLogic teamLogic = new TeamLogic();
             foreach (var lic in licList)
             {
+                // get the User subscription List  which are expired for the Admin
+                var team = teamLogic.GetTeamById(lic.TeamId);
+                UserSubscriptionLogic userSubscriptionLogic = new UserSubscriptionLogic();
+                var userSubscriptionList = userSubscriptionLogic.GetSubscription(team.AdminId);
+
+                // Fetches the Subscription Id Which are  expired and get the ID List
+                userSubscriptionList = userSubscriptionList.Where(l => (l.ExpireDate.Date - DateTime.Today).Days < 0).ToList();
+                List<int> userSubIds = new List<int>();
+                userSubIds.AddRange(userSubscriptionList.Select(us => us.Id).ToList());
+
                 // Getting existing user license
                 var userLicList = Work.UserLicenseRepository.GetData(ul => ul.UserId == lic.UserId).ToList();
                 // Getting Product License based on  the user subscription Id and Product id
-                var data = Work.ProductLicenseRepository.GetData(l => l.ProductId == lic.License.ProductId && l.UserSubscriptionId == lic.License.UserSubscriptionId).ToList().Select(l => l.Id);
+                var data = Work.ProductLicenseRepository.GetData(l => l.ProductId == lic.License.ProductId && !userSubIds.Contains(l.UserSubscriptionId)).ToList().Select(l => l.Id);
                 //fetching the user License  which matches the  Product license Id 
                 var obj = userLicList.FirstOrDefault(ul => data.Contains(ul.LicenseId));
                 // if the record does not exist then user license record will be created for the Product
@@ -87,7 +98,7 @@ namespace License.Logic.DataLogic
             UserSubscriptionLogic userSubscriptionLogic = new UserSubscriptionLogic();
             var userSubscriptionList = userSubscriptionLogic.GetSubscription(model.AdminID);
 
-            // Fetches the Subscription Id Which are not expired and get the ID List
+            // Fetches the Subscription Id Which are  expired and get the ID List
             userSubscriptionList = userSubscriptionList.Where(l => (l.ExpireDate.Date - DateTime.Today).Days < 0).ToList();
             List<int> userSubIds = new List<int>();
             userSubIds.AddRange(userSubscriptionList.Select(us => us.Id).ToList());

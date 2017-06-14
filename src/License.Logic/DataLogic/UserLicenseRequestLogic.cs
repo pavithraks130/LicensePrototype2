@@ -88,9 +88,7 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public List<UserLicenseRequest> GetAllRequestList(string adminId)
         {
-            List<UserLicenseRequest> requestList = new List<UserLicenseRequest>();
-            SubscriptionFileIO proSubLogic = new SubscriptionFileIO();
-            subList = proSubLogic.GetSubscriptionFromFile();
+            List<UserLicenseRequest> requestList = new List<UserLicenseRequest>();           
             var teamList = Work.TeamRepository.GetData(f => f.AdminId == adminId);
             foreach (var team in teamList)
             {
@@ -109,11 +107,7 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public List<UserLicenseRequest> GetRequestListByTeam(int teamId)
         {
-            if(subList == null)
-            {
-                SubscriptionFileIO proSubLogic = new SubscriptionFileIO();
-                subList = proSubLogic.GetSubscriptionFromFile();
-            }
+            SubscriptionFileIO proSubLogic = new SubscriptionFileIO();
             var userlist = Work.TeamMemberRepository.GetData(f => f.TeamId == teamId).ToList();
             if (userlist.Count > 0)
             {
@@ -125,9 +119,7 @@ namespace License.Logic.DataLogic
                     foreach (var obj in licReqList)
                     {
                         var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
-                        var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscription.SubscriptionId);
-                        tempObj.UserSubscription.Subscription = new Subscription() { Id = subscription.Id, Name = subscription.Name };
-                        tempObj.Product = subscription.Products.FirstOrDefault(p => p.Id == tempObj.ProductId);
+                        tempObj.Product = proSubLogic.GetProductFromJsonFile(tempObj.ProductId);
                         userLicReq.Add(tempObj);
                     }
                     return userLicReq;
@@ -137,25 +129,20 @@ namespace License.Logic.DataLogic
         }
 
         /// <summary>
-        /// Get the Requested License based on the UserId1
+        /// Get the Requested License based on the UserId
         /// </summary>
         /// <returns></returns>
         public List<UserLicenseRequest> GetLicenseRequest(string userId)
         {
             SubscriptionFileIO proSubLogic = new SubscriptionFileIO();
-            var subList = proSubLogic.GetSubscriptionFromFile();
-
             var licReqList = Work.UserLicenseRequestRepo.GetData(f => f.Requested_UserId == userId).ToList();
             if (licReqList.Count > 0)
-            {
-                var list = licReqList.GroupBy(f => f.UserSubscriptionId).ToList();
+            {                
                 List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
                 foreach (var obj in licReqList)
                 {
                     var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
-                    var subscription = subList.FirstOrDefault(f => f.Id == tempObj.UserSubscription.SubscriptionId);
-                    tempObj.UserSubscription.Subscription = new Subscription() { Id = subscription.Id, Name = subscription.Name };
-                    tempObj.Product = subscription.Products.FirstOrDefault(p => p.Id == tempObj.ProductId);
+                    tempObj.Product = proSubLogic.GetProductFromJsonFile(obj.ProductId);
                     userLicReq.Add(tempObj);
                 }
                 return userLicReq;

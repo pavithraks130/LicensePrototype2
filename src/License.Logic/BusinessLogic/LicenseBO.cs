@@ -40,10 +40,11 @@ namespace License.Logic.BusinessLogic
         {
             List<UserLicenseRequest> licenseRequestList = new List<UserLicenseRequest>();
             List<UserLicense> userLicenseList = new List<UserLicense>();
-            foreach (var licReq in licReqList)
+            foreach (var userlicReq in licReqList)
             {
+                var licReq = userLicenseRequestLogic.GetById(userlicReq.Id);
                 // If Request is approved then creating the User License record and updating DB
-                if (licReq.IsApproved)
+                if (userlicReq.IsApproved)
                 {
                     UserLicense lic = new UserLicense()
                     {
@@ -52,7 +53,6 @@ namespace License.Logic.BusinessLogic
                         License = new ProductLicense()
                     };
                     lic.License.ProductId = licReq.ProductId;
-                    lic.License.UserSubscriptionId = licReq.UserSubscriptionId;
                     userLicenseList.Add(lic);
                 }
             }

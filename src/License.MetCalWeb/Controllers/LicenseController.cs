@@ -211,7 +211,9 @@ namespace License.MetCalWeb.Controllers
             if (!String.IsNullOrEmpty(responseData))
             {
                 ModelState.AddModelError("", responseData);
-                return View("TeamContainer", "TeamManagement");
+                UserLicenseDetails licDetails = OnPremiseSubscriptionLogic.GetUserLicenseDetails(TempData["UserId"] as string, false, false);
+                ViewBag.UserEmail = licDetails.User.Email;
+                return View(licDetails.Products);
             }
             return RedirectToAction("TeamContainer", "TeamManagement");
         }
@@ -344,20 +346,16 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LicenseRequest(params string[] SelectedSubscription)
+        public ActionResult LicenseRequest(params string[] selectedProduct)
         {
             List<UserLicenseRequest> licReqList = new List<UserLicenseRequest>();
-            foreach (var data in SelectedSubscription)
+            foreach (var data in selectedProduct)
             {
-                var splitValue = data.Split(new char[] { '-' });
-                var prodId = splitValue[0].Split(new char[] { ':' })[1];
-                var subscriptionId = splitValue[1].Split(new char[] { ':' })[1];
-
+                
                 UserLicenseRequest req = new UserLicenseRequest()
                 {
                     Requested_UserId = LicenseSessionState.Instance.User.UserId,
-                    ProductId = Convert.ToInt32(prodId),
-                    UserSubscriptionId = Convert.ToInt32(subscriptionId),
+                    ProductId = Convert.ToInt32(data),
                     RequestedDate = DateTime.Now.Date,
                     TeamId = LicenseSessionState.Instance.SelectedTeam.Id
                 };

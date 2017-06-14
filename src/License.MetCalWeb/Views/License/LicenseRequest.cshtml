@@ -1,4 +1,4 @@
-﻿@model List<License.MetCalWeb.Models.Subscription>
+﻿@model List<License.MetCalWeb.Models.Product>
 
 @{
     ViewBag.Title = "LicenseRequest";
@@ -24,23 +24,12 @@
                         <table class="table" style="border: none">
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                <tr style="">
+                                <tr>
                                     <td>
-                                        @Model[i].Name
-                                        <table class="table">
-                                            @for (int j = 0; j < Model[i].Products.Count; j++)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <label class="control-label">
-                                                            <input type="checkbox" name="SelectedSubscription" value="ProId:@Model[i].Products[j].Id-UserSubId:@Model[i].UserSubscriptionId" @(Model[i].Products[j].IsSelected == true ? "disabled='disabled checked=checked'" : "") class="checkbox-inline">
-                                                            @Model[i].Products[j].Name
-                                                        </label>
-                                                    </td>
-                                                </tr>
-                                            }
-
-                                        </table>
+                                        <label class="control-label">
+                                            <input type="checkbox" name="selectedProduct" value="@Model[i].Id" @(Model[i].IsSelected == true ? "disabled='disabled checked=checked'" : "") class="checkbox-inline">
+                                            @Model[i].Name
+                                        </label>
                                     </td>
                                 </tr>
                             }

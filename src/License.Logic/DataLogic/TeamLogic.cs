@@ -144,6 +144,16 @@ namespace License.Logic.DataLogic
                         mem.TeamId = team.Id;
                         Work.TeamMemberRepository.Update(mem);
                     }
+                    var licList = Work.UserLicenseRepository.GetData(u => u.UserId == mem.InviteeUserId && mem.TeamId == id).ToList();
+                    if(licList != null && licList.Count > 0)
+                    {
+                        foreach(var lic in licList)
+                        {
+                            lic.TeamId = team.Id;
+                            Work.UserLicenseRepository.Update(lic);
+                            Work.UserLicenseRepository.Save();
+                        }
+                    }
                     i++;
                 }
                 if (i > 0)
