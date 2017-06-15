@@ -32,7 +32,10 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<User> users = new List<User>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            ServiceType typeService = ServiceType.OnPremiseWebApi;
+            if (LicenseSessionState.Instance.IsGlobalAdmin)
+                typeService = ServiceType.CentralizeWebApi;
+            HttpClient client = WebApiServiceLogic.CreateClient(typeService);
             var response = await client.GetAsync("api/user/All");
             if (response.IsSuccessStatusCode)
             {
@@ -47,7 +50,10 @@ namespace License.MetCalWeb.Controllers
                 var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
                 ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
             }
-            return View(users);
+            string viewName = "index";
+            if (LicenseSessionState.Instance.IsAdmin || LicenseSessionState.Instance.IsSuperAdmin)
+                viewName = "Users";
+            return View(viewName, users);
         }
 
         /// <summary>
@@ -184,7 +190,7 @@ namespace License.MetCalWeb.Controllers
         public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
         {
             HttpClient client = WebApiServiceLogic.CreateClient(type);
-           
+
             var response = await client.PutAsJsonAsync("api/user/ChangePassword/" + userId, model);
             if (response.IsSuccessStatusCode)
                 return true;
@@ -196,6 +202,71 @@ namespace License.MetCalWeb.Controllers
             }
             ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
             return false;
+        }
+
+
+        public ActionResult EditUser(string id)
+        {
+            User user = new Models.User();
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            var response = client.GetAsync("api/user/UserById/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                user = JsonConvert.DeserializeObject<User>(jsondata);
+            }
+            client.Dispose();
+            client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            response = client.GetAsync("api/Role/All").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var roles = JsonConvert.DeserializeObject<List<Role>>(jsondata);
+                roles.ForEach(r => { if (user.Roles.Contains(r.Name)) r.IsSelected = true; });
+                user.RolesList = roles;
+            }
+            client.Dispose();
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditUser(string id, User user, string[] selectedRole)
+        {
+            HttpClient client;
+            HttpResponseMessage response;
+            if (ModelState.IsValid)
+            {
+                if (selectedRole != null)
+                    user.Roles = selectedRole.ToList();
+                client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+                response = client.PutAsJsonAsync("api/user/Update/" + id, user).Result;
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                if (response.IsSuccessStatusCode)
+                    return RedirectToAction("Index");
+                else
+                {
+                    var failure = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", failure.Message);
+                }
+            }
+
+            client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            response = client.GetAsync("api/Role/All").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var roles = JsonConvert.DeserializeObject<List<Role>>(jsondata);
+                ViewData["RoleList"] = roles.Select(x =>
+                        new SelectListItem()
+                        {
+                            Selected = user.Roles.Contains(x.Name),
+                            Text = x.Name,
+                            Value = x.Name
+                        });
+            }
+            client.Dispose();
+            return View(user);
         }
     }
 }

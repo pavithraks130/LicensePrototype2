@@ -522,6 +522,26 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.GetRoles">
+            <summary>
+            Get Roles List 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.GetRoleById(System.String)">
+            <summary>
+            Get Method, Get the Role by Role ID
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.Create(License.DataModel.Role)">
+            <summary>
+            Post Method, Create the Role
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.AddUserLicense(License.DataModel.UserLicenseDataMapping)">
             <summary>
             Post method. Map the License to the User. The license will be fetched based on the subscription and Product Id

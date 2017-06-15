@@ -201,6 +201,7 @@
     <Compile Include="Common\GlobalExceptionHandling.cs" />
     <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UserLicenseController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TeamController.cs" />

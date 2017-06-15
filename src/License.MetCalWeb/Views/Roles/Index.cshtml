@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-group">
+    <h2>Roles</h2>
+    <button class="btn btn-default btnCreate">Create Role</button>
+</div>
+
+<div class="row">
+    <div>
+        <div class="container">
+            <div class="form-group">
+                <label id="error" class="message-error"></label>
+            </div>
+            <table class="table" style="table-layout:fixed; padding:10px">
+                <tr>
+                    <th class="col-md-4"><label>Role Name</label></th>
+                    <th class="col-md-3"><label style="margin-left:80px"> Action   </label> </th>
+                </tr>
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td class="col-md-4">@obj.Name</td>
+                        <td class="col-md-3">
+                            @if (!obj.IsDefault)
+                            {
+                                <button class="btn btn-default btnEdit" data-id="@obj.RoleId">Edit</button>
+                                <button data-id="@obj.RoleId" class="btn btn-default btnDelete">Delete</button>
+                            }
+                        </td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<div id='myModal' class='modal'>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.btnDelete').click(function (e) {
+            var obj = e.target;
+            var id = $(obj).attr('data-id');
+            $.ajax({
+                url: 'Roles/Delete',
+                method: 'GET',
+                data: { id: id },
+                success: function (data) {
+                    if (data.success) {
+                        $(this).parents('tr').remove();
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        });
+
+        $('.btnEdit').click(function (e) {
+            var obj = e.target;
+            var id = $(obj).attr('data-id');
+            $.ajax({
+                url: 'Roles/Update',
+                method: 'GET',
+                data: { id: id },
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function (data) {
+
+                }
+            });
+        });
+
+        $('.btnCreate').click(function (e) {
+
+            $.ajax({
+                url: 'Roles/Create',
+                method: 'GET',
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function (data) {
+
+                }
+            });
+        });
+    });
+</script>
