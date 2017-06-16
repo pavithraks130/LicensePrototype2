@@ -52,6 +52,7 @@
                             {
                                 <li class="roleList">
                                     <label class="control-label"><input type="checkbox" name="selectedRole" value="@item.Name" checked="@item.IsSelected" class="checkbox-inline" @(item.IsDefault ?"disabled=disabled":"") /> @item.Name</label>
+                                  
                                 </li>
                             }
                         </span>
@@ -92,21 +93,21 @@
 
 
 
-            if (Email.val().trim().length == 0) {
-                $('[data-valmsg-for="Email"]').text("Please enter Email Address"); isPostEnabled = isPostEnabled && false;
-                $('[data-valmsg-for="Email"]').addClass("field-validation-error");
-            }
-            else {
-                var re = /^[\w\.]+\@@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-                if (re.test(Email.val())) {
-                    $('[data-valmsg-for="Email"]').text("");
-                    isPostEnabled = isPostEnabled && true; $('[data-valmsg-for="Email"]').removeClass("field-validation-error");
+            //if (Email.val().length == 0) {
+            //    $('[data-valmsg-for="Email"]').text("Please enter Email Address"); isPostEnabled = isPostEnabled && false;
+            //    $('[data-valmsg-for="Email"]').addClass("field-validation-error");
+            //}
+            //else {
+            //    var re = /^[\w\.]+\@@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            //    if (re.test(Email.val())) {
+            //        $('[data-valmsg-for="Email"]').text("");
+            //        isPostEnabled = isPostEnabled && true; $('[data-valmsg-for="Email"]').removeClass("field-validation-error");
                  
-                } else {
-                    $('[data-valmsg-for="Email"]').text("Not a valid EMail address");
-                    isPostEnabled = isPostEnabled && false; $('[data-valmsg-for="Email"]').addClass("field-validation-error");
-                }
-            }
+            //    } else {
+            //        $('[data-valmsg-for="Email"]').text("Not a valid EMail address");
+            //        isPostEnabled = isPostEnabled && false; $('[data-valmsg-for="Email"]').addClass("field-validation-error");
+            //    }
+            //}
 
 
             i = 0;
@@ -121,6 +122,15 @@
                 $('#lblError').attr('style', 'display:none;');
                 isPostEnabled = isPostEnabled && true;
             }
+            if (isPostEnabled) {
+                var disableList = $('input[type=checkbox][disabled=disabled]');
+                if (disableList.length > 0)
+                    disableList.each(function (e) {                    
+                        $(disableList[e]).removeAttr('disabled');
+                        console.log(disableList[e]);
+                });
+            }
+
             return isPostEnabled;
         });
     });
