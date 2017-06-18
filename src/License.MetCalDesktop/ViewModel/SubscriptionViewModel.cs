@@ -48,7 +48,7 @@ namespace License.MetCalDesktop.ViewModel
         {
             BuyCommand = new RelayCommand(RedirectToPayment);
             RedirectToSubscriptionDetailsCommand = new RelayCommand(RedirectToMain);
-            if (AppState.Instance.IsNetworkAvilable())
+            if (AppState.Instance.IsNetworkAvilable() && AppState.Instance.IsSuperAdmin)
                 LoadSubscriptionList();
         }
 
@@ -63,12 +63,10 @@ namespace License.MetCalDesktop.ViewModel
         /// </summary>
         private void LoadSubscriptionList()
         {
-
             HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
             HttpResponseMessage response = null;
-            if (AppState.Instance.IsSuperAdmin)
-                response = client.GetAsync("api/subscription/All/" + AppState.Instance.User.ServerUserId).Result;
+            response = client.GetAsync("api/subscription/All/" + AppState.Instance.User.ServerUserId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
@@ -85,7 +83,6 @@ namespace License.MetCalDesktop.ViewModel
                 var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
             }
             client.Dispose();
-
         }
 
         /// <summary>

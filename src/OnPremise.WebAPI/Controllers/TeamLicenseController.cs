@@ -24,6 +24,7 @@ namespace OnPremise.WebAPI.Controllers
             teamLicenselogic = new TeamLicenseLogic();
             reqLogic = new UserLicenseRequestLogic();
         }
+     
         /// <summary>
         /// Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
         /// </summary>

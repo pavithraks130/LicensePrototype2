@@ -107,6 +107,7 @@
     <Compile Include="BusinessLogic\LicenseBO.cs" />
     <Compile Include="BusinessLogic\ProductBO.cs" />
     <Compile Include="BusinessLogic\TeamBO.cs" />
+    <Compile Include="BusinessLogic\UserBO.cs" />
     <Compile Include="BusinessLogic\UserSubscriptionBO.cs" />
     <Compile Include="Common\common.cs" />
     <Compile Include="DataLogic\ProductLogic.cs" />

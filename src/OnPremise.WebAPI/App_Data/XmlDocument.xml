@@ -840,6 +840,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.GetUserDetailsById(System.String)">
+            <summary>
+            Get method to fetch the User Details based on the User ID to fetch the Team Details and User Licenese details.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.CreateSubscription(License.DataModel.SubscriptionList)">
             <summary>
             POST Method: Sync the subscription from Centralized to ON premise

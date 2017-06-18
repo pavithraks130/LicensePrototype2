@@ -32,7 +32,7 @@ namespace License.MetCalDesktop.businessLogic
             }
             if (!userList.Any(u => u.Email == user.Email))
                 userList.Add(user);
-            
+
             var jsonData = JsonConvert.SerializeObject(userList);
             FileIO.SaveDatatoFile(jsonData, LoginFileName);
         }
@@ -143,9 +143,7 @@ namespace License.MetCalDesktop.businessLogic
                             new KeyValuePair<string, string>("password", password) });
                         client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                EncodeToBase64(string.Format("{0}:{1}",
-                applicationCode,
-                applicationSecretPass)));
+                EncodeToBase64(string.Format("{0}:{1}", applicationCode, applicationSecretPass)));
                         response = client.PostAsync("/Authenticate", formData1).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -155,12 +153,9 @@ namespace License.MetCalDesktop.businessLogic
                         }
                         AppState.Instance.IsSuperAdmin = true;
                     }
-
                     CreateCredentialFile(user, password);
                     if (AppState.Instance.IsSuperAdmin)
-                    {
                         SynchPurchaseOrder(user.ServerUserId);
-                    }
                 }
             }
             else
@@ -195,16 +190,57 @@ namespace License.MetCalDesktop.businessLogic
         {
             string userId = string.Empty;
             userId = AppState.Instance.User.UserId;
-            
+
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
             var response = client.PostAsJsonAsync("api/UserSubscription/SyncSubscription", subs).Result;
         }
 
-        private static string EncodeToBase64(string value)
+        private string EncodeToBase64(string value)
         {
             var toEncodeAsBytes = Encoding.UTF8.GetBytes(value);
             return Convert.ToBase64String(toEncodeAsBytes);
+        }
+
+        public async Task UpdateFeatureToFile()
+        {
+            string featurefileName = "Products.txt";
+            List<Product> userlicdtls = new List<Product>();
+            if (FileIO.IsFileExist(featurefileName))
+            {
+                var featuresList = FileIO.GetJsonDataFromFile(featurefileName);
+                var licenseDetails = JsonConvert.DeserializeObject<List<Product>>(featuresList);
+                foreach (var pro in AppState.Instance.UserLicenseList)
+                {
+                    var proObj = licenseDetails.FirstOrDefault(p => p.Id == pro.Id);
+                    if (proObj != null)
+                        licenseDetails.Remove(proObj);
+                    licenseDetails.Add(pro);
+                }
+                userlicdtls = licenseDetails;
+            }
+            else
+                userlicdtls.AddRange(AppState.Instance.UserLicenseList);
+            var jsonData = JsonConvert.SerializeObject(userlicdtls);
+            FileIO.SaveDatatoFile(jsonData, featurefileName);
+        }
+
+        public async Task GetUserDetails()
+        {
+            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            var response = client.GetAsync("api/User/GetDetailsById/" + AppState.Instance.User.UserId).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                UserDetails details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+                if (details != null)
+                {
+                    var fileName = AppState.Instance.User.UserId + ".txt";
+                    jsonData = JsonConvert.SerializeObject(details);
+                    FileIO.SaveDatatoFile(jsonData, fileName);
+                }
+            }
         }
     }
 }
