@@ -184,11 +184,20 @@
     <Compile Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.Designer.cs">
       <DependentUpon>201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706150953555_AddedNotificationTable.cs" />
+    <Compile Include="Migrations\201706150953555_AddedNotificationTable.Designer.cs">
+      <DependentUpon>201706150953555_AddedNotificationTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706151103412_AddedNotificationTableEdit.cs" />
+    <Compile Include="Migrations\201706151103412_AddedNotificationTableEdit.Designer.cs">
+      <DependentUpon>201706151103412_AddedNotificationTableEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
     <Compile Include="Model\CartItem.cs" />
     <Compile Include="Model\Feature.cs" />
+    <Compile Include="Model\Notification.cs" />
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductAdditionalOption.cs" />
@@ -266,6 +275,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.resx">
       <DependentUpon>201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706150953555_AddedNotificationTable.resx">
+      <DependentUpon>201706150953555_AddedNotificationTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706151103412_AddedNotificationTableEdit.resx">
+      <DependentUpon>201706151103412_AddedNotificationTableEdit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

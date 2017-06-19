@@ -85,6 +85,15 @@ namespace License.Core.GenericRepository
             }
         }
 
+        private LicenseRepository<CSVFile> _CSVFileRepository;
+        public LicenseRepository<CSVFile> CSVFileRepository
+        {
+            get
+            {
+                return _CSVFileRepository ?? (_CSVFileRepository = new LicenseRepository<CSVFile>(_dbContext));
+            }
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

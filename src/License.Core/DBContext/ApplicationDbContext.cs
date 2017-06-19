@@ -49,5 +49,6 @@ namespace License.Core.DBContext
         public DbSet<UserLicenseRequest> UserLicenseRequest { get; set; }
 
         public DbSet<TeamAsset> TeamAsset { get; set; }
+        public DbSet<CSVFile> CSVFile { get; set; }
     }
 }

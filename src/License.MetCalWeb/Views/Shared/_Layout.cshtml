@@ -56,12 +56,15 @@
                                 <li>@Html.ActionLink("Product Category", "Index", "SubscriptionCategory")</li>
                                 <li>@Html.ActionLink("Products", "Index", "Product")</li>
                                 <li>@Html.ActionLink("Feature", "Index", "Feature")</li>
+                                <li>@Html.ActionLink("Notifications", "Create", "Notification")</li>
                             </ul>
                         </li>
                     }
                     else if (LicenseSessionState.Instance.IsSuperAdmin)
                     {
                         <li>@Html.ActionLink("Dashboard", "Home", "Dashboard")</li>
+
+                        <li>@Html.ActionLink("File Actions", "Upload", "FileAction")</li>
                         <li class="dropdown">
                             @Html.ActionLink("Purchases", "", "")
                             <ul class="dropdown-menu">

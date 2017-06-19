@@ -74,6 +74,9 @@ namespace LicenseServer.Logic
             cfg.CreateMap<Core.Model.ProductAdditionalOption, DataModel.ProductAdditionalOption>();
             cfg.CreateMap<DataModel.ProductAdditionalOption, Core.Model.ProductAdditionalOption>();
 
+            cfg.CreateMap<Core.Model.Notification, DataModel.Notification>();
+            cfg.CreateMap<DataModel.Notification, Core.Model.Notification>();
+
 
 
         }

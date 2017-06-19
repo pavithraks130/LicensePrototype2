@@ -119,6 +119,11 @@ namespace LicenseServer.Core.Infrastructure
             get { return _prodAdditionalOptionRepoository ?? (_prodAdditionalOptionRepoository = new GenericRepository<ProductAdditionalOption>(_context)); }
         }
 
+        private GenericRepository<Notification> _notificationRepository;
+        public GenericRepository<Notification> NotificationRepository
+        {
+            get { return _notificationRepository ?? (_notificationRepository = new GenericRepository<Notification>(_context)); }
+        }
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

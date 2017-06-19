@@ -673,6 +673,18 @@
             <param name="categoryId">Feature Category ID</param>
             <returns>Feature List By Category</returns>
         </member>
+        <member name="T:Centralized.WebAPI.Controllers.NotificationController">
+            <summary>
+            Controller for Notification Related Operations
+            </summary>
+        </member>
+        <member name="M:Centralized.WebAPI.Controllers.NotificationController.CreateNotification(LicenseServer.DataModel.Notification)">
+            <summary>
+            POST Method. Create Notification Data
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:Centralized.WebAPI.Controllers.SubscriptionCategoryController">
             <summary>
             Controller for Subscription Category

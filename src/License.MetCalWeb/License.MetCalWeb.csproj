@@ -229,9 +229,11 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\FeatureController.cs" />
+    <Compile Include="Controllers\FileActionController.cs" />
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SubscriptionCategoryController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\PurchaseNavigationController.cs" />
@@ -251,11 +253,13 @@
     <Compile Include="Models\AccessToken.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\ConcurrentUserLogin.cs" />
+    <Compile Include="Models\CSVFile.cs" />
     <Compile Include="Models\FetchUserSubscription.cs" />
     <Compile Include="Models\ForgotPassword.cs" />
     <Compile Include="Models\ForgotPasswordToken.cs" />
     <Compile Include="Models\LicenseKeyProductMapping.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\ProductAdditionalOption.cs" />
     <Compile Include="Models\ProductDependencyDetails.cs" />
@@ -365,6 +369,8 @@
     <Content Include="Views\Team\AssignLicense.cshtml" />
     <Content Include="Views\Team\RevokeLicense.cshtml" />
     <Content Include="Views\Cart\PaymentGateway.cshtml" />
+    <Content Include="Views\Notification\Create.cshtml" />
+    <Content Include="Views\FileAction\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

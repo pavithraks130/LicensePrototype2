@@ -220,8 +220,13 @@
     <Compile Include="Migrations\201706140739356_RemoveUserSubscriptionTable.Designer.cs">
       <DependentUpon>201706140739356_RemoveUserSubscriptionTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706180859021_CSVDataTable.cs" />
+    <Compile Include="Migrations\201706180859021_CSVDataTable.Designer.cs">
+      <DependentUpon>201706180859021_CSVDataTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
+    <Compile Include="Model\CSVFile.cs" />
     <Compile Include="Model\ProductLicense.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\Team.cs" />
@@ -320,6 +325,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706140739356_RemoveUserSubscriptionTable.resx">
       <DependentUpon>201706140739356_RemoveUserSubscriptionTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706180859021_CSVDataTable.resx">
+      <DependentUpon>201706180859021_CSVDataTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

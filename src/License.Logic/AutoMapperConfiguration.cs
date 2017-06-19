@@ -56,6 +56,9 @@ namespace License.Logic
             cfg.CreateMap<License.DataModel.TeamAsset, License.Core.Model.TeamAsset>();
             cfg.CreateMap<License.Core.Model.TeamAsset, License.DataModel.TeamAsset>();
 
+            cfg.CreateMap<License.DataModel.CSVFile, License.Core.Model.CSVFile>();
+            cfg.CreateMap<License.Core.Model.CSVFile, License.DataModel.CSVFile>();
+
             cfg.CreateMap<DataModel.Team, Core.Model.Team>();
             cfg.CreateMap<Core.Model.Team, DataModel.Team>().MaxDepth(3)
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser));

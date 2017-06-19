@@ -110,6 +110,7 @@
     <Compile Include="BusinessLogic\ProductBO.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="DataLogic\BaseLogic.cs" />
+    <Compile Include="DataLogic\NotificationLogic.cs" />
     <Compile Include="DataLogic\ProductAdditionalOptionLogic.cs" />
     <Compile Include="DataLogic\SubscriptionCategoryLogic.cs" />
     <Compile Include="Initializer.cs" />
