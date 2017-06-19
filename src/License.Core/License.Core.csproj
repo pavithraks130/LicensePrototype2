@@ -228,6 +228,10 @@
     <Compile Include="Migrations\201706190724550_AddedCSVFile.Designer.cs">
       <DependentUpon>201706190724550_AddedCSVFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706190931449_modelPropertychanges.cs" />
+    <Compile Include="Migrations\201706190931449_modelPropertychanges.Designer.cs">
+      <DependentUpon>201706190931449_modelPropertychanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
     <Compile Include="Model\CSVFile.cs" />
@@ -335,6 +339,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706190724550_AddedCSVFile.resx">
       <DependentUpon>201706190724550_AddedCSVFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706190931449_modelPropertychanges.resx">
+      <DependentUpon>201706190931449_modelPropertychanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

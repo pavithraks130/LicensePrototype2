@@ -542,7 +542,7 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.FileActionController.UploadFile(System.Object)">
+        <member name="M:OnPremise.WebAPI.Controllers.FileActionController.UploadFile(License.DataModel.URLData)">
             <summary>
             POST Method: Used to Update the products in bulk
             </summary>

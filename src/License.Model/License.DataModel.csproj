@@ -81,6 +81,7 @@
     <Compile Include="TeamLicenseDataMapping.cs" />
     <Compile Include="TeamLicenseDetails.cs" />
     <Compile Include="TeamMemberResponse.cs" />
+    <Compile Include="URLData.cs" />
     <Compile Include="User.cs" />
     <Compile Include="TeamMembers.cs" />
     <Compile Include="UserDetails.cs" />

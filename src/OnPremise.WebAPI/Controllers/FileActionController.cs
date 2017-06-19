@@ -4,6 +4,7 @@ using LumenWorks.Framework.IO.Csv;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,7 +23,7 @@ namespace OnPremise.WebAPI.Controllers
         {
             _CSVFileLogic = new CSVFileLogic();
         }
-       
+
         /// <summary>
         /// POST Method: Used to Update the products in bulk
         /// </summary>
@@ -30,35 +31,41 @@ namespace OnPremise.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UploadFile")]
-        public HttpResponseMessage UploadFile(dynamic urlLink)
+        public HttpResponseMessage UploadFile(URLData data)
         {
-            HttpPostedFileBase upload = null;
-            object obj = upload;
-            if (upload.FileName.EndsWith(".csv"))
+            List<CSVFile> csvListData = new List<CSVFile>();
+            try
             {
-                // Service call to save the data in Onpremise DB
-                Stream stream = upload.InputStream;
-                DataTable csvTable = new DataTable();
-                List<CSVFile> listData = new List<CSVFile>();
-                CsvReader csvReader = new CsvReader(new StreamReader(stream), true);
+
+           
+            string[] rows = File.ReadAllLines(@data.Url);
+            List<CSVFile> listObj = null;
+            char charector = Convert.ToChar(data.Delimiter[0]);
+            if (rows.Length > 1)
+            {
+                foreach (string row in rows.Skip(1))
                 {
-                    csvTable.Load(csvReader);
+                    //data.Delimiter[0] -it is taking single charector as delimiter
+                    String[] rowItems = row.Split(Convert.ToChar(data.Delimiter[0]));
+                    CSVFile csvObj = new CSVFile();
+                    csvObj.TestDevice = rowItems[0];
+                    csvObj.ExpirationDate = DateTime.Parse(rowItems[1], new CultureInfo("en-US", true));
+                    csvListData.Add(csvObj);
                 }
-                foreach (DataRow row in csvTable.Rows)
-                {
-                    CSVFile cSVobj = new CSVFile();
-                    cSVobj.Id = 1;
-                    cSVobj.SerialNumber = row[csvTable.Columns[0]] as string;
-                    cSVobj.Description = row[csvTable.Columns[1]] as string;
-                    listData.Add(cSVobj);
-                }
-                var listObj = _CSVFileLogic.CreateCSVData(listData);
-                if (listObj != null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK, "success");
-                }
+
+                 listObj = _CSVFileLogic.CreateCSVData(csvListData);
+            }
+            if (listObj != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, "success");
+            }
+            }
+            catch (Exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "Error in Input file...");
             }
             return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, _CSVFileLogic.ErrorMessage);
         }
+
     }
 }

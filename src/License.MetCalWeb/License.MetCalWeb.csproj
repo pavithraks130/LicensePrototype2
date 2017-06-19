@@ -53,6 +53,9 @@
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LumenWorksCsvReader.3.9.1\lib\net20\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -289,6 +292,7 @@
     <Compile Include="Models\TeamMember.cs" />
     <Compile Include="Models\TeamMemberResponse.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\URLData.cs" />
     <Compile Include="Models\UserInvite.cs" />
     <Compile Include="Models\UserLicense.cs" />
     <Compile Include="Models\UserLicenseDataMapping.cs" />

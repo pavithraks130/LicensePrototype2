@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace License.DataModel
 {
-    public class CSVFile
+   public class URLData
     {
-
-        public int Id { get; set; }
-        public string TestDevice { get; set; }
-        public DateTime ExpirationDate { get; set; }
-
+        public string Url { get; set; }
+        public string Delimiter { get; set; }
     }
 }

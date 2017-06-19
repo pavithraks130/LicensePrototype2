@@ -1,9 +1,11 @@
 ﻿using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
+using LumenWorks.Framework.IO.Csv;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -14,6 +16,8 @@ namespace License.MetCalWeb.Controllers
 {
     public class FileActionController : Controller
     {
+        private object jsonData;
+
         public ActionResult Upload()
         {
             return View();
@@ -21,42 +25,29 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload(HttpPostedFileBase upload)
+        public ActionResult Upload(string link)
         {
-            if (ModelState.IsValid)
+            URLData data = new URLData();
+            data.Delimiter = ";";
+            data.Url = link;
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //dynamic obj = new { urllink = link };
+            //string jsonData = JsonConvert.SerializeObject(obj);
+            var response = client.PostAsJsonAsync("api/FileAction/UploadFile", data).Result;
+            if (response.IsSuccessStatusCode)
             {
-
-                if (upload != null && upload.ContentLength > 0)
-                {
-
-                    string link = "link file";
-                    HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                    dynamic obj = new { urllink = link };
-                    string jsonData = JsonConvert.SerializeObject(obj);
-                    var response = client.PostAsJsonAsync("api/FileAction/UploadFile", jsonData).Result;
-                    if (response.IsSuccessStatusCode)
-                        return RedirectToAction("Create");
-                    else
-                    {
-                        var jsondata = response.Content.ReadAsStringAsync().Result;
-                        var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
-                        ModelState.AddModelError("", errorResponse.Message);
-                    }
-                    return View();
-                }
-                else
-                {
-                    ModelState.AddModelError("File", "This file format is not supported");
-                    return View();
-                }
+                TempData["msg"] = "Successfully uploaded file";
+                return View();
             }
             else
             {
-                ModelState.AddModelError("File", "Please Upload Your file");
+                TempData["msg"] = "";
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
+                ModelState.AddModelError("", errorResponse.Message);
             }
             return View();
         }
-
     }
-
 }
+
