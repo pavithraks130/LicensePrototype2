@@ -38,6 +38,7 @@ namespace LicenseServer.Core.DbContext
         public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
 
         public DbSet<ProductAdditionalOption> ProductAdditionalOption { get; set; }
+
         public DbSet<Notification> Notification { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -184,13 +184,9 @@
     <Compile Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.Designer.cs">
       <DependentUpon>201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706150953555_AddedNotificationTable.cs" />
-    <Compile Include="Migrations\201706150953555_AddedNotificationTable.Designer.cs">
-      <DependentUpon>201706150953555_AddedNotificationTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201706151103412_AddedNotificationTableEdit.cs" />
-    <Compile Include="Migrations\201706151103412_AddedNotificationTableEdit.Designer.cs">
-      <DependentUpon>201706151103412_AddedNotificationTableEdit.cs</DependentUpon>
+    <Compile Include="Migrations\201706190726338_AddedNotificationTable.cs" />
+    <Compile Include="Migrations\201706190726338_AddedNotificationTable.Designer.cs">
+      <DependentUpon>201706190726338_AddedNotificationTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
@@ -276,11 +272,8 @@
     <EmbeddedResource Include="Migrations\201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.resx">
       <DependentUpon>201706130534333_RemovedSubscriptionCategoryFromAdditionalOption.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706150953555_AddedNotificationTable.resx">
-      <DependentUpon>201706150953555_AddedNotificationTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706151103412_AddedNotificationTableEdit.resx">
-      <DependentUpon>201706151103412_AddedNotificationTableEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706190726338_AddedNotificationTable.resx">
+      <DependentUpon>201706190726338_AddedNotificationTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
