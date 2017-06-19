@@ -233,6 +233,7 @@
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SubscriptionCategoryController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\RenewSubscriptionList.cs" />
     <Compile Include="Models\ResetPassword.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\SubscriptionCategory.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
@@ -369,6 +371,11 @@
     <Content Include="Views\Team\AssignLicense.cshtml" />
     <Content Include="Views\Team\RevokeLicense.cshtml" />
     <Content Include="Views\Cart\PaymentGateway.cshtml" />
+    <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Roles\Create.cshtml" />
+    <Content Include="Views\Roles\Update.cshtml" />
+    <Content Include="Views\User\Users.cshtml" />
+    <Content Include="Views\User\EditUser.cshtml" />
     <Content Include="Views\Notification\Create.cshtml" />
     <Content Include="Views\FileAction\Upload.cshtml" />
     <None Include="Web.Debug.config">

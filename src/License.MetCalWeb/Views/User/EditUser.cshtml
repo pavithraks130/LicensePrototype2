@@ -1,0 +1,146 @@
+﻿@model  License.MetCalWeb.Models.User
+@{
+    ViewBag.Title = "EditUser";
+}
+
+<h2>EditUser</h2>
+<div class="row">
+    <div class="form-group">
+        @using (Html.BeginForm("EditUser", "User", new { id = Model.UserId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.UserId)
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.ValidationSummary(true)
+                    <div class="form-group">
+                        <label  class="col-md-4">First Name></label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Enter First Name" })
+                            @Html.ValidationMessageFor(m => m.FirstName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-md-4">Last Name</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Enter Last Name" })
+                            @Html.ValidationMessageFor(m => m.LastName)
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-md-4">User Name</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Enter Email", @readonly = "readonly" })
+                        </div>
+                       
+                    </div>
+                   
+                    <div class="form-group">
+                        <label class="col-md-4">Phone Number</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @placeholder = "Enter Phone Number" })
+                            @Html.ValidationMessageFor(m => m.PhoneNumber)
+                        </div>
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4">Roles <strong><span style="color:red">&nbsp;&nbsp;*</span></strong></label>
+                        <span class=" col-md-8">
+                            @foreach (var item in Model.RolesList)
+                            {
+                                <li class="roleList">
+                                    <label class="control-label"><input type="checkbox" name="selectedRole" value="@item.Name" checked="@item.IsSelected" class="checkbox-inline" @(item.IsDefault ?"disabled=disabled":"") /> @item.Name</label>
+                                  
+                                </li>
+                            }
+                        </span>
+                        <label style="display:none;color:red;" id="lblError">Roles are not selected</label>
+                    </div>
+                    <div>
+                        <button id="BtnCancel" class="btn btn-default" type="submit"><strong>Cancel</strong></button>
+                        <button class="btn btn-default" type="submit" id="BtnSave" style="margin-right:20px;"><strong>Save</strong></button>
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        if ($("#UserName").text() == "admin@fmcti.com") {
+            $("#UserName").attr("disabled", 'disabled');
+        }
+
+        $("#BtnCancel").click(function () {
+            window.location.replace('@Url.Action("Cancel", "Users")');
+            return false;
+        });
+
+
+        $("#BtnSave").click(function () {
+            var isPostEnabled = true;
+            var FirstName = $('#FirstName');
+            var Email = $("#Email");
+            var ConfirmPassword = $("#ConfirmPassword");
+            var Password = $("#Password");
+            var chkList = $('input[type=checkbox]');
+
+
+
+            //if (Email.val().length == 0) {
+            //    $('[data-valmsg-for="Email"]').text("Please enter Email Address"); isPostEnabled = isPostEnabled && false;
+            //    $('[data-valmsg-for="Email"]').addClass("field-validation-error");
+            //}
+            //else {
+            //    var re = /^[\w\.]+\@@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            //    if (re.test(Email.val())) {
+            //        $('[data-valmsg-for="Email"]').text("");
+            //        isPostEnabled = isPostEnabled && true; $('[data-valmsg-for="Email"]').removeClass("field-validation-error");
+                 
+            //    } else {
+            //        $('[data-valmsg-for="Email"]').text("Not a valid EMail address");
+            //        isPostEnabled = isPostEnabled && false; $('[data-valmsg-for="Email"]').addClass("field-validation-error");
+            //    }
+            //}
+
+
+            i = 0;
+            $('input[type=checkbox]:checked').each(function () {
+                i++;
+            });
+            if (i == 0) {
+                $('#lblError').attr('style', 'display:inline;color:red;');
+                isPostEnabled = isPostEnabled && false;
+            }
+            else {
+                $('#lblError').attr('style', 'display:none;');
+                isPostEnabled = isPostEnabled && true;
+            }
+            if (isPostEnabled) {
+                var disableList = $('input[type=checkbox][disabled=disabled]');
+                if (disableList.length > 0)
+                    disableList.each(function (e) {                    
+                        $(disableList[e]).removeAttr('disabled');
+                        console.log(disableList[e]);
+                });
+            }
+
+            return isPostEnabled;
+        });
+    });
+</script>
+<style type="text/css">
+    .roleList {
+        list-style-type: none;
+    }
+
+    .form-textColor {
+        color: red;
+    }
+</style>

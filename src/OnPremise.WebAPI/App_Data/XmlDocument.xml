@@ -522,6 +522,26 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.GetRoles">
+            <summary>
+            Get Roles List 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.GetRoleById(System.String)">
+            <summary>
+            Get Method, Get the Role by Role ID
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.Create(License.DataModel.Role)">
+            <summary>
+            Post Method, Create the Role
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnPremise.WebAPI.Controllers.FileActionController.UploadFile(System.Object)">
             <summary>
             POST Method: Used to Update the products in bulk
@@ -825,6 +845,13 @@
             <summary>
             GET Method. Check for the concurent user 
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.GetUserDetailsById(System.String)">
+            <summary>
+            Get method to fetch the User Details based on the User ID to fetch the Team Details and User Licenese details.
+            </summary>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.CreateSubscription(License.DataModel.SubscriptionList)">

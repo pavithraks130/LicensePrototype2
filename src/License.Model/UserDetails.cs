@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace License.DataModel
 {
-    public class Role
+    public class UserDetails
     {
-        public string RoleId { get; set; }
-        public string Name { get; set; }
-        public bool IsDefault { get; set; }
+        public List<Team> Teams { get; set; }
+        public List<UserLicense> UserLicenses { get; set; }
     }
 }

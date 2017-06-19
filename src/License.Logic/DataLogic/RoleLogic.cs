@@ -26,9 +26,9 @@ namespace License.Logic.DataLogic
             var list = RoleManager.Roles.ToList();
             foreach (var r in list)
             {
-                listRoles.Add(AutoMapper.Mapper.Map<License.Core.Model.Role, Role>(r));
+                listRoles.Add(AutoMapper.Mapper.Map<Role>(r));
             }
-            return listRoles;
+            return listRoles.OrderBy(r => r.Name).ToList();
         }
 
         /// <summary>
@@ -36,19 +36,32 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public IdentityResult CreateRole(Role r)
+        public Role CreateRole(Role r)
         {
             try
             {
-                var obj = AutoMapper.Mapper.Map<Role, License.Core.Model.Role>(r);
-                return RoleManager.Create(obj);
+                var role = RoleManager.FindByName(r.Name);
+                if (role == null)
+                {
+                    var obj = AutoMapper.Mapper.Map<Role, License.Core.Model.Role>(r);
+                    var result = RoleManager.Create(obj);
+                    if (result.Succeeded)
+                    {
+                        var roleObj = RoleManager.FindByName(r.Name);
+                        return AutoMapper.Mapper.Map<Role>(roleObj);
+                    }
+                    else
+                        ErrorMessage = result.Errors.ToList().ToString();
+                }
+                else
+                    ErrorMessage = "Role already Exist";
+
             }
             catch (Exception ex)
             {
-                // throw ex;
-                var result = new IdentityResult(new string[] { ex.Message });
-                return result;
+                ErrorMessage = ex.Message;
             }
+            return null;
         }
 
         /// <summary>
@@ -56,10 +69,25 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public IdentityResult UpdateRole(Role r)
+        public Role UpdateRole(string id, Role r)
         {
-            var role = AutoMapper.Mapper.Map<DataModel.Role, Core.Model.Role>(r);
-            return RoleManager.Update(role);
+            var role = RoleManager.FindById(id);
+            role.Name = r.Name;
+            var duplicateRole = RoleManager.FindByName(r.Name);
+            if (duplicateRole != null && role.Id != duplicateRole.Id)
+                ErrorMessage = "Role Exist in this name";
+            else
+            {
+                var result = RoleManager.Update(role);
+                if (result.Succeeded)
+                {
+                    var roleObj = RoleManager.FindById(id);
+                    return AutoMapper.Mapper.Map<Role>(roleObj);
+                }
+                else
+                    ErrorMessage = result.Errors.ToList().ToString();
+            }
+            return null;
         }
 
         /// <summary>
@@ -71,7 +99,7 @@ namespace License.Logic.DataLogic
         public Role GetRoleById(string id)
         {
             var r = RoleManager.FindById(id);
-            return AutoMapper.Mapper.Map<Core.Model.Role, DataModel.Role>(r);
+            return AutoMapper.Mapper.Map<Role>(r);
         }
 
         /// <summary>
@@ -79,10 +107,15 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IdentityResult DeleteRole(string id)
+        public Role DeleteRole(string id)
         {
             var r = RoleManager.FindById(id);
-            return RoleManager.Delete(r);
+            var result =  RoleManager.Delete(r);
+            if (result.Succeeded)
+                return AutoMapper.Mapper.Map<Role>(r);
+            else
+                ErrorMessage = result.Errors.ToList().ToString();
+            return null;
         }
     }
 }

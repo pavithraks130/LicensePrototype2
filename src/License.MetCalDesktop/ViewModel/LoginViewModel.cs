@@ -23,7 +23,7 @@ namespace License.MetCalDesktop.ViewModel
         private string _password;
 
         private bool _isEnableLogin = true;
-
+        LoginLogic logic = null;
         #endregion private field
 
         /// <summary>
@@ -155,9 +155,10 @@ namespace License.MetCalDesktop.ViewModel
         /// <param name="param"></param>
         public void LoginUser(object param)
         {
+            logic = new LoginLogic();
             if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
             {
-                LoginLogic logic = new LoginLogic();
+
                 IsEnableLogin = false;
                 Model.User user = null;
                 if (AppState.Instance.IsNetworkAvilable())
@@ -179,17 +180,14 @@ namespace License.MetCalDesktop.ViewModel
                 AppState.Instance.User = user;
                 AppState.Instance.IsUserLoggedIn = true;
                 if (AppState.Instance.IsNetworkAvilable())
-                    LoadTeams();
+                    LoadTeamsOnline();
                 else
-                {
-                    if (AppState.Instance.IsUserLoggedIn)
-                        NavigateNextPage?.Invoke("Dashboard", null);
-                }
+                    LoadTeamsOffline();
                 IsEnableLogin = true;
             }
         }
 
-        public void LoadTeams()
+        public void LoadTeamsOnline()
         {
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
@@ -221,6 +219,8 @@ namespace License.MetCalDesktop.ViewModel
                     jsonData = response.Content.ReadAsStringAsync().Result;
                     var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
                     AppState.Instance.UserLicenseList = userLoginObj.Products;
+                    logic.UpdateFeatureToFile();
+                    logic.GetUserDetails();
                     if (userLoginObj.IsUserLoggedIn)
                         NavigateNextPage?.Invoke("Dashboard", null);
                     else
@@ -230,9 +230,33 @@ namespace License.MetCalDesktop.ViewModel
             }
         }
 
+        public void LoadTeamsOffline()
+        {
+            var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
+            var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+            if (details.Teams.Count == 1)
+            {
+                AppState.Instance.SelectedTeam = details.Teams[0];
+                var licenseList = details.UserLicenses.Where(l => l.TeamId == AppState.Instance.SelectedTeam.Id).ToList();
+                var prodId = licenseList.Select(l => l.License.ProductId).Distinct().ToList();
+                DashboardLogic dashboardLogic = new DashboardLogic();
+                var proList = dashboardLogic.LoadFeatureOffline();
+                if (proList != null && proList.Count > 0)
+                    AppState.Instance.UserLicenseList = proList.Where(p => prodId.Contains(p.Id)).ToList();
+                NavigateNextPage?.Invoke("Dashboard", null);
+            }
+            else
+            {
+                AppState.Instance.TeamList = details.Teams;
+                Views.Teams teamWindow = new Views.Teams();
+                teamWindow.ClosePopupWindow += CloseWindow;
+                teamWindow.ShowDialog();
+            }
+        }
+
         private void CloseWindow(object sender, EventArgs e1)
         {
-            
+
             (sender as System.Windows.Window).Close();
             if (AppState.Instance.UserLogin == null)
                 return;

@@ -16,13 +16,14 @@ namespace License.MetCalWeb.Models
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
         public string Name { get { return FirstName + " " + LastName; } }
-        public IList<string> Roles { get; set; }
+        public IList<String> Roles { get; set; }
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
         public string ServerUserId { get; set; }
         public bool IsActive { get; set; }
         public string Password { get; set; }
         public List<Subscription> SubscriptionList { get; set; }
+        public List<Role> RolesList { get;set;}
         public User()
         {
             Organization = new Organization();

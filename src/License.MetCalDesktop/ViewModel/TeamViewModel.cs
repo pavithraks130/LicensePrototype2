@@ -9,13 +9,15 @@ using System.ComponentModel;
 using License.MetCalDesktop.Common;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using System.IO;
 using System.Net.Http;
+using License.MetCalDesktop.businessLogic;
 
 namespace License.MetCalDesktop.ViewModel
 {
     public class TeamViewModel : INotifyPropertyChanged
     {
-        public delegate void ClosePopupWindowEvent(object sender,CustomEventArgs e);
+        public delegate void ClosePopupWindowEvent(object sender, CustomEventArgs e);
 
         public EventHandler ClosepoupWindow;
 
@@ -48,17 +50,34 @@ namespace License.MetCalDesktop.ViewModel
         public void UpdateSelectedTeam(object args)
         {
             AppState.Instance.SelectedTeam = (Team)args;
-            ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
-            userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
-            userLogin.UserId = AppState.Instance.User.UserId;
-            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
-            var jsonData = response.Content.ReadAsStringAsync().Result;
-            var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
-            AppState.Instance.UserLicenseList = userLoginObj.Products;
-            AppState.Instance.UserLogin = userLoginObj;
-            ClosepoupWindow?.Invoke(this,new EventArgs());
+            if (AppState.Instance.IsNetworkAvilable())
+            {
+                ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
+                userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
+                userLogin.UserId = AppState.Instance.User.UserId;
+                HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+                var jsonData = response.Content.ReadAsStringAsync().Result;
+                var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+                AppState.Instance.UserLicenseList = userLoginObj.Products;
+                LoginLogic logic = new LoginLogic();
+                logic.UpdateFeatureToFile();
+                AppState.Instance.UserLogin = userLoginObj;
+                logic.GetUserDetails();
+            }
+            else
+            {
+                var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
+                var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+                var licenseList = details.UserLicenses.Where(l => l.TeamId == AppState.Instance.SelectedTeam.Id).ToList();
+                var prodId = licenseList.Select(l => l.License.ProductId).Distinct().ToList();
+                DashboardLogic dashboardLogic = new DashboardLogic();
+                var proList = dashboardLogic.LoadFeatureOffline();
+                if (proList != null && proList.Count > 0)
+                    AppState.Instance.UserLicenseList = proList.Where(p => prodId.Contains(p.Id)).ToList();
+            }
+            ClosepoupWindow?.Invoke(this, new EventArgs());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -67,5 +86,7 @@ namespace License.MetCalDesktop.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
+
+        
     }
 }

@@ -77,7 +77,11 @@
                             @Html.ActionLink("Teams", "Index", "Team")
                         </li>
                         <li class="dropdown">
-                            @Html.ActionLink("Users", "TeamContainer", "TeamManagement")
+                            @Html.ActionLink("Users", "Index", "User")
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Roles","Index","Roles")</li>
+                                <li>@Html.ActionLink("User Management", "TeamContainer", "TeamManagement")</li>
+                            </ul>
                         </li>
                         <li>@Html.ActionLink("Hardware", "HardwareContainer", "Hardware")</li>
                     }

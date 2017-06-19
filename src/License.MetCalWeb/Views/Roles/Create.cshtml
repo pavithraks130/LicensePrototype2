@@ -1,31 +1,30 @@
-﻿@model License.MetCalWeb.Models.Team
-
+﻿@model License.MetCalWeb.Models.Role
 @{
     Layout = null;
-    ViewBag.Title = "Create";
 }
-<h2>Create</h2>
+
+<h2>Create Role</h2>
 <div class="modal-dialog">
     <div class="modal-content">
         <div id='myModalContent'>
-            @using (Html.BeginForm("CreateTeam", "Team", FormMethod.Post))
+            @using (Html.BeginForm("Create", "Roles", FormMethod.Post))
             {
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Team</h4>
+                    <h4 class="modal-title">Name</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         @Html.AntiForgeryToken()
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label id = "error" class="message-error"></label>
+                                <label id="error" class="message-error"></label>
                             </div>
                             <div class="form-group">
-                                @Html.LabelFor(t => t.Name, new { @class = "col-md-4" })
+                                @Html.LabelFor(r => r.Name, new { @class = "col-md-4" })
                                 <div class="col-md-8">
-                                    @Html.TextBoxFor(t => t.Name)
-                                    @Html.ValidationMessageFor(t => t.Name)
+                                    @Html.TextBoxFor(r => r.Name,new { @class="txtName"})
+                                    @Html.ValidationMessageFor(r => r.Name)
                                 </div>
                             </div>
                         </div>
@@ -39,21 +38,24 @@
         </div>
     </div>
 </div>
-}
 
-@* Javascript *@
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         $('form').on('submit', function (e) {
             e.preventDefault();
             var form = $(this);
+            var name = $('.txtName').val().toString().trim();
+            if (name == "") {
+                $('#error').text('please enter name');
+                return false;
+            }
             $.ajax({
-                url: form.attr("action"),
-                method: form.attr("method"),  // post
+                url: form.attr('action'),
+                method: form.attr('method'),
                 data: form.serialize(),
-                success: function (partialResult) {
-                    if (partialResult.success == false) {
-                        $('#error').text(partialResult.message);
+                success: function (data) {
+                    if (!data.success) {
+                        $('#error').text(data.message);
                     }
                     else {
                         location.reload();
@@ -62,8 +64,8 @@
                 error: function (data) {
                     console.log(data);
                 }
-
             });
         });
     });
 </script>
+

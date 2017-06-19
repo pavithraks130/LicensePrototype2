@@ -232,7 +232,7 @@ namespace OnPremise.WebAPI.Controllers
                 FetchUserSubscription model = new FetchUserSubscription() { IsFeatureRequired = true, TeamId = userLogin.TeamId, UserId = userLogin.UserId };
                 var licenseDtlsObj = licBO.GetUserLicenseSubscriptionDetails(model);
                 userLogin.Products = licenseDtlsObj.Products;
-                
+
                 statusCode = HttpStatusCode.OK;
                 userLogin.IsUserLoggedIn = true;
             }
@@ -243,6 +243,25 @@ namespace OnPremise.WebAPI.Controllers
                 statusCode = HttpStatusCode.ExpectationFailed;
             }
             return Request.CreateResponse(statusCode, userLogin);
+        }
+
+        /// <summary>
+        /// Get method to fetch the User Details based on the User ID to fetch the Team Details and User Licenese details.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetDetailsById/{userId}")]
+        public HttpResponseMessage GetUserDetailsById(string userId)
+        {
+            UserBO _userBo = new UserBO();
+            _userBo.UserManager = UserManager;
+            _userBo.RoleManager = RoleManager;
+            var data = _userBo.GetUserDetailsByUserId(userId);
+            if (string.IsNullOrEmpty(_userBo.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, _userBo.ErrorMessage);
         }
     }
 }

@@ -157,7 +157,7 @@ namespace License.Logic.DataLogic
             {
                 foreach (var lic in model.LicenseDataList)
                 {
-                    var obj = Work.UserLicenseRepository.GetData(l => l.UserId == user.UserId && l.License.ProductId == lic.ProductId && l.TeamId == model.TeamId).FirstOrDefault();
+                    var obj = Work.UserLicenseRepository.GetData(l => l.UserId == user.UserId && l.License.ProductId == lic.ProductId).FirstOrDefault();// && l.TeamId == model.TeamId
                     RevokeUserLicense(obj);
                 }
             }

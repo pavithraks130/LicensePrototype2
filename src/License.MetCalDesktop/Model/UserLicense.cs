@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace License.DataModel
+namespace License.MetCalDesktop.Model
 {
     public class UserLicense
     {
@@ -20,11 +20,18 @@ namespace License.DataModel
 
         public int TeamLicenseId { get; set; }
 
-        public User User { get; set; }
-        
         public ProductLicense License { get; set; }
     }
 
+    public class ProductLicense
+    {
+        public int Id { get; set; }
 
-   
+        public string AdminUserId { get; set; }
+
+        public string LicenseKey { get; set; }
+
+        public int ProductId { get; set; }
+        
+    }
 }

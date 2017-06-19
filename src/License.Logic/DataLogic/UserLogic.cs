@@ -47,6 +47,7 @@ namespace License.Logic.DataLogic
             };
             AppUser user = AutoMapper.Mapper.Map<License.DataModel.User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
+            DataModel.Role role = null;
             try
             {
                 // Creation Role if the Role Doen't exist.
@@ -54,7 +55,10 @@ namespace License.Logic.DataLogic
                 {
                     RoleLogic rolelogic = new RoleLogic();
                     rolelogic.RoleManager = RoleManager;
-                    result = rolelogic.CreateRole(new DataModel.Role() { Name = roleName });
+                    bool isDefault = false;
+                    if (roleName == "SuperAdmin" || roleName == "TeamMember")
+                        isDefault = true;
+                    rolelogic.CreateRole(new DataModel.Role() { Name = roleName, IsDefault = isDefault });
                 }
 
                 // Check if user Record is Already created. If not exist then create User using Identity User manager
@@ -125,6 +129,19 @@ namespace License.Logic.DataLogic
             appuser.LastName = user.LastName;
             appuser.PhoneNumber = user.PhoneNumber;
             var result = UserManager.Update(appuser);
+            if (user.Roles != null && user.Roles.Count > 0)
+            {
+                var existingUserRoles = UserManager.GetRoles(id);
+                var defaultRoles = RoleManager.Roles.Where(r => r.IsDefault == true).Select(r => r.Name).ToList();
+                foreach (var role in defaultRoles)
+                {
+                    if (existingUserRoles.Contains(role))
+                        if (!user.Roles.Contains(role))
+                            user.Roles.Add(role);
+                }
+                result = UserManager.AddToRoles(id, user.Roles.Except(existingUserRoles).ToArray<string>());
+                result = UserManager.RemoveFromRoles(id, existingUserRoles.Except(user.Roles).ToArray<string>());
+            }
             if (!result.Succeeded)
                 foreach (string str in result.Errors)
                     ErrorMessage += str;

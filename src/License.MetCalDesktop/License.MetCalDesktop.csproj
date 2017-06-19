@@ -123,6 +123,8 @@
     <Compile Include="Model\AccessToken.cs" />
     <Compile Include="Model\Team.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="Model\UserDetails.cs" />
+    <Compile Include="Model\UserLicense.cs" />
     <Compile Include="Model\UserLicenseDetails.cs" />
     <Compile Include="ViewModel\BaseEntity.cs" />
     <Compile Include="ViewModel\CreditAndDebitCardDetailsViewModel.cs" />

@@ -220,6 +220,10 @@
     <Compile Include="Migrations\201706140739356_RemoveUserSubscriptionTable.Designer.cs">
       <DependentUpon>201706140739356_RemoveUserSubscriptionTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706151035415_AddedColumnToRoleTable.cs" />
+    <Compile Include="Migrations\201706151035415_AddedColumnToRoleTable.Designer.cs">
+      <DependentUpon>201706151035415_AddedColumnToRoleTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201706180859021_CSVDataTable.cs" />
     <Compile Include="Migrations\201706180859021_CSVDataTable.Designer.cs">
       <DependentUpon>201706180859021_CSVDataTable.cs</DependentUpon>
@@ -325,6 +329,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706140739356_RemoveUserSubscriptionTable.resx">
       <DependentUpon>201706140739356_RemoveUserSubscriptionTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706151035415_AddedColumnToRoleTable.resx">
+      <DependentUpon>201706151035415_AddedColumnToRoleTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706180859021_CSVDataTable.resx">
       <DependentUpon>201706180859021_CSVDataTable.cs</DependentUpon>

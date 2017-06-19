@@ -38,11 +38,11 @@ namespace License.MetCalDesktop.ViewModel
 
         public void LoadFeatures()
         {
-            DashboardLogic logic = new DashboardLogic();
-            if (AppState.Instance.IsNetworkAvilable())
-                logic.LoadFeaturesOnline();
-            else
-                logic.LoadFeatureOffline();
+            //DashboardLogic logic = new DashboardLogic();
+            //if (AppState.Instance.IsNetworkAvilable())
+            //    logic.LoadFeaturesOnline();
+            //else
+            //    logic.LoadFeatureOffline();
 
             if (AppState.Instance.UserLicenseList != null)
             {
@@ -58,13 +58,26 @@ namespace License.MetCalDesktop.ViewModel
 
         public void LogOut(object param)
         {
+            var fileName = AppState.Instance.User.UserId + ".txt";
             if (AppState.Instance.IsNetworkAvilable())
             {
                 UpdateLogoutStatus(AppState.Instance.User.UserId, ServiceType.OnPremiseWebApi);
                 if (AppState.Instance.IsSuperAdmin)
                     UpdateLogoutStatus(AppState.Instance.User.ServerUserId, ServiceType.CentralizeWebApi);
             }
-            
+           // Code to remove the Team License for the selected Team on User LogOut.
+            var jsonData = FileIO.GetJsonDataFromFile(fileName);
+            if (!string.IsNullOrEmpty(jsonData))
+            {
+                var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+                var licenseList = details.UserLicenses.Where(l => l.TeamId == AppState.Instance.SelectedTeam.Id && l.IsTeamLicense == true).ToList();
+                if (licenseList != null && licenseList.Count != 0)
+                {
+                    details.UserLicenses = details.UserLicenses.Except(licenseList).ToList();
+                    jsonData = JsonConvert.SerializeObject(details);
+                    FileIO.SaveDatatoFile(jsonData, fileName);
+                }
+            }
             AppState.Instance.User = null;
             AppState.Instance.UserLicenseList = null;
             AppState.Instance.IsUserLoggedIn = false;
