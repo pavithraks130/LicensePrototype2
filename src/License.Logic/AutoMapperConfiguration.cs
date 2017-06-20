@@ -56,8 +56,8 @@ namespace License.Logic
             cfg.CreateMap<License.DataModel.TeamAsset, License.Core.Model.TeamAsset>();
             cfg.CreateMap<License.Core.Model.TeamAsset, License.DataModel.TeamAsset>();
 
-            cfg.CreateMap<License.DataModel.CSVFile, License.Core.Model.CSVFile>();
-            cfg.CreateMap<License.Core.Model.CSVFile, License.DataModel.CSVFile>();
+            cfg.CreateMap<License.DataModel.VISMAData, License.Core.Model.VISMAData >();
+            cfg.CreateMap<License.Core.Model.VISMAData , License.DataModel.VISMAData>();
 
             cfg.CreateMap<DataModel.Team, Core.Model.Team>();
             cfg.CreateMap<Core.Model.Team, DataModel.Team>().MaxDepth(3)

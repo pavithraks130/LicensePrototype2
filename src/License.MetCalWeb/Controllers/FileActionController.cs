@@ -1,6 +1,5 @@
 ﻿using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
-using LumenWorks.Framework.IO.Csv;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,10 +24,10 @@ namespace License.MetCalWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload(string link)
+        public ActionResult Upload(string link,string delimter)
         {
             URLData data = new URLData();
-            data.Delimiter = ";";
+            data.Delimiter = delimter;
             data.Url = link;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             //dynamic obj = new { urllink = link };

@@ -1,6 +1,5 @@
 ﻿using License.DataModel;
 using License.Logic.DataLogic;
-using LumenWorks.Framework.IO.Csv;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,10 +17,10 @@ namespace OnPremise.WebAPI.Controllers
     [RoutePrefix("api/FileAction")]
     public class FileActionController : BaseController
     {
-        CSVFileLogic _CSVFileLogic = null;
+        VISMADataLogic _CSVFileLogic = null;
         public FileActionController()
         {
-            _CSVFileLogic = new CSVFileLogic();
+            _CSVFileLogic = new VISMADataLogic();
         }
 
         /// <summary>
@@ -33,13 +32,11 @@ namespace OnPremise.WebAPI.Controllers
         [Route("UploadFile")]
         public HttpResponseMessage UploadFile(URLData data)
         {
-            List<CSVFile> csvListData = new List<CSVFile>();
+            List<VISMAData> csvListData = new List<VISMAData>();
             try
-            {
-
-           
+            {           
             string[] rows = File.ReadAllLines(@data.Url);
-            List<CSVFile> listObj = null;
+            List<VISMAData> listObj = null;
             char charector = Convert.ToChar(data.Delimiter[0]);
             if (rows.Length > 1)
             {
@@ -47,7 +44,7 @@ namespace OnPremise.WebAPI.Controllers
                 {
                     //data.Delimiter[0] -it is taking single charector as delimiter
                     String[] rowItems = row.Split(Convert.ToChar(data.Delimiter[0]));
-                    CSVFile csvObj = new CSVFile();
+                    VISMAData csvObj = new VISMAData();
                     csvObj.TestDevice = rowItems[0];
                     csvObj.ExpirationDate = DateTime.Parse(rowItems[1], new CultureInfo("en-US", true));
                     csvListData.Add(csvObj);

@@ -85,12 +85,12 @@ namespace License.Core.GenericRepository
             }
         }
 
-        private LicenseRepository<CSVFile> _CSVFileRepository;
-        public LicenseRepository<CSVFile> CSVFileRepository
+        private LicenseRepository<VISMAData > _VISMADataRepository;
+        public LicenseRepository<VISMAData > VISMADataRepository
         {
             get
             {
-                return _CSVFileRepository ?? (_CSVFileRepository = new LicenseRepository<CSVFile>(_dbContext));
+                return _VISMADataRepository ?? (_VISMADataRepository = new LicenseRepository<VISMAData >(_dbContext));
             }
         }
 

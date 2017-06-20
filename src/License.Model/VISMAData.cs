@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace License.DataModel
 {
-    public class CSVFile
+    public class VISMAData
     {
-
         public int Id { get; set; }
         public string TestDevice { get; set; }
         public DateTime ExpirationDate { get; set; }

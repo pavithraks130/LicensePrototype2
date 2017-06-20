@@ -3,32 +3,29 @@
 @{
     ViewBag.Title = "Notification";
 }
-
-
 @using (Html.BeginForm("Create", "Notification", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-        @Html.AntiForgeryToken()
-        
-        <div class="form-horizontal">
-            <h4>Notification</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.NotificationData, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.NotificationData, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.NotificationData, "", new { @class = "text-danger" })
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default" />
-                </div>
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Notification</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-md-10">
+            <label>Notification Data</label>
+            @Html.EditorFor(model => model.NotificationData, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.NotificationData, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" class="btn btn-default" />
+                <button class="btn btn-default">@Html.ActionLink("Home", "Index", "User")</button>
             </div>
         </div>
-    }
-    
-    <div>
-        @Html.ActionLink("Back to List", "Index")
     </div>
+}
+
+<div>
+
+</div>

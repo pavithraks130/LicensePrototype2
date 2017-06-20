@@ -3,17 +3,17 @@ namespace License.Core.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddedCSVFile : DbMigration
+    public partial class TableRename : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.CSVFile",
+                "dbo.VISMAData",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        SerialNumber = c.String(),
-                        Description = c.String(),
+                        TestDevice = c.String(),
+                        ExpirationDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -21,7 +21,7 @@ namespace License.Core.Migrations
         
         public override void Down()
         {
-            DropTable("dbo.CSVFile");
+            DropTable("dbo.VISMAData");
         }
     }
 }

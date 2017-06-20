@@ -110,7 +110,7 @@
     <Compile Include="BusinessLogic\UserBO.cs" />
     <Compile Include="BusinessLogic\UserSubscriptionBO.cs" />
     <Compile Include="Common\common.cs" />
-    <Compile Include="DataLogic\CSVFileLogic.cs" />
+    <Compile Include="DataLogic\VISMADataLogic.cs" />
     <Compile Include="DataLogic\ProductLogic.cs" />
     <Compile Include="DataLogic\TeamLicenseLogic.cs" />
     <Compile Include="DataLogic\TeamLogic.cs" />

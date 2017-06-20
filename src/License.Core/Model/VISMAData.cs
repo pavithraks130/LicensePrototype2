@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace License.MetCalWeb.Models
+namespace License.Core.Model
 {
-    public class CSVFile
+    public class VISMAData 
     {
+        [Key]
         public int Id { get; set; }
         public string TestDevice { get; set; }
         public DateTime ExpirationDate { get; set; }

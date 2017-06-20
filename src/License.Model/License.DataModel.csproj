@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="ChangePassword.cs" />
     <Compile Include="ConcurrentUserLogin.cs" />
-    <Compile Include="CSVFile.cs" />
+    <Compile Include="VISMAData.cs" />
     <Compile Include="FetchUserSubscription.cs" />
     <Compile Include="ForgotPassword.cs" />
     <Compile Include="ForgotPasswordToken.cs" />

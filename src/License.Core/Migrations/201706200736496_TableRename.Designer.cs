@@ -7,13 +7,13 @@ namespace License.Core.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddedCSVFile : IMigrationMetadata
+    public sealed partial class TableRename : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedCSVFile));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(TableRename));
         
         string IMigrationMetadata.Id
         {
-            get { return "201706190724550_AddedCSVFile"; }
+            get { return "201706200736496_TableRename"; }
         }
         
         string IMigrationMetadata.Source
