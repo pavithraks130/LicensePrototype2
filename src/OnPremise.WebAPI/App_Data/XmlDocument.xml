@@ -542,11 +542,11 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.FileActionController.UploadFile(License.DataModel.URLData)">
+        <member name="M:OnPremise.WebAPI.Controllers.VISMADataController.UploadFile(License.DataModel.URLData)">
             <summary>
             POST Method: Used to Update the products in bulk
             </summary>
-            <param name="CSV data ListdataList"></param>
+            <param name="VISMA data ListdataList"></param>
             <returns></returns>
         </member>
         <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.AddUserLicense(License.DataModel.UserLicenseDataMapping)">

@@ -126,6 +126,7 @@
     <Compile Include="Model\UserDetails.cs" />
     <Compile Include="Model\UserLicense.cs" />
     <Compile Include="Model\UserLicenseDetails.cs" />
+    <Compile Include="Model\VISMAData.cs" />
     <Compile Include="ViewModel\BaseEntity.cs" />
     <Compile Include="ViewModel\CreditAndDebitCardDetailsViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="ViewModel\RedirectToAmountPaymentPageViewModel.cs" />
     <Compile Include="ViewModel\SubscriptionViewModel.cs" />
     <Compile Include="ViewModel\TeamViewModel.cs" />
+    <Compile Include="ViewModel\VISMADataViewModel.cs" />
     <Compile Include="Views\CreditAndDebitCardDetails.xaml.cs">
       <DependentUpon>CreditAndDebitCardDetails.xaml</DependentUpon>
     </Compile>
@@ -154,6 +156,9 @@
     </Compile>
     <Compile Include="Views\Teams.xaml.cs">
       <DependentUpon>Teams.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VISMAData.xaml.cs">
+      <DependentUpon>VISMAData.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -196,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Teams.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VISMAData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

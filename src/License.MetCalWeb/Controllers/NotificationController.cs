@@ -15,7 +15,23 @@ namespace License.MetCalWeb.Controllers
         // GET: Notification
         public ActionResult Index()
         {
+            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            var response = client.GetAsync("api/Notification/GetAllNotification/").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var notificationList = JsonConvert.DeserializeObject<List<Notification>>(jsondata);
+                return View(notificationList);
+            }
+            else
+            {
+                var jsondata = response.Content.ReadAsStringAsync().Result;
+                var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
+                ModelState.AddModelError("", errorResponse.Message);
+            }
+            client.Dispose();
             return View();
+
         }
 
         // GET: Notification/Details/5

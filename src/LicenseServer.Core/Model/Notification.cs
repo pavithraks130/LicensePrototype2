@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.Core.Model
 {
-   public class Notification
+    public class Notification
     {
         [Key]
         public int Id { get; set; }
         public string NotificationData { get; set; }
+        public string Image { get; set; }
 
     }
 }

@@ -202,7 +202,7 @@
     <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
-    <Compile Include="Controllers\FileActionController.cs" />
+    <Compile Include="Controllers\VISMADataController.cs" />
     <Compile Include="Controllers\UserLicenseController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TeamController.cs" />

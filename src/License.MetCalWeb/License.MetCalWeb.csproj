@@ -159,6 +159,7 @@
     <Content Include="Catalog\Images\Admin.png" />
     <Content Include="Catalog\Images\Delete_Icon.png" />
     <Content Include="Catalog\Images\Down_Arrow.png" />
+    <Content Include="Catalog\Images\Immediate_Notification.png" />
     <Content Include="Catalog\Images\Users_Icon.png" />
     <Content Include="Catalog\Slide_Images\6003440-96270-video-212x100.jpg" />
     <Content Include="Catalog\Slide_Images\6003965-6270A-fcal-home-image-970x374.jpg" />
@@ -229,7 +230,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\FeatureController.cs" />
-    <Compile Include="Controllers\FileActionController.cs" />
+    <Compile Include="Controllers\VISMADataController.cs" />
     <Compile Include="Controllers\HardwareController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
@@ -376,8 +377,9 @@
     <Content Include="Views\Roles\Update.cshtml" />
     <Content Include="Views\User\Users.cshtml" />
     <Content Include="Views\User\EditUser.cshtml" />
+    <Content Include="Views\VISMAData\Upload.cshtml" />
     <Content Include="Views\Notification\Create.cshtml" />
-    <Content Include="Views\FileAction\Upload.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

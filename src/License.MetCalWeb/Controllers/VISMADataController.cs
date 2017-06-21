@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace License.MetCalWeb.Controllers
 {
-    public class FileActionController : Controller
+    public class VISMADataController : Controller
     {
         private object jsonData;
 
@@ -32,7 +32,7 @@ namespace License.MetCalWeb.Controllers
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             //dynamic obj = new { urllink = link };
             //string jsonData = JsonConvert.SerializeObject(obj);
-            var response = client.PostAsJsonAsync("api/FileAction/UploadFile", data).Result;
+            var response = client.PostAsJsonAsync("api/VISMAData/UploadFile", data).Result;
             if (response.IsSuccessStatusCode)
             {
                 TempData["msg"] = "Successfully uploaded file";

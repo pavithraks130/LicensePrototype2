@@ -1,8 +1,4 @@
-﻿@model System.Data.DataTable
-@using System.Data;
-
-
-@using (Html.BeginForm("Upload", "FileAction", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+﻿@using (Html.BeginForm("Upload", "VISMAData", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()

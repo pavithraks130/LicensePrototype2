@@ -5,7 +5,7 @@
 }
 <link href="~/Content/drag-and-drop-container.css" rel="stylesheet" />
 <br />
-<div class="row">
+<div class="row col-md-16">
     <div class="col-md-12">
         <div class="form-group">
             <h2>
@@ -93,6 +93,9 @@
             </div>
 
         }
+    </div>
+    <div class="col-md-4">
+        @{ Html.RenderAction("Index","Notification",null); }
     </div>
 </div>
 

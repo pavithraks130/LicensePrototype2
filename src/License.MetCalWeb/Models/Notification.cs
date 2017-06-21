@@ -9,5 +9,6 @@ namespace License.MetCalWeb.Models
     {
         public int Id { get; set; }
         public string NotificationData { get; set; }
+        public string Image { get; set; }
     }
 }

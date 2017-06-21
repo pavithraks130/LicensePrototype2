@@ -60,7 +60,12 @@
                 <TabItem Header="Subscription" IsEnabled="{Binding IsSuperAdmin}" >
                     <StackPanel>
                         <local:Subscriptions />
-                    </StackPanel>                       
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="VISMA Data" IsEnabled="{Binding IsSuperAdmin}" >
+                    <StackPanel>
+                        <local:VISMAData />
+                    </StackPanel>
                 </TabItem>
             </TabControl>
         </Grid>
