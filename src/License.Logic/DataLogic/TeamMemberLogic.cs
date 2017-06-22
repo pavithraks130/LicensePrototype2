@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using License.Core.Model;
 using License.Logic.Common;
-using License.DataModel;
+using License.Models;
 using Microsoft.AspNet.Identity;
-using DataModelTeamMember = License.DataModel.TeamMember;
+using DataModelTeamMember = License.Models.TeamMember;
 
 namespace License.Logic.DataLogic
 {
@@ -46,7 +46,7 @@ namespace License.Logic.DataLogic
             List<DataModelTeamMember> teamMembers = new List<DataModelTeamMember>();
             var listData = Work.TeamMemberRepository.GetData(filter: t => t.TeamId == TeamId);
             foreach (var data in listData)
-                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMember, DataModel.TeamMember>(data));
+                teamMembers.Add(AutoMapper.Mapper.Map<Core.Model.TeamMember, DataModelTeamMember>(data));
             return teamMembers;
         }
 
@@ -76,10 +76,10 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<DataModel.TeamMember> GetTeamMemberDetailsByUserId(string userId)
+        public List<DataModelTeamMember> GetTeamMemberDetailsByUserId(string userId)
         {
             var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId).ToList();
-            return AutoMapper.Mapper.Map<List<DataModel.TeamMember>>(obj);
+            return AutoMapper.Mapper.Map<List<DataModelTeamMember>>(obj);
         }
 
         /// <summary>

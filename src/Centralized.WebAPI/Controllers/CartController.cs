@@ -1,5 +1,5 @@
 ﻿using Centralized.WebAPI.Common;
-using LicenseServer.DataModel;
+using License.Models;
 using LicenseServer.Logic;
 using LicenseServer.Logic.BusinessLogic;
 using System;

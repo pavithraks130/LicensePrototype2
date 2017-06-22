@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
+using License.Models;
 using System.Collections;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using License.ServiceInvoke;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -284,7 +285,7 @@ namespace License.MetCalWeb.Controllers
             {
                 TeamMember mem = new TeamMember()
                 {
-                    InviteeStatus = Common.InviteStatus.Accepted.ToString(),
+                    InviteeStatus = InviteStatus.Accepted.ToString(),
                     TeamId = Convert.ToInt32(teamId),
                     InviteeUserId = userId,
                     InviteeEmail = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail                    

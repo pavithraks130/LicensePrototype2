@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License;
+using License.Models;
 
 namespace License.Logic.DataLogic
 {
@@ -26,10 +26,10 @@ namespace License.Logic.DataLogic
         ///  Gets All Teams
         /// </summary>
         /// <returns></returns>
-        public List<DataModel.Team> GetTeam()
+        public List<Team> GetTeam()
         {
             var objList = Work.TeamRepository.GetData();
-            var teamList = objList.Select(t => AutoMapper.Mapper.Map<DataModel.Team>(t)).ToList();
+            var teamList = objList.Select(t => AutoMapper.Mapper.Map<Team>(t)).ToList();
             return teamList;
         }
 
@@ -38,10 +38,10 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="adminId"></param>
         /// <returns></returns>
-        public List<DataModel.Team> GetTeamsByAdmin(string adminId)
+        public List<Team> GetTeamsByAdmin(string adminId)
         {
             var objList = Work.TeamRepository.GetData(t => t.AdminId == adminId).ToList();
-            var teamList = objList.Select(t => AutoMapper.Mapper.Map<DataModel.Team>(t)).ToList();
+            var teamList = objList.Select(t => AutoMapper.Mapper.Map<Team>(t)).ToList();
             return teamList;
         }
 
@@ -50,11 +50,11 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<DataModel.Team> GetTeamsByUser(string userId)
+        public List<Team> GetTeamsByUser(string userId)
         {
             var teamIdList = Work.TeamMemberRepository.GetData(tm => tm.InviteeUserId == userId).ToList().Select(t => t.TeamId).ToList();
             var objList = Work.TeamRepository.GetData(t => teamIdList.Contains(t.Id)).ToList();
-            var teamList = objList.Select(t => AutoMapper.Mapper.Map<DataModel.Team>(t)).ToList();
+            var teamList = objList.Select(t => AutoMapper.Mapper.Map<Team>(t)).ToList();
             return teamList;
         }
 
@@ -63,11 +63,11 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataModel.Team GetTeamById(int id)
+        public Team GetTeamById(int id)
         {
             TeamMemberLogic memLogic = new TeamMemberLogic();
             var obj = Work.TeamRepository.GetById(id);
-            DataModel.Team teamObj = AutoMapper.Mapper.Map<DataModel.Team>(obj);
+            Team teamObj = AutoMapper.Mapper.Map<Team>(obj);
             teamObj.TeamMembers = memLogic.GetTeamMembers(id);
             return teamObj;
         }
@@ -77,7 +77,7 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public DataModel.Team CreateTeam(DataModel.Team model)
+        public Team CreateTeam(Team model)
         {
             var obj = AutoMapper.Mapper.Map<Core.Model.Team>(model);
             var objTemp = Work.TeamRepository.GetData(t => t.Name.Trim() == obj.Name.Trim() && t.AdminId == model.AdminId).FirstOrDefault();
@@ -90,7 +90,7 @@ namespace License.Logic.DataLogic
             Work.TeamRepository.Save();
             if (obj.Id > 0)
             {
-                model = AutoMapper.Mapper.Map<DataModel.Team>(obj);
+                model = AutoMapper.Mapper.Map<Team>(obj);
                 UserLogic userLogic = new UserLogic();
                 userLogic.UserManager = UserManager;
                 model.AdminUser = userLogic.GetUserById(model.AdminId);
@@ -104,7 +104,7 @@ namespace License.Logic.DataLogic
         /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public DataModel.Team UpdateTeam(int id, DataModel.Team model)
+        public Team UpdateTeam(int id, Team model)
         {
             var obj = Work.TeamRepository.GetById(id);
             // The temp object to make sure the change in the team Name   is already exist in the Db excluduing the current team ID. If the record is already exist with the 
@@ -118,7 +118,7 @@ namespace License.Logic.DataLogic
             obj.Name = model.Name;
             obj = Work.TeamRepository.Update(obj);
             Work.TeamRepository.Save();
-            return AutoMapper.Mapper.Map<DataModel.Team>(obj);
+            return AutoMapper.Mapper.Map<Team>(obj);
         }
 
         /// <summary>
@@ -199,13 +199,13 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="teamObj"></param>
         /// <returns></returns>
-        public DataModel.Team UpdateConcurrentUser(DataModel.Team teamObj)
+        public Team UpdateConcurrentUser(Team teamObj)
         {
             var team = Work.TeamRepository.GetById(teamObj.Id);
             team.ConcurrentUserCount = teamObj.ConcurrentUserCount;
             Work.TeamRepository.Update(team);
             Work.TeamRepository.Save();
-            return AutoMapper.Mapper.Map<DataModel.Team>(team);
+            return AutoMapper.Mapper.Map<Team>(team);
         }
     }
 }

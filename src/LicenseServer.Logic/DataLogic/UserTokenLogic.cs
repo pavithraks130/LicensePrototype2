@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 using AutoMapper;
 
 namespace LicenseServer.Logic
@@ -16,7 +16,7 @@ namespace LicenseServer.Logic
             var tokenList = Work.UserTokenRepository.GetData();
             foreach (var t in tokenList)
             {
-                var obj = Mapper.Map<DataModel.UserToken>(t);
+                var obj = Mapper.Map<UserToken>(t);
                 tokenListObj.Add(obj);
             }
             return tokenListObj;
@@ -39,14 +39,14 @@ namespace LicenseServer.Logic
             var tokenObj = Work.UserTokenRepository.Create(obj);
             Work.UserTokenRepository.Save();
             if (tokenObj != null)
-                return Mapper.Map<LicenseServer.DataModel.UserToken>(tokenObj);
+                return Mapper.Map< License.Models.UserToken>(tokenObj);
             return null;
         }
 
         public UserToken IsTokenGenerated(string email)
         {
             var tokenObj = Work.UserTokenRepository.GetData(u => u.Email == email).FirstOrDefault();
-            return Mapper.Map<LicenseServer.DataModel.UserToken>(tokenObj);
+            return Mapper.Map<License.Models.UserToken>(tokenObj);
         }
 
         public bool VerifyUserToken(UserToken t)

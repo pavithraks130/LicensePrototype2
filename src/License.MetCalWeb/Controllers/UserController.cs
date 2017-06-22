@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using License.MetCalWeb.Models;
+using License.Models;
 using System.Threading.Tasks;
 using System.Net.Http;
 using License.MetCalWeb.Common;
+using License.MetCalWeb.Models;
 using Newtonsoft.Json;
+using License.ServiceInvoke;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -115,7 +117,7 @@ namespace License.MetCalWeb.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            var changePwdModel = new Models.ChangePassword();
+            var changePwdModel = new ChangePasswordExtended();
             return View(changePwdModel);
         }
 
@@ -207,13 +209,13 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult EditUser(string id)
         {
-            User user = new Models.User();
+            UserExtended user = new UserExtended();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             var response = client.GetAsync("api/user/UserById/" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var jsondata = response.Content.ReadAsStringAsync().Result;
-                user = JsonConvert.DeserializeObject<User>(jsondata);
+                user = JsonConvert.DeserializeObject<UserExtended>(jsondata);
             }
             client.Dispose();
             client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 
 namespace LicenseServer.Logic
 {
@@ -13,13 +13,13 @@ namespace LicenseServer.Logic
         {
             List<UserSubscription> subscriptions = new List<UserSubscription>();
             var subscriptionList = Work.UserSubscriptionRepository.GetData(us => us.UserId == userId, null, "SubType");
-            subscriptions = subscriptionList.Select(us => AutoMapper.Mapper.Map<DataModel.UserSubscription>(us)).ToList();
+            subscriptions = subscriptionList.Select(us => AutoMapper.Mapper.Map<UserSubscription>(us)).ToList();
             return subscriptions;
         }
 
         public SubscriptionLicenseMapping CreateUserSubscription(UserSubscription subscription, int teamId)
         {
-            Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<DataModel.UserSubscription, Core.Model.UserSubscription>(subscription);
+            Core.Model.UserSubscription subs = AutoMapper.Mapper.Map<UserSubscription, Core.Model.UserSubscription>(subscription);
             subs.ActivationDate = DateTime.Now.Date;
             var obj = Work.UserSubscriptionRepository.Create(subs);
             Work.UserSubscriptionRepository.Save();
@@ -93,7 +93,7 @@ namespace LicenseServer.Logic
             List<UserSubscription> subType = null;
             var subList = Work.UserSubscriptionRepository.GetData(u => u.UserId == userId).ToList();
             var subListObj = subList.Where(s => (s.ExpireDate.Date - DateTime.Now.Date).Days <= duration).ToList();
-            subType = subListObj.Select(s => AutoMapper.Mapper.Map<LicenseServer.DataModel.UserSubscription>(s)).ToList();
+            subType = subListObj.Select(s => AutoMapper.Mapper.Map<License.Models.UserSubscription>(s)).ToList();
             return subType;
         }
 

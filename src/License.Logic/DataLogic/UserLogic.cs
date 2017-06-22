@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using License.Core.Model;
-using License.DataModel;
+using License.Models;
 using Microsoft.AspNet.Identity;
 
 namespace License.Logic.DataLogic
@@ -23,7 +23,7 @@ namespace License.Logic.DataLogic
         {
             List<User> usersList = new List<User>();
             var users = UserManager.Users.ToList();
-            usersList = users.Select(u => AutoMapper.Mapper.Map<License.DataModel.User>(u)).ToList();
+            usersList = users.Select(u => AutoMapper.Mapper.Map<License.Models.User>(u)).ToList();
             return usersList;
         }
 
@@ -45,9 +45,9 @@ namespace License.Logic.DataLogic
                 UserName = u.Email,
                 ServerUserId = u.ServerUserId
             };
-            AppUser user = AutoMapper.Mapper.Map<License.DataModel.User, License.Core.Model.AppUser>(ur);
+            AppUser user = AutoMapper.Mapper.Map<User, License.Core.Model.AppUser>(ur);
             IdentityResult result;
-            DataModel.Role role = null;
+            Models.Role role = null;
             try
             {
                 // Creation Role if the Role Doen't exist.
@@ -58,7 +58,7 @@ namespace License.Logic.DataLogic
                     bool isDefault = false;
                     if (roleName == "SuperAdmin" || roleName == "TeamMember")
                         isDefault = true;
-                    rolelogic.CreateRole(new DataModel.Role() { Name = roleName, IsDefault = isDefault });
+                    rolelogic.CreateRole(new Models.Role() { Name = roleName, IsDefault = isDefault });
                 }
 
                 // Check if user Record is Already created. If not exist then create User using Identity User manager
@@ -83,7 +83,7 @@ namespace License.Logic.DataLogic
                 {
                     TeamLogic teamLogic = new TeamLogic();
                     teamLogic.UserManager = UserManager;
-                    DataModel.Team team = new DataModel.Team();
+                    Models.Team team = new Models.Team();
                     team.AdminId = userId;
                     team.IsDefaultTeam = true;
                     team.Name = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultTeamName");
@@ -110,7 +110,7 @@ namespace License.Logic.DataLogic
         public User GetUserById(string id)
         {
             var u = UserManager.FindById(id);
-            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.DataModel.User>(u);
+            var user = AutoMapper.Mapper.Map<License.Core.Model.AppUser, License.Models.User>(u);
             IList<string> roles = UserManager.GetRoles(user.UserId);
             user.Roles = roles;
             return user;
@@ -168,7 +168,7 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public DataModel.User GetUserByEmail(string email)
+        public Models.User GetUserByEmail(string email)
         {
             var data = UserManager.FindByEmail<AppUser, string>(email);
             return AutoMapper.Mapper.Map<User>(data);

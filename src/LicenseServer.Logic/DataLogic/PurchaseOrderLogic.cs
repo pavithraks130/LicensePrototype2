@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 
 
 namespace LicenseServer.Logic
@@ -17,7 +17,7 @@ namespace LicenseServer.Logic
             tempObj = Work.PurchaseOrderRepository.Create(tempObj);
             Work.PurchaseOrderRepository.Save();
             if (tempObj.Id > 0)
-                return AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(tempObj);
+                return AutoMapper.Mapper.Map<PurchaseOrder>(tempObj);
             return null;
         }
 
@@ -31,7 +31,7 @@ namespace LicenseServer.Logic
             tempObj.Comment = order.Comment;
             tempObj = Work.PurchaseOrderRepository.Update(tempObj);
             Work.PurchaseOrderRepository.Save();
-            return AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(tempObj);
+            return AutoMapper.Mapper.Map<PurchaseOrder>(tempObj);
         }
 
         public void UpdatePurchaseOrder(List<PurchaseOrder> orderList)
@@ -52,33 +52,33 @@ namespace LicenseServer.Logic
 
         public List<PurchaseOrder> GetPurchaseOrderByIds(List<int> poIdList)
         {
-            List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
+            List<PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => poIdList.Contains(f.Id));
-            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<PurchaseOrder>(po)).ToList();
             return purchaseOrderList;
         }
 
         public List<PurchaseOrder> GetAllPendingPurchaseOrder()
         {
-            List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
+            List<PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.IsApproved == false && string.IsNullOrEmpty(f.ApprovedBy));
-            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();          
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<PurchaseOrder>(po)).ToList();          
             return purchaseOrderList;
         }
 
         public List<PurchaseOrder> GetPurchaseOrderByUser(string userId)
         {
-            List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
+            List<PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.UserId == userId);
-            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<PurchaseOrder>(po)).ToList();
             return purchaseOrderList;
         }
 
         public List<PurchaseOrder> GetPOToBeSynchedByUser(String userId)
         {
-            List<DataModel.PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
+            List<PurchaseOrder> purchaseOrderList = new List<PurchaseOrder>();
             var listItem = Work.PurchaseOrderRepository.GetData(f => f.UserId == userId && f.IsApproved == true && f.IsSynched == false);
-            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(po)).ToList();
+            purchaseOrderList = listItem.Select(po => AutoMapper.Mapper.Map<PurchaseOrder>(po)).ToList();
             return purchaseOrderList;
         }
 
@@ -108,7 +108,7 @@ namespace LicenseServer.Logic
         public PurchaseOrder GetPurchaseOrderById(int id)
         {
             var order = Work.PurchaseOrderRepository.GetById(id);
-            return AutoMapper.Mapper.Map<DataModel.PurchaseOrder>(order);
+            return AutoMapper.Mapper.Map<PurchaseOrder>(order);
 
         }
     }

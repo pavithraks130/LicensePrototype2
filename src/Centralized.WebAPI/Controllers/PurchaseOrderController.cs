@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using LicenseServer.Logic;
-using LicenseServer.DataModel;
+using License.Models;
 using LicenseServer.Logic.BusinessLogic;
 using Centralized.WebAPI.Common;
 

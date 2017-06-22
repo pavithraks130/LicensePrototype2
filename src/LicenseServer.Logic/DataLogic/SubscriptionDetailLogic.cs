@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 
 namespace LicenseServer.Logic
 {
@@ -21,7 +21,7 @@ namespace LicenseServer.Logic
         {
             foreach (var obj in list)
             {
-                var subscriptionDetail = AutoMapper.Mapper.Map<DataModel.SubscriptionDetails, Core.Model.SubscriptionDetail>(obj);
+                var subscriptionDetail = AutoMapper.Mapper.Map<SubscriptionDetails, Core.Model.SubscriptionDetail>(obj);
                 Work.SubscriptionDetailResitory.Create(subscriptionDetail);
             }
             if (list.Count > 0)

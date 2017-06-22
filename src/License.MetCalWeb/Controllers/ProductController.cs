@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
+using License.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using License.ServiceInvoke;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -137,9 +139,9 @@ namespace License.MetCalWeb.Controllers
             // Updating the data 
             if (pro.Features.Count > 0)
                 foreach (var feature in pro.Features)
-                    (ViewBag.Features as List<Feature>).Find(p => p.Id == feature.Id).Selected = true;
+                    (ViewBag.Features as List<FeatureExtended>).Find(p => p.Id == feature.Id).Selected = true;
 
-            var objList = ViewBag.Categories as List<SubscriptionCategory>;
+            var objList = ViewBag.Categories as List<SubscriptionCategoryExtended>;
             if (objList != null)
             {
                 foreach (var category in pro.Categories)
@@ -209,7 +211,7 @@ namespace License.MetCalWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
-                ProductDependencyDetails dependencyObj = JsonConvert.DeserializeObject<ProductDependencyDetails>(jsonData);
+                ProductDependency dependencyObj = JsonConvert.DeserializeObject<ProductDependency>(jsonData);
                 ViewBag.Categories = dependencyObj.Categories;
                 ViewBag.Features = dependencyObj.Features;
             }

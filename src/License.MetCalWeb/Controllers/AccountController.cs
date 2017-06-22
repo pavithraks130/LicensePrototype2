@@ -13,6 +13,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using License.MetCalWeb.Logic;
+using License.Models;
+using License.ServiceInvoke;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -283,7 +285,7 @@ namespace License.MetCalWeb.Controllers
 
         public ActionResult ResetPassword(string userId, string code)
         {
-            License.MetCalWeb.Models.ResetPassword model = new ResetPassword()
+            License.Models.ResetPassword model = new ResetPassword()
             {
                 Token = code,
                 UserId = userId

@@ -1,7 +1,7 @@
-﻿@using License.MetCalWeb.Models
+﻿
 @using License.MetCalWeb.Helper
 
-@model TeamDetails
+@model License.Models.TeamDetails
 
 @{
     Layout = null;
@@ -38,7 +38,7 @@
             {
                 <h5>Pending Users</h5>
                 <table class="table" style="border: none">
-                    @foreach (TeamMember t in Model.PendinigUsers)
+                    @foreach (var t in Model.PendinigUsers)
                     {
                         <tr>
                             <td class="col-md-2">
@@ -81,7 +81,7 @@
                <label>
                         Active Users</label> 
                 <table class="table" style="border: none">
-                    @foreach (TeamMember t in Model.AcceptedUsers)
+                    @foreach (var t in Model.AcceptedUsers)
                     {
                         <tr>
                             <td class="col-md-2">

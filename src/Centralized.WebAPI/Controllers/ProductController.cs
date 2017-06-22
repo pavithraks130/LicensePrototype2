@@ -1,4 +1,4 @@
-﻿using LicenseServer.DataModel;
+﻿using License.Models;
 using LicenseServer.Logic;
 using System.Collections.Generic;
 using System.Net;

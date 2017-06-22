@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.DataModel;
+using License.Models;
 using License.Logic.BusinessLogic;
 
 namespace License.Logic.DataLogic
@@ -118,7 +118,7 @@ namespace License.Logic.DataLogic
                     List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
                     foreach (var obj in licReqList)
                     {
-                        var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
+                        var tempObj = AutoMapper.Mapper.Map<License.Models.UserLicenseRequest>(obj);
                         tempObj.Product = proSubLogic.GetProductFromJsonFile(tempObj.ProductId);
                         userLicReq.Add(tempObj);
                     }
@@ -141,7 +141,7 @@ namespace License.Logic.DataLogic
                 List<UserLicenseRequest> userLicReq = new List<UserLicenseRequest>();
                 foreach (var obj in licReqList)
                 {
-                    var tempObj = AutoMapper.Mapper.Map<License.DataModel.UserLicenseRequest>(obj);
+                    var tempObj = AutoMapper.Mapper.Map<License.Models.UserLicenseRequest>(obj);
                     tempObj.Product = proSubLogic.GetProductFromJsonFile(obj.ProductId);
                     userLicReq.Add(tempObj);
                 }
@@ -158,7 +158,7 @@ namespace License.Logic.DataLogic
         public UserLicenseRequest GetById(int id)
         {
             var data = Work.UserLicenseRequestRepo.GetById(id);
-            return AutoMapper.Mapper.Map<DataModel.UserLicenseRequest>(data);
+            return AutoMapper.Mapper.Map<Models.UserLicenseRequest>(data);
         }
 
     }

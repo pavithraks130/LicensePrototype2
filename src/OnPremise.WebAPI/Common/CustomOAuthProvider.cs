@@ -9,7 +9,7 @@ using License.Core.Manager;
 using Microsoft.AspNet.Identity.Owin;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
-using License.DataModel;
+using License.Models;
 
 namespace OnPremise.WebAPI.Common
 {

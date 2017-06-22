@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
+using License.Models;
 using System.Collections;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using License.ServiceInvoke;
 namespace License.MetCalWeb.Controllers
 {
     /// <summary>
@@ -267,7 +268,7 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult RevokeLicense(int teamId)
         {
-            TeamDetails teamDetails = new TeamDetails()
+            TeamDetailsExtended teamDetails = new TeamDetailsExtended()
             {
                 Team = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault(),
                 ProductList = OnPremiseSubscriptionLogic.GetTeamLicenseDetails(teamId)

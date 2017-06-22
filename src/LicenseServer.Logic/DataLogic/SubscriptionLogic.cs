@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 using LicenseServer.Logic.Common;
 
 namespace LicenseServer.Logic
@@ -15,7 +15,7 @@ namespace LicenseServer.Logic
             List<Subscription> subscriptionTypes = new List<Subscription>();
             List<Core.Model.Subscription> listSubscription = null;
             listSubscription = Work.SubscriptionRepository.GetData(s => String.IsNullOrEmpty(s.CreatedBy) == true || s.CreatedBy == userId).ToList();
-            subscriptionTypes = listSubscription.Select(obj => AutoMapper.Mapper.Map<DataModel.Subscription>(obj)).ToList();
+            subscriptionTypes = listSubscription.Select(obj => AutoMapper.Mapper.Map<Subscription>(obj)).ToList();
             return subscriptionTypes;
         }
 
@@ -72,7 +72,7 @@ namespace LicenseServer.Logic
                 if (i > 0)
                     Work.SubscriptionDetailResitory.Save();
             }
-            return AutoMapper.Mapper.Map<DataModel.Subscription>(coreSubscription);
+            return AutoMapper.Mapper.Map<Subscription>(coreSubscription);
         }
 
         public Subscription GetById(int id)
