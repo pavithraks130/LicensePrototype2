@@ -34,14 +34,14 @@
                                 <h4>@product.Name</h4>
                             </div>
                         </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label>Expire Date</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <label>@product.ExpireDate.Date.ToString("D")</label>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Expire Date</label>
                             </div>
+                            <div class="col-md-8">
+                                <label>@product.ExpireDate.Date.ToString("D")</label>
+                            </div>
+                        </div>
 
                             <div class="row">
                                 <div class="col-md-11">
@@ -94,9 +94,13 @@
 
         }
     </div>
-    <div class="col-md-4">
-        @{ Html.RenderAction("Index","Notification",null); }
-    </div>
+
+    @if (@LicenseSessionState.Instance.IsSuperAdmin)
+    {
+        <div class="col-md-4">
+            @{ Html.RenderAction("Index", "Notification", null); }
+        </div>
+    }
 </div>
 
 @* Javascript *@

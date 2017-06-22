@@ -12,6 +12,9 @@ using System.Windows.Input;
 
 namespace License.MetCalDesktop.ViewModel
 {
+    /// <summary>
+    /// This view model is used to  handle VISMA Data
+    /// </summary>
     public class VISMADataViewModel : BaseEntity
     {
         private ObservableCollection<VISMAData> _VISMADataCollections = new ObservableCollection<VISMAData>();
@@ -20,24 +23,29 @@ namespace License.MetCalDesktop.ViewModel
         private string result;
         public ICommand GetVISMADataCommand { get; set; }
         public ICommand GetVISMADataByTestDeviceCommand { get; set; }
+        /// <summary>
+        /// To display VISMA Data 
+        /// </summary>
         public ObservableCollection<VISMAData> VISMADataCollections { get => _VISMADataCollections; set => _VISMADataCollections = value; }
-        public string ErrorMsg
+
+        /// <summary>
+        /// TestDevice property from VISMA Data Table
+        /// </summary>
+        public string TestDevice
         {
             get
             {
-                return errorMsg;
+                return expirationDate;
             }
             set
             {
-                errorMsg = value; OnPropertyChanged("ErrorMsg");
-                OnPropertyChanged("ErrorMsg");
+                expirationDate = value;
+                OnPropertyChanged("TestDevice");
             }
         }
-        public string TestDevice
-        {
-            get { return expirationDate; }
-            set { expirationDate = value; OnPropertyChanged("TestDevice"); }
-        }
+        /// <summary>
+        /// Result after search 
+        /// </summary>
         public string Result
         {
             get { return result; }
@@ -46,14 +54,18 @@ namespace License.MetCalDesktop.ViewModel
 
         public VISMADataViewModel()
         {
-
             GetVISMADataCommand = new RelayCommand(OnLoadVISMAData);
             GetVISMADataByTestDeviceCommand = new RelayCommand(GetVISMADataByTestDevice);
+            TestDevice = Constants.SEARCHDATA;
         }
 
+        /// <summary>
+        /// Get VISMAData By TestDevice id
+        /// </summary>
+        /// <param name="parm"></param>
         private void GetVISMADataByTestDevice(object parm)
         {
-            if (!string.IsNullOrEmpty(TestDevice))
+            if (!string.IsNullOrEmpty(TestDevice) && !(TestDevice == Constants.SEARCHDATA))
             {
                 HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
@@ -63,7 +75,6 @@ namespace License.MetCalDesktop.ViewModel
                 {
                     var data = response.Content.ReadAsStringAsync().Result;
                     var records = JsonConvert.DeserializeObject<List<VISMAData>>(data);
-                   // ErrorMsg = string.Empty;
                     if (records.Count == 0)
                     {
                         Result = "Data Not Found ";
@@ -76,30 +87,33 @@ namespace License.MetCalDesktop.ViewModel
                         DateTime expDate = Convert.ToDateTime(item.ExpirationDate);
                         if (expDate.Date <= DateTime.Now.Date)
                         {
-                            Result = "TestDevice already expired,expired date:" + item.ExpirationDate;
+                            Result = "TestDevice is already expired.\n expired date:" + item.ExpirationDate;
                         }
                         else
                         {
-                            Result = "Test Device expiry date:" + item.ExpirationDate;                         }
-                        break;
+                            Result = "Test Device is about to expire on:" + item.ExpirationDate;
+                            break;
+                        }
                     }
                 }
                 else
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
                     var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    Result = string.Empty;
-                    ErrorMsg = failureResult.Message;
+                    Result = failureResult.Message;
                 }
                 client.Dispose();
             }
             else
             {
-                Result = string.Empty;
-                ErrorMsg = "Please enter valid data";
+                Result = "Please enter valid data";
             }
         }
 
+        /// <summary>
+        /// Load  All VISMA Data
+        /// </summary>
+        /// <param name="parm"></param>
         private void OnLoadVISMAData(object parm)
         {
             VISMADataCollections.Clear();
@@ -120,8 +134,7 @@ namespace License.MetCalDesktop.ViewModel
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                Result = string.Empty;
-                ErrorMsg = failureResult.Message;
+                Result = failureResult.Message;
             }
             client.Dispose();
         }

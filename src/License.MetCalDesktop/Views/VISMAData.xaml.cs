@@ -1,4 +1,5 @@
-﻿using License.MetCalDesktop.ViewModel;
+﻿using License.MetCalDesktop.Common;
+using License.MetCalDesktop.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,14 +26,32 @@ namespace License.MetCalDesktop.Views
         {
             InitializeComponent();
             var viewmodel = new VISMADataViewModel();
-            viewmodel.NavigateNextPage += NavigateNextPage;
             DataContext = viewmodel;
         }
-
-        private void NavigateNextPage(string screenName, Dictionary<string, string> additionalInfo)
+        /// <summary>
+        /// Text box water mark text handling
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtUserName_MouseEnter(object sender, MouseEventArgs e)
         {
-           
+            if (txtUserName.Text == Constants.SEARCHDATA)
+            {
+                txtUserName.Text = "";
+            }
         }
 
+        /// <summary>
+        /// Text box water mark text handling
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtUserName_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (txtUserName.Text ==string.Empty)
+            {
+                txtUserName.Text = Constants.SEARCHDATA;
+            }
+        }
     }
 }

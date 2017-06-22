@@ -17,11 +17,21 @@ namespace License.MetCalWeb.Controllers
     {
         private object jsonData;
 
+        /// <summary>
+        /// Display User interaction View 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Upload()
         {
             return View();
         }
 
+        /// <summary>
+        /// Used to upload VISMA data into database
+        /// </summary>
+        /// <param name="link"></param>
+        /// <param name="delimter"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Upload(string link,string delimter)
@@ -30,8 +40,6 @@ namespace License.MetCalWeb.Controllers
             data.Delimiter = delimter;
             data.Url = link;
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            //dynamic obj = new { urllink = link };
-            //string jsonData = JsonConvert.SerializeObject(obj);
             var response = client.PostAsJsonAsync("api/VISMAData/UploadFile", data).Result;
             if (response.IsSuccessStatusCode)
             {

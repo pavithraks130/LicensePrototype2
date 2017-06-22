@@ -27,6 +27,11 @@ namespace License.Logic.DataLogic
             return list ;
         }
 
+        /// <summary>
+        /// Update VISMA Data into database
+        /// </summary>
+        /// <param name="_VISMAData"></param>
+        /// <returns></returns>
         public VISMAData UpdateVISMAData(VISMAData _VISMAData)
         {
             List<VISMAData> list = new List<VISMAData>();
@@ -44,6 +49,11 @@ namespace License.Logic.DataLogic
             return null;
         }
 
+        /// <summary>
+        /// Delete VISMA Data by Id
+        /// </summary>
+        /// <param name="_VISMADataId"></param>
+        /// <returns></returns>
         public bool DeleteVISMAData(int  _VISMADataId)
         {
             List<VISMAData> dataList = new List<VISMAData>();
@@ -51,6 +61,11 @@ namespace License.Logic.DataLogic
             Work.VISMADataRepository.Save();
             return status;
         }
+        /// <summary>
+        /// Retrieve VISMA data based on test device
+        /// </summary>
+        /// <param name="testDevice"></param>
+        /// <returns></returns>
         public List<VISMAData> GetVISMADataByTestDevice(string testDevice)
         {
             List<VISMAData> dataList = new List<VISMAData>();
@@ -58,6 +73,10 @@ namespace License.Logic.DataLogic
             dataList = list.Select(l => AutoMapper.Mapper.Map<VISMAData>(l)).ToList();
             return dataList;
         }
+        /// <summary>
+        /// To retrieve entire VISMA Data from DB
+        /// </summary>
+        /// <returns></returns>
         public List<VISMAData> GetAllVISMAData()
         {
             List<VISMAData> dataList = new List<VISMAData>();
