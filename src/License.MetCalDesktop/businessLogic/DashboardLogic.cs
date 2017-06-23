@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
-using License.MetCalDesktop.Model;
+using License.Models;
 using License.MetCalDesktop.Common;
 
 

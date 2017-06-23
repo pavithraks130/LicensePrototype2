@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using License.Models;
 
 namespace License.MetCalDesktop.Model
 {
-   public class VISMAData
+    public class UserExtended:User
     {
-        public int Id { get; set; }
-        public string TestDevice { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public string PasswordHash { get; set; }
+        public string ThumbPrint { get; set; }
     }
 }

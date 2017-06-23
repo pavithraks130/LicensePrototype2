@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using License.MetCalDesktop.Model;
+using License.Models;
 using System.Net.Http;
 using License.MetCalDesktop.Common;
 using Newtonsoft.Json;
+using License.ServiceInvoke;
+
 namespace License.MetCalDesktop.ViewModel
 {
     /// <summary>

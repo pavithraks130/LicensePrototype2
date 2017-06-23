@@ -49,7 +49,7 @@
                 data: { id: id },
                 success: function (data) {
                     if (data.success) {
-                        $(this).parents('tr').remove();
+                        location.reload();
                     }
                     else {
                         alert(data.message);
