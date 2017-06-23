@@ -224,13 +224,13 @@
     <Compile Include="Migrations\201706151035415_AddedColumnToRoleTable.Designer.cs">
       <DependentUpon>201706151035415_AddedColumnToRoleTable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706190724550_AddedCSVFile.cs" />
-    <Compile Include="Migrations\201706190724550_AddedCSVFile.Designer.cs">
-      <DependentUpon>201706190724550_AddedCSVFile.cs</DependentUpon>
+    <Compile Include="Migrations\201706200736496_TableRename.cs" />
+    <Compile Include="Migrations\201706200736496_TableRename.Designer.cs">
+      <DependentUpon>201706200736496_TableRename.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
-    <Compile Include="Model\CSVFile.cs" />
+    <Compile Include="Model\VISMAData.cs" />
     <Compile Include="Model\ProductLicense.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\Team.cs" />
@@ -333,8 +333,8 @@
     <EmbeddedResource Include="Migrations\201706151035415_AddedColumnToRoleTable.resx">
       <DependentUpon>201706151035415_AddedColumnToRoleTable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706190724550_AddedCSVFile.resx">
-      <DependentUpon>201706190724550_AddedCSVFile.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706200736496_TableRename.resx">
+      <DependentUpon>201706200736496_TableRename.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

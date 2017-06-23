@@ -50,6 +50,6 @@ namespace License.Core.DBContext
 
         public DbSet<TeamAsset> TeamAsset { get; set; }
 
-        public DbSet<CSVFile> CSVFile { get; set; }
+        public DbSet<VISMAData > VISMAData { get; set; }
     }
 }

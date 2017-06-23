@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace License.Models
 {
-    public class Notification
+    public class VISMAData
     {
         public int Id { get; set; }
-        public string NotificationData { get; set; }
-        public string Image { get; set; }
+        public string TestDevice { get; set; }
+        public DateTime ExpirationDate { get; set; }
+
     }
 }
-

@@ -1,0 +1,23 @@
+﻿@using (Html.BeginForm("Upload", "VISMAData", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="form-group col-md-8">
+        <label class="col-md-4">Enter VISMA Data file location:</label>
+        <input class="col-md-4" type="url" id="dataFile" name="link" />
+    </div>
+    <div class="form-group col-md-8" >
+        <label class=" col-md-4" id="delimiter">Enter delimiter:</label>
+        <input class="col-md-2" type="text"  name="delimter" value="" id="textId" style="width:120px"/>
+        <label class=" col-md-3" id="delimiter" style="font-weight:bold !important">Example:  ('.', ';', ',' ) </label>
+    </div>
+    <div class="form-group col-md-8">
+        <label id="lblError" style="color:green">@TempData["msg"]</label>
+    </div>
+    <div class="form-group col-md-8">
+        <input type="submit" value="Upload" class="btn btn-default" />
+    </div>
+   
+}
+

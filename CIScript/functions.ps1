@@ -123,7 +123,7 @@ function Deploy-Package
         [Parameter(Mandatory=$True)]
         [string]$MSDeployParamFile,
         [Parameter(Mandatory=$False)]
-        [string]$MSDeployParams = "-verb:sync -allowUntrusted -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension",
+        [string]$MSDeployParams = " -allowUntrusted -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension",
         [Parameter(Mandatory=$False)]
         [string]$WhatIf = ""
     )
@@ -132,7 +132,7 @@ function Deploy-Package
         $serverUrl = "https://${Destination}:8172/msdeploy.axd"
 	    $dest = "auto,computerName=$serverUrl,username=$UserName,password=$Password,authtype=Basic,includeAcls=False"
         $configParam = "-setParam:Name='IIS Web Application Name',Value='$IISAppName'"
-        $Deployment_Command = "msdeploy.exe -verb:sync -source:package=$PackageFile -dest:auto  $configParam"
+        $Deployment_Command = "msdeploy.exe -verb:sync -source:package=$PackageFile -dest:$dest $MSDeployParams  $configParam"
 
         try{
 			Write-Host $Deployment_Command

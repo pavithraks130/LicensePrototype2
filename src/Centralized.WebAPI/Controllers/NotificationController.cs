@@ -40,5 +40,23 @@ namespace Centralized.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to create Notifcation object due to internal service error");
         }
 
+        [HttpGet]
+        [Route("GetAllNotification")]
+        public HttpResponseMessage GetAllNotification()
+        {
+            List<Notification> notificationData = new List<Notification>();
+            notificationData = notificationLogic.GetNotifications();
+            if (notificationData.Count >= 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, notificationData);
+            }
+            //if (_VISMAData.Count == 0)
+            //{
+            //    return Request.CreateResponse(HttpStatusCode.OK, "No data available!!!");
+            //}
+            return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "Error in retrieve data");
+        }
+
+
     }
 }

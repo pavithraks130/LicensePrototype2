@@ -20,7 +20,7 @@ namespace License.Models
 
         public string PhoneNumber { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get { return FirstName + " " + LastName; } }
 
         public int OrganizationId { get; set; }
 

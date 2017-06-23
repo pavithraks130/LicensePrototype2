@@ -16,15 +16,14 @@ namespace License.ServiceInvoke
         public string UrlObjType { get; set; }
         public string JsonData { get; set; }
         public string AdminId { get; set; }
-
-
+        public string AccessToken { get; set; }
     }
 
-    public class WebAPIResponse
+    public class WebAPIResponse<T>
     {
         public bool Status { get; set; }
 
-        public string ResponseData { get; set; }
+        public T ResponseData { get; set; }
 
         public ResponseFailure Error { get; set; }
     }

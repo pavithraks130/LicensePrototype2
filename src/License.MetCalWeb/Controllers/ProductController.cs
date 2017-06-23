@@ -212,13 +212,13 @@ namespace License.MetCalWeb.Controllers
             {
                 var jsonData = response.Content.ReadAsStringAsync().Result;
                 ProductDependency dependencyObj = JsonConvert.DeserializeObject<ProductDependency>(jsonData);
-                ViewBag.Categories = dependencyObj.Categories;
-                ViewBag.Features = dependencyObj.Features;
+                ViewBag.Categories = dependencyObj.Categories.Select(c=> new SubscriptionCategoryExtended(c)).ToList();
+                ViewBag.Features = dependencyObj.Features.Select(f => new FeatureExtended(f)).ToList(); 
             }
             else
             {
-                ViewBag.Categories = new List<SubscriptionCategory>();
-                ViewBag.Features = new List<Feature>();
+                ViewBag.Categories = new List<SubscriptionCategoryExtended>();
+                ViewBag.Features = new List<FeatureExtended>();
             }
         }
 

@@ -24,7 +24,7 @@ namespace License.Logic
                 .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Id));
             cfg.CreateMap<Role, License.Core.Model.Role>();
 
-            cfg.CreateMap<License.Core.Model.AppUser,User>()
+            cfg.CreateMap<License.Core.Model.AppUser, User>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
             cfg.CreateMap<User, License.Core.Model.AppUser>();
 
@@ -34,7 +34,7 @@ namespace License.Logic
             cfg.CreateMap<TeamMember, License.Core.Model.TeamMember>()
                 .ForMember(dest => dest.InviteeUser, opt => opt.MapFrom(src => src.InviteeUser));
 
-            cfg.CreateMap<License.Core.Model.UserSubscription,UserSubscription>();
+            cfg.CreateMap<License.Core.Model.UserSubscription, UserSubscription>();
             cfg.CreateMap<UserSubscription, License.Core.Model.UserSubscription>();
 
             cfg.CreateMap<License.Core.Model.ProductLicense, ProductLicense>();
@@ -56,8 +56,8 @@ namespace License.Logic
             cfg.CreateMap<TeamAsset, License.Core.Model.TeamAsset>();
             cfg.CreateMap<License.Core.Model.TeamAsset, TeamAsset>();
 
-            cfg.CreateMap<CSVFile, License.Core.Model.CSVFile>();
-            cfg.CreateMap<License.Core.Model.CSVFile, CSVFile>();
+            cfg.CreateMap<VISMAData, License.Core.Model.VISMAData >();
+            cfg.CreateMap<License.Core.Model.VISMAData , VISMAData>();
 
             cfg.CreateMap<Team, Core.Model.Team>();
             cfg.CreateMap<Core.Model.Team, Team>().MaxDepth(3)

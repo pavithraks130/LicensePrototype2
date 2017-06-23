@@ -179,7 +179,7 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult ProductDetails(int id, string categoryName)
         {
-            Subscription type = new Subscription()
+            SubscriptionExtended type = new SubscriptionExtended()
             {
                 Category = new SubscriptionCategory()
                 {

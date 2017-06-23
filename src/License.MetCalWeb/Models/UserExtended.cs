@@ -11,7 +11,7 @@ namespace License.MetCalWeb.Models
 {
     public class UserExtended : User
     {
-        public List<Role> RolesList { get;set;}
+        public List<Role> RolesList { get; set; }
     }
 }
 

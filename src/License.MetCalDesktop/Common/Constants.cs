@@ -16,5 +16,7 @@ namespace License.MetCalDesktop.Common
 
         public const int CARD_NUMBER_LENGTH = 16;
         public const int CARD_CVV_LENGTH = 3;
+
+        public const string SEARCHDATA = "Enter Test Device Id";
     }
 }

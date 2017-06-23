@@ -18,9 +18,9 @@ namespace License.Models
         public DateTime ModifiedDate { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
-        public ICollection<SubscriptionCategory> Categories { get; set; }
-        public ICollection<Feature> Features { get; set; }
-        public List<ProductAdditionalOption> AdditionalOption { get; set; }
+        public IList<SubscriptionCategory> Categories { get; set; }
+        public IList<Feature> Features { get; set; }
+        public IList<ProductAdditionalOption> AdditionalOption { get; set; }
         public int AvailableCount { get; set; }
         [JsonIgnore]
         public bool IsLocal { get; set; } = false;

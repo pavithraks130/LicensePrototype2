@@ -8,23 +8,23 @@ Properties {
 	$SourceDir = "$targetpath\src"
 	$NuGet =  "$targetpath\.nuget\NuGet.exe"
 
-	#$WebProject = ls "$targetpath\src\"+$ProjectName "*.csproj"
-	$WebProject = ls "$targetpath\src\License.MetCalWeb" "*.csproj"
+	$WebProject = ls "$targetpath\src\"+$ProjectName "*.csproj"
+	#$WebProject = ls "$targetpath\src\License.MetCalWeb" "*.csproj"
     $IISAppNode = "parameters.setParameter"
-    #$SiteName = $env:IISAppName
-	$SiteName = "WebApp"
+    $SiteName = $env:IISAppName
+	#$SiteName = "WebApp"
 	$Package = "$SiteName.zip"
     $PkgLocation = $build_artifacts_dir+"\"+$Package
-    #$Destination=$env:Destination
-	#$UserName = $env:DeploymentUserName
-	#$Pwd = $env:DeploymentUserPassword
-	$Destination="localhost"
-	$UserName = "pshivaru"
-	$Pwd = "Qwerty#9876"
-	#$configuration = $env:BuildConfiguration
-	$configuration = "Debug"
-	#$SitefinityUrl = $env:WebUrl
-	$SitefinityUrl = "http://localhost/WebApp"
+    $Destination=$env:Destination
+	$UserName = $env:DeploymentUserName
+	$Pwd = $env:DeploymentUserPassword
+	#$Destination="localhost"
+	#$UserName = "pshivaru"
+	#$Pwd = "Qwerty#9876"
+	$configuration = $env:BuildConfiguration
+	#$configuration = "Debug"
+	$SitefinityUrl = $env:WebUrl
+	#$SitefinityUrl = "http://localhost/WebApp"
 }
 
 FormatTaskName (("-"*25) + "[{0}]" + ("-"*25))
