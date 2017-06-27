@@ -323,8 +323,8 @@
     <Content Include="Views\License\AssignLicense.cshtml" />
     <Content Include="Views\License\RevokeLicense.cshtml" />
     <Content Include="Views\Dashboard\Home.cshtml" />
-    <Content Include="Views\UserToken\Index.cshtml" />
-    <Content Include="Views\UserToken\CreateToken.cshtml" />
+    <Content Include="Views\VISMAData\UserToken\Index.cshtml" />
+    <Content Include="Views\VISMAData\UserToken\CreateToken.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\User\Index.cshtml" />

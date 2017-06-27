@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.Logic.DataLogic
 {
+    /// <summary>
+    /// Used to perform CRUD op on Database
+    /// </summary>
   public class NotificationLogic:BaseLogic
     {
+        /// <summary>
+        /// Get notification item from DB
+        /// </summary>
+        /// <returns></returns>
         public List<Notification> GetNotifications()
         {
             List<Notification> notificationsList = new List<Notification>();
@@ -19,6 +26,11 @@ namespace LicenseServer.Logic.DataLogic
             }
             return notificationsList;
         }
+        /// <summary>
+        /// Create Notification item 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Notification CreateNotificationItem(Notification item)
         {
             Core.Model.Notification notificationItem = AutoMapper.Mapper.Map<Notification, Core.Model.Notification>(item);
@@ -27,6 +39,11 @@ namespace LicenseServer.Logic.DataLogic
             Work.NotificationRepository.Save();
             return AutoMapper.Mapper.Map<Notification>(notificationItem);
         }
+        /// <summary>
+        /// Update Notification data
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Notification UpdateNotification(Notification item)
         {
             Core.Model.Notification notificationItem = Work.NotificationRepository.GetById(item.Id);
@@ -37,6 +54,12 @@ namespace LicenseServer.Logic.DataLogic
             return AutoMapper.Mapper.Map<Notification>(notificationItem);
 
         }
+
+        /// <summary>
+        /// Delete Notification data
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool DeleteNotificationItem(int id)
         {
             bool status= Work.NotificationRepository.Delete(id);

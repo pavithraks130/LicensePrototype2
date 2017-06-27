@@ -1,20 +1,18 @@
 ﻿@model IEnumerable<License.MetCalWeb.Models.Notification>
 @using License.MetCalWeb.Helper
-
-<span style="font-weight:bold;color:forestgreen" id="blinker">Notifications!!</span>
+@if (Model != null)
+{
+    <span style="font-weight:bold;color:forestgreen" id="blinker">Notifications!!</span>
     <table class="table">
         @foreach (var item in Model)
-            {
+        {
             <tr>
                 <td colspan="2">
-                    @*@Html.DisplayFor(modelItem => item.NotificationData)*@
-                @*</td>
-                <td>*@
                     @Html.Image(String.Concat("../Catalog/Images/", item.Image), item.NotificationData, "35", "100", "vertical-align:left;")
                     <div style='vertical-align:middle; display:inline; font-weight:bold'>
-                       @item.NotificationData
+                        @item.NotificationData
                     </div>
-                  
+
                 </td>
             </tr>
         }
@@ -22,3 +20,4 @@
 <script type="text/javascript">
     var blink_speed = 500; var t = setInterval(function () { var ele = document.getElementById('blinker'); ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden'); }, blink_speed);
 </script>
+}

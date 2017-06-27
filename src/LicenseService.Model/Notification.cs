@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.DataModel
 {
-  public class Notification
+    /// <summary>
+    /// This is used to synch notification data with core model table.
+    /// </summary>
+    public class Notification
     {
         public int Id { get; set; }
         public string NotificationData { get; set; }

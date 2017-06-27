@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.Core.Model
 {
+    /// <summary>
+    /// This is used to create notification table on DB.
+    /// </summary>
     public class Notification
     {
         [Key]
