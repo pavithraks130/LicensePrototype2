@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Pavithra\Projects\CalibrationLicensing\LicenseProtoTypeSite\LicensePrototype2-MVC\src\License.MetCalWeb\obj\Debug\Package\PackageTmp" />
+  <setAcl path="C:\Pavithra\Projects\CalibrationLicensing\LicenseProtoTypeSite\LicensePrototype2-MVC\src\License.MetCalWeb\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Pavithra\Projects\CalibrationLicensing\LicenseProtoTypeSite\LicensePrototype2-MVC\src\License.MetCalWeb\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
+using License.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using License.ServiceInvoke;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -55,7 +57,7 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            Subscription subType = new Subscription();
+            SubscriptionExtended subType = new SubscriptionExtended();
             List<Product> productList = new List<Product>();
             HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
             var response = client.GetAsync("api/Product/All").Result;
@@ -177,7 +179,7 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult ProductDetails(int id, string categoryName)
         {
-            Subscription type = new Subscription()
+            SubscriptionExtended type = new SubscriptionExtended()
             {
                 Category = new SubscriptionCategory()
                 {
@@ -249,7 +251,7 @@ namespace License.MetCalWeb.Controllers
         /// <param name="selectedProducts"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Create(Subscription type, string addToCart, string[] selectedFeatures, int[] cmmsQty, params string[] selectedProducts)
+        public async Task<ActionResult> Create(SubscriptionExtended type, string addToCart, string[] selectedFeatures, int[] cmmsQty, params string[] selectedProducts)
         {
             IList<Product> productCollection = new List<Product>();
             // Product creation based on the feature selection
@@ -276,7 +278,7 @@ namespace License.MetCalWeb.Controllers
                 }
 
             // Creation of the subscription Object
-            Subscription subscriptionType = new Subscription()
+            SubscriptionExtended subscriptionType = new SubscriptionExtended()
             {
                 Name = type.Name,
                 Price = type.Price,

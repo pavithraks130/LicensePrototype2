@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using License.MetCalWeb.Common;
-using License.MetCalWeb.Models;
+using License.Models;
 
 
 namespace License.MetCalWeb

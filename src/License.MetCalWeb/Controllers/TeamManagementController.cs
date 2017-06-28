@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using License.MetCalWeb;
 using License.MetCalWeb.Common;
 using License.MetCalWeb.Models;
+using License.Models;
 using System.Collections;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using License.ServiceInvoke;
 
 namespace License.MetCalWeb.Controllers
 {
@@ -258,16 +259,16 @@ namespace License.MetCalWeb.Controllers
         /// <param name="userId"></param>
         /// <param name="actiontype"></param>
         /// <returns></returns>
-        public List<Team> LoadTeamsByUserId(string userId, string actiontype)
+        public List<TeamExtended> LoadTeamsByUserId(string userId, string actiontype)
         {
             List<Team> teamList = null;
             var mappedTeams = OnPremiseSubscriptionLogic.GetTeamList(userId);
             var existingTeamIdList = mappedTeams.Select(t => t.Id).ToList();
             if (actiontype == "AssignTeam")
-                teamList = LicenseSessionState.Instance.TeamList.Where(t => !existingTeamIdList.Contains(t.Id) && t.AdminId == LicenseSessionState.Instance.SelectedTeam.AdminId).ToList();
+                teamList = LicenseSessionState.Instance.TeamList;
             else 
                 teamList = mappedTeams.Where(t=>t.IsDefaultTeam == false).ToList();
-            return teamList;
+            return teamList.Select(t=> new TeamExtended() { Id = t.Id, Name = t.Name, IsSelected = existingTeamIdList.Contains(t.Id) }).ToList();
         }
 
         /// <summary>
@@ -284,7 +285,7 @@ namespace License.MetCalWeb.Controllers
             {
                 TeamMember mem = new TeamMember()
                 {
-                    InviteeStatus = Common.InviteStatus.Accepted.ToString(),
+                    InviteeStatus = InviteStatus.Accepted.ToString(),
                     TeamId = Convert.ToInt32(teamId),
                     InviteeUserId = userId,
                     InviteeEmail = LicenseSessionState.Instance.SelectedTeam.TeamMembers.FirstOrDefault(t => t.InviteeUserId == userId).InviteeEmail                    

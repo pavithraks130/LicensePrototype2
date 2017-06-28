@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LicenseServer.Core.Model;
-using FeatureDataModel = LicenseServer.DataModel.Feature;
+using FeatureDataModel = License.Models.Feature;
 
 namespace LicenseServer.Logic
 {

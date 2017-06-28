@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using License.Logic.DataLogic;
-using License.DataModel;
+using License.Models;
 
 namespace License.Logic.BusinessLogic
 {

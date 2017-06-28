@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using License.Logic.DataLogic;
-using License.DataModel;
-using License.Logic.Common;
+using License.Models;
 using License.Core.Manager;
+using License.Logic.Common;
 namespace License.Logic.BusinessLogic
 {
     public class TeamBO

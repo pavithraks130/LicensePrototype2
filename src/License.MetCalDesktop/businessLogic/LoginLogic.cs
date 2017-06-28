@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.MetCalDesktop.Model;
+using License.Models;
 using System.Security.Cryptography;
 using License.MetCalDesktop.Common;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using License.MetCalDesktop.Model;
+using License.ServiceInvoke;
 
 namespace License.MetCalDesktop.businessLogic
 {
@@ -19,7 +21,7 @@ namespace License.MetCalDesktop.businessLogic
         private string applicationSecretPass = "MetCal";
         public string ErrorMessage { get; set; }
 
-        public void CreateCredentialFile(User user, string password)
+        public void CreateCredentialFile(UserExtended user, string password)
         {
             List<User> userList = new List<User>();
             string thumbPrint = string.Empty;
@@ -80,12 +82,12 @@ namespace License.MetCalDesktop.businessLogic
             return new String(chars);
         }
 
-        public User AuthenticateUser(string email, string password)
+        public UserExtended AuthenticateUser(string email, string password)
         {
             if (FileIO.IsFileExist(LoginFileName))
             {
                 var usersData = FileIO.GetJsonDataFromFile(LoginFileName);
-                var usersList = JsonConvert.DeserializeObject<List<User>>(usersData);
+                var usersList = JsonConvert.DeserializeObject<List<UserExtended>>(usersData);
                 var user = usersList.FirstOrDefault(u => u.Email == email);
                 if (user != null)
                 {
@@ -107,9 +109,9 @@ namespace License.MetCalDesktop.businessLogic
             return null;
         }
 
-        public User AuthenticateOnline(string email, string password)
+        public UserExtended AuthenticateOnline(string email, string password)
         {
-            User user = null;
+            UserExtended user = null;
             HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             var formData = new FormUrlEncodedContent(new[]{
                         new KeyValuePair<string, string>("grant_type", "password"),
@@ -132,7 +134,7 @@ namespace License.MetCalDesktop.businessLogic
                 if (response.IsSuccessStatusCode)
                 {
                     jsondata = response.Content.ReadAsStringAsync().Result;
-                    user = JsonConvert.DeserializeObject<User>(jsondata);
+                    user = JsonConvert.DeserializeObject<UserExtended>(jsondata);
                     AppState.Instance.IsSuperAdmin = false;
                     if (user.Roles.Contains("SuperAdmin"))
                     {

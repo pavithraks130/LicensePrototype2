@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.MetCalDesktop.Model;
+using License.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using License.MetCalDesktop.Common;
@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Net.Http;
 using License.MetCalDesktop.businessLogic;
+using License.ServiceInvoke;
 
 namespace License.MetCalDesktop.ViewModel
 {

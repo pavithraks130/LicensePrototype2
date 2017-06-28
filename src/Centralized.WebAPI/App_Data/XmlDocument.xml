@@ -527,7 +527,7 @@
             <param name="context">Token Endpoint Context</param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Common.CustomOAuthProvider.CreateProperties(LicenseServer.DataModel.User)">
+        <member name="M:Centralized.WebAPI.Common.CustomOAuthProvider.CreateProperties(License.Models.User)">
             <summary>
             Creates Properties
             </summary>
@@ -570,7 +570,7 @@
             Constructor for Cart Class
             </summary>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateCart(LicenseServer.DataModel.CartItem)">
+        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateCart(License.Models.CartItem)">
             <summary>
             POST Method. Creates Cart Item Record in the cart for the Subscription which is added
             </summary>
@@ -614,7 +614,7 @@
             <param name="userId">The User ID</param>
             <returns>Current Subscription List</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateSubscriptionAddToCart(LicenseServer.DataModel.Subscription)">
+        <member name="M:Centralized.WebAPI.Controllers.CartController.CreateSubscriptionAddToCart(License.Models.Subscription)">
             <summary>
             POST Method. Create the Custom Subscription 
             </summary>
@@ -644,14 +644,14 @@
             <param name="id">Feature ID</param>
             <returns>On successfully finding Feature, returns Feature else returns error</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.FeatureController.CreateFeature(LicenseServer.DataModel.Feature)">
+        <member name="M:Centralized.WebAPI.Controllers.FeatureController.CreateFeature(License.Models.Feature)">
             <summary>
             Create Feature Record in database
             </summary>
             <param name="feature">Feature to be created</param>
             <returns>Status of Feature Creation</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.FeatureController.UpdateFeature(System.Int32,LicenseServer.DataModel.Feature)">
+        <member name="M:Centralized.WebAPI.Controllers.FeatureController.UpdateFeature(System.Int32,License.Models.Feature)">
             <summary>
             Update Existing Feature with Changes.
             </summary>
@@ -678,7 +678,7 @@
             Controller for Notification Related Operations
             </summary>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.NotificationController.CreateNotification(LicenseServer.DataModel.Notification)">
+        <member name="M:Centralized.WebAPI.Controllers.NotificationController.CreateNotification(License.Models.Notification)">
             <summary>
             POST Method. Create Notification Data
             </summary>
@@ -701,7 +701,7 @@
             </summary>
             <returns>Subscription Category List</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.SubscriptionCategoryController.CreateSubscriptionCategory(LicenseServer.DataModel.SubscriptionCategory)">
+        <member name="M:Centralized.WebAPI.Controllers.SubscriptionCategoryController.CreateSubscriptionCategory(License.Models.SubscriptionCategory)">
             <summary>
             POST Method: Create Subscription Category
             </summary>
@@ -715,7 +715,7 @@
             <param name="id">Subscription Category ID</param>
             <returns>Subscription Category</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.SubscriptionCategoryController.UpdateSubscriptionCategory(System.Int32,LicenseServer.DataModel.SubscriptionCategory)">
+        <member name="M:Centralized.WebAPI.Controllers.SubscriptionCategoryController.UpdateSubscriptionCategory(System.Int32,License.Models.SubscriptionCategory)">
             <summary>
             PUT Method: Updating the Category changes based on the categoryId.
             </summary>
@@ -736,14 +736,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.ProductController.CreateProduct(LicenseServer.DataModel.Product)">
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.CreateProduct(License.Models.Product)">
             <summary>
             POST Method. Create Product Data
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.ProductController.UpdateProduct(System.Int32,LicenseServer.DataModel.Product)">
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.UpdateProduct(System.Int32,License.Models.Product)">
             <summary>
             Put Method. Update the Product details based on the Product ID.
             </summary>
@@ -778,7 +778,7 @@
             <param name="categoryId"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetProductUpdatesByProductId(System.Collections.Generic.List{LicenseServer.DataModel.Product})">
+        <member name="M:Centralized.WebAPI.Controllers.ProductController.GetProductUpdatesByProductId(System.Collections.Generic.List{License.Models.Product})">
             <summary>
             Post method: to get the Product canges based on the Product Id. Input to this service is list Products with Product Id and Last Modified changes.
             </summary>
@@ -818,7 +818,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.UpdatePurchaseOrder(System.Int32,LicenseServer.DataModel.PurchaseOrder)">
+        <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.UpdatePurchaseOrder(System.Int32,License.Models.PurchaseOrder)">
             <summary>
             PUT Method. Update Purchase Order details  based on id
             </summary>
@@ -826,14 +826,14 @@
             <param name="order"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.UpdateMultiplePurchaseOrder(System.Collections.Generic.List{LicenseServer.DataModel.PurchaseOrder})">
+        <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.UpdateMultiplePurchaseOrder(System.Collections.Generic.List{License.Models.PurchaseOrder})">
             <summary>
             PUT Method. Multiple Purchase Orders can be updated in single Call which is Bulk status Update
             </summary>
             <param name="orders"></param>
             <returns></returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.CreatePurchaseOrder(LicenseServer.DataModel.PurchaseOrder)">
+        <member name="M:Centralized.WebAPI.Controllers.PurchaseOrderController.CreatePurchaseOrder(License.Models.PurchaseOrder)">
             <summary>
             POST Method. Create Purchase Order with Details.
             </summary>
@@ -872,7 +872,7 @@
             <param name="userId">User ID to include Custom Subscriptions</param>
             <returns>Subscription List</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.SubscriptionController.CreateSubscription(LicenseServer.DataModel.Subscription)">
+        <member name="M:Centralized.WebAPI.Controllers.SubscriptionController.CreateSubscription(License.Models.Subscription)">
             <summary>
             POST method. Creates the Subscriptioon
             </summary>
@@ -889,28 +889,28 @@
             Constructor for User Controller
             </summary>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserController.Create(LicenseServer.DataModel.Registration)">
+        <member name="M:Centralized.WebAPI.Controllers.UserController.Create(License.Models.Registration)">
             <summary>
             POST Method. Create User record with Super Admin Role 
             </summary>
             <param name="user">User Registration</param>
             <returns>On success returns created User else returns error</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserController.GetPasswordResetToken(LicenseServer.DataModel.ForgotPassword)">
+        <member name="M:Centralized.WebAPI.Controllers.UserController.GetPasswordResetToken(License.Models.ForgotPassword)">
             <summary>
             POST Method. Gets Reset Token for the Forgot Password Functionality
             </summary>
             <param name="userName">User Name</param>
             <returns>Password Reset Token if Successful</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserController.ResetUserPassword(LicenseServer.DataModel.ResetPassword)">
+        <member name="M:Centralized.WebAPI.Controllers.UserController.ResetUserPassword(License.Models.ResetPassword)">
             <summary>
             POST Method. Reset the Password with New password based on validating the Reset Token
             </summary>
             <param name="resetPasswordModel">Reset Password Object</param>
             <returns>Status Indicating Password Change</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserController.UpdateActiveStatus(LicenseServer.DataModel.User)">
+        <member name="M:Centralized.WebAPI.Controllers.UserController.UpdateActiveStatus(License.Models.User)">
             <summary>
             Put Method. Updating the User Status once user logIn or Log Out
             </summary>
@@ -937,7 +937,7 @@
             <param name="email">Email ID</param>
             <returns>User if Exists</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserController.UpdateUser(System.String,LicenseServer.DataModel.User)">
+        <member name="M:Centralized.WebAPI.Controllers.UserController.UpdateUser(System.String,License.Models.User)">
             <summary>
             PUT Method. Update the User Data based on the User Id
             </summary>
@@ -952,7 +952,7 @@
             <param name="id">User ID</param>
             <returns>Status indicating whther User is Deleted</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserController.UpdatePassword(System.String,LicenseServer.DataModel.ChangePassword)">
+        <member name="M:Centralized.WebAPI.Controllers.UserController.UpdatePassword(System.String,License.Models.ChangePassword)">
             <summary>
             PUT Method. Change Password of the user based on the User ID and Previous Password Validation
             which is sent in the CHangePassword Object
@@ -979,7 +979,7 @@
             <param name="userId">User ID</param>
             <returns>List of Subscriptions which are set to Expire</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserSubscriptionController.RenewSubscription(System.String,LicenseServer.DataModel.RenewSubscriptionList)">
+        <member name="M:Centralized.WebAPI.Controllers.UserSubscriptionController.RenewSubscription(System.String,License.Models.RenewSubscriptionList)">
             <summary>
             Post method: To renew the subscription which are selected for the renew based on the subscription ID. Input to this service
             is list of Subscription which need to Renewed for the  User.
@@ -1004,14 +1004,14 @@
             </summary>
             <returns>List of All User Tokens</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserTokenController.CreateUserToken(LicenseServer.DataModel.UserToken)">
+        <member name="M:Centralized.WebAPI.Controllers.UserTokenController.CreateUserToken(License.Models.UserToken)">
             <summary>
             POST Method. Create User Token for the specified Email
             </summary>
             <param name="token">User Token</param>
             <returns>On success returns created Token else returns error</returns>
         </member>
-        <member name="M:Centralized.WebAPI.Controllers.UserTokenController.VerifyToken(LicenseServer.DataModel.UserToken)">
+        <member name="M:Centralized.WebAPI.Controllers.UserTokenController.VerifyToken(License.Models.UserToken)">
             <summary>
             POST Method. Verify the User Token with Email  during User Registration
             </summary>

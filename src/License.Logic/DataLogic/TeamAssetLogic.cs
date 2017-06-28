@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using License.Core.Model;
-using TeamAssetModel = License.DataModel.TeamAsset;
+using TeamAssetModel = License.Models.TeamAsset;
 
 namespace License.Logic.DataLogic
 {

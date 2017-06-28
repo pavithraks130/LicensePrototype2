@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Windows.Data;
-using License.MetCalDesktop.Model;
+using License.Models;
+using License.ServiceInvoke;
 
 namespace License.MetCalDesktop.Common
 {

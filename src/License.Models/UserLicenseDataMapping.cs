@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace License.Models
+{
+    public class UserLicenseDataMapping
+    {
+        public string AdminID { get; set; }
+        public int TeamId { get; set; }
+        public List<User> UserList { get; set; }
+        public List<ProductLicense> LicenseDataList { get; set; }
+    }
+}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 
 namespace LicenseServer.Logic
 {
@@ -20,7 +20,7 @@ namespace LicenseServer.Logic
         public Product GetProductById(int id)
         {
             Core.Model.Product pro = Work.ProductRepository.GetById(id);
-            return AutoMapper.Mapper.Map<DataModel.Product>(pro);
+            return AutoMapper.Mapper.Map<Product>(pro);
         }
 
         public List<Product> GetProductByCategoryId(int categoryId)

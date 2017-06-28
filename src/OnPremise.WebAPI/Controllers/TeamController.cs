@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using License.Logic.BusinessLogic;
 using License.Logic.DataLogic;
-using License.DataModel;
+using License.Models;
 
 namespace OnPremise.WebAPI.Controllers
 {

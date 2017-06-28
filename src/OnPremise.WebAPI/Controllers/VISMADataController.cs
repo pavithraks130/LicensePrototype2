@@ -1,5 +1,4 @@
-﻿using License.DataModel;
-using License.Logic.DataLogic;
+﻿using License.Logic.DataLogic;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using License.Models;
 
 namespace OnPremise.WebAPI.Controllers
 {

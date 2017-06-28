@@ -7,7 +7,7 @@ using Microsoft.Owin.Security.OAuth;
 using LicenseServer.Logic;
 using Owin;
 using Microsoft.Owin;
-using LicenseServer.DataModel;
+using License.Models;
 using LicenseServer.Core.Manager;
 using Microsoft.AspNet.Identity.Owin;
 using System.Security.Claims;

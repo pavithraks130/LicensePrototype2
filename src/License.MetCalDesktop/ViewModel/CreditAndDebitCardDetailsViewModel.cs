@@ -8,6 +8,9 @@ using System.ComponentModel;
 using System.Windows.Input;
 using System.Net.Http;
 using Newtonsoft.Json;
+using License.Models;
+using License.ServiceInvoke;
+
 
 namespace License.MetCalDesktop.ViewModel
 {
@@ -288,7 +291,7 @@ namespace License.MetCalDesktop.ViewModel
         private void PayOffline(object obj)
         {
             //Add to cart
-            CartItems item = new CartItems();
+            CartItem item = new CartItem();
             item.SubscriptionId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
             item.Quantity = 1;
             item.DateCreated = DateTime.Now;
@@ -353,7 +356,7 @@ namespace License.MetCalDesktop.ViewModel
                 && !string.IsNullOrEmpty(SelectedYear.ToString()) && !string.IsNullOrEmpty(CardCVV.ToString()))
             {
                 //Add to cart
-                CartItems item = new CartItems();
+                CartItem item = new CartItem();
                 item.SubscriptionId = Convert.ToInt32(AppState.Instance.SelectedSubscription.Id);
                 item.Quantity = 1;
                 item.DateCreated = DateTime.Now;

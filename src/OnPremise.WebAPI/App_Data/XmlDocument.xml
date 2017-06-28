@@ -492,7 +492,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Create(License.DataModel.TeamAsset)">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Create(License.Models.TeamAsset)">
             <summary>
             Post Method to create the Asset
             </summary>
@@ -507,7 +507,7 @@
             <returns></returns>
             
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Update(System.Int32,License.DataModel.TeamAsset)">
+        <member name="M:OnPremise.WebAPI.Controllers.AssetController.Update(System.Int32,License.Models.TeamAsset)">
             <summary>
             Put Method to Update the asset changes based on the Asset Id
             </summary>
@@ -535,28 +535,28 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.RolesController.Create(License.DataModel.Role)">
+        <member name="M:OnPremise.WebAPI.Controllers.RolesController.Create(License.Models.Role)">
             <summary>
             Post Method, Create the Role
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.VISMADataController.UploadFile(License.DataModel.URLData)">
+        <member name="M:OnPremise.WebAPI.Controllers.VISMADataController.UploadFile(License.Models.URLData)">
             <summary>
             POST Method: Used to Update the products in bulk
             </summary>
             <param name="VISMA data ListdataList"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.AddUserLicense(License.DataModel.UserLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.AddUserLicense(License.Models.UserLicenseDataMapping)">
             <summary>
             Post method. Map the License to the User. The license will be fetched based on the subscription and Product Id
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.RemoveUserLicense(License.DataModel.UserLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.RemoveUserLicense(License.Models.UserLicenseDataMapping)">
             <summary>
             Post Method. To remove the Mapped License from User.
             </summary>
@@ -585,7 +585,7 @@
             <param name="teamId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.ApproveRejectLicense(System.Collections.Generic.List{License.DataModel.UserLicenseRequest})">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.ApproveRejectLicense(System.Collections.Generic.List{License.Models.UserLicenseRequest})">
             <summary>
             Post Method. To update the approve or Rejection status of the License Request. 
             Multiple request will be updated. Input to this Service is List of UserLicenseRequest Object which contains 
@@ -593,14 +593,14 @@
             <param name="licReqList"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.RequestLicense(System.Collections.Generic.List{License.DataModel.UserLicenseRequest})">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.RequestLicense(System.Collections.Generic.List{License.Models.UserLicenseRequest})">
             <summary>
             Post Method. Used for the License Request. Multiple License will be requested
             </summary>
             <param name="licReqList"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.GetUserSubscripedLicense(License.DataModel.FetchUserSubscription)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserLicenseController.GetUserSubscripedLicense(License.Models.FetchUserSubscription)">
             <summary>
             Post Method. Used to fetch the User Subscribed License List based on the Team Id and User Id.
             Features will be fetched based on the user Requirement. The input to the service is FetchUserSubscription
@@ -617,7 +617,7 @@
             <param name="adminId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.ProductController.UpdateProducts(System.Collections.Generic.List{License.DataModel.Product})">
+        <member name="M:OnPremise.WebAPI.Controllers.ProductController.UpdateProducts(System.Collections.Generic.List{License.Models.Product})">
             <summary>
             POST Method: Used to Update the products in bulk
             </summary>
@@ -659,14 +659,14 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamController.CreateTeam(License.DataModel.Team)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamController.CreateTeam(License.Models.Team)">
             <summary>
             POST Method. To Create Team
             </summary>
             <param name="team"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamController.UpdateTeam(System.Int32,License.DataModel.Team)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamController.UpdateTeam(System.Int32,License.Models.Team)">
             <summary>
             PUT Method. To Update the Team Details
             </summary>
@@ -682,7 +682,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamController.UpdateConcurentUser(License.DataModel.Team)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamController.UpdateConcurentUser(License.Models.Team)">
             <summary>
             POST Method: To update the concurrent user to team 
             and  update the product License if the products are mapped
@@ -690,14 +690,14 @@
             <param name="team"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.AddTeamLicense(License.DataModel.TeamLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.AddTeamLicense(License.Models.TeamLicenseDataMapping)">
             <summary>
             Post method. Map the License to the Team. The license will be fetched based on the subscription and Product Id
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.DeleteTeamLicenses(License.DataModel.TeamLicenseDataMapping)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamLicenseController.DeleteTeamLicenses(License.Models.TeamLicenseDataMapping)">
             <summary>
             Delete Method : To delete the team License
             </summary>
@@ -714,21 +714,21 @@
             <param name="teamId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateInvite(License.DataModel.TeamMember)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateInvite(License.Models.TeamMember)">
             <summary>
             POST Method. To create the User Invite Request to the Team
             </summary>
             <param name="member"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateTeamMembers(System.Collections.Generic.List{License.DataModel.TeamMember})">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.CreateTeamMembers(System.Collections.Generic.List{License.Models.TeamMember})">
             <summary>
             POST Method: To Create the Team Member record
             </summary>
             <param name="teamMemList"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.RemoveTeamMembers(System.Collections.Generic.List{License.DataModel.TeamMember})">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.RemoveTeamMembers(System.Collections.Generic.List{License.Models.TeamMember})">
             <summary>
             POST Method : To remove Team Members in Bulk
             </summary>
@@ -742,14 +742,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.UpdateInvitationStatus(License.DataModel.TeamMember)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.UpdateInvitationStatus(License.Models.TeamMember)">
             <summary>
             PUT method. To update the Team Meember for User Invitation Request Status can be updated
             </summary>
             <param name="mem"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.UpdateAdminAccess(License.DataModel.TeamMember)">
+        <member name="M:OnPremise.WebAPI.Controllers.TeamMemberController.UpdateAdminAccess(License.Models.TeamMember)">
             <summary>
             Put Method. To Update the admin access to the Team Member 
             </summary>
@@ -776,14 +776,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.CreateUser(License.DataModel.Registration)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.CreateUser(License.Models.Registration)">
             <summary>
             POST method. To create User 
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.UpdateRole(System.String,License.DataModel.User)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.UpdateRole(System.String,License.Models.User)">
             <summary>
             Put Method. To Update the User Details based on the UserId
             </summary>
@@ -812,28 +812,28 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.GetPasswordResetToken(License.DataModel.ForgotPassword)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.GetPasswordResetToken(License.Models.ForgotPassword)">
             <summary>
             Post Method. Get Password Reset Token  for reseting password.
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.ResetuserPassword(License.DataModel.ResetPassword)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.ResetuserPassword(License.Models.ResetPassword)">
             <summary>
             POST method. Update/Reset the password.
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.UpdateActiveStatus(License.DataModel.User)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.UpdateActiveStatus(License.Models.User)">
             <summary>
             PUT method. To update the User Status when User is Online or Offline
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.UpdatePassword(System.String,License.DataModel.ChangePassword)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.UpdatePassword(System.String,License.Models.ChangePassword)">
             <summary>
             Pot method. ChangePassword the Password
             </summary>
@@ -841,7 +841,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserController.IsConcurrentUserLoggedIn(License.DataModel.ConcurrentUserLogin)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserController.IsConcurrentUserLoggedIn(License.Models.ConcurrentUserLogin)">
             <summary>
             GET Method. Check for the concurent user 
             </summary>
@@ -854,14 +854,14 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.CreateSubscription(License.DataModel.SubscriptionList)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.CreateSubscription(License.Models.SubscriptionList)">
             <summary>
             POST Method: Sync the subscription from Centralized to ON premise
             </summary>
             <param name="subscriptionData"></param>
             <returns></returns>
         </member>
-        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.UpdateSubscriptionRenewal(License.DataModel.SubscriptionList,System.String)">
+        <member name="M:OnPremise.WebAPI.Controllers.UserSubscriptionController.UpdateSubscriptionRenewal(License.Models.SubscriptionList,System.String)">
             <summary>
              POST Method: To update the renewal  subscription details
             </summary>

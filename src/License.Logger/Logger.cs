@@ -52,9 +52,7 @@ namespace Logger
 
             var fileTarget = new FileTarget();
             config.AddTarget("file", fileTarget);
-
-
-            //   path ="E:\\SAWDGS\\";
+            
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             fileTarget.FileName = Path.Combine(path, filename+".log");
@@ -72,13 +70,7 @@ namespace Logger
             // Step 5. Activate the configuration
             LogManager.Configuration = config;
         }
-
-        //public static string GetAppLogPath()
-        //{
-        //    var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        //       Global.MEMORYDRIVENAME);
-        //    return logPath;
-        //}
+        
     }
 
     public static class LoggerExt

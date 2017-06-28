@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using License.DataModel;
+using License.Models;
 using License.Logic.DataLogic;
 using License.Logic.Common;
 using System.Dynamic;
@@ -38,10 +38,10 @@ namespace License.Logic.BusinessLogic
                 sub.ServerUserSubscriptionId = data.UserSubscriptionId;
                 var userSubscriptionId = userSubLogic.CreateSubscription(sub);
 
-                List<License.DataModel.ProductLicense> licenseDataList = new List<DataModel.ProductLicense>();
+                List<License.Models.ProductLicense> licenseDataList = new List<Models.ProductLicense>();
                 foreach (var lic in data.LicenseKeyProductMapping)
                 {
-                    License.DataModel.ProductLicense licenseData = new DataModel.ProductLicense()
+                    License.Models.ProductLicense licenseData = new Models.ProductLicense()
                     {
                         LicenseKey = lic.LicenseKey,
                         ProductId = lic.ProductId,

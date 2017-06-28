@@ -8,7 +8,7 @@ using System.Web.Http;
 using License.Core.Model;
 using License.Logic.BusinessLogic;
 using License.Logic.DataLogic;
-using License.DataModel;
+using License.Models;
 using Microsoft.AspNet.Identity;
 
 

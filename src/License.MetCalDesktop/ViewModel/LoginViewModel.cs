@@ -11,6 +11,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using License.MetCalDesktop.Model;
 using License.MetCalDesktop.businessLogic;
+using License.Models;
+using License.ServiceInvoke;
 
 namespace License.MetCalDesktop.ViewModel
 {
@@ -160,7 +162,7 @@ namespace License.MetCalDesktop.ViewModel
             {
 
                 IsEnableLogin = false;
-                Model.User user = null;
+                UserExtended user = null;
                 if (AppState.Instance.IsNetworkAvilable())
                     user = logic.AuthenticateOnline(Email, Password);
                 else if (AppState.Instance.IsCredentialFileExist())

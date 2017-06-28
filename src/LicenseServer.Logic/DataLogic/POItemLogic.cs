@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 
 namespace LicenseServer.Logic
 {
@@ -38,7 +38,7 @@ namespace LicenseServer.Logic
             var itemList = Work.POItemRepository.GetData(f => f.PurchaseOrderId == poId);
             foreach (var obj in itemList)
             {
-                var item = AutoMapper.Mapper.Map<DataModel.PurchaseOrderItem>(obj);
+                var item = AutoMapper.Mapper.Map<PurchaseOrderItem>(obj);
                 items.Add(item);
             }
             return items;

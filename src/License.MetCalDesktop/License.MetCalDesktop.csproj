@@ -106,7 +106,6 @@
     <Compile Include="businessLogic\LoginLogic.cs" />
     <Compile Include="Common\AppState.cs" />
     <Compile Include="Common\BaseEntity.cs" />
-    <Compile Include="Common\common.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\CustomEventArgs.cs" />
     <Compile Include="Common\DataValidations.cs" />
@@ -115,18 +114,8 @@
     <Compile Include="Common\PasswordHelper.cs" />
     <Compile Include="Common\StringToListConverter.cs" />
     <Compile Include="Model\CardDetails.cs" />
-    <Compile Include="Model\CartItems.cs" />
-    <Compile Include="Model\LicenseType.cs" />
-    <Compile Include="Model\PurchaseOrder.cs" />
-    <Compile Include="Model\ResponseFailure.cs" />
-    <Compile Include="Model\Subscription.cs" />
-    <Compile Include="Model\AccessToken.cs" />
-    <Compile Include="Model\Team.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Model\UserDetails.cs" />
-    <Compile Include="Model\UserLicense.cs" />
-    <Compile Include="Model\UserLicenseDetails.cs" />
-    <Compile Include="Model\VISMAData.cs" />
+    <Compile Include="Model\SubscriptionExtended.cs" />
+    <Compile Include="Model\UserExtended.cs" />
     <Compile Include="ViewModel\BaseEntity.cs" />
     <Compile Include="ViewModel\CreditAndDebitCardDetailsViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
@@ -263,7 +252,16 @@
       <Project>{50961cdc-c21f-43ea-9f6f-ab74a7a8e547}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\License.Models\License.Models.csproj">
+      <Project>{9e73118a-8030-418d-8487-56fda12f9dc6}</Project>
+      <Name>License.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\License.ServiceInvoke\License.ServiceInvoke.csproj">
+      <Project>{596ee3cd-98da-4667-8c45-e6a67e8dff5d}</Project>
+      <Name>License.ServiceInvoke</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

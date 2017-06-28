@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LicenseServer.DataModel;
+using License.Models;
 using Microsoft.AspNet.Identity;
 using LicenseServer.Core.DbContext;
 using LicenseServer.Core.Manager;
@@ -37,7 +37,7 @@ namespace LicenseServer.Logic
         public User CreateUser(Registration u, string roleName = "BackendAdmin")
         {
             UserTokenLogic tokenLogic = new UserTokenLogic();
-            var status = tokenLogic.VerifyUserToken(new LicenseServer.DataModel.UserToken() { Email = u.Email, Token = u.Token });
+            var status = tokenLogic.VerifyUserToken(new License.Models.UserToken() { Email = u.Email, Token = u.Token });
             if(!status)
             {
                 ErrorMessage = "Invalid User Token";
@@ -51,9 +51,9 @@ namespace LicenseServer.Logic
             ur.UserName = u.Email;
             var teamName = u.OrganizationName;
             OrganizationLogic logic = new OrganizationLogic();
-            DataModel.Organization t = logic.GetOrganizationByName(teamName);
+            License.Models.Organization t = logic.GetOrganizationByName(teamName);
             if (t == null)
-                t = logic.CreateOrganization(new DataModel.Organization() { Name = teamName });
+                t = logic.CreateOrganization(new License.Models.Organization() { Name = teamName });
             ur.OrganizationId = t.Id;
             LicenseServer.Core.Model.Appuser user = AutoMapper.Mapper.Map<User, LicenseServer.Core.Model.Appuser>(ur);
             IdentityResult result;

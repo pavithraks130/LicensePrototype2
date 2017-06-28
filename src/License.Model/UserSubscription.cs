@@ -23,11 +23,5 @@ namespace License.DataModel
         public int ServerUserSubscriptionId { get; set; }
 
         public DateTime ExpireDate { get; set; } = new DateTime(1900, 01, 01);
-
-        public List<LicenseKeyProductMapping> LicenseKeys { get; set; }
-
-        public Subscription Subscription { get; set; }
-
-        public User User { get; set; }
     }
 }

@@ -94,7 +94,7 @@
     </ProjectReference>
     <ProjectReference Include="..\License.Model\License.DataModel.csproj">
       <Project>{E4B922B6-6723-4E85-9522-C9EB666FD620}</Project>
-      <Name>License.Model</Name>
+      <Name>License.DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\LicenseServer.Core\LicenseServer.Core.csproj">
       <Project>{D3B38260-18DB-4629-8D7B-A7123BC06297}</Project>

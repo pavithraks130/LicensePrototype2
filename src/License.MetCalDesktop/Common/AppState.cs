@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using License.MetCalDesktop.Model;
+using License.Models;
 using System.Net;
 
 namespace License.MetCalDesktop.Common

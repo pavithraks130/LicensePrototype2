@@ -221,7 +221,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\AuthorizeBackendService.cs" />
     <Compile Include="Common\CentralizedSubscriptionLogic.cs" />
-    <Compile Include="Common\Common.cs" />
     <Compile Include="Common\EmailService.cs" />
     <Compile Include="Common\EncryptDecrypt.cs" />
     <Compile Include="Common\OnPremiseSubscriptionLogic.cs" />
@@ -252,53 +251,19 @@
     <Compile Include="Helper\HtmlHelperExtension.cs" />
     <Compile Include="LicenseSessionState.cs" />
     <Compile Include="Logic\AccountLogic.cs" />
-    <Compile Include="Models\AccessToken.cs" />
-    <Compile Include="Models\ChangePassword.cs" />
-    <Compile Include="Models\ConcurrentUserLogin.cs" />
-    <Compile Include="Models\FetchUserSubscription.cs" />
-    <Compile Include="Models\ForgotPassword.cs" />
-    <Compile Include="Models\ForgotPasswordToken.cs" />
-    <Compile Include="Models\LicenseKeyProductMapping.cs" />
+    <Compile Include="Models\ChangePasswordExtended.cs" />
     <Compile Include="Models\Login.cs" />
-    <Compile Include="Models\Notification.cs" />
-    <Compile Include="Models\Organization.cs" />
-    <Compile Include="Models\ProductAdditionalOption.cs" />
-    <Compile Include="Models\ProductDependencyDetails.cs" />
-    <Compile Include="Models\ProductLicense.cs" />
-    <Compile Include="Models\PurchaseOrderItem.cs" />
-    <Compile Include="Models\Registration.cs" />
+    <Compile Include="Models\RegistrationExtended.cs" />
     <Compile Include="Models\CardDetails.cs" />
-    <Compile Include="Models\CartItem.cs" />
-    <Compile Include="Models\Feature.cs" />
-    <Compile Include="Models\HardwareDetails.cs" />
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\RenewSubscriptionList.cs" />
-    <Compile Include="Models\ResetPassword.cs" />
-    <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\Subscription.cs" />
-    <Compile Include="Models\SubscriptionCategory.cs" />
-    <Compile Include="Models\PurchaseOrder.cs" />
-    <Compile Include="Models\ResponseFailure.cs" />
-    <Compile Include="Models\SubscriptionLicenseMapping.cs" />
-    <Compile Include="Models\SubscriptionList.cs" />
-    <Compile Include="Models\TeamAsset.cs" />
-    <Compile Include="Models\TeamConcurrentUserResponse.cs" />
-    <Compile Include="Models\TeamDetails.cs" />
-    <Compile Include="Models\TeamLicenseDataMapping.cs" />
+    <Compile Include="Models\FeatureExtended.cs" />
+    <Compile Include="Models\Hardware.cs" />
+    <Compile Include="Models\SubscriptionCategoryExtended.cs" />
+    <Compile Include="Models\SubscriptionExtended.cs" />
+    <Compile Include="Models\TeamDetailsExtended.cs" />
     <Compile Include="Models\TeamMappingDetails.cs" />
-    <Compile Include="Models\TeamMember.cs" />
-    <Compile Include="Models\TeamMemberResponse.cs" />
-    <Compile Include="Models\Team.cs" />
-    <Compile Include="Models\URLData.cs" />
+    <Compile Include="Models\TeamExtended.cs" />
     <Compile Include="Models\UserInvite.cs" />
-    <Compile Include="Models\UserLicense.cs" />
-    <Compile Include="Models\UserLicenseDataMapping.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserLicenseDetails.cs" />
-    <Compile Include="Models\UserLicenseRequest.cs" />
-    <Compile Include="Models\UserSubscription.cs" />
-    <Compile Include="Models\WebAPIRequest.cs" />
-    <Compile Include="Models\UserToken.cs" />
+    <Compile Include="Models\UserExtended.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionExpireAttribute.cs" />
     <Compile Include="Startup.cs" />
@@ -397,6 +362,14 @@
     <ProjectReference Include="..\License.Logger\Logger.csproj">
       <Project>{50961cdc-c21f-43ea-9f6f-ab74a7a8e547}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\License.Models\License.Models.csproj">
+      <Project>{9e73118a-8030-418d-8487-56fda12f9dc6}</Project>
+      <Name>License.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\License.ServiceInvoke\License.ServiceInvoke.csproj">
+      <Project>{596ee3cd-98da-4667-8c45-e6a67e8dff5d}</Project>
+      <Name>License.ServiceInvoke</Name>
     </ProjectReference>
     <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
       <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
