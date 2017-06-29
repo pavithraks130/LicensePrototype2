@@ -334,7 +334,9 @@ namespace License.ServiceInvoke
             string url = string.Empty;
             switch (functionality)
             {
+                case Functionality.All: url = "api/VISMAData/GetAllVISMAData"; break;
                 case Functionality.UploadFile: url = "api/VISMAData/UploadFile"; break;
+                case Functionality.GetVISMADataByTestDevice: url = "api/VISMAData/GetVISMADataByTestDevice/" + id; break;
             }
             return url;
         }

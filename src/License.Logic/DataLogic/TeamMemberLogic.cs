@@ -98,7 +98,7 @@ namespace License.Logic.DataLogic
             if (adminStatus)
             {
                 if (!RoleManager.RoleExists("Admin"))
-                    RoleManager.Create(new Core.Model.Role() { Name = "Admin" });
+                    RoleManager.Create(new Core.Model.Role() { Name = "Admin" , IsDefault = true});
                 UserManager.AddToRole(userId, "Admin");
             }
             else
