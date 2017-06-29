@@ -1,11 +1,15 @@
 ﻿@model IEnumerable<License.Models.Notification>
 @using License.MetCalWeb.Helper
 
-<span style="font-weight:bold;color:forestgreen" id="blinker">Notifications!!</span>
-<table class="table">
-    @if (Model != null)
-    {
-        foreach (var item in Model)
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table">
+        <tr>
+            <td>
+                <span style="font-weight:bold;color:forestgreen" id="blinker">Notifications!!</span>
+            </td>
+        </tr>
+        @foreach (var item in Model)
         {
             <tr>
                 <td colspan="2">
@@ -18,8 +22,8 @@
                 </td>
             </tr>
         }
-    }
-</table>
+    </table>
+}
 <script type="text/javascript">
     var blink_speed = 500; var t = setInterval(function () { var ele = document.getElementById('blinker'); ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden'); }, blink_speed);
 </script>
