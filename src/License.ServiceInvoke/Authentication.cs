@@ -95,7 +95,7 @@ namespace License.ServiceInvoke
                 if (user != null)
                 {
                     var hashPassword = _userLogic.CreatePasswordhash(loginModel.Password, user.ThumbPrint);
-                    if (user.Password == hashPassword)
+                    if (user.PasswordHash == hashPassword)
                     {
                         ErrorMessage = "";
                         response.User = (Q)Convert.ChangeType(user, typeof(Q));

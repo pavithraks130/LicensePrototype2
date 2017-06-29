@@ -46,13 +46,15 @@ namespace License.MetCalDesktop.businessLogic
             var response = _authentication.DesktopAuthentication<Login, User>(new Login() { Email = email, Password = password });
             if (String.IsNullOrEmpty(response.ErrorMessage))
             {
-                AppState.Instance.OnPremiseToken = response.OnPremiseToken;
-                AppState.Instance.CentralizedToken = response.CentralizedToken;
-                _authentication.OnpremiseToken = response.OnPremiseToken.access_token;
-                _authentication.CentralizedToken = response.CentralizedToken.access_token;
                 user = response.User;
                 AppState.Instance.User = user;
                 AppState.Instance.IsSuperAdmin = user.Roles.Contains("SuperAdmin");
+
+                AppState.Instance.OnPremiseToken = response.OnPremiseToken;
+                AppState.Instance.CentralizedToken = response.CentralizedToken;
+                _authentication.OnpremiseToken = response.OnPremiseToken == null ? "" : response.OnPremiseToken.access_token;
+                _authentication.CentralizedToken = response.CentralizedToken == null ? "" : response.CentralizedToken.access_token;
+
                 if (AppState.Instance.IsSuperAdmin && AppState.Instance.IsNetworkAvilable())
                     SynchPurchaseOrder(user.ServerUserId);
             }
@@ -256,7 +258,8 @@ namespace License.MetCalDesktop.businessLogic
                 ServiceType = ServiceType.OnPremiseWebApi
             };
             var response = _userlogic.GetUserDetails(request);
-
+            if (!response.Status)
+                ErrorMessage = response.Error.error + " " + response.Error.Message;
             //HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
             //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
             //var response = client.GetAsync("api/User/GetDetailsById/" + AppState.Instance.User.UserId).Result;

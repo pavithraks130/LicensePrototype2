@@ -259,6 +259,7 @@ namespace License.ServiceInvoke
                 case Functionality.UpdateConcurentUser: url = "api/User/IsConcurrentUserLoggedIn"; break;
                 case Functionality.UpdateLogoutStatus: url = "api/user/UpdateActiveStatus"; break;
                 case Functionality.Register: url = "api/user/Create"; break;
+                case Functionality.GetUserDetailsById: url = "api/User/GetDetailsById/" + id; break;
             }
             return url;
         }

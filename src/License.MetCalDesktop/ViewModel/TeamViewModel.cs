@@ -93,6 +93,7 @@ namespace License.MetCalDesktop.ViewModel
                 var proList = dashboardLogic.LoadFeatureOffline();
                 if (proList != null && proList.Count > 0)
                     AppState.Instance.UserLicenseList = proList.Where(p => prodId.Contains(p.Id)).ToList();
+                AppState.Instance.UserLogin = new ConcurrentUserLogin() {  IsUserLoggedIn  = true};
             }
             ClosepoupWindow?.Invoke(this, new EventArgs());
         }

@@ -309,6 +309,8 @@ namespace License.MetCalDesktop.ViewModel
             //var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
             //var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
             var details = _fileIO.GetDataFromFile<UserDetails>(AppState.Instance.User.UserId + ".txt");
+            if (details == null)
+                NavigateNextPage?.Invoke("Dashboard", null);
             if (details.Teams.Count == 1)
             {
                 AppState.Instance.SelectedTeam = details.Teams[0];

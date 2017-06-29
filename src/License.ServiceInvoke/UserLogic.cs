@@ -33,8 +33,7 @@ namespace License.ServiceInvoke
             if (response.Status)
             {
                 var fileName = request.Id + ".txt";
-                var jsonData = JsonConvert.SerializeObject(response.ResponseData);
-                _fileIO.SaveDatatoFile(jsonData, fileName);
+                _fileIO.SaveDatatoFile(response.ResponseData, fileName);
             }
             else
                 ErrorMessage = response.Error.error + " " + response.Error.Message;

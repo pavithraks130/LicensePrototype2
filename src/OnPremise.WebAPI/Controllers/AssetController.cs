@@ -100,7 +100,7 @@ namespace OnPremise.WebAPI.Controllers
         {
             var asset = logic.RemoveAsset(id);
             if (asset != null)
-                return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
+                return Request.CreateResponse(HttpStatusCode.OK, asset);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
