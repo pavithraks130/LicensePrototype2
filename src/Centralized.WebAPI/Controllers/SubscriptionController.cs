@@ -55,7 +55,7 @@ namespace Centralized.WebAPI.Controllers
         /// <param name="subscriptionItem">Subscription Item to be Created</param>
         /// <returns>On success returns created Subscription else returns error</returns>
         [HttpPost]
-        [Route("CreateSubscription")]
+        [Route("Create")]
         public HttpResponseMessage CreateSubscription(Subscription subscriptionItem)
         {
             var subscriptionType = subscriptionLogic.CreateSubscriptionWithProduct(subscriptionItem);

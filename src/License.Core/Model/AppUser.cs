@@ -62,6 +62,8 @@ namespace License.Core.Model
 
         public bool IsActive { get; set; }
 
+        
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager, string authenticationType)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);

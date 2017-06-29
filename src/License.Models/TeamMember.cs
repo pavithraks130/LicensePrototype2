@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace License.Models
 {
-       public class TeamMember
+    public class TeamMember
     {
         public int Id { get; set; }
         public int TeamId { get; set; }

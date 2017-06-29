@@ -127,7 +127,7 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool DeleteTeam(int id)
+        public Team DeleteTeam(int id)
         {
             var tempObj = Work.TeamRepository.GetById(id);
             var data = Work.TeamMemberRepository.GetData(tm => tm.TeamId == id).ToList();
@@ -165,9 +165,9 @@ namespace License.Logic.DataLogic
             teamLicLogic.RemoveLicenseByTeam(id);
 
             // Deleting the team based on the ID
-            var deletestatus = Work.TeamRepository.Delete(id);
+             tempObj = Work.TeamRepository.Delete(tempObj);
             Work.TeamRepository.Save();
-            return deletestatus;
+            return AutoMapper.Mapper.Map<Team>(tempObj);
         }
 
         /// <summary>

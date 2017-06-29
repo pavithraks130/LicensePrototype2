@@ -141,12 +141,15 @@ namespace LicenseServer.Logic.BusinessLogic
             return userSsubList;
         }
 
-        public bool CreateSubscriptionAddToCart(Subscription type)
+        public Subscription CreateSubscriptionAddToCart(Subscription type)
         {
             SubscriptionLogic typeLOgic = new SubscriptionLogic();
             Subscription subType = typeLOgic.CreateSubscriptionWithProduct(type);
             if (subType == null && String.IsNullOrEmpty(typeLOgic.ErrorMessage))
+            {
                 ErrorMessage = typeLOgic.ErrorMessage;
+                return null;
+            }
             else
             {
                 CartItem item = new CartItem()
@@ -160,9 +163,12 @@ namespace LicenseServer.Logic.BusinessLogic
                 CartLogic logic = new CartLogic();
                 var cartItem = logic.CreateCartItem(item);
                 if (cartItem == null || cartItem.Id == 0)
+                {
                     ErrorMessage = logic.ErrorMessage;
+                    return null;
+                }
             }
-            return String.IsNullOrEmpty(ErrorMessage);
+            return subType;
         }
     }
 }

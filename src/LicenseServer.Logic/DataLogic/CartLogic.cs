@@ -47,11 +47,12 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<Core.Model.CartItem, CartItem>(obj);
         }
 
-        public bool DeleteCartItem(int id)
+        public CartItem DeleteCartItem(int id)
         {
-            var obj = Work.CartItemLicenseRepository.Delete(id);
+            var cartItem = Work.CartItemLicenseRepository.GetById(id);
+            cartItem = Work.CartItemLicenseRepository.Delete(cartItem);
             Work.CartItemLicenseRepository.Save();
-            return obj;
-        }       
+            return AutoMapper.Mapper.Map<CartItem>(cartItem);
+        }
     }
 }

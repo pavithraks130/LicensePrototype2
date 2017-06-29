@@ -14,10 +14,15 @@ namespace License.MetCalWeb.Controllers
     /// <summary>
     /// Controler is used to perform the actions related to the Feature. CRUD operation for the Features
     /// </summary>
-    [Authorize(Roles ="BackendAdmin")]
+    [Authorize(Roles = "BackendAdmin")]
     [SessionExpire]
     public class FeatureController : BaseController
     {
+        private APIInvoke _invoke = null;
+        public FeatureController()
+        {
+            _invoke = new APIInvoke();
+        }
         /// <summary>
         /// Get Action to list all the features
         /// </summary>
@@ -25,13 +30,26 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Index()
         {
             List<Feature> data = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var respons = client.GetAsync("api/Feature/All").Result;
-            if (respons.IsSuccessStatusCode)
+            WebAPIRequest<List<Feature>> request = new WebAPIRequest<List<Feature>>()
             {
-                var jsonData = respons.Content.ReadAsStringAsync().Result;
-                data = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Feature,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<Feature>,List<Feature>>(request);
+            if (response.Status)
+                data = response.ResponseData;
+            else
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var respons = client.GetAsync("api/Feature/All").Result;
+            //if (respons.IsSuccessStatusCode)
+            //{
+            //    var jsonData = respons.Content.ReadAsStringAsync().Result;
+            //    data = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
+            //}
             return View(data);
         }
 
@@ -55,18 +73,32 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = client.PostAsJsonAsync("api/Feature/Create", f).Result;
-                if (response.IsSuccessStatusCode)
+                WebAPIRequest<Feature> request = new WebAPIRequest<Feature>()
                 {
+                    AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                    Functionality = Functionality.Create,
+                    InvokeMethod = Method.POST,
+                    ServiceModule = Modules.Feature,
+                    ServiceType = ServiceType.CentralizeWebApi,
+                    ModelObject = f
+                };
+                var response = _invoke.InvokeService<Feature, Feature>(request);
+                if (response.Status)
                     return Json(new { message = "success", success = true });
-                }
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var responseData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    ModelState.AddModelError("", responseData.Message);
-                }
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+                //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+                //var response = client.PostAsJsonAsync("api/Feature/Create", f).Result;
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    return Json(new { message = "success", success = true });
+                //}
+                //else
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var responseData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //    ModelState.AddModelError("", responseData.Message);
+                //}
 
             }
             var _message = string.Join(Environment.NewLine, ModelState.Values
@@ -81,22 +113,36 @@ namespace License.MetCalWeb.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(int id)
         {
             Feature obj = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/feature/GetbyId/" + Id).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<Feature> request = new WebAPIRequest<Feature>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                obj = JsonConvert.DeserializeObject<Feature>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetById,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Feature,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = id.ToString()
+            };
+            var response = _invoke.InvokeService<Feature,Feature>(request);
+            if (response.Status)
+                obj = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var responseData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", responseData.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/feature/GetbyId/" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    obj = JsonConvert.DeserializeObject<Feature>(jsonData);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var responseData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", responseData.Message);
+            //}
             return View(obj);
         }
 
@@ -111,16 +157,31 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = client.PutAsJsonAsync("api/feature/Update/" + id, f).Result;
-                if (response.IsSuccessStatusCode)
+                WebAPIRequest<Feature> request = new WebAPIRequest<Feature>()
+                {
+                    AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                    Functionality = Functionality.Update,
+                    InvokeMethod = Method.PUT,
+                    ServiceModule = Modules.Feature,
+                    ServiceType = ServiceType.CentralizeWebApi,
+                    Id = id.ToString(),
+                    ModelObject = f
+                };
+                var response = _invoke.InvokeService<Feature,Feature>(request);
+                if (response.Status)
                     return Json(new { message = "success", success = true });
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var errorResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    ModelState.AddModelError("", errorResult.Message);
-                }
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+                //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+                //var response = client.PutAsJsonAsync("api/feature/Update/" + id, f).Result;
+                //if (response.IsSuccessStatusCode)
+                //    return Json(new { message = "success", success = true });
+                //else
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var errorResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //    ModelState.AddModelError("", errorResult.Message);
+                //}
             }
             string _message = String.Join(Environment.NewLine, ModelState.Values.SelectMany(s => s.Errors).Select(e => e.ErrorMessage));
             return Json(new { message = _message, success = false });
@@ -131,18 +192,32 @@ namespace License.MetCalWeb.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public ActionResult Delete(int Id)
+        public ActionResult Delete(int id)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.DeleteAsync("api/Feature/Delete/" + Id).Result;
-            if (response.IsSuccessStatusCode)
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.DeleteAsync("api/Feature/Delete/" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //    return Json(new { message = "success", success = true });
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var errorData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    return Json(new { message = errorData.Message, success = false });
+            //}
+            WebAPIRequest<Feature> request = new WebAPIRequest<Feature>()
+            {
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.Delete,
+                InvokeMethod = Method.DELETE,
+                ServiceModule = Modules.Feature,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = id.ToString()
+            };
+            var response = _invoke.InvokeService<Feature,Feature>(request);
+            if (response.Status)
                 return Json(new { message = "success", success = true });
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var errorData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                return Json(new { message = errorData.Message, success = false });
-            }
+                return Json(new { message = response.Error.error + " " + response.Error.Message, success = false }); 
         }
     }
 }

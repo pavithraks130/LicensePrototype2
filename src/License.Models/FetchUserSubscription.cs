@@ -11,5 +11,6 @@ namespace License.Models
         public int TeamId { get; set; }
         public string UserId { get; set; }
         public bool IsFeatureRequired { get; set; }
+        public UserLicenseDetails UserLicenseDetails { get; set; }
     }
 }

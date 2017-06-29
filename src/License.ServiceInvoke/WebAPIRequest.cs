@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace License.ServiceInvoke
 {
-    public class WebAPIRequest
+    public class WebAPIRequest<T>
     {
         public string Id { get; set; }
         public Method InvokeMethod { get; set; }
         public ServiceType ServiceType { get; set; }
         public Modules ServiceModule { get; set; }
-        public string Functionality { get; set; }
-        public string UrlObjType { get; set; }
-        public string JsonData { get; set; }
+        public Functionality Functionality { get; set; }
+        public T ModelObject { get; set; }
         public string AdminId { get; set; }
         public string AccessToken { get; set; }
     }

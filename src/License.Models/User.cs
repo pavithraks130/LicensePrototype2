@@ -31,6 +31,10 @@ namespace License.Models
         public string Password { get; set; }
         public bool IsActive { get; set; }
         public string ServerUserId { get; set; }
+
+        public string ThumbPrint { get; set; }
+
+        public string PasswordHash { get; set; }
         public User()
         {
             Roles = new List<string>();

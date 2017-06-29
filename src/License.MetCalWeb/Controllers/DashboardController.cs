@@ -16,16 +16,21 @@ namespace License.MetCalWeb.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
+        private CentralizedSubscriptionLogic _centralizedSubscriptionLogic = null;
+        public DashboardController()
+        {
+            _centralizedSubscriptionLogic = new CentralizedSubscriptionLogic();
+        }
         /// <summary>
         /// Get Action to display the product License which is mapped already to user based on the Team Context selected.
         /// </summary>
         /// <returns></returns>
         public ActionResult Home()
         {
-      
+
             if (LicenseSessionState.Instance.IsSuperAdmin)
             {
-                var expiredSubscriptipon = CentralizedSubscriptionLogic.GetExpireSubscription();
+                var expiredSubscriptipon = _centralizedSubscriptionLogic.GetExpireSubscription();
                 ViewBag.ExpiredSubCount = expiredSubscriptipon == null ? 0 : expiredSubscriptipon.Count;
             }
             else
@@ -41,7 +46,7 @@ namespace License.MetCalWeb.Controllers
         /// Function to make te Service call to get the data related to the Logged In User.
         /// </summary>
         /// <returns></returns>
-     
+
 
         // GET: Tab
         public ActionResult About()

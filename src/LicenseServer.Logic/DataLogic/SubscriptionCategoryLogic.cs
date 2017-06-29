@@ -42,11 +42,12 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<SubscriptionCategory>(categoryObj);
         }
 
-        public bool Delete(int id)
+        public SubscriptionCategory Delete(int id)
         {
-            var status = Work.SubscriptionCategoryRepo.Delete(id);
+            var category = Work.SubscriptionCategoryRepo.GetById(id);
+            category = Work.SubscriptionCategoryRepo.Delete(category);
             Work.SubscriptionCategoryRepo.Save();
-            return status;
+            return AutoMapper.Mapper.Map<SubscriptionCategory>(category);
         }
 
     }

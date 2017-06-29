@@ -20,6 +20,15 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class SubscriptionController : Controller
     {
+
+        private APIInvoke _invoke = null;
+        public CentralizedSubscriptionLogic _centralizedSubscriptionLogic = null;
+        public SubscriptionController()
+        {
+            _invoke = new APIInvoke();
+            _centralizedSubscriptionLogic = new CentralizedSubscriptionLogic();
+        }
+
         /// <summary>
         ///  Get Aaction for listing all the subscription based on the user Id . Returns the view with the list of subscription display
         /// </summary>
@@ -28,26 +37,40 @@ namespace License.MetCalWeb.Controllers
         {
             TempData["CartCount"] = "";
             List<Subscription> typeList = new List<Subscription>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            HttpResponseMessage response;
-            if (LicenseSessionState.Instance.IsGlobalAdmin)
-                response = await client.GetAsync("api/subscription/All");
-            else
-                response = await client.GetAsync("api/subscription/All/" + LicenseSessionState.Instance.User.ServerUserId);
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<Subscription>> request = new WebAPIRequest<List<Subscription>>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                typeList = JsonConvert.DeserializeObject<List<Subscription>>(data);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = LicenseSessionState.Instance.IsGlobalAdmin ? Functionality.All: Functionality.GetByUser,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Subscription,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = LicenseSessionState.Instance.IsGlobalAdmin ? "" : LicenseSessionState.Instance.User.ServerUserId
+            };
+
+            var response = _invoke.InvokeService<List<Subscription>, List<Subscription>>(request);
+            if (response.Status)
+                typeList = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
-            client.Dispose();
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //HttpResponseMessage response;
+            //if (LicenseSessionState.Instance.IsGlobalAdmin)
+            //    response = await client.GetAsync("api/subscription/All");
+            //else
+            //    response = await client.GetAsync("api/subscription/All/" + LicenseSessionState.Instance.User.ServerUserId);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    typeList = JsonConvert.DeserializeObject<List<Subscription>>(data);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
+            //client.Dispose();
             CartItemCount();
-            client.Dispose();
             return View(typeList);
         }
         /// <summary>
@@ -58,22 +81,35 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Create()
         {
             SubscriptionExtended subType = new SubscriptionExtended();
-            List<Product> productList = new List<Product>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/Product/All").Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<Product>> request = new WebAPIRequest<List<Product>>()
             {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                if (!String.IsNullOrEmpty(jsondata))
-                    productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
-                subType.Products = productList;
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Product,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<Product>, List<Product>>(request);
+            if (response.Status)
+                subType.Products = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //List<Product> productList = new List<Product>();
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/Product/All").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsondata = response.Content.ReadAsStringAsync().Result;
+            //    if (!String.IsNullOrEmpty(jsondata))
+            //        productList = JsonConvert.DeserializeObject<List<Product>>(jsondata);
+            //    subType.Products = productList;
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             subType.ActivationMonth = 1;
             TempData["ActivationMonth"] = LicenseSessionState.Instance.SubscriptionMonth;
             return View(subType);
@@ -95,20 +131,34 @@ namespace License.MetCalWeb.Controllers
         private void CartItemCount()
         {
             TempData["CartCount"] = "";
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<string> request = new WebAPIRequest<string>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var count = JsonConvert.DeserializeObject<string>(data);
-                if (!string.IsNullOrEmpty(count))
-                {
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetCartItemsCount,
+                Id = LicenseSessionState.Instance.User.ServerUserId,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Cart,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
 
-                    if (Convert.ToInt32(count) > 0)
-                        TempData["CartCount"] = "(" + count + ")";
-                }
-            }
-            client.Dispose();
+            var response = _invoke.InvokeService<string, string>(request);
+            if (response.Status)
+                if (!string.IsNullOrEmpty(response.ResponseData) && Convert.ToInt32(response.ResponseData) > 0)
+                    TempData["CartCount"] = "(" + response.ResponseData + ")";
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/Cart/GetCartItemCount/" + LicenseSessionState.Instance.User.ServerUserId).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    var count = JsonConvert.DeserializeObject<string>(data);
+            //    if (!string.IsNullOrEmpty(count))
+            //    {
+
+            //        if (Convert.ToInt32(count) > 0)
+            //            TempData["CartCount"] = "(" + count + ")";
+            //    }
+            //}
+            //client.Dispose();
         }
 
         /// <summary>
@@ -119,17 +169,30 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Categories()
         {
             List<SubscriptionCategory> category = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/SubscriptionCategory/All").Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<SubscriptionCategory>> request = new WebAPIRequest<List<SubscriptionCategory>>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<List<SubscriptionCategory>>(data);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.SubscriptionCategory,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<SubscriptionCategory>, List<SubscriptionCategory>>(request);
+            if (response.Status)
+                category = response.ResponseData;
             else
-            {
                 category = new List<SubscriptionCategory>();
-            }
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/SubscriptionCategory/All").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    category = JsonConvert.DeserializeObject<List<SubscriptionCategory>>(data);
+            //}
+            //else
+            //{
+            //    category = new List<SubscriptionCategory>();
+            //}
             return View(category);
         }
 
@@ -142,13 +205,25 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Features(int id)
         {
             List<Feature> featureList = new List<Feature>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/feature/GetByCategory/" + id).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<Feature>> request = new WebAPIRequest<List<Feature>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                featureList = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetByCategory,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Feature,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = id.ToString()
+            };
+            var response = _invoke.InvokeService<List<Feature>, List<Feature>>(request);
+            if (response.Status)
+                featureList = response.ResponseData;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/feature/GetByCategory/" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    featureList = JsonConvert.DeserializeObject<List<Feature>>(jsonData);
+            //}
             return View(featureList);
         }
 
@@ -159,13 +234,24 @@ namespace License.MetCalWeb.Controllers
         public ActionResult CMMSProducts()
         {
             List<Product> cmmsProducts = new List<Product>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/Product/GetCMMSProducts").Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<Product>> request = new WebAPIRequest<List<Product>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                cmmsProducts = JsonConvert.DeserializeObject<List<Product>>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetCMMSProducts,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Product,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService< List<Product>, List< Product > >(request);
+            if (response.Status)
+                cmmsProducts = response.ResponseData;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/Product/GetCMMSProducts").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    cmmsProducts = JsonConvert.DeserializeObject<List<Product>>(jsonData);
+            //}
             return View(cmmsProducts);
         }
 
@@ -261,11 +347,10 @@ namespace License.MetCalWeb.Controllers
                 Quantity = type.NoOfUsers,
                 Categories = new List<SubscriptionCategory>() { type.Category }
             };
-            pro.Features = selectedFeatures.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();           
+            pro.Features = selectedFeatures.ToList().Select(featureId => new Feature() { Id = Convert.ToInt32(featureId) }).ToList();
             productCollection.Add(pro);
 
             // Creation of the Product for each cmms product selection 
-            HttpResponseMessage response = null;
             if (selectedProducts != null)
                 for (int i = 0; i < selectedProducts.Length; i++)
                 {
@@ -297,21 +382,36 @@ namespace License.MetCalWeb.Controllers
                 case 3: subscriptionType.ActiveDays = 365 * 3; break;
             }
 
-            // Service call to create the subscription  based on the 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            if (bool.Parse(addToCart))
-                response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
-            else
-                response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+            //// Service call to create the subscription  based on the 
 
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<SubscriptionExtended> request = new WebAPIRequest<SubscriptionExtended>()
+            {
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = bool.Parse(addToCart) ? Functionality.CreateSubscriptionAddToCart : Functionality.Create,
+                InvokeMethod = Method.POST,
+                ModelObject = subscriptionType,
+                ServiceModule = bool.Parse(addToCart) ? Modules.Cart : Modules.Subscription,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService< SubscriptionExtended, SubscriptionExtended>(request);
+            if (response.Status)
                 return RedirectToAction("Index");
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //if (bool.Parse(addToCart))
+            //    response = await client.PostAsJsonAsync("api/cart/CreateSubscriptionAddToCart", subscriptionType);
+            //else
+            //    response = await client.PostAsJsonAsync("api/subscription/CreateSubscription", subscriptionType);
+
+            //if (response.IsSuccessStatusCode)
+            //    return RedirectToAction("Index");
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return null;
         }
 
@@ -323,7 +423,7 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Renew()
         {
             RenewSubscriptionList renewSub = new RenewSubscriptionList();
-            renewSub.SubscriptionList = CentralizedSubscriptionLogic.GetExpireSubscription();
+            renewSub.SubscriptionList = _centralizedSubscriptionLogic.GetExpireSubscription();
             return View(renewSub);
         }
 

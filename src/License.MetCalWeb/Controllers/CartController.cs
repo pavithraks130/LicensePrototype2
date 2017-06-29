@@ -19,10 +19,12 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class CartController : BaseController
     {
+        private APIInvoke _invoke = null;
+        private CentralizedSubscriptionLogic _centralizedSubscriptionLogic = null;
         public CartController()
         {
-
-
+            _invoke = new APIInvoke();
+            _centralizedSubscriptionLogic = new CentralizedSubscriptionLogic();
         }
 
         /// <summary>
@@ -45,9 +47,24 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public async Task<ActionResult> RemoveItem(int id)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.DeleteAsync("api/cart/Delete/" + id);
-            return RedirectToAction("CartItem", "Cart");
+            WebAPIRequest<CartItem> request = new WebAPIRequest<License.Models.CartItem>()
+            {
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.Delete,
+                Id = id.ToString(),
+                InvokeMethod = Method.DELETE,
+                ServiceModule = Modules.Cart,
+                ServiceType = ServiceType.CentralizeWebApi
+
+            };
+            var response = _invoke.InvokeService<CartItem, CartItem>(request);
+            if (response.Status)
+                return RedirectToAction("CartItem", "Cart");
+            else
+                return Json(new { success = false, message = response.Error.error + " " + response.Error.Message });
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.DeleteAsync("api/cart/Delete/" + id);
+
         }
 
         /// <summary>
@@ -81,9 +98,9 @@ namespace License.MetCalWeb.Controllers
         public async Task Purchase()
         {
             if (TempData["RenewSubscription"] != null)
-                await Common.CentralizedSubscriptionLogic.RenewSubscription((RenewSubscriptionList)TempData["RenewSubscription"]);
+                await _centralizedSubscriptionLogic.RenewSubscription((RenewSubscriptionList)TempData["RenewSubscription"]);
             else
-                await Common.CentralizedSubscriptionLogic.UpdateUserSubscription();
+                await _centralizedSubscriptionLogic.UpdateUserSubscription();
         }
 
         ///// <summary>
@@ -107,20 +124,35 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> OfflinePayment()
         {
             PurchaseOrder poOrder = new PurchaseOrder();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.PostAsync("api/cart/offlinepayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<PurchaseOrder> request = new WebAPIRequest<PurchaseOrder>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                if (!string.IsNullOrEmpty(jsonData))
-                    poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.OfflinePayment,
+                InvokeMethod = Method.POST,
+                Id = LicenseSessionState.Instance.User.ServerUserId,
+                ServiceModule = Modules.Cart,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<PurchaseOrder,PurchaseOrder>(request);
+            if (response.Status)
+                poOrder = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.PostAsync("api/cart/offlinepayment/" + LicenseSessionState.Instance.User.ServerUserId, null);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    if (!string.IsNullOrEmpty(jsonData))
+            //        poOrder = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View(poOrder);
 
         }
@@ -133,19 +165,33 @@ namespace License.MetCalWeb.Controllers
         private async Task<List<CartItem>> GetCartItems()
         {
             List<CartItem> itemList = null;
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.GetAsync("api/cart/getItems/" + LicenseSessionState.Instance.User.ServerUserId);
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<CartItem>> request = new WebAPIRequest<List<CartItem>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                itemList = JsonConvert.DeserializeObject<List<CartItem>>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetByUser,
+                InvokeMethod = Method.GET,
+                Id = LicenseSessionState.Instance.User.ServerUserId,
+                ServiceModule = Modules.Cart,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<CartItem>,List<CartItem>>(request);
+            if (response.Status)
+                itemList = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.GetAsync("api/cart/getItems/" + LicenseSessionState.Instance.User.ServerUserId);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    itemList = JsonConvert.DeserializeObject<List<CartItem>>(jsonData);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return itemList;
         }
 
@@ -163,16 +209,31 @@ namespace License.MetCalWeb.Controllers
                 DateCreated = DateTime.Now,
                 UserId = LicenseSessionState.Instance.User.ServerUserId
             };
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.PostAsJsonAsync("api/Cart/Create", item);
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<CartItem> request = new WebAPIRequest<CartItem>()
+            {
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.Create,
+                InvokeMethod = Method.POST,
+                Id = LicenseSessionState.Instance.User.ServerUserId,
+                ServiceModule = Modules.Cart,
+                ServiceType = ServiceType.CentralizeWebApi,
+                 ModelObject = item
+            };
+            var response = _invoke.InvokeService<CartItem,CartItem>(request);
+            if (response.Status)
                 return RedirectToAction("Index", "Subscription");
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.PostAsJsonAsync("api/Cart/Create", item);
+            //if (response.IsSuccessStatusCode)
+            //    return RedirectToAction("Index", "Subscription");
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return null;
         }
 

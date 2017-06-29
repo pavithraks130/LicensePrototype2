@@ -34,7 +34,7 @@ namespace LicenseServer.Logic
             return usersList;
         }
 
-        public User CreateUser(Registration u, string roleName = "BackendAdmin")
+        public Registration CreateUser(Registration u, string roleName = "BackendAdmin")
         {
             UserTokenLogic tokenLogic = new UserTokenLogic();
             var status = tokenLogic.VerifyUserToken(new License.Models.UserToken() { Email = u.Email, Token = u.Token });
@@ -66,12 +66,13 @@ namespace LicenseServer.Logic
                 if (roleObj == null)
                     result = rolelogic.CreateRole(new Role() { Name = roleName });
                 UserManager.AddToRole(user.Id, roleName);
+                u.ServerUserId = user.Id;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return AutoMapper.Mapper.Map<User>(user);
+            return u;
         }
 
         public User GetUserById(string id)
@@ -83,14 +84,15 @@ namespace LicenseServer.Logic
             return user;
         }
 
-        public bool UpdateUser(string id, User user)
+        public User UpdateUser(string id, User user)
         {
             var appuser = UserManager.FindById(id);
             appuser.FirstName = user.FirstName;
             appuser.LastName = user.LastName;
             appuser.PhoneNumber = user.PhoneNumber;
             var result = UserManager.Update(appuser);
-            return result.Succeeded;
+            var usrObj = UserManager.FindById(id);
+            return AutoMapper.Mapper.Map<User>(usrObj);
         }
 
         public bool DeleteUser(string id)
@@ -166,11 +168,12 @@ namespace LicenseServer.Logic
 
         }
 
-        public void UpdateLogInStatus(string userid, bool status)
+        public User UpdateLogInStatus(string userid, bool status)
         {
             var user = UserManager.FindById(userid);
             user.IsActive = status;
             UserManager.Update(user);
+            return AutoMapper.Mapper.Map<User>(user);
         }
 
 

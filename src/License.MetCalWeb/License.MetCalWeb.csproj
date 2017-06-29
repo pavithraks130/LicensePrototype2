@@ -224,7 +224,6 @@
     <Compile Include="Common\EmailService.cs" />
     <Compile Include="Common\EncryptDecrypt.cs" />
     <Compile Include="Common\OnPremiseSubscriptionLogic.cs" />
-    <Compile Include="Common\WebApiServiceLogic.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -250,9 +249,7 @@
     </Compile>
     <Compile Include="Helper\HtmlHelperExtension.cs" />
     <Compile Include="LicenseSessionState.cs" />
-    <Compile Include="Logic\AccountLogic.cs" />
     <Compile Include="Models\ChangePasswordExtended.cs" />
-    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\RegistrationExtended.cs" />
     <Compile Include="Models\CardDetails.cs" />
     <Compile Include="Models\FeatureExtended.cs" />

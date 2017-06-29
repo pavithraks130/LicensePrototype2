@@ -65,19 +65,20 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool RemoveAsset(int id)
+        public TeamAsset RemoveAsset(int id)
         {
             try
             {
-                var status = Work.TeamAssetRepository.Delete(id);
+                var asset = Work.TeamAssetRepository.GetById(id);
+                asset = Work.TeamAssetRepository.Delete(asset);
                 Work.TeamAssetRepository.Save();
-                return true;
+                return AutoMapper.Mapper.Map<TeamAsset>(asset);
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
             }
-            return false;
+            return null;
         }
 
         /// <summary>

@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace LicenseServer.Logic.DataLogic
 {
-  public class NotificationLogic:BaseLogic
+    public class NotificationLogic : BaseLogic
     {
         public List<Notification> GetNotifications()
         {
             List<Notification> notificationsList = new List<Notification>();
             var notificationObject = Work.NotificationRepository.GetData();
-            foreach (var item in notificationObject)
-            {
-                notificationsList.Add(AutoMapper.Mapper.Map<Core.Model.Notification,Notification>(item));
-            }
+            notificationsList = notificationObject.Select(n => AutoMapper.Mapper.Map<Notification>(n)).ToList();
             return notificationsList;
         }
         public Notification CreateNotificationItem(Notification item)
@@ -37,12 +34,12 @@ namespace LicenseServer.Logic.DataLogic
             return AutoMapper.Mapper.Map<Notification>(notificationItem);
 
         }
-        public bool DeleteNotificationItem(int id)
+        public Notification DeleteNotificationItem(int id)
         {
-            bool status= Work.NotificationRepository.Delete(id);
-
+            var notificationObj = Work.NotificationRepository.GetById(id);
+            notificationObj = Work.NotificationRepository.Delete(notificationObj);
             Work.NotificationRepository.Save();
-            return status;
+            return AutoMapper.Mapper.Map<Notification>(notificationObj);
         }
 
     }

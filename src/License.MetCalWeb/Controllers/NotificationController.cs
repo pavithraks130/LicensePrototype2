@@ -13,24 +13,43 @@ namespace License.MetCalWeb.Controllers
 {
     public class NotificationController : Controller
     {
+        private APIInvoke _invoke = null;
+        public NotificationController()
+        {
+            _invoke = new APIInvoke();
+        }
         // GET: Notification
         public ActionResult Index()
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/Notification/GetAllNotification/").Result;
-            if (response.IsSuccessStatusCode)
+            List<Notification> notifications = new List<Notification>();
+            WebAPIRequest<List<Notification>> request = new WebAPIRequest<List<Notification>>()
             {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                var notificationList = JsonConvert.DeserializeObject<List<Notification>>(jsondata);
-                return View(notificationList);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Notification,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<Notification>, List<Notification>>(request);
+            if (response.Status)
+                notifications = response.ResponseData;
             else
-            {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
-                ModelState.AddModelError("", errorResponse.Message);
-            }
-            client.Dispose();
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/Notification/GetAllNotification").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsondata = response.Content.ReadAsStringAsync().Result;
+            //    var notificationList = JsonConvert.DeserializeObject<List<Notification>>(jsondata);
+            //    return View(notificationList);
+            //}
+            //else
+            //{
+            //    var jsondata = response.Content.ReadAsStringAsync().Result;
+            //    var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
+            //    ModelState.AddModelError("", errorResponse.Message);
+            //}
+            //client.Dispose();
             return View();
 
         }
@@ -51,24 +70,37 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult Create(Notification notification)
         {
-            // TODO: Add insert logic here
-
-            if (notification != null)
+            if (ModelState.IsValid)
             {
-                //Service call to save the data in Centralized DB
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = client.PostAsJsonAsync("api/Notification/Create", notification).Result;
-                if (response.IsSuccessStatusCode)
-                    return RedirectToAction("Create");
-                else
+                WebAPIRequest<Notification> request = new WebAPIRequest<Notification>()
                 {
-                    var jsondata = response.Content.ReadAsStringAsync().Result;
-                    var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
-                    ModelState.AddModelError("", errorResponse.Message);
-                }
+                    AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                    Functionality = Functionality.Create,
+                    InvokeMethod = Method.POST,
+                    ServiceModule = Modules.Notification,
+                    ServiceType = ServiceType.CentralizeWebApi,
+                    ModelObject = notification
+
+                };
+                var response = _invoke.InvokeService< Notification, Notification>(request);
+                if (response.Status)
+                    return RedirectToAction("Index");
+                else
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+                ////Service call to save the data in Centralized DB
+                //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+                //var response = client.PostAsJsonAsync("api/Notification/Create", notification).Result;
+                //if (response.IsSuccessStatusCode)
+                //    return RedirectToAction("Create");
+                //else
+                //{
+                //    var jsondata = response.Content.ReadAsStringAsync().Result;
+                //    var errorResponse = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
+                //    ModelState.AddModelError("", errorResponse.Message);
+                //}
             }
 
-            return RedirectToAction("Create");
+            return View(notification);
 
         }
 
@@ -84,7 +116,7 @@ namespace License.MetCalWeb.Controllers
         {
             try
             {
-                // TODO: Add update logic here
+
 
                 return RedirectToAction("Index");
             }
@@ -106,7 +138,6 @@ namespace License.MetCalWeb.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
 
                 return RedirectToAction("Index");
             }

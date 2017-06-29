@@ -30,11 +30,12 @@ namespace LicenseServer.Logic
             return AutoMapper.Mapper.Map<FeatureDataModel>(fet);
         }
 
-        public bool DeleteFeature(int id)
+        public FeatureDataModel DeleteFeature(int id)
         {
-            var status = Work.FeaturesRepository.Delete(id);
+            var feature = Work.FeaturesRepository.GetById(id);
+            feature = Work.FeaturesRepository.Delete(feature);
             Work.FeaturesRepository.Save();
-            return status;
+            return AutoMapper.Mapper.Map<FeatureDataModel>(feature);
         }
 
         public FeatureDataModel Update(int id, FeatureDataModel f)

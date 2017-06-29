@@ -78,7 +78,7 @@
         }
 
         $("#BtnCancel").click(function () {
-            window.location.replace('@Url.Action("Cancel", "Users")');
+            window.location = '@Url.Action("Index", "User")';
             return false;
         });
 

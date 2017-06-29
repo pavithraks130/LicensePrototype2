@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using License.Models;
+using License.ServiceInvoke;
 using System.Net;
 
 namespace License.MetCalDesktop.Common
@@ -71,7 +72,8 @@ namespace License.MetCalDesktop.Common
 
         public bool IsCredentialFileExist()
         {
-            return FileIO.IsFileExist("credential.txt");
+            FileIO _fileIO = new FileIO();
+            return _fileIO.IsFileExist("credential.txt");
         }
 
     }

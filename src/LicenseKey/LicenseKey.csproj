@@ -106,6 +106,7 @@
     <Compile Include="Checksum.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomEncryption\FileIO.cs" />
     <Compile Include="Datatype.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -113,7 +114,7 @@
     <Compile Include="LicenseKey.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LicenseKeyGen\CryptoEngine.cs" />
+    <Compile Include="CustomEncryption\CryptoEngine.cs" />
     <Compile Include="NumberDatatype.cs">
       <SubType>Code</SubType>
     </Compile>

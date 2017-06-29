@@ -24,6 +24,8 @@ namespace License.MetCalDesktop.ViewModel
         private string result;
         public ICommand GetVISMADataCommand { get; set; }
         public ICommand GetVISMADataByTestDeviceCommand { get; set; }
+
+        private APIInvoke _invoke = null;
         /// <summary>
         /// To display VISMA Data 
         /// </summary>
@@ -58,6 +60,7 @@ namespace License.MetCalDesktop.ViewModel
             GetVISMADataCommand = new RelayCommand(OnLoadVISMAData);
             GetVISMADataByTestDeviceCommand = new RelayCommand(GetVISMADataByTestDevice);
             TestDevice = Constants.SEARCHDATA;
+            _invoke = new APIInvoke();
         }
 
         /// <summary>
@@ -68,42 +71,59 @@ namespace License.MetCalDesktop.ViewModel
         {
             if (!string.IsNullOrEmpty(TestDevice) && !(TestDevice == Constants.SEARCHDATA))
             {
-                HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-                HttpResponseMessage response = null;
-                response = client.GetAsync("api/VISMAData/GetVISMADataByTestDevice/" + TestDevice).Result;
-                if (response.IsSuccessStatusCode)
+
+                WebAPIRequest<VISMAData> request = new WebAPIRequest<VISMAData>()
                 {
-                    var data = response.Content.ReadAsStringAsync().Result;
-                    var records = JsonConvert.DeserializeObject<List<VISMAData>>(data);
-                    if (records.Count == 0)
-                    {
-                        Result = "Data Not Found ";
-                        _VISMADataCollections.Clear();
-                    }
-                    foreach (var item in records)
-                    {
-                        _VISMADataCollections.Clear();
-                        _VISMADataCollections.Add(item);
-                        DateTime expDate = Convert.ToDateTime(item.ExpirationDate);
-                        if (expDate.Date <= DateTime.Now.Date)
-                        {
-                            Result = "TestDevice is already expired.\n expired date:" + item.ExpirationDate;
-                        }
-                        else
-                        {
-                            Result = "Test Device is about to expire on:" + item.ExpirationDate;
-                            break;
-                        }
-                    }
+                    AccessToken = AppState.Instance.OnPremiseToken.access_token,
+                    Functionality = Functionality.GetVISMADataByTestDevice,
+                    InvokeMethod = Method.GET,
+                    ServiceModule = Modules.VISMAData,
+                    ServiceType = ServiceType.OnPremiseWebApi,
+                    Id = TestDevice
+                };
+                var response = _invoke.InvokeService<VISMAData, List<VISMAData>>(request);
+                if (response.Status)
+                {
+                    VISMADataCollections = new ObservableCollection<VISMAData>(response.ResponseData);
                 }
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    Result = failureResult.Message;
-                }
-                client.Dispose();
+                    Result = response.Error.error + " " + response.Error.Message;
+                //HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                //HttpResponseMessage response = null;
+                //response = client.GetAsync("api/VISMAData/GetVISMADataByTestDevice/" + TestDevice).Result;
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var data = response.Content.ReadAsStringAsync().Result;
+                //    var records = JsonConvert.DeserializeObject<List<VISMAData>>(data);
+                //    if (records.Count == 0)
+                //    {
+                //        Result = "Data Not Found ";
+                //        _VISMADataCollections.Clear();
+                //    }
+                //    foreach (var item in records)
+                //    {
+                //        _VISMADataCollections.Clear();
+                //        _VISMADataCollections.Add(item);
+                //        DateTime expDate = Convert.ToDateTime(item.ExpirationDate);
+                //        if (expDate.Date <= DateTime.Now.Date)
+                //        {
+                //            Result = "TestDevice is already expired.\n expired date:" + item.ExpirationDate;
+                //        }
+                //        else
+                //        {
+                //            Result = "Test Device is about to expire on:" + item.ExpirationDate;
+                //            break;
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //    Result = failureResult.Message;
+                //}
+                //client.Dispose();
             }
             else
             {
@@ -118,26 +138,39 @@ namespace License.MetCalDesktop.ViewModel
         private void OnLoadVISMAData(object parm)
         {
             VISMADataCollections.Clear();
-            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            HttpResponseMessage response = null;
-            response = client.GetAsync("api/VISMAData/GetAllVISMAData/").Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<VISMAData> request = new WebAPIRequest<VISMAData>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var records = JsonConvert.DeserializeObject<List<VISMAData>>(data);
-                foreach (var item in records)
-                {
-                    VISMADataCollections.Add(item);
-                }
-            }
+                AccessToken = AppState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.VISMAData,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<VISMAData, List<VISMAData>>(request);
+            if (response.Status)
+                VISMADataCollections = new ObservableCollection<VISMAData>(response.ResponseData);
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                Result = failureResult.Message;
-            }
-            client.Dispose();
+                Result = response.Error.error + " " + response.Error.Message;
+            //HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            //HttpResponseMessage response = null;
+            //response = client.GetAsync("api/VISMAData/GetAllVISMAData/").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    var records = JsonConvert.DeserializeObject<List<VISMAData>>(data);
+            //    foreach (var item in records)
+            //    {
+            //        VISMADataCollections.Add(item);
+            //    }
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    Result = failureResult.Message;
+            //}
+            //client.Dispose();
         }
     }
 }

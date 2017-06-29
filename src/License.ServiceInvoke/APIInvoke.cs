@@ -10,7 +10,7 @@ namespace License.ServiceInvoke
 {
     public class APIInvoke
     {
-        public static HttpClient CreateClient(ServiceType serviceType)
+        internal HttpClient CreateClient(ServiceType serviceType)
         {
             string url = string.Empty;
             switch (serviceType)
@@ -27,26 +27,26 @@ namespace License.ServiceInvoke
                 BaseAddress = new Uri(url)
             };
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-
             return client;
         }
-        public WebAPIResponse<T> InvokeService<T>(WebAPIRequest apiRequestData)
+        public WebAPIResponse<Q> InvokeService<T, Q>(WebAPIRequest<T> apiRequestData)
         {
-            WebAPIResponse<T> serviceResponse = new WebAPIResponse<T>();
+            WebAPIResponse<Q> serviceResponse = new WebAPIResponse<Q>();
             var url = GetServiceUrl(apiRequestData.Id, apiRequestData.ServiceModule, apiRequestData.Functionality, apiRequestData.AdminId);
 
             HttpClient client = CreateClient(apiRequestData.ServiceType);
+
             if (!string.IsNullOrEmpty(apiRequestData.AccessToken))
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + apiRequestData.AccessToken);
+
             HttpResponseMessage response = null;
             switch (apiRequestData.InvokeMethod)
             {
                 case Method.POST:
-                    response = client.PostAsJsonAsync(url, apiRequestData.JsonData).Result;
+                    response = client.PostAsJsonAsync<T>(url, apiRequestData.ModelObject).Result;
                     break;
                 case Method.PUT:
-                    response = client.PutAsJsonAsync(url, apiRequestData.JsonData).Result;
+                    response = client.PutAsJsonAsync<T>(url, apiRequestData.ModelObject).Result;
                     break;
                 case Method.DELETE:
                     response = client.DeleteAsync(url).Result;
@@ -57,7 +57,7 @@ namespace License.ServiceInvoke
             }
             if (response.IsSuccessStatusCode)
             {
-                serviceResponse.ResponseData = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().ToString());
+                serviceResponse.ResponseData = response.Content.ReadAsAsync<Q>().Result;
                 serviceResponse.Status = true;
             }
             else
@@ -70,7 +70,7 @@ namespace License.ServiceInvoke
             return serviceResponse;
         }
 
-        public String GetServiceUrl(string id, Modules type, string functionality, string adminId = null)
+        private String GetServiceUrl(string id, Modules type, Functionality functionality, string adminId = null)
         {
             string url = string.Empty;
             switch (type)
@@ -89,223 +89,252 @@ namespace License.ServiceInvoke
                 case Modules.UserLicense: url = GetUserLicenseUrl(id, functionality, adminId); break;
                 case Modules.UserSubscription: url = GetUserSubscriptionUrl(id, functionality, adminId); break;
                 case Modules.UserToken: url = GetUserTokenUrl(id, functionality, adminId); break;
+                case Modules.Notification: url = GetNotificationUrl(id, functionality, adminId); break;
+                case Modules.VISMAData: url = GetVISMADataUrl(id, functionality, adminId); break;
+                case Modules.Role: url = GetRoleUrl(id, functionality, adminId); break;
             }
             return url;
         }
 
-        public string GetAssetUrl(string id, string functionality, string adminId)
-        {
-            AssetFunctionality assetFunctionality = (AssetFunctionality)Enum.Parse(typeof(AssetFunctionality), functionality);
-            string url = String.Empty;
-            switch (assetFunctionality)
-            {
-                case AssetFunctionality.All: url = "api/asset/All"; break;
-                case AssetFunctionality.GetById: url = "api/asset/GetById/" + id; break;
-                case AssetFunctionality.Update: url = "api/asset/Update/" + id; break;
-                case AssetFunctionality.Delete: url = "api/asset/Delete/" + id; break;
-                case AssetFunctionality.Create: url = "api/asset/Create"; break;
-            }
-            return url;
-        }
-
-        public string GetCartUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            CartFunctionality cartFunctionality = (CartFunctionality)Enum.Parse(typeof(CartFunctionality), functionality);
-            switch (cartFunctionality)
-            {
-                case CartFunctionality.Delete: url = "api/cart/Delete/" + id; break;
-                case CartFunctionality.OfflinePayment: url = "api/cart/offlinepayment/" + id; break;
-                case CartFunctionality.OnlinePayment: url = "api/cart/OnlinePayment/" + id; break;
-                case CartFunctionality.GetByUser: url = "api/cart/GetItemsByUser/" + id; break;
-                case CartFunctionality.GetCartItemsCount: url = "api/Cart/GetCartItemCount/" + id; break;
-                case CartFunctionality.CreateSubscriptionAddToCart: url = "api/cart/CreateSubscriptionAddToCart"; break;
-            }
-            return url;
-        }
-
-        public string GetFeatureUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            FeatureFunctionality featureFunctionality = (FeatureFunctionality)Enum.Parse(typeof(FeatureFunctionality), functionality);
-            switch (featureFunctionality)
-            {
-                case FeatureFunctionality.All: url = "api/Feature/All"; break;
-                case FeatureFunctionality.Create: url = "api/Feature/Create"; break;
-                case FeatureFunctionality.GetById: url = "api/feature/GetbyId/" + id; break;
-                case FeatureFunctionality.Update: url = "api/feature/Update/" + id; break;
-                case FeatureFunctionality.Delete: url = "api/Feature/Delete/" + id; break;
-                case FeatureFunctionality.GetByCategory: url = "api/Feature/GetByCategory/" + id; break;
-            }
-            return url;
-        }
-
-        public string GetProductUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            ProductFunctionality prodFunctionality = (ProductFunctionality)Enum.Parse(typeof(ProductFunctionality), functionality);
-            switch (prodFunctionality)
-            {
-                case ProductFunctionality.All: url = "api/Product/All"; break;
-                case ProductFunctionality.Create: url = "api/product/create"; break;
-                case ProductFunctionality.GetById: url = "api/product/GetById/" + id; break;
-                case ProductFunctionality.Update: url = "api/product/update/" + id; break;
-                case ProductFunctionality.ProductDependency: url = "api/Product/ProductDependency"; break;
-                case ProductFunctionality.Delete: url = "api/product/delete/" + id; break;
-                case ProductFunctionality.GetProductsWithUserMappedProduct: url = "api/Product/GetProductsWithUserMappedProduct/" + adminId + "/" + id; break;
-                case ProductFunctionality.GetProducts: url = "api/Product/GetProducts/" + id; break;
-                case ProductFunctionality.GetCMMSProducts: url = "api/Product/GetCMMSProducts"; break;
-            }
-            return url;
-
-        }
-
-        public string GetPurchaseOrderUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            PurchaseOrderFunctionality poFunctionality = (PurchaseOrderFunctionality)Enum.Parse(typeof(PurchaseOrderFunctionality), functionality);
-            switch (poFunctionality)
-            {
-                case PurchaseOrderFunctionality.All: url = "api/purchaseorder/All"; break;
-                case PurchaseOrderFunctionality.UpdataMuliplePO: url = "/api/purchaseorder/UpdataMuliplePO"; break;
-                case PurchaseOrderFunctionality.OrderByUser: url = "api/purchaseorder/OrderByUser/" + id; break;
-                case PurchaseOrderFunctionality.GetById: url = "api/purchaseorder/GetById/" + id; break;
-
-            }
-            return url;
-        }
-
-        public string GetSubscriptionCategoryUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            SubscriptionCategoryFunctionality categoryFunctionality = (SubscriptionCategoryFunctionality)Enum.Parse(typeof(SubscriptionCategoryFunctionality), functionality);
-            switch (categoryFunctionality)
-            {
-                case SubscriptionCategoryFunctionality.All: url = "api/SubscriptionCategory/All"; break;
-                case SubscriptionCategoryFunctionality.Create: url = "api/SubscriptionCategory/create"; break;
-                case SubscriptionCategoryFunctionality.GetById: url = "api/SubscriptionCategory/GetById/" + id; break;
-                case SubscriptionCategoryFunctionality.Update: url = "api/SubscriptionCategory/update/" + id; break;
-                case SubscriptionCategoryFunctionality.Delete: url = "api/SubscriptionCategory/Delete/" + id; break;
-            }
-            return url;
-        }
-
-        public string GetSubscriptionUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            SubscriptionFunctionality subscriptionFunctionality = (SubscriptionFunctionality)Enum.Parse(typeof(SubscriptionFunctionality), functionality);
-            switch (subscriptionFunctionality)
-            {
-                case SubscriptionFunctionality.All: url = "api/subscription/All"; break;
-                case SubscriptionFunctionality.Get: url = "api/subscription/All/" + id; break;
-                case SubscriptionFunctionality.Create: url = "api/subscription/Create"; break;
-            }
-            return url;
-        }
-
-        public string GetTeamUrl(string id, string functionality, string adminId)
-        {
-            string url = string.Empty;
-            TeamFunctionality teamFunctionality = (TeamFunctionality)Enum.Parse(typeof(TeamFunctionality), functionality);
-            switch (teamFunctionality)
-            {
-                case TeamFunctionality.Create: url = "api/Team/Create"; break;
-                case TeamFunctionality.Update: url = "api/team/Update/" + id; break;
-                case TeamFunctionality.Delete: url = "api/team/Delete/" + id; break;
-                case TeamFunctionality.UpdateConcurentUser: url = "api/team/UpdateConcurentUser"; break;
-                case TeamFunctionality.GetById: url = "api/Team/GetById/" + id; break;
-                case TeamFunctionality.GetTeamsByAdminId: url = "api/Team/GetTeamsByAdminId/" + id; break;
-                case TeamFunctionality.GetTeamsByUserId: url = "api/Team/GetTeamsByUserId/" + id; break;
-
-            }
-            return url;
-        }
-
-        public string GetTeamLicenseUrl(string id, string functionality, string adminId)
+        private string GetAssetUrl(string id, Functionality functionality, string adminId)
         {
             string url = String.Empty;
-            TeamLicenseFunctionality teamLicenseFunctionality = (TeamLicenseFunctionality)Enum.Parse(typeof(TeamLicenseFunctionality), functionality);
-            switch (teamLicenseFunctionality)
+            switch (functionality)
             {
-                case TeamLicenseFunctionality.Create: url = "api/TeamLicense/Create"; break;
-                case TeamLicenseFunctionality.Revoke: url = "api/TeamLicense/Revoke"; break;
-                case TeamLicenseFunctionality.GetTeamLicenseByTeam: url = "api/TeamLicense/GetTeamLicenseByTeam/" + id; break;
+                case Functionality.All: url = "api/asset/All"; break;
+                case Functionality.GetById: url = "api/asset/GetById/" + id; break;
+                case Functionality.Update: url = "api/asset/Update/" + id; break;
+                case Functionality.Delete: url = "api/asset/Delete/" + id; break;
+                case Functionality.Create: url = "api/asset/Create"; break;
             }
             return url;
         }
 
-        public string GetTeamMemberUrl(string id, string functionality, string adminId)
+        private string GetCartUrl(string id, Functionality functionality, string adminId)
         {
             string url = string.Empty;
-            TeamMemberFunctionality teamMemberFunctionality = (TeamMemberFunctionality)Enum.Parse(typeof(TeamMemberFunctionality), functionality);
-            switch (teamMemberFunctionality)
+            switch (functionality)
             {
-                case TeamMemberFunctionality.Create:
-                case TeamMemberFunctionality.Assign: url = "api/TeamMember/Create"; break;
-                case TeamMemberFunctionality.UpdateAdminAccess: url = "api/TeamMember/UpdateAdminAccess"; break;
-                case TeamMemberFunctionality.Delete: url = "api/TeamMember/Delete/" + id; break;
-                case TeamMemberFunctionality.Revoke: url = "api/TeamMember/Remove"; break;
+                case Functionality.Create: url = "api/Cart/Create"; break;
+                case Functionality.Delete: url = "api/cart/Delete/" + id; break;
+                case Functionality.OfflinePayment: url = "api/cart/offlinepayment/" + id; break;
+                case Functionality.OnlinePayment: url = "api/cart/OnlinePayment/" + id; break;
+                case Functionality.GetByUser: url = "api/cart/GetItemsByUser/" + id; break;
+                case Functionality.GetCartItemsCount: url = "api/Cart/GetCartItemCount/" + id; break;
+                case Functionality.CreateSubscriptionAddToCart: url = "api/cart/CreateSubscriptionAddToCart"; break;
+            }
+            return url;
+        }
+
+        private string GetFeatureUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/Feature/All"; break;
+                case Functionality.Create: url = "api/Feature/Create"; break;
+                case Functionality.GetById: url = "api/feature/GetbyId/" + id; break;
+                case Functionality.Update: url = "api/feature/Update/" + id; break;
+                case Functionality.Delete: url = "api/Feature/Delete/" + id; break;
+                case Functionality.GetByCategory: url = "api/Feature/GetByCategory/" + id; break;
+            }
+            return url;
+        }
+
+        private string GetProductUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/Product/All"; break;
+                case Functionality.Create: url = "api/product/create"; break;
+                case Functionality.GetById: url = "api/product/GetById/" + id; break;
+                case Functionality.Update: url = "api/product/update/" + id; break;
+                case Functionality.ProductDependency: url = "api/Product/ProductDependency"; break;
+                case Functionality.Delete: url = "api/product/delete/" + id; break;
+                case Functionality.GetProductsWithUserMappedProduct: url = "api/Product/GetProductsWithUserMappedProduct/" + adminId + "/" + id; break;
+                case Functionality.GetProducts: url = "api/Product/GetProducts/" + id; break;
+                case Functionality.GetCMMSProducts: url = "api/Product/GetCMMSProducts"; break;
+            }
+            return url;
+
+        }
+
+        private string GetPurchaseOrderUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/purchaseorder/All"; break;
+                case Functionality.UpdataMuliplePO: url = "/api/purchaseorder/UpdataMuliplePO"; break;
+                case Functionality.OrderByUser: url = "api/purchaseorder/OrderByUser/" + id; break;
+                case Functionality.GetById: url = "api/purchaseorder/GetById/" + id; break;
+                case Functionality.syncpo: url = "api/purchaseorder/syncpo/" + id; break;
 
             }
             return url;
         }
 
-        public string GetUserUrl(string id, string functionality, string adminId)
+        private string GetSubscriptionCategoryUrl(string id, Functionality functionality, string adminId)
         {
             string url = string.Empty;
-            UserFunctionality userFunctionalaity = (UserFunctionality)Enum.Parse(typeof(UserFunctionality), functionality);
-            switch (userFunctionalaity)
+            switch (functionality)
             {
-                case UserFunctionality.All: url = "api/user/All"; break;
-                case UserFunctionality.Update: url = "/api/user/update/" + id; break;
-                case UserFunctionality.ChangePassword: url = "api/user/ChangePassword/" + id; break;
+                case Functionality.All: url = "api/SubscriptionCategory/All"; break;
+                case Functionality.Create: url = "api/SubscriptionCategory/create"; break;
+                case Functionality.GetById: url = "api/SubscriptionCategory/GetById/" + id; break;
+                case Functionality.Update: url = "api/SubscriptionCategory/update/" + id; break;
+                case Functionality.Delete: url = "api/SubscriptionCategory/Delete/" + id; break;
+            }
+            return url;
+        }
+
+        private string GetSubscriptionUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/subscription/All"; break;
+                case Functionality.GetByUser: url = "api/subscription/All/" + id; break;
+                case Functionality.Create: url = "api/subscription/Create"; break;
+            }
+            return url;
+        }
+
+        private string GetTeamUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.Create: url = "api/Team/Create"; break;
+                case Functionality.Update: url = "api/team/Update/" + id; break;
+                case Functionality.Delete: url = "api/team/Delete/" + id; break;
+                case Functionality.UpdateConcurentUser: url = "api/team/UpdateConcurentUser"; break;
+                case Functionality.GetById: url = "api/Team/GetById/" + id; break;
+                case Functionality.GetTeamsByAdminId: url = "api/Team/GetTeamsByAdminId/" + id; break;
+                case Functionality.GetTeamsByUserId: url = "api/Team/GetTeamsByUserId/" + id; break;
 
             }
             return url;
         }
 
-        public string GetUserLicenseUrl(string id, string functionality, string adminId)
+        private string GetTeamLicenseUrl(string id, Functionality functionality, string adminId)
         {
-            string url = string.Empty;
-            UserLicenseFunctionality licenseFunctionality = (UserLicenseFunctionality)Enum.Parse(typeof(UserLicenseFunctionality), functionality);
-            switch (licenseFunctionality)
+            string url = String.Empty;
+            switch (functionality)
             {
-                case UserLicenseFunctionality.GetRequestByTeam: url = "api/UserLicense/GetRequestByTeam/" + id; break;
-                case UserLicenseFunctionality.ApproveReject: url = "api/UserLicense/ApproveReject"; break;
-                case UserLicenseFunctionality.Create: url = "api/UserLicense/Create"; break;
-                case UserLicenseFunctionality.Revoke: url = "api/UserLicense/Revoke"; break;
-                case UserLicenseFunctionality.LicenseRequest: url = "api/UserLicense/LicenseRequest"; break;
-                case UserLicenseFunctionality.GetRequestStatus: url = "api/UserLicense/GetRequestStatus/" + id; break;
-                case UserLicenseFunctionality.GetUserLicenseByUser: url = "api/UserLicense/GetUserLicenseByUser"; break;
+                case Functionality.Assign: url = "api/TeamLicense/Create"; break;
+                case Functionality.Revoke: url = "api/TeamLicense/Revoke"; break;
+                case Functionality.GetTeamLicenseByTeam: url = "api/TeamLicense/GetTeamLicenseByTeam/" + id; break;
             }
             return url;
         }
 
-        public string GetUserSubscriptionUrl(string id, string functionality, string parameter2)
+        private string GetTeamMemberUrl(string id, Functionality functionality, string adminId)
         {
             string url = string.Empty;
-            UserSubscriptionFunctionality userSubscriptionFunctionality = (UserSubscriptionFunctionality)Enum.Parse(typeof(UserSubscriptionFunctionality), functionality);
-            switch (userSubscriptionFunctionality)
+            switch (functionality)
             {
-                case UserSubscriptionFunctionality.RenewSubscription: url = "api/UserSubscription/RenewSubscription/" + id; break;
-                case UserSubscriptionFunctionality.UpdateSubscriptionRenewel: url = "api/UserSubscription/UpdateSubscriptionRenewal/" + id; break;
-                case UserSubscriptionFunctionality.SynchronizeSubscription: url = "api/UserSubscription/SyncSubscription"; break;
-                case UserSubscriptionFunctionality.ExpireSubscription: url = "api/UserSubscription/ExpireSubscription/" + parameter2 + "/" + id; break;
-                case UserSubscriptionFunctionality.SubscriptionDetils: url = "api/UserSubscription/SubscriptionDetils/" + id; break;
-                case UserSubscriptionFunctionality.GetSubscriptioDtlsForLicenseMap: url = "api/UserSubscription/GetSubscriptioDtlsForLicenseMap/" + parameter2 + "/" + id; break;
+                case Functionality.Create: url = "api/TeamMember/Create"; break;
+                case Functionality.Assign: url = "api/TeamMember/Assign"; break;
+                case Functionality.UpdateAdminAccess: url = "api/TeamMember/UpdateAdminAccess"; break;
+                case Functionality.Delete: url = "api/TeamMember/Delete/" + id; break;
+                case Functionality.Revoke: url = "api/TeamMember/Revoke"; break;
+                case Functionality.UpdateInvite: url = "api/TeamMember/UpdateInvitation"; break;
             }
             return url;
         }
 
-        public string GetUserTokenUrl(string id, string functionality, string adminId)
+        private string GetUserUrl(string id, Functionality functionality, string adminId)
         {
             string url = string.Empty;
-            UserTokenFunctionality tokenfunctionality = (UserTokenFunctionality)Enum.Parse(typeof(UserTokenFunctionality), functionality);
-            switch (tokenfunctionality)
+            switch (functionality)
             {
-                case UserTokenFunctionality.All: url = "api/usertoken/All"; break;
-                case UserTokenFunctionality.Create: url = "api/usertoken/create"; break;
+                case Functionality.All: url = "api/user/All"; break;
+                case Functionality.Update: url = "/api/user/update/" + id; break;
+                case Functionality.ChangePassword: url = "api/user/ChangePassword/" + id; break;
+                case Functionality.GetById: url = "api/user/UserById/" + id; break;
+                case Functionality.ForgotPassword: url = "api/user/GetResetToken"; break;
+                case Functionality.ResetPassword: url = "api/user/ResetPassword"; break;
+                case Functionality.UpdateConcurentUser: url = "api/User/IsConcurrentUserLoggedIn"; break;
+                case Functionality.UpdateLogoutStatus: url = "api/user/UpdateActiveStatus"; break;
+                case Functionality.Register: url = "api/user/Create"; break;
+            }
+            return url;
+        }
+        private string GetRoleUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/Role/All"; break;
+                case Functionality.Create: url = "api/role/create"; break;
+                case Functionality.Update: url = "api/Role/update/" + id; break;
+                case Functionality.GetById: url = "api/role/GetById/" + id; break;
+                case Functionality.Delete: url = "api/role/Delete/" + id; break;
+            }
+            return url;
+        }
 
+        private string GetUserLicenseUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.GetRequestByTeam: url = "api/UserLicense/GetRequestByTeam/" + id; break;
+                case Functionality.ApproveReject: url = "api/UserLicense/ApproveReject"; break;
+                case Functionality.Assign: url = "api/UserLicense/Create"; break;
+                case Functionality.Revoke: url = "api/UserLicense/Revoke"; break;
+                case Functionality.LicenseRequest: url = "api/UserLicense/LicenseRequest"; break;
+                case Functionality.GetRequestStatus: url = "api/UserLicense/GetRequestStatus/" + id; break;
+                case Functionality.GetUserLicenseByUser: url = "api/UserLicense/GetUserLicenseByUser"; break;
+            }
+            return url;
+        }
+
+        private string GetUserSubscriptionUrl(string id, Functionality functionality, string parameter2)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.RenewSubscription: url = "api/UserSubscription/RenewSubscription/" + id; break;
+                case Functionality.UpdateSubscriptionRenewal: url = "api/UserSubscription/UpdateSubscriptionRenewal/" + id; break;
+                case Functionality.SynchronizeSubscription: url = "api/UserSubscription/SyncSubscription"; break;
+                case Functionality.ExpireSubscription: url = "api/UserSubscription/ExpireSubscription/" + parameter2 + "/" + id; break;
+                case Functionality.SubscriptionDetils: url = "api/UserSubscription/SubscriptionDetils/" + id; break;
+                case Functionality.GetSubscriptioDtlsForLicenseMap: url = "api/UserSubscription/GetSubscriptioDtlsForLicenseMap/" + parameter2 + "/" + id; break;
+            }
+            return url;
+        }
+
+        private string GetUserTokenUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/usertoken/All"; break;
+                case Functionality.Create: url = "api/usertoken/create"; break;
+            }
+            return url;
+        }
+
+        private string GetNotificationUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/Notification/GetAllNotification"; break;
+                case Functionality.Create: url = "api/Notification/Create"; break;
+            }
+            return url;
+        }
+
+        private string GetVISMADataUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.UploadFile: url = "api/VISMAData/UploadFile"; break;
             }
             return url;
         }

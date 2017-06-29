@@ -48,7 +48,7 @@ namespace Centralized.WebAPI.Controllers
             Initialize();
             var createdUser = userLogic.CreateUser(user, "SuperAdmin");
             if (createdUser != null)
-                return Request.CreateResponse<User>(HttpStatusCode.OK, createdUser);
+                return Request.CreateResponse<Registration>(HttpStatusCode.OK,  createdUser);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }
@@ -61,18 +61,15 @@ namespace Centralized.WebAPI.Controllers
         [HttpPost]
         [Route("GetResetToken")]
         [AllowAnonymous]
-        public HttpResponseMessage GetPasswordResetToken(ForgotPassword userName)
+        public HttpResponseMessage GetPasswordResetToken(ForgotPassword model)
         {
-            var user = UserManager.FindByEmail(userName.Email);
+            var user = UserManager.FindByEmail(model.Email);
             if (user == null)
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, "Invalid Email Address");
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
-            ForgotPasswordToken passwordToken = new ForgotPasswordToken()
-            {
-                UserId = user.UserId,
-                Token = token
-            };
-            return Request.CreateResponse(HttpStatusCode.OK, passwordToken);
+            model.UserId = user.UserId;
+            model.Token = token;
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
         /// <summary>
@@ -93,8 +90,9 @@ namespace Centralized.WebAPI.Controllers
                 token = resetPasswordModel.Token;
             var result = UserManager.ResetPassword(resetPasswordModel.UserId, token, resetPasswordModel.Password);
             var user = userLogic.GetUserById(resetPasswordModel.UserId);
+            resetPasswordModel.ServerUserId = user.ServerUserId;
             if (result.Succeeded)
-                return Request.CreateResponse(HttpStatusCode.OK, user);
+                return Request.CreateResponse(HttpStatusCode.OK, resetPasswordModel);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
         }
@@ -110,11 +108,11 @@ namespace Centralized.WebAPI.Controllers
         public HttpResponseMessage UpdateActiveStatus(User userModel)
         {
             Initialize();
-            userLogic.UpdateLogInStatus(userModel.UserId, userModel.IsActive);
+            var userObj = userLogic.UpdateLogInStatus(userModel.UserId, userModel.IsActive);
             if (!String.IsNullOrEmpty(userLogic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
             else
-                return Request.CreateResponse(HttpStatusCode.OK, Common.Constants.Updated);
+                return Request.CreateResponse(HttpStatusCode.OK, userObj);
         }
 
         /// <summary>
@@ -169,9 +167,9 @@ namespace Centralized.WebAPI.Controllers
         public HttpResponseMessage UpdateUser(string id, User user)
         {
             Initialize();
-            bool status = userLogic.UpdateUser(id, user);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, Common.Constants.Updated);
+            var userObject = userLogic.UpdateUser(id, user);
+            if (userObject!= null)
+                return Request.CreateResponse(HttpStatusCode.OK, userObject);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }
@@ -206,8 +204,9 @@ namespace Centralized.WebAPI.Controllers
         {
             Initialize();
             var status = userLogic.ChangePassword(userId, passwordUpdateModel.CurrentPassword, passwordUpdateModel.NewPassword);
+            passwordUpdateModel.UserId = userId;
             if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, Common.Constants.Updated);
+                return Request.CreateResponse(HttpStatusCode.OK,passwordUpdateModel);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, userLogic.ErrorMessage);
         }

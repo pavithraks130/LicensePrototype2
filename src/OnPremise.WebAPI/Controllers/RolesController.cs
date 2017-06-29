@@ -85,11 +85,11 @@ namespace OnPremise.WebAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("Delete/{roleId}")]
-        public HttpResponseMessage Delete(string roleId)
+        [Route("Delete/{id}")]
+        public HttpResponseMessage Delete(string id)
         {
             Initialize();
-            var roleObj = logic.DeleteRole(roleId);
+            var roleObj = logic.DeleteRole(id);
             if (String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.OK, roleObj);
             else

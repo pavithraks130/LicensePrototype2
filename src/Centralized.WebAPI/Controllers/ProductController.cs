@@ -75,9 +75,9 @@ namespace Centralized.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteProduct(int id)
         {
-            var status = logic.DeleteProduct(id);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.Accepted, "Deleted the Product");
+            var product = logic.DeleteProduct(id);
+            if (product != null)
+                return Request.CreateResponse(HttpStatusCode.Accepted, product);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, "Failed to Delete Product due to internal error");
         }

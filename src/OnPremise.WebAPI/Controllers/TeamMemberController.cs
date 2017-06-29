@@ -37,7 +37,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="member"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("CreateInvite")]
+        [Route("Create")]
         public HttpResponseMessage CreateInvite(TeamMember member)
         {
             Initialize();
@@ -54,7 +54,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="teamMemList"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("CreateTeamMember")]
+        [Route("Assign")]
         public HttpResponseMessage CreateTeamMembers(List<TeamMember> teamMemList)
         {
             Initialize();
@@ -68,7 +68,7 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="teamMemList"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("RemoveTeamMember")]
+        [Route("Revoke")]
         public HttpResponseMessage RemoveTeamMembers(List<TeamMember> teamMemList)
         {
             Initialize();
@@ -82,13 +82,13 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("DeleteTeamMember/{id}")]
+        [Route("Delete/{id}")]
         public HttpResponseMessage DeleteTeamMember(int id)
         {
             Initialize();
-            var status = logic.DeleteTeamMember(id);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Success");
+            var teamMember = logic.DeleteTeamMember(id);
+            if (teamMember != null)
+                return Request.CreateResponse(HttpStatusCode.OK, teamMember);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
@@ -100,14 +100,14 @@ namespace OnPremise.WebAPI.Controllers
         /// <param name="mem"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("UpdateInvitation")]
+        [Route("Update")]
         [AllowAnonymous]
         public HttpResponseMessage UpdateInvitationStatus(TeamMember mem)
         {
             Initialize();
-            logic.UpdateInviteStatus(mem.Id, mem.InviteeStatus);
+            mem = logic.UpdateInviteStatus(mem.Id, mem.InviteeStatus);
             if (string.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateResponse(HttpStatusCode.OK, "success");
+                return Request.CreateResponse(HttpStatusCode.OK, mem);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
@@ -123,9 +123,9 @@ namespace OnPremise.WebAPI.Controllers
         public HttpResponseMessage UpdateAdminAccess(TeamMember mem)
         {
             Initialize();
-            logic.SetAsAdmin(mem.Id, mem.InviteeUserId, mem.IsAdmin);
-            if (string.IsNullOrEmpty(logic.ErrorMessage))
-                return Request.CreateResponse(HttpStatusCode.OK, "success");
+            var teamMemberModel = logic.SetAsAdmin(mem.Id, mem.InviteeUserId, mem.IsAdmin);
+            if (teamMemberModel != null && string.IsNullOrEmpty(logic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.OK, teamMemberModel);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }

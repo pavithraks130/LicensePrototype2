@@ -21,9 +21,15 @@ namespace License.MetCalWeb.Controllers
     public class UserController : BaseController
     {
         string ErrorMessage;
+        private APIInvoke _invoke = null;
+        private Authentication _authentication = null;
+
         public UserController()
         {
-
+            _invoke = new APIInvoke();
+            _authentication = new Authentication();
+            _authentication.OnpremiseToken = LicenseSessionState.Instance.OnPremiseToken != null ? LicenseSessionState.Instance.OnPremiseToken.access_token : "";
+            _authentication.CentralizedToken = LicenseSessionState.Instance.CentralizedToken != null ? LicenseSessionState.Instance.CentralizedToken.access_token : "";
         }
 
         /// <summary>
@@ -34,24 +40,38 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<User> users = new List<User>();
-            ServiceType typeService = ServiceType.OnPremiseWebApi;
-            if (LicenseSessionState.Instance.IsGlobalAdmin)
-                typeService = ServiceType.CentralizeWebApi;
-            HttpClient client = WebApiServiceLogic.CreateClient(typeService);
-            var response = await client.GetAsync("api/user/All");
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<User>> request = new WebAPIRequest<List<License.Models.User>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                users = JsonConvert.DeserializeObject<List<User>>(jsonData);
-                var obj = users.FirstOrDefault(u => u.Email == LicenseSessionState.Instance.User.Email);
-                users.Remove(obj);
-            }
+                AccessToken = LicenseSessionState.Instance.IsGlobalAdmin ? LicenseSessionState.Instance.CentralizedToken.access_token : LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.User,
+                ServiceType = LicenseSessionState.Instance.IsGlobalAdmin ? ServiceType.CentralizeWebApi : ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<List<User>, List<User>>(request);
+            if (response.Status)
+                users = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error + " - " + response.Error.Message);
+
+            //ServiceType typeService = ServiceType.OnPremiseWebApi;
+            //if (LicenseSessionState.Instance.IsGlobalAdmin)
+            //    typeService = ServiceType.CentralizeWebApi;
+            //HttpClient client = WebApiServiceLogic.CreateClient(typeService);
+            //var response = await client.GetAsync("api/user/All");
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    users = JsonConvert.DeserializeObject<List<User>>(jsonData);
+            //    var obj = users.FirstOrDefault(u => u.Email == LicenseSessionState.Instance.User.Email);
+            //    users.Remove(obj);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             string viewName = "index";
             if (LicenseSessionState.Instance.IsAdmin || LicenseSessionState.Instance.IsSuperAdmin)
                 viewName = "Users";
@@ -67,6 +87,7 @@ namespace License.MetCalWeb.Controllers
             var user = LicenseSessionState.Instance.User;
             return View(user);
         }
+
         /// <summary>
         /// POST Action to update the profile dat to db by making call using serveice  based on the Role the respective Service will be called to update the data.
         /// 1. Global Admin : Centralized Service will be called.
@@ -83,18 +104,20 @@ namespace License.MetCalWeb.Controllers
             bool status = false;
             if (ModelState.IsValid)
             {
-                if (LicenseSessionState.Instance.IsGlobalAdmin)
-                    status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
-                else if (LicenseSessionState.Instance.IsSuperAdmin)
-                {
-                    status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
-                    if (status)
-                        status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
-                }
-                else
-                    status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                //if (LicenseSessionState.Instance.IsGlobalAdmin)
+                //    status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
+                //else if (LicenseSessionState.Instance.IsSuperAdmin)
+                //{
+                //    status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                //    if (status)
+                //        status = await UpdateProfile(usermodel, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
+                //}
+                //else
+                //    status = await UpdateProfile(usermodel, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
+                usermodel.Roles = LicenseSessionState.Instance.User.Roles;
+                var response = _authentication.UpdateProfile(usermodel);
 
-                if (status)
+                if (response.Status)
                 {
                     LicenseSessionState.Instance.User.FirstName = usermodel.FirstName;
                     LicenseSessionState.Instance.User.LastName = usermodel.LastName;
@@ -104,7 +127,7 @@ namespace License.MetCalWeb.Controllers
                     else
                         return RedirectToAction("Home", "Dashboard");
                 }
-                ModelState.AddModelError("", ErrorMessage);
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
             }
             return View(usermodel);
         }
@@ -131,22 +154,12 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePassword model)
+        public async Task<ActionResult> ChangePassword(ChangePasswordExtended model)
         {
-            bool status = false;
             if (ModelState.IsValid)
             {
-                if (LicenseSessionState.Instance.IsGlobalAdmin)
-                    status = await UpdatePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.UserId);
-                else if (LicenseSessionState.Instance.IsSuperAdmin)
-                {
-                    status = await UpdatePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
-                    if (status)
-                        status = await UpdatePassword(model, ServiceType.CentralizeWebApi, LicenseSessionState.Instance.User.ServerUserId);
-                }
-                else
-                    status = await UpdatePassword(model, ServiceType.OnPremiseWebApi, LicenseSessionState.Instance.User.UserId);
-                if (status)
+                var response = _authentication.ChangePassword<ChangePasswordExtended>(model, LicenseSessionState.Instance.User);
+                if (response.Status)
                 {
                     if (LicenseSessionState.Instance.IsGlobalAdmin)
                         return RedirectToAction("Index", "User");
@@ -154,121 +167,141 @@ namespace License.MetCalWeb.Controllers
                         return RedirectToAction("Home", "Dashboard");
                 }
                 else
-                    ModelState.AddModelError("", ErrorMessage);
-
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
             }
             return View(model);
         }
 
-        /// <summary>
-        /// common function to invoke bothe On Premise and Centralized Service based on the type parameter
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="type"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<bool> UpdateProfile(User model, ServiceType type, string userId)
-        {
-            HttpClient client = WebApiServiceLogic.CreateClient(type);
-            var response = await client.PutAsJsonAsync("/api/user/update/" + userId, model);
-            if (response.IsSuccessStatusCode)
-                return true;
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
-            }
-            return false;
-        }
+        ///// <summary>
+        ///// common function to invoke bothe On Premise and Centralized Service based on the type parameter
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <param name="type"></param>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public async Task<bool> UpdateProfile(User model, ServiceType type, string userId)
+        //{
+        //    HttpClient client = WebApiServiceLogic.CreateClient(type);
+        //    var response = await client.PutAsJsonAsync("/api/user/update/" + userId, model);
+        //    if (response.IsSuccessStatusCode)
+        //        return true;
+        //    else
+        //    {
+        //        var jsonData = response.Content.ReadAsStringAsync().Result;
+        //        var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+        //        ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
+        //    }
+        //    return false;
+        //}
 
-        /// <summary>
-        ///  common function to invoke bothe On Premise and Centralized Service based on the type parameter
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="type"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
-        {
-            HttpClient client = WebApiServiceLogic.CreateClient(type);
+        ///// <summary>
+        /////  common function to invoke bothe On Premise and Centralized Service based on the type parameter
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <param name="type"></param>
+        ///// <param name="userId"></param>
+        ///// <returns></returns>
+        //public async Task<bool> UpdatePassword(ChangePassword model, ServiceType type, string userId)
+        //{
+        //    HttpClient client = WebApiServiceLogic.CreateClient(type);
 
-            var response = await client.PutAsJsonAsync("api/user/ChangePassword/" + userId, model);
-            if (response.IsSuccessStatusCode)
-                return true;
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
-            ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
-            return false;
-        }
+        //    var response = await client.PutAsJsonAsync("api/user/ChangePassword/" + userId, model);
+        //    if (response.IsSuccessStatusCode)
+        //        return true;
+        //    else
+        //    {
+        //        var jsonData = response.Content.ReadAsStringAsync().Result;
+        //        var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+        //        ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+        //    }
+        //    ErrorMessage = response.ReasonPhrase + " - " + response.Content.ReadAsStringAsync().Result;
+        //    return false;
+        //}
 
 
         public ActionResult EditUser(string id)
         {
             UserExtended user = new UserExtended();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.GetAsync("api/user/UserById/" + id).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<UserExtended> request = new WebAPIRequest<UserExtended>()
             {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                user = JsonConvert.DeserializeObject<UserExtended>(jsondata);
-            }
-            client.Dispose();
-            client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            response = client.GetAsync("api/Role/All").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                var roles = JsonConvert.DeserializeObject<List<Role>>(jsondata);
-                roles.ForEach(r => { if (user.Roles.Contains(r.Name)) r.IsSelected = true; });
-                user.RolesList = roles;
-            }
-            client.Dispose();
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.GetById,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.User,
+                ServiceType = ServiceType.OnPremiseWebApi,
+                Id = id
+            };
+            var response = _invoke.InvokeService<UserExtended, UserExtended>(request);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.GetAsync("api/user/UserById/" + id).Result;
+            if (response.Status)
+                user = response.ResponseData;
+            var roles = GetRoles();
+            roles.ForEach(r => { if (user.Roles.Contains(r.Name)) r.IsSelected = true; });
+            user.RolesList = roles;
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditUser(string id, User user, string[] selectedRole)
+        public ActionResult EditUser(string id, UserExtended user, string[] selectedRole)
         {
-            HttpClient client;
-            HttpResponseMessage response;
+
             if (ModelState.IsValid)
             {
                 if (selectedRole != null)
                     user.Roles = selectedRole.ToList();
-                client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                response = client.PutAsJsonAsync("api/user/Update/" + id, user).Result;
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                if (response.IsSuccessStatusCode)
+                var response = _authentication.UpdateProfile(user);
+                if (response.Status)
                     return RedirectToAction("Index");
                 else
                 {
-                    var failure = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    ModelState.AddModelError("", failure.Message);
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+                    var roles = GetRoles();
+                    roles.ForEach(r => { if (user.Roles.Contains(r.Name)) r.IsSelected = true; });
+                    user.RolesList = roles;
                 }
+                //client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+                //response = client.PutAsJsonAsync("api/user/Update/" + id, user).Result;
+                //var jsonData = response.Content.ReadAsStringAsync().Result;
+                //if (response.IsSuccessStatusCode)
+                //    return RedirectToAction("Index");
+                //else
+                //{
+                //    var failure = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //    ModelState.AddModelError("", failure.Message);
+                //    var roles = GetRoles();
+                //    roles.ForEach(r => { if (user.Roles.Contains(r.Name)) r.IsSelected = true; });
+                //    user.RolesList = roles;
+                //}
             }
-
-            client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            response = client.GetAsync("api/Role/All").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                var roles = JsonConvert.DeserializeObject<List<Role>>(jsondata);
-                ViewData["RoleList"] = roles.Select(x =>
-                        new SelectListItem()
-                        {
-                            Selected = user.Roles.Contains(x.Name),
-                            Text = x.Name,
-                            Value = x.Name
-                        });
-            }
-            client.Dispose();
             return View(user);
+        }
+
+        public List<Role> GetRoles()
+        {
+            List<Role> roles = new List<Role>();
+            WebAPIRequest<List<Role>> request = new WebAPIRequest<List<Role>>()
+            {
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Role,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<List<Role>, List<Role>>(request);
+            if (response.Status)
+                roles = response.ResponseData;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.GetAsync("api/Role/All").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsondata = response.Content.ReadAsStringAsync().Result;
+            //    roles = JsonConvert.DeserializeObject<List<Role>>(jsondata);
+
+            //}
+            //client.Dispose();
+            return roles;
         }
     }
 }

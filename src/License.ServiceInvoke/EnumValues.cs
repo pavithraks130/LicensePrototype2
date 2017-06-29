@@ -9,7 +9,8 @@ namespace License.ServiceInvoke
     public enum ServiceType
     {
         OnPremiseWebApi,
-        CentralizeWebApi
+        CentralizeWebApi,
+        All
     }
 
     public enum InviteStatus
@@ -43,167 +44,64 @@ namespace License.ServiceInvoke
         User,
         UserLicense,
         UserSubscription,
-        UserToken
+        UserToken,
+        Role,
+        Notification,
+        VISMAData
     }
 
-    public enum AssetFunctionality
+    public enum Functionality
     {
         All,
         Create,
         Update,
+        ForgotPassword,
         Get,
         GetById,
-        Delete
-    }
-    public enum CartFunctionality
-    {
-        Create,
-        Get,
         Delete,
+        UpdateInvite,
         OfflinePayment,
-        Update,
-        GetById,
+        UpdateLogoutStatus,
         CreateSubscriptionAddToCart,
         OnlinePayment,
         RenewSubscription,
         GetByUser,
-        GetCartItemsCount
-    }
-    public enum FeatureFunctionality
-    {
-        All,
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
-        GetByCategory
-    }
-    public enum ProductFunctionality
-    {
-        All,
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
+        GetCartItemsCount,
+        GetByCategory,
         ProductDependency,
         GetCMMSProducts,
         GetProductsByAdminId,
         CheckProductUpdates,
         UpdateProducts,
         GetProductsWithUserMappedProduct,
-        GetProducts
-    }
-    public enum PurchaseOrderFunctionality
-    {
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
-        All,
+        GetProducts,
         UpdataMuliplePO,
         OrderByUser,
-        syncpo
-    }
-    public enum SubscriptionFunctionality
-    {
-        All,
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
+        syncpo,
         UpdateSubscriptionRenewal,
-        SyncSubscription
-    }
-    public enum SubscriptionCategoryFunctionality
-    {
-        All,
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete
-    }
-    public enum TeamFunctionality
-    {
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
+        SyncSubscription,
         UpdateConcurentUser,
         GetTeamsByAdminId,
-        GetTeamsByUserId
-    }
-    public enum TeamMemberFunctionality
-    {
-        Create,
+        GetTeamsByUserId,
         Assign,
-        Update,
-        Get,
-        GetById,
-        Delete,
         UpdateAdminAccess,
-        Revoke
-    }
-    public enum TeamLicenseFunctionality
-    {
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
         Revoke,
-        GetTeamLicenseByTeam
-    }
-    public enum UserFunctionality
-    {
-        All,
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
-        ChangePassword
-    }
-    public enum UserLicenseFunctionality
-    {
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
+        GetTeamLicenseByTeam,
+        ChangePassword,
         ApproveReject,
         GetRequestByTeam,
-        Revoke,
         LicenseRequest,
         GetRequestStatus,
-        GetUserLicenseByUser
-    }
-    public enum UserSubscriptionFunctionality
-    {
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete,
-        RenewSubscription,
+        GetUserLicenseByUser,
         ExpireSubscription,
         SubscriptionDetils,
         GetSubscriptioDtlsForLicenseMap,
         SynchronizeSubscription,
-        UpdateSubscriptionRenewel
-    }
-    public enum UserTokenFunctionality
-    {
-        All,
-        Create,
-        Update,
-        Get,
-        GetById,
-        Delete
+        ResetPassword,
+        Register,
+        GetCartItems,
+        UploadFile,
+        GetUserDetailsById,
+        GetVISMADataByTestDevice
     }
 }

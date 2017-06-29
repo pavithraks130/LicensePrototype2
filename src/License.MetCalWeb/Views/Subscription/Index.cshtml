@@ -7,87 +7,100 @@
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
-           <div class="col-md-10">
-               <h3 class="login-header-new">Fluke Calibration Store</h3>
-           </div> 
+            <div class="col-md-10">
+                <h3 class="login-header-new">Fluke Calibration Store</h3>
+            </div>
             <div class="col-md-2">
                 @if (LicenseSessionState.Instance.IsSuperAdmin)
-                {
-                        <table class="table-hover success">
-                            <tr>
-                                <td class="col-md-1" style="padding-right:0px;text-align:right;">
-                                        <a class="" style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
-                                            <img src="~/Catalog/Images/Cart_Menu.png" width="20" />
-                                        </a>
-                                </td>
-                                <td class="col-md-1" style="padding-left: 0px;">
-                                    <h5>
-                                        <a style="color: #468847;text-align: left;padding-left: 0px; font-weight:bold" href="@Url.Action("CartItem", "Cart")">
-                                            Cart @TempData["CartCount"]
-                                        </a>
-                                    </h5>
-                                </td>
-                            </tr>
-                        </table>
+            {
+                    <table class="table-hover success">
+                        <tr>
+                            <td class="col-md-1" style="padding-right:0px;text-align:right;">
+                                <a class="" style="color: #3D1400" href="@Url.Action("CartItem", "Cart")">
+                                    <img src="~/Catalog/Images/Cart_Menu.png" width="20" />
+                                </a>
+                            </td>
+                            <td class="col-md-1" style="padding-left: 0px;">
+                                <h5>
+                                    <a style="color: #468847;text-align: left;padding-left: 0px; font-weight:bold" href="@Url.Action("CartItem", "Cart")">
+                                        Cart @TempData["CartCount"]
+                                    </a>
+                                </h5>
+                            </td>
+                        </tr>
+                    </table>
                 }
 
             </div>
         </div>
-        @using (Html.BeginForm())
+        @if (Model == null || Model.Count == 0)
         {
             <div class="form-group">
                 <div class="col-md-9">
-                    <table class="table-hover" style="border: none">
-                        <tr>
-                            <th class="col-md-2" style="margin-left:40px"><label>Info</label></th>
-                            <th class="col-md-2">
-                                <label>
-                                Subscription Name
-                                </label>
-                            </th>
-                            <th class="col-md-1">
-                                <label>
-                               Dutration
-                                </label>
-                            </th>
-                            <th class="col-md-1">
-                                <label>
-                                    Price
-                                </label>
-                            </th>
-                            <th class="col-md-2">
-                                <label>
-                                    Action
-                                </label>
-                            </th>
-                        </tr>
-                        @foreach (var subscription in Model)
-                {
-                            <tr>
-                                <td class="col-md-2">
-                                    @Html.Image(String.Concat("../Catalog/Products_Images/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
-                                </td>
-                                <td class="col-md-2">
-                                    @subscription.Name
-                                </td>
-                                <td class="col-md-1">
-                                    @subscription.ActiveDays
-                                </td>
-                                <td class="col-md-1">
-                                    @subscription.Price.ToString()
-                                </td>
-                                <td class="col-md-2">
-                                    @if (LicenseSessionState.Instance.IsSuperAdmin)
-                                    {
-                                        <button class="btn btn-default"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { Id = @subscription.Id }, null)</button>
-                                    }
-                                </td>
-                            </tr>
-
-                        }
-                    </table>
+                    No Subscription Exist. Create your own Custom Subscription . 
+                    @Html.ActionLink("Custom Subsciption", "SubscriptionContainer", "Subscription")
                 </div>
             </div>
+        }
+
+        else
+        {
+            using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    <div class="col-md-9">
+                        <table class="table-hover" style="border: none">
+                            <tr>
+                                <th class="col-md-2" style="margin-left:40px"><label>Info</label></th>
+                                <th class="col-md-2">
+                                    <label>
+                                        Subscription Name
+                                    </label>
+                                </th>
+                                <th class="col-md-1">
+                                    <label>
+                                        Dutration
+                                    </label>
+                                </th>
+                                <th class="col-md-1">
+                                    <label>
+                                        Price
+                                    </label>
+                                </th>
+                                <th class="col-md-2">
+                                    <label>
+                                        Action
+                                    </label>
+                                </th>
+                            </tr>
+                            @foreach (var subscription in Model)
+                            {
+                                <tr>
+                                    <td class="col-md-2">
+                                        @Html.Image(String.Concat("../Catalog/Products_Images/", subscription.ImagePath), subscription.Name, "35", "100", "img-responsive")
+                                    </td>
+                                    <td class="col-md-2">
+                                        @subscription.Name
+                                    </td>
+                                    <td class="col-md-1">
+                                        @subscription.ActiveDays
+                                    </td>
+                                    <td class="col-md-1">
+                                        @subscription.Price.ToString()
+                                    </td>
+                                    <td class="col-md-2">
+                                        @if (LicenseSessionState.Instance.IsSuperAdmin)
+                                        {
+                                            <button class="btn btn-default"> @Html.ActionLink("Add To Cart", "AddProductToCart", "Cart", new { Id = @subscription.Id }, null)</button>
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+                        </table>
+                    </div>
+                </div>
+            }
         }
     </div>
 

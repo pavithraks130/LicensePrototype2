@@ -34,7 +34,6 @@ namespace License.Logic.DataLogic
         /// <returns></returns>
         public VISMAData UpdateVISMAData(VISMAData _VISMAData)
         {
-            List<VISMAData> list = new List<VISMAData>();
             var obj = Work.VISMADataRepository.GetById(_VISMAData.Id);
             if (obj != null)
             {
@@ -54,12 +53,12 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="_VISMADataId"></param>
         /// <returns></returns>
-        public bool DeleteVISMAData(int  _VISMADataId)
+        public VISMAData DeleteVISMAData(int  id)
         {
-            List<VISMAData> dataList = new List<VISMAData>();
-            bool status = Work.VISMADataRepository.Delete(_VISMADataId);
+            var dataObj = Work.VISMADataRepository.GetById(id);
+            dataObj = Work.VISMADataRepository.Delete(dataObj);
             Work.VISMADataRepository.Save();
-            return status;
+            return AutoMapper.Mapper.Map<VISMAData>(dataObj);
         }
         /// <summary>
         /// Retrieve VISMA data based on test device

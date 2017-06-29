@@ -20,12 +20,13 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class UserTokenController : BaseController
     {
-      
+
+        private APIInvoke _invoke = null;
         public UserTokenController()
         {
-           
+            _invoke = new APIInvoke();
         }
-        
+
         /// <summary>
         /// Listing all the user Token created based on the Email Id.
         /// </summary>
@@ -33,19 +34,32 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<UserToken> tokenList = new List<UserToken>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.GetAsync("api/usertoken/All");
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<UserToken>> request = new WebAPIRequest<List<UserToken>>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                tokenList = JsonConvert.DeserializeObject<List<UserToken>>(data);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.UserToken,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<UserToken>, List<UserToken>>(request);
+            if (response.Status)
+                tokenList = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.GetAsync("api/usertoken/All");
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    tokenList = JsonConvert.DeserializeObject<List<UserToken>>(data);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View(tokenList);
         }
 
@@ -69,17 +83,22 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = await client.PostAsJsonAsync<UserToken>("api/usertoken/create", token);
-                if (response.IsSuccessStatusCode)
+                WebAPIRequest<UserToken> request = new WebAPIRequest<UserToken>()
                 {
-                    var data = response.Content.ReadAsStringAsync().Result;
-                    var tokenObj = JsonConvert.DeserializeObject<UserToken>(data);
+                    AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                    Functionality = Functionality.Create,
+                    InvokeMethod = Method.POST,
+                    ModelObject = token,
+                    ServiceModule = Modules.UserToken,
+                    ServiceType = ServiceType.CentralizeWebApi
+                };
+                var response = _invoke.InvokeService<UserToken, UserToken>(request);
+                if (response.Status)
+                {
+                    var tokenObj = response.ResponseData;
                     string subject = string.Empty;
                     string body = string.Empty;
-
                     subject = "Admin Invite to Fluke Calibration";
-
                     body = System.IO.File.ReadAllText(Server.MapPath("~/EmailTemplate/RegistrationToken.html"));
                     body = body.Replace("{{UserToken}}", tokenObj.Token);
                     body = body.Replace("{{RegisterUrl}}", String.Concat(Request.Url.ToString().Replace(Request.Url.AbsolutePath, ""), Url.Action("Register", "Account")));
@@ -88,11 +107,21 @@ namespace License.MetCalWeb.Controllers
                     return RedirectToAction("Index");
                 }
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-                }
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+                //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+                //var response = await client.PostAsJsonAsync<UserToken>("api/usertoken/create", token);
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var data = response.Content.ReadAsStringAsync().Result;
+                //    var tokenObj = JsonConvert.DeserializeObject<UserToken>(data);
+
+                //}
+                //else
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                //}
             }
             var _message = string.Join(Environment.NewLine, ModelState.Values
                                      .SelectMany(x => x.Errors)

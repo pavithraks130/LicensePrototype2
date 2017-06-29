@@ -13,7 +13,6 @@ using System.IO;
 using System.Net.Http;
 using License.MetCalDesktop.businessLogic;
 using License.ServiceInvoke;
-
 namespace License.MetCalDesktop.ViewModel
 {
     public class TeamViewModel : INotifyPropertyChanged
@@ -22,6 +21,8 @@ namespace License.MetCalDesktop.ViewModel
 
         public EventHandler ClosepoupWindow;
 
+        private APIInvoke _invoke = null;
+        private FileIO _fileIO = null;
         public ICommand UpdateCommand { get; set; }
 
         public ICommand CloseCommand { get; set; }
@@ -46,6 +47,8 @@ namespace License.MetCalDesktop.ViewModel
         {
             TeamList = new ObservableCollection<Team>(AppState.Instance.TeamList);
             UpdateCommand = new RelayCommand(UpdateSelectedTeam);
+            _invoke = new APIInvoke();
+            _fileIO = new FileIO();
         }
 
         public void UpdateSelectedTeam(object args)
@@ -56,11 +59,23 @@ namespace License.MetCalDesktop.ViewModel
                 ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
                 userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
                 userLogin.UserId = AppState.Instance.User.UserId;
-                HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-                var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+                //HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                //var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+                //var jsonData = response.Content.ReadAsStringAsync().Result;
+                //var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+
+                WebAPIRequest<ConcurrentUserLogin> _request = new WebAPIRequest<ConcurrentUserLogin>()
+                {
+                    AccessToken = AppState.Instance.OnPremiseToken.access_token,
+                    Functionality = Functionality.UpdateConcurentUser,
+                    InvokeMethod = Method.POST,
+                    ModelObject = userLogin,
+                    ServiceModule = Modules.User,
+                    ServiceType = ServiceType.OnPremiseWebApi
+                };
+                var response1 = _invoke.InvokeService<ConcurrentUserLogin, ConcurrentUserLogin>(_request);
+                var userLoginObj = response1.ResponseData;
                 AppState.Instance.UserLicenseList = userLoginObj.Products;
                 LoginLogic logic = new LoginLogic();
                 logic.UpdateFeatureToFile();
@@ -69,8 +84,9 @@ namespace License.MetCalDesktop.ViewModel
             }
             else
             {
-                var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
-                var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+                //var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
+                //var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+                var details = _fileIO.GetDataFromFile<UserDetails>(AppState.Instance.User.UserId + ".txt");
                 var licenseList = details.UserLicenses.Where(l => l.TeamId == AppState.Instance.SelectedTeam.Id).ToList();
                 var prodId = licenseList.Select(l => l.License.ProductId).Distinct().ToList();
                 DashboardLogic dashboardLogic = new DashboardLogic();

@@ -98,8 +98,8 @@ namespace OnPremise.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage Delete(int id)
         {
-            var status = logic.RemoveAsset(id);
-            if (status)
+            var asset = logic.RemoveAsset(id);
+            if (asset != null)
                 return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);

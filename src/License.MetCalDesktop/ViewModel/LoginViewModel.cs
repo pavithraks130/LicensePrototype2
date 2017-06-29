@@ -13,7 +13,6 @@ using License.MetCalDesktop.Model;
 using License.MetCalDesktop.businessLogic;
 using License.Models;
 using License.ServiceInvoke;
-
 namespace License.MetCalDesktop.ViewModel
 {
     class LoginViewModel : BaseEntity
@@ -26,6 +25,8 @@ namespace License.MetCalDesktop.ViewModel
 
         private bool _isEnableLogin = true;
         LoginLogic logic = null;
+        private APIInvoke _invoke = null;
+        private FileIO _fileIO = null;
         #endregion private field
 
         /// <summary>
@@ -34,6 +35,8 @@ namespace License.MetCalDesktop.ViewModel
         public LoginViewModel()
         {
             LoginCommand = new RelayCommand(LoginUser);
+            _invoke = new APIInvoke();
+            _fileIO = new FileIO();
         }
 
         /// <summary>
@@ -163,17 +166,13 @@ namespace License.MetCalDesktop.ViewModel
 
                 IsEnableLogin = false;
                 UserExtended user = null;
-                if (AppState.Instance.IsNetworkAvilable())
-                    user = logic.AuthenticateOnline(Email, Password);
-                else if (AppState.Instance.IsCredentialFileExist())
-                    user = logic.AuthenticateUser(Email, Password);
-                else
-                {
-                    MessageBox.Show("Need to be online for first time login");
-                    IsEnableLogin = true;
-                    return;
-                }
-                if (user == null)
+
+                var response = logic.AuthenticateUser(Email, Password);
+                //if (AppState.Instance.IsNetworkAvilable())
+                //    user = logic.AuthenticateOnline(Email, Password);
+                //else if (AppState.Instance.IsCredentialFileExist())
+                //    user = logic.AuthenticateUser(Email, Password);
+                if (response == null)
                 {
                     MessageBox.Show(logic.ErrorMessage);
                     IsEnableLogin = true;
@@ -191,16 +190,21 @@ namespace License.MetCalDesktop.ViewModel
 
         public void LoadTeamsOnline()
         {
-            HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-            string url = "api/Team/GetTeamsByUserId/";
-            if (AppState.Instance.IsSuperAdmin)
-                url = "api/Team/GetTeamsByAdminId/";
-            var response = client.GetAsync(url + AppState.Instance.User.UserId).Result;
-            if (response.IsSuccessStatusCode)
+            List<Team> teamList = new List<Team>();
+            WebAPIRequest<List<Team>> request = new WebAPIRequest<List<Team>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var teamList = JsonConvert.DeserializeObject<List<Team>>(jsonData);
+                AccessToken = AppState.Instance.OnPremiseToken.access_token,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Team,
+                ServiceType = ServiceType.OnPremiseWebApi,
+                Id = AppState.Instance.User.UserId,
+                Functionality = AppState.Instance.IsSuperAdmin ? Functionality.GetTeamsByAdminId : Functionality.GetTeamsByUserId
+            };
+            var response = _invoke.InvokeService<List<Team>, List<Team>>(request);
+
+            if (response.Status)
+            {
+                teamList = response.ResponseData;
                 if (teamList.Count > 1)
                 {
                     AppState.Instance.TeamList = teamList;
@@ -215,11 +219,28 @@ namespace License.MetCalDesktop.ViewModel
                     ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
                     userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
                     userLogin.UserId = AppState.Instance.User.UserId;
-                    client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
-                    response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
-                    jsonData = response.Content.ReadAsStringAsync().Result;
-                    var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+
+                    WebAPIRequest<ConcurrentUserLogin> _request = new WebAPIRequest<ConcurrentUserLogin>()
+                    {
+                        AccessToken = AppState.Instance.OnPremiseToken.access_token,
+                        Functionality = Functionality.UpdateConcurentUser,
+                        InvokeMethod = Method.POST,
+                        ModelObject = userLogin,
+                        ServiceModule = Modules.User,
+                        ServiceType = ServiceType.OnPremiseWebApi
+                    };
+                    var response1 = _invoke.InvokeService<ConcurrentUserLogin, ConcurrentUserLogin>(_request);
+                    if (response1.Error != null)
+                    {
+                        MessageBox.Show(response.Error.error + " " + response.Error.Message);
+                        return;
+                    }
+                    //client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+                    //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+                    //response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+                    //jsonData = response.Content.ReadAsStringAsync().Result;
+                    //var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+                    var userLoginObj = response1.ResponseData;
                     AppState.Instance.UserLicenseList = userLoginObj.Products;
                     logic.UpdateFeatureToFile();
                     logic.GetUserDetails();
@@ -228,14 +249,67 @@ namespace License.MetCalDesktop.ViewModel
                     else
                         MessageBox.Show(userLoginObj.ErrorOrNotificationMessage);
                 }
-
             }
+            //HttpClient client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            //string url = "api/Team/GetTeamsByUserId/";
+            //if (AppState.Instance.IsSuperAdmin)
+            //    url = "api/Team/GetTeamsByAdminId/";
+            //var response = client.GetAsync(url + AppState.Instance.User.UserId).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var teamList = JsonConvert.DeserializeObject<List<Team>>(jsonData);
+            //    if (teamList.Count > 1)
+            //    {
+            //        AppState.Instance.TeamList = teamList;
+            //        Views.Teams teamWindow = new Views.Teams();
+            //        teamWindow.ClosePopupWindow += CloseWindow;
+            //        teamWindow.ShowDialog();
+
+            //    }
+            //    else if (teamList.Count == 1)
+            //    {
+            //        AppState.Instance.SelectedTeam = teamList.FirstOrDefault();
+            //        ConcurrentUserLogin userLogin = new ConcurrentUserLogin();
+            //        userLogin.TeamId = AppState.Instance.SelectedTeam.Id;
+            //        userLogin.UserId = AppState.Instance.User.UserId;
+
+            //        WebAPIRequest<ConcurrentUserLogin> _request = new WebAPIRequest<ConcurrentUserLogin>()
+            //        {
+            //            AccessToken = AppState.Instance.OnPremiseToken.access_token,
+            //            Functionality = Functionality.UpdateConcurentUser,
+            //            InvokeMethod = Method.POST,
+            //            ModelObject = userLogin,
+            //            ServiceModule = Modules.User,
+            //            ServiceType = ServiceType.OnPremiseWebApi
+            //        };
+            //        var response = _invoke.InvokeService<ConcurrentUserLogin, ConcurrentUserLogin>(_request);
+            //        if (response.Error != null)
+            //            return null;
+            //        //client = AppState.CreateClient(ServiceType.OnPremiseWebApi.ToString());
+            //        //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.OnPremiseToken.access_token);
+            //        //response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+            //        //jsonData = response.Content.ReadAsStringAsync().Result;
+            //        //var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+            //        var userLoginObj = response.ResponseData;
+            //        AppState.Instance.UserLicenseList = userLoginObj.Products;
+            //        logic.UpdateFeatureToFile();
+            //        logic.GetUserDetails();
+            //        if (userLoginObj.IsUserLoggedIn)
+            //            NavigateNextPage?.Invoke("Dashboard", null);
+            //        else
+            //            MessageBox.Show(userLoginObj.ErrorOrNotificationMessage);
+            //    }
+
+            //}
         }
 
         public void LoadTeamsOffline()
         {
-            var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
-            var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+            //var jsonData = FileIO.GetJsonDataFromFile(AppState.Instance.User.UserId + ".txt");
+            //var details = JsonConvert.DeserializeObject<UserDetails>(jsonData);
+            var details = _fileIO.GetDataFromFile<UserDetails>(AppState.Instance.User.UserId + ".txt");
             if (details.Teams.Count == 1)
             {
                 AppState.Instance.SelectedTeam = details.Teams[0];

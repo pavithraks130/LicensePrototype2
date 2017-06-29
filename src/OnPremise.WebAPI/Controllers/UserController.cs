@@ -59,7 +59,7 @@ namespace OnPremise.WebAPI.Controllers
             Initialize();
             var result = logic.CreateUser(user);
             if (result)
-                return Request.CreateResponse(HttpStatusCode.Created, "Sucess");
+                return Request.CreateResponse(HttpStatusCode.Created, user);
             else
                 return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
@@ -75,9 +75,9 @@ namespace OnPremise.WebAPI.Controllers
         public HttpResponseMessage UpdateRole(string id, User user)
         {
             Initialize();
-            bool result = logic.UpdateUser(id, user);
-            if (result)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated Successfuly");
+            var result = logic.UpdateUser(id, user);
+            if (result != null)
+                return Request.CreateResponse(HttpStatusCode.OK,result);
             else
                 return Request.CreateResponse<string>(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }
@@ -140,10 +140,9 @@ namespace OnPremise.WebAPI.Controllers
 
             var user = UserManager.FindByEmail(model.Email);
             var token = UserManager.GeneratePasswordResetTokenAsync(user.UserId).Result;
-            ForgotPasswordToken passwordToken = new ForgotPasswordToken();
-            passwordToken.UserId = user.UserId;
-            passwordToken.Token = token;
-            return Request.CreateResponse(HttpStatusCode.OK, passwordToken);
+            model.UserId = user.UserId;
+            model.Token = token;
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
         /// <summary>
@@ -164,8 +163,9 @@ namespace OnPremise.WebAPI.Controllers
                 token = model.Token;
             var result = UserManager.ResetPassword(model.UserId, token, model.Password);
             var user = logic.GetUserById(model.UserId);
+            model.ServerUserId = user.ServerUserId;
             if (result.Succeeded)
-                return Request.CreateResponse(HttpStatusCode.OK, user);
+                return Request.CreateResponse(HttpStatusCode.OK, model);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, string.Join(",", result.Errors.ToArray()).Substring(1));
         }
@@ -181,13 +181,13 @@ namespace OnPremise.WebAPI.Controllers
         public HttpResponseMessage UpdateActiveStatus(User model)
         {
             Initialize();
-            logic.UpdateLogOutStatus(model.UserId, model.IsActive);
+            var user = logic.UpdateLogOutStatus(model.UserId, model.IsActive);
             UserLicenseLogic licLogic = new UserLicenseLogic();
             licLogic.RevokeTeamLicenseFromUser(model.UserId);
             if (!String.IsNullOrEmpty(logic.ErrorMessage))
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
             else
-                return Request.CreateResponse(HttpStatusCode.OK, "updated");
+                return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
         /// <summary>
@@ -202,8 +202,9 @@ namespace OnPremise.WebAPI.Controllers
         {
             Initialize();
             var status = logic.ChangePassword(userId, model.CurrentPassword, model.NewPassword);
+            model.UserId = userId;
             if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, "Updated");
+                return Request.CreateResponse(HttpStatusCode.OK, model);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, logic.ErrorMessage);
         }

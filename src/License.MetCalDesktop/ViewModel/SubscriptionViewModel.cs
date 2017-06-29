@@ -16,7 +16,7 @@ namespace License.MetCalDesktop.ViewModel
     /// </summary>
     class SubscriptionViewModel : BaseEntity
     {
-
+        private APIInvoke _invoke = null;
         private List<Subscription> _subscriptionList = new List<Subscription>();
         /// <summary>
         ///performing the license purchase  action
@@ -49,6 +49,7 @@ namespace License.MetCalDesktop.ViewModel
         public SubscriptionViewModel()
         {
             BuyCommand = new RelayCommand(RedirectToPayment);
+            _invoke = new APIInvoke();
             RedirectToSubscriptionDetailsCommand = new RelayCommand(RedirectToMain);
             if (AppState.Instance.IsNetworkAvilable() && AppState.Instance.IsSuperAdmin)
                 LoadSubscriptionList();
@@ -65,26 +66,49 @@ namespace License.MetCalDesktop.ViewModel
         /// </summary>
         private void LoadSubscriptionList()
         {
-            HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
-            HttpResponseMessage response = null;
-            response = client.GetAsync("api/subscription/All/" + AppState.Instance.User.ServerUserId).Result;
-            if (response.IsSuccessStatusCode)
+            List<Subscription> typeList = new List<Subscription>();
+            WebAPIRequest<List<Subscription>> request = new WebAPIRequest<List<Subscription>>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(data);
-                foreach (var x in subscriptionList)
+                AccessToken = AppState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetByUser,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.Subscription,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = AppState.Instance.User.ServerUserId
+            };
+
+            var response = _invoke.InvokeService<List<Subscription>, List<Subscription>>(request);
+            if (response.Status)
+            {
+                typeList = response.ResponseData;
+                foreach (var x in typeList)
                 {
                     x.ImagePath = @"..\Catalog\Products_Images\" + x.ImagePath;
                     _subscriptionList.Add(x);
                 }
             }
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-            }
-            client.Dispose();
+           // else
+             //   var failureResult = response.Error.error + " " + response.Error.Message;
+            //HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
+            //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + AppState.Instance.CentralizedToken.access_token);
+            //HttpResponseMessage response = null;
+            //response = client.GetAsync("api/subscription/All/" + AppState.Instance.User.ServerUserId).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    var subscriptionList = JsonConvert.DeserializeObject<List<Subscription>>(data);
+            //    foreach (var x in subscriptionList)
+            //    {
+            //        x.ImagePath = @"..\Catalog\Products_Images\" + x.ImagePath;
+            //        _subscriptionList.Add(x);
+            //    }
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var failureResult = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //}
+            //client.Dispose();
         }
 
         /// <summary>

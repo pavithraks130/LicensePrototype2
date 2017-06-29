@@ -75,7 +75,7 @@ namespace Centralized.WebAPI.Controllers
         /// <param name="userId">The User ID</param>
         /// <returns>The Cart Items Based on User ID</returns>
         [HttpGet]
-        [Route("GetItems/{userId}")]
+        [Route("GetItemsByUser/{userId}")]
         public IHttpActionResult GetCartItems(string userId)
         {
             var cartItemList = cartLogic.GetCartItems(userId);
@@ -91,9 +91,9 @@ namespace Centralized.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteCartItem(int id)
         {
-            var status = cartLogic.DeleteCartItem(id);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, Constants.Success);
+            var item = cartLogic.DeleteCartItem(id);
+            if (item != null)
+                return Request.CreateResponse(HttpStatusCode.OK, item);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, cartLogic.ErrorMessage);
         }
@@ -145,9 +145,9 @@ namespace Centralized.WebAPI.Controllers
         [Route("CreateSubscriptionAddToCart")]
         public HttpResponseMessage CreateSubscriptionAddToCart(Subscription subscriptionType)
         {
-            bool status = cartBOLogic.CreateSubscriptionAddToCart(subscriptionType);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.Created, Constants.Success);
+           var subscription = cartBOLogic.CreateSubscriptionAddToCart(subscriptionType);
+            if (subscription != null)
+                return Request.CreateResponse(HttpStatusCode.Created, subscription);
             else if (String.IsNullOrEmpty(cartBOLogic.ErrorMessage))
                 return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Due to internal issue the subscription cannot be created");
             else

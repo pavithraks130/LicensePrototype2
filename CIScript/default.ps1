@@ -6,7 +6,6 @@ Properties {
 	$build_artifacts_dir = "$targetpath\buildartifacts"
 	$sln_file =  ls $targetpath -Recurse "LicensePrototypeSolution.sln"
 	$SourceDir = "$targetpath\src"
-	$NuGet =  "$targetpath\.nuget\NuGet.exe"
 
 	$WebProject = ls "$targetpath\src\"+$ProjectName "*.csproj"
 	#$WebProject = ls "$targetpath\src\License.MetCalWeb" "*.csproj"

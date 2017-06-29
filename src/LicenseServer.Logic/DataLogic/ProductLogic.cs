@@ -110,11 +110,12 @@ namespace LicenseServer.Logic
             return products;
         }
 
-        public bool DeleteProduct(int id)
+        public Product DeleteProduct(int id)
         {
-            var status = Work.ProductRepository.Delete(id);
+            var pro = Work.ProductRepository.GetById(id);
+            pro = Work.ProductRepository.Delete(pro);
             Work.ProductRepository.Save();
-            return status;
+            return AutoMapper.Mapper.Map<Product>(pro);
         }
 
         public List<Product> GetProductUpdatesByProductId(List<Product> products)

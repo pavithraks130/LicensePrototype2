@@ -63,12 +63,13 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="inviteId"></param>
         /// <param name="status"></param>
-        public void UpdateInviteStatus(object inviteId, string status)
+        public License.Models.TeamMember UpdateInviteStatus(object inviteId, string status)
         {
             Core.Model.TeamMember invite = Work.TeamMemberRepository.GetById(inviteId);
             invite.InviteeStatus = status;
             Work.TeamMemberRepository.Update(invite);
             Work.TeamMemberRepository.Save();
+            return AutoMapper.Mapper.Map<License.Models.TeamMember>(invite);
         }
 
         /// <summary>
@@ -89,9 +90,8 @@ namespace License.Logic.DataLogic
         /// <param name="id"></param>
         /// <param name="userId"></param>
         /// <param name="adminStatus"></param>
-        public void SetAsAdmin(int id, string userId, bool adminStatus)
+        public Models.TeamMember SetAsAdmin(int id, string userId, bool adminStatus)
         {
-
             Core.Model.TeamMember teamMember = Work.TeamMemberRepository.GetById(id);
             var team = Work.TeamRepository.GetById(teamMember.TeamId);
             var teamMemberList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId && t.Team.AdminId == team.AdminId).ToList();
@@ -112,6 +112,8 @@ namespace License.Logic.DataLogic
             }
             if (count > 0)
                 Work.TeamMemberRepository.Save();
+            teamMember = Work.TeamMemberRepository.GetById(id);
+            return AutoMapper.Mapper.Map<Models.TeamMember>(teamMember);
         }
 
         /// <summary>
@@ -119,12 +121,12 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="teamMember"></param>
         /// <returns></returns>
-        public bool DeleteTeamMember(DataModelTeamMember teamMember)
+        public Models.TeamMember DeleteTeamMember(DataModelTeamMember teamMember)
         {
             var obj = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamMember.InviteeUserId && t.TeamId == teamMember.TeamId).FirstOrDefault();
             if (obj != null)
                 return DeleteTeamMember(obj.Id);
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool DeleteTeamMember(int id)
+        public Models.TeamMember DeleteTeamMember(int id)
         {
             try
             {
@@ -166,19 +168,19 @@ namespace License.Logic.DataLogic
                 // if the user is not belong to any other team excluding the current team from which he his being removed and if he has admin access 
                 // then the admin role will be removed for the user.
                 var membList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamObj.InviteeUserId && team.AdminId == teamObj.Team.AdminId).ToList();
-                int count = membList.Where(t => t.Id != teamObj.Id).Count();               
+                int count = membList.Where(t => t.Id != teamObj.Id).Count();
                 if (teamObj.IsAdmin && count == 0)
                     UserManager.RemoveFromRole(teamObj.InviteeUserId, "Admin");
 
-                var status = Work.TeamMemberRepository.Delete(teamObj);
+                teamObj = Work.TeamMemberRepository.Delete(teamObj);
                 Work.TeamMemberRepository.Save();
-                return true;
+                return AutoMapper.Mapper.Map<Models.TeamMember>(teamObj);
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
             }
-            return false;
+            return null;
 
         }
 

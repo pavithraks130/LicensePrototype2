@@ -168,8 +168,8 @@ namespace OnPremise.WebAPI.Controllers
             LicenseBO licBOLogic = new LicenseBO();
             licBOLogic.UserManager = UserManager;
             licBOLogic.RoleManager = RoleManager;
-            var data = licBOLogic.GetUserLicenseSubscriptionDetails(model);
-            return Request.CreateResponse(HttpStatusCode.OK, data);
+            model.UserLicenseDetails = licBOLogic.GetUserLicenseSubscriptionDetails(model);
+            return Request.CreateResponse(HttpStatusCode.OK,model);
         }      
     }
 }

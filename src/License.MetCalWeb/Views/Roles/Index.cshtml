@@ -45,9 +45,10 @@
             var id = $(obj).attr('data-id');
             $.ajax({
                 url: 'Roles/Delete',
-                method: 'GET',
+                method: 'POST',
                 data: { id: id },
                 success: function (data) {
+                    console.log(data);
                     if (data.success) {
                         location.reload();
                     }
@@ -56,7 +57,7 @@
                     }
                 },
                 error: function (data) {
-
+                    console.log(data);
                 }
             });
         });

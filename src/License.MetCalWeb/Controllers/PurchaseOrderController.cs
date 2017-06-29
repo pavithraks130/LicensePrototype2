@@ -19,9 +19,11 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class PurchaseOrderController : Controller
     {
+        private APIInvoke _invoke = null;
+
         public PurchaseOrderController()
         {
-
+            _invoke = new APIInvoke();
         }
 
         /// <summary>
@@ -32,19 +34,32 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> Index()
         {
             List<PurchaseOrder> orderList = new List<PurchaseOrder>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.GetAsync("api/purchaseorder/All");
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<PurchaseOrder>> request = new WebAPIRequest<List<PurchaseOrder>>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.PurchaseOrder,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<List<PurchaseOrder>, List<PurchaseOrder>>(request);
+            if (response.Status)
+                orderList = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.GetAsync("api/purchaseorder/All");
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    orderList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(data);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View(orderList);
         }
 
@@ -73,17 +88,31 @@ namespace License.MetCalWeb.Controllers
                 ApprovedBy = LicenseSessionState.Instance.User.UserName
             }).ToList();
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
-
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<PurchaseOrder>> request = new WebAPIRequest<List<PurchaseOrder>>()
+            {
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.UpdataMuliplePO,
+                InvokeMethod = Method.PUT,
+                ServiceModule = Modules.PurchaseOrder,
+                ServiceType = ServiceType.CentralizeWebApi,
+                ModelObject = orderList
+            };
+            var response = _invoke.InvokeService<List<PurchaseOrder>, string>(request);
+            if (response.Status)
                 return RedirectToAction("Index", "User");
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.PutAsJsonAsync("/api/purchaseorder/UpdataMuliplePO", orderList);
+
+            //if (response.IsSuccessStatusCode)
+            //    return RedirectToAction("Index", "User");
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View();
         }
 
@@ -95,19 +124,33 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> OrderStatus()
         {
             List<PurchaseOrder> poList = new List<PurchaseOrder>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.GetAsync("api/purchaseorder/OrderByUser/" + LicenseSessionState.Instance.User.ServerUserId);
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<PurchaseOrder>> request = new WebAPIRequest<List<PurchaseOrder>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                poList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.OrderByUser,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.PurchaseOrder,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = LicenseSessionState.Instance.User.ServerUserId
+            };
+            var response = _invoke.InvokeService<List<PurchaseOrder>, List<PurchaseOrder>>(request);
+            if (response.Status)
+                poList = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.GetAsync("api/purchaseorder/OrderByUser/" + LicenseSessionState.Instance.User.ServerUserId);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    poList = JsonConvert.DeserializeObject<List<PurchaseOrder>>(jsonData);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View(poList);
         }
 
@@ -120,19 +163,33 @@ namespace License.MetCalWeb.Controllers
         public async Task<ActionResult> OrderDetail(int id)
         {
             PurchaseOrder order = new PurchaseOrder();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = await client.GetAsync("api/purchaseorder/OrderById/" + id.ToString());
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<PurchaseOrder> request = new WebAPIRequest<PurchaseOrder>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                order = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetById,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.PurchaseOrder,
+                ServiceType = ServiceType.CentralizeWebApi,
+                Id = id.ToString()
+            };
+            var response = _invoke.InvokeService<PurchaseOrder, PurchaseOrder>(request);
+            if (response.Status)
+                order = response.ResponseData;
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = await client.GetAsync("api/purchaseorder/OrderById/" + id.ToString());
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    order = JsonConvert.DeserializeObject<PurchaseOrder>(jsonData);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View(order);
         }
     }

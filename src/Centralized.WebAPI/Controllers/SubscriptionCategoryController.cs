@@ -45,7 +45,7 @@ namespace Centralized.WebAPI.Controllers
         {
             var subscrCategory = subscriptionCategoryLogic.Create(subscriptionCategory);
             if (subscrCategory?.Id > 0)
-                return Request.CreateResponse(HttpStatusCode.Created, Constants.Success);
+                return Request.CreateResponse(HttpStatusCode.Created, subscrCategory);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, subscriptionCategoryLogic.ErrorMessage);
         }
@@ -92,9 +92,9 @@ namespace Centralized.WebAPI.Controllers
         [Route("Delete/{id}")]
         public HttpResponseMessage DeleteSubscriptionCategory(int id)
         {
-            bool status = subscriptionCategoryLogic.Delete(id);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, Constants.Deleted);
+            var category = subscriptionCategoryLogic.Delete(id);
+            if (category != null)
+                return Request.CreateResponse(HttpStatusCode.OK,category);
             else
                 return Request.CreateResponse(HttpStatusCode.ExpectationFailed, subscriptionCategoryLogic.ErrorMessage);
         }

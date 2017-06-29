@@ -122,7 +122,7 @@ namespace License.Logic.DataLogic
         /// <param name="id"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        public bool UpdateUser(string id, User user)
+        public User UpdateUser(string id, User user)
         {
             var appuser = UserManager.FindById(id);
             appuser.FirstName = user.FirstName;
@@ -143,9 +143,12 @@ namespace License.Logic.DataLogic
                 result = UserManager.RemoveFromRoles(id, existingUserRoles.Except(user.Roles).ToArray<string>());
             }
             if (!result.Succeeded)
+            {
                 foreach (string str in result.Errors)
                     ErrorMessage += str;
-            return result.Succeeded;
+                return null;
+            }           
+            return AutoMapper.Mapper.Map<User>(appuser);
         }
 
         /// <summary>
@@ -223,7 +226,7 @@ namespace License.Logic.DataLogic
         /// </summary>
         /// <param name="userid"></param>
         /// <param name="status"></param>
-        public void UpdateLogOutStatus(string userid, bool status)
+        public User UpdateLogOutStatus(string userid, bool status)
         {
             var user = UserManager.FindById(userid);
             user.IsActive = status;
@@ -231,6 +234,7 @@ namespace License.Logic.DataLogic
             if (!result.Succeeded)
                 foreach (string str in result.Errors)
                     ErrorMessage += str;
+            return AutoMapper.Mapper.Map<User>(user);
         }
 
         /// <summary>

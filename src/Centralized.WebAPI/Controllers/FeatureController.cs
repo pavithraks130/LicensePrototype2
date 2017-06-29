@@ -15,7 +15,7 @@ namespace Centralized.WebAPI.Controllers
     public class FeatureController : BaseController
     {
         private FeaturesLogic featurelogic = null;
-        
+
         /// <summary>
         /// Constructor for Feature Controller 
         /// </summary>
@@ -62,7 +62,7 @@ namespace Centralized.WebAPI.Controllers
         {
             feature = featurelogic.CreateFeature(feature);
             if (feature?.Id > 0)
-                return Request.CreateResponse(HttpStatusCode.Created, Constants.Success);
+                return Request.CreateResponse(HttpStatusCode.Created, feature);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, featurelogic.ErrorMessage);
         }
@@ -79,7 +79,7 @@ namespace Centralized.WebAPI.Controllers
         {
             var feature = featurelogic.Update(id, featureToUpdate);
             if (feature?.Id > 0)
-                return Request.CreateResponse(HttpStatusCode.OK, Constants.Success);
+                return Request.CreateResponse(HttpStatusCode.OK, feature);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, featurelogic.ErrorMessage);
         }
@@ -93,9 +93,9 @@ namespace Centralized.WebAPI.Controllers
         [HttpDelete]
         public HttpResponseMessage DeleteFeature(int id)
         {
-            bool status = featurelogic.DeleteFeature(id);
-            if (status)
-                return Request.CreateResponse(HttpStatusCode.OK, Constants.Deleted);
+            var feature = featurelogic.DeleteFeature(id);
+            if (feature != null && string.IsNullOrEmpty(featurelogic.ErrorMessage))
+                return Request.CreateResponse(HttpStatusCode.OK, feature);
             else
                 return Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, featurelogic.ErrorMessage);
         }

@@ -110,7 +110,6 @@
     <Compile Include="Common\CustomEventArgs.cs" />
     <Compile Include="Common\DataValidations.cs" />
     <Compile Include="Common\Enum.cs" />
-    <Compile Include="Common\FileIO.cs" />
     <Compile Include="Common\PasswordHelper.cs" />
     <Compile Include="Common\StringToListConverter.cs" />
     <Compile Include="Model\CardDetails.cs" />
@@ -259,6 +258,10 @@
     <ProjectReference Include="..\License.ServiceInvoke\License.ServiceInvoke.csproj">
       <Project>{596ee3cd-98da-4667-8c45-e6a67e8dff5d}</Project>
       <Name>License.ServiceInvoke</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LicenseKey\LicenseKey.csproj">
+      <Project>{1dc3f930-86be-4404-8366-49bf479244e0}</Project>
+      <Name>LicenseKey</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

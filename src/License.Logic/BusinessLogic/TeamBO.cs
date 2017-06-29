@@ -143,7 +143,8 @@ namespace License.Logic.BusinessLogic
             bool status = true;
             foreach (var mem in teamMemberList)
             {
-                status &= logic.DeleteTeamMember(mem);
+                var obj = logic.DeleteTeamMember(mem);
+                status &= obj != null;
                 var adminId = teamLogic.GetTeamById(mem.TeamId).AdminId;
                 var team = teamLogic.GetTeamsByAdmin(adminId).FirstOrDefault(t => t.IsDefaultTeam);
                 var memberlist = logic.GetTeamMemberDetailsByUserId(mem.InviteeUserId);
@@ -247,6 +248,7 @@ namespace License.Logic.BusinessLogic
         /// Product license will added or removed for the team for the products which are mapped.
         public TeamConcurrentUserResponse UpdateConcurrentUsers(Team team)
         {
+
             TeamConcurrentUserResponse concurentUserResponse = new TeamConcurrentUserResponse();
             concurentUserResponse.TeamId = team.Id;
             // Get Team Based on the Team Id
@@ -326,7 +328,7 @@ namespace License.Logic.BusinessLogic
         }
 
         /// Delete Team , along with the team delete if any license is mapped then remove the team License.
-        public bool DeleteTeam(int teamId)
+        public Team DeleteTeam(int teamId)
         {
             try
             {
@@ -345,12 +347,12 @@ namespace License.Logic.BusinessLogic
             {
                 ErrorMessage = ex.Message;
             }
-            bool status = false;
+            Team team = null;
             if (String.IsNullOrEmpty(ErrorMessage))
-                status = teamLogic.DeleteTeam(teamId);
-            if (!status)
+                team = teamLogic.DeleteTeam(teamId);
+            if (team == null)
                 ErrorMessage = ErrorMessage + " " + teamLogic.ErrorMessage;
-            return status;
+            return team;
         }
     }
 }

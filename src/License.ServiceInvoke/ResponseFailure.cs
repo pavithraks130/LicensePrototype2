@@ -9,5 +9,7 @@ namespace License.ServiceInvoke
     public class ResponseFailure
     {
         public string Message { get; set; }
+
+        public string error { get; set; }
     }
 }

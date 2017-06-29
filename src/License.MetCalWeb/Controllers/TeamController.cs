@@ -20,9 +20,12 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class TeamController : BaseController
     {
+        private OnPremiseSubscriptionLogic _onPremiseSubscriptionLogic = null;
+        private APIInvoke _invoke = null;
         public TeamController()
         {
-
+            _onPremiseSubscriptionLogic = new OnPremiseSubscriptionLogic();
+            _invoke = new APIInvoke();
         }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace License.MetCalWeb.Controllers
             string userId = string.Empty;
             if (!LicenseSessionState.Instance.IsSuperAdmin)
                 userId = LicenseSessionState.Instance.User.UserId;
-            var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+            var teamList = _onPremiseSubscriptionLogic.GetTeamList(userId);
             LicenseSessionState.Instance.TeamList = teamList;
             return View(LicenseSessionState.Instance.TeamList);
         }
@@ -74,23 +77,39 @@ namespace License.MetCalWeb.Controllers
                     model.AdminId = LicenseSessionState.Instance.User.UserId;
                 else if (LicenseSessionState.Instance.IsAdmin)
                     model.AdminId = LicenseSessionState.Instance.AppTeamContext.AdminId;
-                    
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                var response = client.PostAsJsonAsync("api/Team/Create", model).Result;
-                if (response.IsSuccessStatusCode)
+                WebAPIRequest<Team> request = new WebAPIRequest<Team>()
                 {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var data = JsonConvert.DeserializeObject<Team>(jsonData);
-                    LicenseSessionState.Instance.TeamList.Add(data);
+                    AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                    Functionality = Functionality.Create,
+                    InvokeMethod = Method.POST,
+                    ModelObject = model,
+                    ServiceModule = Modules.Team,
+                    ServiceType = ServiceType.OnPremiseWebApi
+                };
+                var response = _invoke.InvokeService<Team, Team>(request);
+                if (response.Status)
+                {
+                    LicenseSessionState.Instance.TeamList.Add(response.ResponseData);
                     return Json(new { success = true, message = "" });
                 }
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+                //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+                //var response = client.PostAsJsonAsync("api/Team/Create", model).Result;
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var data = JsonConvert.DeserializeObject<Team>(jsonData);
+                //    LicenseSessionState.Instance.TeamList.Add(data);
+                //    return Json(new { success = true, message = "" });
+                //}
+                //else
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
 
-                }
+                //}
             }
             var _message = string.Join(Environment.NewLine, ModelState.Values
                                         .SelectMany(x => x.Errors)
@@ -110,7 +129,7 @@ namespace License.MetCalWeb.Controllers
             teamMappingDetails.TeamID = teamId;
             teamMappingDetails.ConcurrentUserCount = team.ConcurrentUserCount;
             teamMappingDetails.SelectedTeamName = team.Name;
-            teamMappingDetails.ProductList = OnPremiseSubscriptionLogic.GetProductsFromSubscription().ToList();
+            teamMappingDetails.ProductList = _onPremiseSubscriptionLogic.GetProductsFromSubscription().ToList();
             return View(teamMappingDetails);
 
         }
@@ -151,14 +170,27 @@ namespace License.MetCalWeb.Controllers
             team.ConcurrentUserCount = teamMappingDetails.ConcurrentUserCount;
             List<ProductLicense> proLicList = ExtractLicenseData(selectedProducts);
             TeamLicenseDataMapping mapping = new TeamLicenseDataMapping() { LicenseDataList = proLicList, TeamList = new List<Team>() { team } };
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/TeamLicense/Create", mapping).Result;
-            if (!response.IsSuccessStatusCode)
+            WebAPIRequest<TeamLicenseDataMapping> request = new WebAPIRequest<TeamLicenseDataMapping>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                return response.ReasonPhrase + " - " + obj.Message;
-            }
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.Assign,
+                InvokeMethod = Method.POST,
+                ModelObject = mapping,
+                ServiceModule = Modules.TeamLicense,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<TeamLicenseDataMapping, String>(request);
+            if (!response.Status)
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.PostAsJsonAsync("api/TeamLicense/Create", mapping).Result;
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    return response.ReasonPhrase + " - " + obj.Message;
+            //}
             return String.Empty;
         }
 
@@ -188,7 +220,7 @@ namespace License.MetCalWeb.Controllers
             TempData["UserId"] = userId;
             //Logic to get the Subscription details Who are Team Member and Role is assigned as admin by the Super admin
             string adminUserId = string.Empty;
-            IList<Subscription> licenseMapModelList = OnPremiseSubscriptionLogic.GetSubscriptionForLicenseMap(userId, adminUserId);
+            IList<Subscription> licenseMapModelList = _onPremiseSubscriptionLogic.GetSubscriptionForLicenseMap(userId, adminUserId);
             return licenseMapModelList;
         }
 
@@ -213,22 +245,42 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditTeam(int id, Team model)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PutAsJsonAsync("api/team/Update/" + id, model).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<Team> request = new WebAPIRequest<Team>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var teamObj = JsonConvert.DeserializeObject<Team>(data);
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.Update,
+                InvokeMethod = Method.PUT,
+                ModelObject = model,
+                ServiceModule = Modules.Team,
+                ServiceType = ServiceType.OnPremiseWebApi,
+                Id = id.ToString()
+            };
+
+            var response = _invoke.InvokeService<Team, Team>(request);
+            if (response.Status)
+            {
                 LicenseSessionState.Instance.TeamList.RemoveAll(f => f.Id == id);
-                LicenseSessionState.Instance.TeamList.Add(teamObj);
+                LicenseSessionState.Instance.TeamList.Add(response.ResponseData);
                 return RedirectToAction("Index");
             }
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.PutAsJsonAsync("api/team/Update/" + id, model).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    var teamObj = JsonConvert.DeserializeObject<Team>(data);
+            //    LicenseSessionState.Instance.TeamList.RemoveAll(f => f.Id == id);
+            //    LicenseSessionState.Instance.TeamList.Add(teamObj);
+            //    return RedirectToAction("Index");
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             var _message = string.Join(Environment.NewLine, ModelState.Values
                                       .SelectMany(x => x.Errors)
                                       .Select(x => x.ErrorMessage));
@@ -243,9 +295,17 @@ namespace License.MetCalWeb.Controllers
         [HttpGet]
         public ActionResult DeleteTeam(int id)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.DeleteAsync("api/team/Delete/" + id).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<Team> request = new WebAPIRequest<Team>()
+            {
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.Delete,
+                InvokeMethod = Method.DELETE,
+                Id = id.ToString(),
+                ServiceModule = Modules.Team,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<Team, Team>(request);
+            if (response.Status)
             {
                 LicenseSessionState.Instance.TeamList.RemoveAll(t => t.Id == id);
                 if (LicenseSessionState.Instance.SelectedTeam != null && LicenseSessionState.Instance.SelectedTeam.Id == id)
@@ -253,11 +313,22 @@ namespace License.MetCalWeb.Controllers
                 return RedirectToAction("Index");
             }
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-            }
+                ModelState.AddModelError("", response.Error.error + " - " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.DeleteAsync("api/team/Delete/" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    LicenseSessionState.Instance.TeamList.RemoveAll(t => t.Id == id);
+            //    if (LicenseSessionState.Instance.SelectedTeam != null && LicenseSessionState.Instance.SelectedTeam.Id == id)
+            //        LicenseSessionState.Instance.SelectedTeam = LicenseSessionState.Instance.TeamList.FirstOrDefault(s => s.IsDefaultTeam = true);
+            //    return RedirectToAction("Index");
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
+            //}
             return View();
         }
 
@@ -271,7 +342,7 @@ namespace License.MetCalWeb.Controllers
             TeamDetailsExtended teamDetails = new TeamDetailsExtended()
             {
                 Team = LicenseSessionState.Instance.TeamList.ToList().Where(t => t.Id == teamId).FirstOrDefault(),
-                ProductList = OnPremiseSubscriptionLogic.GetTeamLicenseDetails(teamId)
+                ProductList = _onPremiseSubscriptionLogic.GetTeamLicenseDetails(teamId)
             };
             return View(teamDetails);
         }
@@ -292,15 +363,26 @@ namespace License.MetCalWeb.Controllers
                 TeamList = new List<Team> { new Team() { Id = teamId } },
                 LicenseDataList = ExtractLicenseData(selectedProducts)
             };
-
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/TeamLicense/Revoke", teamLicDataMapping).Result;
-            if (!response.IsSuccessStatusCode)
+            WebAPIRequest<TeamLicenseDataMapping> request = new WebAPIRequest<TeamLicenseDataMapping>()
             {
-                var jsondata = response.Content.ReadAsStringAsync().Result;
-                var responsefailure = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
-                return Json(new { success = false, message = responsefailure.Message });
-            }
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.Revoke,
+                InvokeMethod = Method.POST,
+                ModelObject = teamLicDataMapping,
+                ServiceModule = Modules.TeamLicense,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<TeamLicenseDataMapping, String>(request);
+            if (!response.Status)
+                ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.PostAsJsonAsync("api/TeamLicense/Revoke", teamLicDataMapping).Result;
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    var jsondata = response.Content.ReadAsStringAsync().Result;
+            //    var responsefailure = JsonConvert.DeserializeObject<ResponseFailure>(jsondata);
+            //    return Json(new { success = false, message = responsefailure.Message });
+            //}
             return Json(new { success = true, message = "" });
 
         }
@@ -313,14 +395,26 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult UpdateConcurentUser(int teamId, int noOfUser)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
             Team team = new Team() { Id = teamId, ConcurrentUserCount = noOfUser };
-            var response = client.PostAsJsonAsync("api/team/UpdateConcurentUser", team).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<Team> request = new WebAPIRequest<Team>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var responsedata = JsonConvert.DeserializeObject<TeamConcurrentUserResponse>(jsonData);
-                if (responsedata.UserUpdateStatus)
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.UpdateConcurentUser,
+                InvokeMethod = Method.POST,
+                ModelObject = team,
+                ServiceModule = Modules.Team,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<Team, TeamConcurrentUserResponse>(request);
+            if (!response.Status)
+            {
+                team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
+                return Json(new { success = false, message = response.Error.error + " " + response.Error.Message, OldUserCount = team != null ? team.ConcurrentUserCount : 0 }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                if (response.ResponseData.UserUpdateStatus)
                 {
                     team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
                     if (team != null)
@@ -328,15 +422,30 @@ namespace License.MetCalWeb.Controllers
                     return Json(new { success = true, message = "", OldUserCount = team.ConcurrentUserCount }, JsonRequestBehavior.AllowGet);
                 }
                 else
-                    return Json(new { success = false, message = responsedata.ErrorMessage, OldUserCount = responsedata.OldUserCount }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, message = response.ResponseData.ErrorMessage, OldUserCount = response.ResponseData.OldUserCount }, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var failureData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
-                return Json(new { success = false, message = failureData.Message, OldUserCount = team != null ? team.ConcurrentUserCount : 0 }, JsonRequestBehavior.AllowGet);
-            }
+            //var response = client.PostAsJsonAsync("api/team/UpdateConcurentUser", team).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var responsedata = JsonConvert.DeserializeObject<TeamConcurrentUserResponse>(jsonData);
+            //    if (responsedata.UserUpdateStatus)
+            //    {
+            //        team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
+            //        if (team != null)
+            //            team.ConcurrentUserCount = noOfUser;
+            //        return Json(new { success = true, message = "", OldUserCount = team.ConcurrentUserCount }, JsonRequestBehavior.AllowGet);
+            //    }
+            //    else
+            //        return Json(new { success = false, message = responsedata.ErrorMessage, OldUserCount = responsedata.OldUserCount }, JsonRequestBehavior.AllowGet);
+            //}
+            //else
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    var failureData = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+            //    team = LicenseSessionState.Instance.TeamList.FirstOrDefault(t => t.Id == teamId);
+            //    return Json(new { success = false, message = failureData.Message, OldUserCount = team != null ? team.ConcurrentUserCount : 0 }, JsonRequestBehavior.AllowGet);
+            //}
         }
     }
 }

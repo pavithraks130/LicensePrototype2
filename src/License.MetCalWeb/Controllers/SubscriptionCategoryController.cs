@@ -18,6 +18,11 @@ namespace License.MetCalWeb.Controllers
     [SessionExpire]
     public class SubscriptionCategoryController : BaseController
     {
+        private APIInvoke _invoke = null;
+        public SubscriptionCategoryController()
+        {
+            _invoke = new APIInvoke();
+        }
         /// <summary>
         /// GET action which fetches list of all the SubscriptionCategory
         /// </summary>
@@ -25,13 +30,24 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Index()
         {
             List<SubscriptionCategory> categories = new List<SubscriptionCategory>();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/SubscriptionCategory/All").Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<List<SubscriptionCategory>> request = new WebAPIRequest<List<SubscriptionCategory>>()
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                categories = JsonConvert.DeserializeObject<List<SubscriptionCategory>>(jsonData);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.All,
+                InvokeMethod = Method.GET,
+                ServiceModule = Modules.SubscriptionCategory,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService< List<SubscriptionCategory>, List< SubscriptionCategory > >(request);
+            if (response.Status)
+                categories = response.ResponseData;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/SubscriptionCategory/All").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var jsonData = response.Content.ReadAsStringAsync().Result;
+            //    categories = JsonConvert.DeserializeObject<List<SubscriptionCategory>>(jsonData);
+            //}
             return View(categories);
         }
 
@@ -56,16 +72,30 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = client.PostAsJsonAsync("api/SubscriptionCategory/create", category).Result;
-                if (response.IsSuccessStatusCode)
+                WebAPIRequest<SubscriptionCategory> request = new WebAPIRequest<SubscriptionCategory>()
+                {
+                    AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                    Functionality = Functionality.Create,
+                    InvokeMethod = Method.POST,
+                    ModelObject = category,
+                    ServiceModule = Modules.SubscriptionCategory,
+                    ServiceType = ServiceType.CentralizeWebApi
+                };
+                var response = _invoke.InvokeService< SubscriptionCategory, SubscriptionCategory>(request);
+                if (response.Status)
                     return Json(new { message = "success", success = true });
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var responseError = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                    return Json(new { message = responseError.Message, success = false });
-                }
+                    return Json(new { message = response.Error.error + " " + response.Error.Message, success = false });
+                //    HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+                //    var response = client.PostAsJsonAsync("api/SubscriptionCategory/create", category).Result;
+                //    if (response.IsSuccessStatusCode)
+                //        return Json(new { message = "success", success = true });
+                //    else
+                //    {
+                //        var jsonData = response.Content.ReadAsStringAsync().Result;
+                //        var responseError = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                //        return Json(new { message = responseError.Message, success = false });
+                //    }
             }
             var _message = String.Join(Environment.NewLine, ModelState.Values.SelectMany(r => r.Errors).SelectMany(r => r.ErrorMessage));
             return Json(new { message = _message, success = false });
@@ -79,13 +109,25 @@ namespace License.MetCalWeb.Controllers
         public ActionResult Edit(int id)
         {
             SubscriptionCategory category = new SubscriptionCategory();
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.GetAsync("api/SubscriptionCategory/GetById/" + id).Result;
-            if (response.IsSuccessStatusCode)
+            WebAPIRequest<SubscriptionCategory> request = new WebAPIRequest<SubscriptionCategory>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<SubscriptionCategory>(data);
-            }
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.GetById,
+                InvokeMethod = Method.GET,
+                Id = id.ToString(),
+                ServiceModule = Modules.SubscriptionCategory,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService< SubscriptionCategory, SubscriptionCategory>(request);
+            if (response.Status)
+                category = response.ResponseData;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.GetAsync("api/SubscriptionCategory/GetById/" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    category = JsonConvert.DeserializeObject<SubscriptionCategory>(data);
+            //}
             return View(category);
         }
 
@@ -99,16 +141,31 @@ namespace License.MetCalWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, SubscriptionCategory category)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.PutAsJsonAsync("api/SubscriptionCategory/update/" + id, category).Result;
-            if (!response.IsSuccessStatusCode)
+            WebAPIRequest<SubscriptionCategory> request = new WebAPIRequest<SubscriptionCategory>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var responseFailure = JsonConvert.DeserializeObject<ResponseFailure>(data);
-                return Json(new { message = responseFailure.Message, success = false });
-            }
-            else
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.Update,
+                InvokeMethod = Method.PUT,
+                Id = id.ToString(),
+                ServiceModule = Modules.SubscriptionCategory,
+                ServiceType = ServiceType.CentralizeWebApi,
+                ModelObject = category
+            };
+            var response = _invoke.InvokeService< SubscriptionCategory, SubscriptionCategory>(request);
+            if (response.Status)
                 return Json(new { message = "success", success = true });
+            else
+                return Json(new { message = response.Error.error + " " + response.Error.Message, success = false });
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.PutAsJsonAsync("api/SubscriptionCategory/update/" + id, category).Result;
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    var responseFailure = JsonConvert.DeserializeObject<ResponseFailure>(data);
+            //    return Json(new { message = responseFailure.Message, success = false });
+            //}
+            //else
+            //    return Json(new { message = "success", success = true });
         }
 
         /// <summary>
@@ -119,15 +176,29 @@ namespace License.MetCalWeb.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-            var response = client.DeleteAsync("api/SubscriptionCategory/Delete/" + id).Result;
-            if (!response.IsSuccessStatusCode)
+            WebAPIRequest<SubscriptionCategory> request = new WebAPIRequest<SubscriptionCategory>()
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var responseFailure = JsonConvert.DeserializeObject<ResponseFailure>(data);
-                return Json(new { message = responseFailure.Message, success = false });
-            }
-            return Json(new { message = "success", success = true });
+                AccessToken = LicenseSessionState.Instance.CentralizedToken.access_token,
+                Functionality = Functionality.Delete,
+                InvokeMethod = Method.DELETE,
+                Id = id.ToString(),
+                ServiceModule = Modules.SubscriptionCategory,
+                ServiceType = ServiceType.CentralizeWebApi
+            };
+            var response = _invoke.InvokeService<SubscriptionCategory, SubscriptionCategory>(request);
+            if (response.Status)
+                return Json(new { message = "success", success = true });
+            else
+                return Json(new { message = response.Error.error + " " + response.Error.Message, success = false });
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+            //var response = client.DeleteAsync("api/SubscriptionCategory/Delete/" + id).Result;
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    var data = response.Content.ReadAsStringAsync().Result;
+            //    var responseFailure = JsonConvert.DeserializeObject<ResponseFailure>(data);
+            //    return Json(new { message = responseFailure.Message, success = false });
+            //}
+            //return Json(new { message = "success", success = true });
         }
     }
 }

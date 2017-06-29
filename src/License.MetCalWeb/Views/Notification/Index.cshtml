@@ -3,18 +3,21 @@
 
 <span style="font-weight:bold;color:forestgreen" id="blinker">Notifications!!</span>
 <table class="table">
-    @foreach (var item in Model)
-            {
-        <tr>
-            <td colspan="2">
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td colspan="2">
 
-                @Html.Image(String.Concat("../Catalog/Images/", item.Image), item.NotificationData, "35", "100", "vertical-align:left;")
-                <div style='vertical-align:middle; display:inline; font-weight:bold'>
-                    @item.NotificationData
-                </div>
+                    @Html.Image(String.Concat("../Catalog/Images/", item.Image), item.NotificationData, "35", "100", "vertical-align:left;")
+                    <div style='vertical-align:middle; display:inline; font-weight:bold'>
+                        @item.NotificationData
+                    </div>
 
-            </td>
-        </tr>
+                </td>
+            </tr>
+        }
     }
 </table>
 <script type="text/javascript">

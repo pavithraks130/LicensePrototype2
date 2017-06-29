@@ -53,7 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessToken.cs" />
     <Compile Include="CartItem.cs" />
     <Compile Include="ChangePassword.cs" />
     <Compile Include="ConcurrentUserLogin.cs" />

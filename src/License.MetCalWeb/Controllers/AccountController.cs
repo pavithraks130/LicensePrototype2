@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using License.MetCalWeb.Common;
-using License.MetCalWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using License.MetCalWeb.Logic;
 using License.Models;
 using License.ServiceInvoke;
 
@@ -25,8 +23,10 @@ namespace License.MetCalWeb.Controllers
     public class AccountController : BaseController
     {
         string ErrorMessage;
-        private AccountLogic _accountLogic = null;
         private IAuthenticationManager _authManager = null;
+        private Authentication _authentication = null;
+        private APIInvoke _invoke = null;
+        private OnPremiseSubscriptionLogic _onPremiseSubscriptionLogic = null;
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -40,8 +40,13 @@ namespace License.MetCalWeb.Controllers
 
         public AccountController()
         {
-            _accountLogic = new AccountLogic();
-        }
+            //_accountLogic = new AccountLogic();
+            _authentication = new Authentication();
+            _invoke = new APIInvoke();
+            _onPremiseSubscriptionLogic = new OnPremiseSubscriptionLogic();
+            _authentication.ApplicationType = "WebPortal";
+            _authentication.ApplicationCode = "kXtpZlZCESG7F8jo+uVuaA==";
+    }
 
         public ActionResult Register()
         {
@@ -64,40 +69,44 @@ namespace License.MetCalWeb.Controllers
             ViewBag.SucessMessageDisplay = false;
             if (ModelState.IsValid)
             {
-                //Invoking the Create User Service ofo the centralized Server
-                HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
-                var response = await client.PostAsJsonAsync("api/user/create", model);
-                if (response.IsSuccessStatusCode)
+                var response = _authentication.Register<Registration>(model);
+                if (response.Status)
                 {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var datamodel = JsonConvert.DeserializeObject<User>(jsonData);
-
-                    client.Dispose();
-                    model.ServerUserId = datamodel.UserId;
-                    //Invoking the Create User Service ofo the OnPremise Server
-                    client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-                    response = await client.PostAsJsonAsync("api/user/create", model);
-                    if (response.IsSuccessStatusCode)
-                    {
-
-                        ViewBag.SucessMessageDisplay = true;
-                        FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
-                        StreamReader reader = new StreamReader(stream);
-                        string str = reader.ReadToEnd();
-                        reader.Close();
-                        stream.Close();
-                        stream.Dispose();
-                        EmailService service = new EmailService();
-                        service.SendEmail(model.Email, "Welcome to Fluke", str);
-                    }
+                    ViewBag.SucessMessageDisplay = true;
+                    FileStream stream = System.IO.File.Open(Server.MapPath("~/EmailTemplate/WelcometoFlukeCalibration.htm"), FileMode.Open);
+                    StreamReader reader = new StreamReader(stream);
+                    string str = reader.ReadToEnd();
+                    reader.Close();
+                    stream.Close();
+                    stream.Dispose();
+                    EmailService service = new EmailService();
+                    service.SendEmail(model.Email, "Welcome to Fluke", str);
                 }
                 else
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
+                    ModelState.AddModelError("", response.Error.Message);
+                ////Invoking the Create User Service ofo the centralized Server
+                //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
+                //var response = await client.PostAsJsonAsync("api/user/create", model);
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var jsonData = response.Content.ReadAsStringAsync().Result;
+                //    var datamodel = JsonConvert.DeserializeObject<User>(jsonData);
 
-                    ModelState.AddModelError("", response.ReasonPhrase + " - " + obj.Message);
-                }
+                //    client.Dispose();
+                //    model.ServerUserId = datamodel.UserId;
+                //    //Invoking the Create User Service ofo the OnPremise Server
+                //    client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+                //    response = await client.PostAsJsonAsync("api/user/create", model);
+                //    if (response.IsSuccessStatusCode)
+                //    {
+
+
+                //    }
+                //}
+                //else
+                //{
+
+                //}
             }
             return View();
         }
@@ -119,33 +128,19 @@ namespace License.MetCalWeb.Controllers
             User user = null;
             if (ModelState.IsValid)
             {
-                // AUthentication performed on the On Premise Server, If te Authentication fails or the Server User id is not empty then the user is authenticated with
-                // centralized service
-                var status = await _accountLogic.AuthenticateUser(model, ServiceType.OnPremiseWebApi);
-                if (status)
+                var resposne = _authentication.LoginAuthentication<User, User>(model);
+                if (!String.IsNullOrEmpty(resposne.ErrorMessage))
                 {
-                    user = await _accountLogic.GetUserData(ServiceType.OnPremiseWebApi);
-                    if (user.Roles.Contains("SuperAdmin"))
-                        status = await _accountLogic.AuthenticateUser(model, ServiceType.CentralizeWebApi);
-                }
-                else
-                {
-                    status = await _accountLogic.AuthenticateUser(model, ServiceType.CentralizeWebApi);
-                    if (status)
-                        user = await _accountLogic.GetUserData(ServiceType.CentralizeWebApi);
-                    else
-                    {
-                        ModelState.AddModelError("", "Invalid Credentials");
-                        return View();
-                    }
-                }
-
-                // Once the Authentication is performed and user  object returned is not equal to null , then the global session object are set  as shown below.
-                if (user == null)
-                {
-                    ModelState.AddModelError("", _accountLogic.ErrorMessage);
+                    ModelState.AddModelError("", resposne.ErrorMessage);
                     return View();
                 }
+                user = resposne.User;
+                LicenseSessionState.Instance.OnPremiseToken = resposne.OnPremiseToken;
+                LicenseSessionState.Instance.CentralizedToken = resposne.CentralizedToken;
+                // Once the Authentication is performed and user  object returned is not equal to null , then the global session object are set  as shown below.
+                //if (user == null)
+                //    //ModelState.AddModelError("", _accountLogic.ErrorMessage);
+                //    return View();
                 LicenseSessionState.Instance.User = user;
                 LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
                 LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
@@ -187,7 +182,7 @@ namespace License.MetCalWeb.Controllers
 
                     // Get the Team list for which the logged in User belongs to  if the us3er belongs to more than one team then the pop up window is displayed for the 
                     // team selection
-                    var teamList = OnPremiseSubscriptionLogic.GetTeamList(userId);
+                    var teamList = _onPremiseSubscriptionLogic.GetTeamList(userId);
                     LicenseSessionState.Instance.TeamList = teamList;
 
                     if (teamList.Count == 0)
@@ -265,11 +260,13 @@ namespace License.MetCalWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Invokjking the On Premise Service for token generation
-                var tokenModel = _accountLogic.GetForgotPasswordToken(model, ServiceType.OnPremiseWebApi);
-                // If the return value is Null then centralized service called
-                if (tokenModel == null)
-                    tokenModel = _accountLogic.GetForgotPasswordToken(model, ServiceType.CentralizeWebApi);
+                var response = _authentication.ForgotPassword<ForgotPassword>(model);
+                var tokenModel = response.ResponseData;
+                //// Invoking the On Premise Service for token generation
+                //var tokenModel = _accountLogic.GetForgotPasswordToken(model, ServiceType.OnPremiseWebApi);
+                //// If the return value is Null then centralized service called
+                //if (tokenModel == null)
+                //    tokenModel = _accountLogic.GetForgotPasswordToken(model, ServiceType.CentralizeWebApi);
                 if (tokenModel != null)
                 {
                     var callbackUrl = Url.Action("ResetPassword", "Account", new { UserId = tokenModel.UserId, code = tokenModel.Token }, protocol: Request.Url.Scheme);
@@ -278,7 +275,7 @@ namespace License.MetCalWeb.Controllers
                     ViewBag.Message = "Mail has been sent to the specified email address to reset the password.  !!!!!";
                 }
                 else
-                    ModelState.AddModelError("", _accountLogic.ErrorMessage);
+                    ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
             }
             return View();
         }
@@ -310,20 +307,21 @@ namespace License.MetCalWeb.Controllers
             {
                 model.Token = code;
                 model.UserId = userId;
-                var user = _accountLogic.ResetUserPassword(model, ServiceType.OnPremiseWebApi);
-                if (user == null)
-                    user = _accountLogic.ResetUserPassword(model, ServiceType.CentralizeWebApi);
-                else if (!String.IsNullOrEmpty(user.ServerUserId))
-                {
-                    model.UserId = user.ServerUserId;
-                    model.Token = String.Empty;
-                    user = _accountLogic.ResetUserPassword(model, ServiceType.CentralizeWebApi);
-                    ErrorMessage = "Centralized Server : " + _accountLogic.ErrorMessage;
-                }
+                var response = _authentication.ResetPasswordAction(model);
+                //var user = _accountLogic.ResetUserPassword(model, ServiceType.OnPremiseWebApi);
+                //if (user == null)
+                //    user = _accountLogic.ResetUserPassword(model, ServiceType.CentralizeWebApi);
+                //else if (!String.IsNullOrEmpty(user.ServerUserId))
+                //{
+                //    model.UserId = user.ServerUserId;
+                //    model.Token = String.Empty;
+                //    user = _accountLogic.ResetUserPassword(model, ServiceType.CentralizeWebApi);
+                //    ErrorMessage = "Centralized Server : " + _accountLogic.ErrorMessage;
+                //}
 
-                if (user == null)
+                if (!response.Status)
                 {
-                    ModelState.AddModelError("", _accountLogic.ErrorMessage);
+                    ModelState.AddModelError("", response.Error.Message);
                     return View(model);
                 }
                 ViewBag.Display = "inline";
@@ -338,15 +336,16 @@ namespace License.MetCalWeb.Controllers
         /// <returns></returns>
         public ActionResult LogOut()
         {
-            if (LicenseSessionState.Instance.IsGlobalAdmin)
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.UserId, ServiceType.CentralizeWebApi);
-            else if (LicenseSessionState.Instance.IsSuperAdmin)
+            LicenseSessionState.Instance.User.IsActive = false;
+            WebAPIRequest<User> request = new WebAPIRequest<User>()
             {
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.UserId, ServiceType.OnPremiseWebApi);
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.ServerUserId, ServiceType.CentralizeWebApi);
-            }
-            else
-                _accountLogic.UpdateLogoutStatus(LicenseSessionState.UserId, ServiceType.OnPremiseWebApi);
+                ModelObject = LicenseSessionState.Instance.User,
+                InvokeMethod = Method.PUT,
+                ServiceModule = Modules.User,
+                ServiceType = ServiceType.All,
+                Functionality = Functionality.UpdateLogoutStatus
+            };
+            _authentication.LogoutUser(LicenseSessionState.Instance.User);
             ClearSession();
             return RedirectToAction("LogIn");
         }
@@ -375,24 +374,25 @@ namespace License.MetCalWeb.Controllers
             string teamId = details[0];
             string inviteId = details[1];
 
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            WebAPIRequest<TeamMember> _apiRequest = new WebAPIRequest<TeamMember>();
             TeamMember mem = new TeamMember();
             mem.Id = Convert.ToInt32(inviteId);
             mem.TeamId = Convert.ToInt32(teamId);
             mem.InviteeStatus = status;
-            var response = client.PutAsJsonAsync("api/TeamMember/UpdateInvitation", mem).Result;
-            if (response.IsSuccessStatusCode)
+            _apiRequest.ModelObject = mem;
+            _apiRequest.InvokeMethod = Method.PUT;
+            _apiRequest.ServiceModule = Modules.TeamMember;
+            _apiRequest.ServiceType = ServiceType.OnPremiseWebApi;
+            _apiRequest.Functionality = Functionality.UpdateInvite;
+            var response = _invoke.InvokeService<TeamMember, TeamMember>(_apiRequest);
+            if (response.Status)
             {
                 var stat = (InviteStatus)Enum.Parse(typeof(InviteStatus), status);
                 if (stat == InviteStatus.Accepted)
                     ViewBag.Message = "You have accepted the invitation. Click below to Login with credentials which was shared through Mail";
             }
             else
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var obj = JsonConvert.DeserializeObject<ResponseFailure>(jsonData);
-                ViewBag.ErrorMessage = response.ReasonPhrase + " - " + obj.Message;
-            }
+                ViewBag.ErrorMessage = response.Error.error + " " + response.Error.Message;
 
             return View();
         }
@@ -449,12 +449,24 @@ namespace License.MetCalWeb.Controllers
                 TeamId = LicenseSessionState.Instance.SelectedTeam.Id,
                 UserId = LicenseSessionState.Instance.User.UserId
             };
-            HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
-            var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
-            var jsonData = response.Content.ReadAsStringAsync().Result;
-            var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
-            LicenseSessionState.Instance.UserSubscribedProducts = userLoginObj.Products;
-            return userLoginObj;
+            WebAPIRequest<ConcurrentUserLogin> _request = new WebAPIRequest<ConcurrentUserLogin>()
+            {
+                AccessToken = LicenseSessionState.Instance.OnPremiseToken.access_token,
+                Functionality = Functionality.UpdateConcurentUser,
+                InvokeMethod = Method.POST,
+                ModelObject = userLogin,
+                ServiceModule = Modules.User,
+                ServiceType = ServiceType.OnPremiseWebApi
+            };
+            var response = _invoke.InvokeService<ConcurrentUserLogin, ConcurrentUserLogin>(_request);
+            if (response.Error != null)
+                return null;
+            //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.OnPremiseWebApi);
+            //var response = client.PostAsJsonAsync("api/User/IsConcurrentUserLoggedIn", userLogin).Result;
+            //var jsonData = response.Content.ReadAsStringAsync().Result;
+            //var userLoginObj = JsonConvert.DeserializeObject<ConcurrentUserLogin>(jsonData);
+            LicenseSessionState.Instance.UserSubscribedProducts = response.ResponseData.Products;
+            return response.ResponseData;
 
         }
     }
