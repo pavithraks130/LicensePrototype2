@@ -32,7 +32,10 @@ namespace License.MetCalWeb.Controllers
             };
             var response = _invoke.InvokeService<List<Notification>, List<Notification>>(request);
             if (response.Status)
+            { 
                 notifications = response.ResponseData;
+                return View(notifications);
+            }
             else
                 ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
             //HttpClient client = WebApiServiceLogic.CreateClient(ServiceType.CentralizeWebApi);
@@ -84,7 +87,7 @@ namespace License.MetCalWeb.Controllers
                 };
                 var response = _invoke.InvokeService< Notification, Notification>(request);
                 if (response.Status)
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Create");
                 else
                     ModelState.AddModelError("", response.Error.error + " " + response.Error.Message);
                 ////Service call to save the data in Centralized DB
