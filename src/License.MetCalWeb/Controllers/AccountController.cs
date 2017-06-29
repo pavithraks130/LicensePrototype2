@@ -128,7 +128,7 @@ namespace License.MetCalWeb.Controllers
             User user = null;
             if (ModelState.IsValid)
             {
-                var resposne = _authentication.LoginAuthentication<User, User>(model);
+                var resposne = _authentication.LoginAuthentication<User>(model);
                 if (!String.IsNullOrEmpty(resposne.ErrorMessage))
                 {
                     ModelState.AddModelError("", resposne.ErrorMessage);

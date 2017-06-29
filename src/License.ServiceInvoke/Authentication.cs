@@ -33,7 +33,7 @@ namespace License.ServiceInvoke
         }
         public String ErrorMessage { get; set; }
 
-        public AuthenticationResponse<Q> LoginAuthentication<T, Q>(Login loginModel)
+        public AuthenticationResponse<Q> LoginAuthentication<Q>(Login loginModel)
         {
             AuthenticationResponse<Q> response = new AuthenticationResponse<Q>();
             var onPremiseToken = AuthenticateUser(loginModel, ServiceType.OnPremiseWebApi);
@@ -51,7 +51,7 @@ namespace License.ServiceInvoke
                 response.ErrorMessage = "";
 
             // User record fetch
-            WebAPIRequest<T> apiRequest = new WebAPIRequest<T>()
+            WebAPIRequest<Q> apiRequest = new WebAPIRequest<Q>()
             {
                 InvokeMethod = Method.GET,
                 ServiceModule = Modules.User,
@@ -69,7 +69,7 @@ namespace License.ServiceInvoke
                 apiRequest.Id = response.CentralizedToken.Id;
                 apiRequest.ServiceType = ServiceType.CentralizeWebApi;
             }
-            var apiResponse = _invoke.InvokeService<T, Q>(apiRequest);
+            var apiResponse = _invoke.InvokeService<Q, Q>(apiRequest);
             if (apiResponse.Error == null)
             {
                 response.User = apiResponse.ResponseData;
@@ -117,7 +117,7 @@ namespace License.ServiceInvoke
         {
             AuthenticationResponse<Q> response = new AuthenticationResponse<Q>();
             if (IsNetworkAvailable())
-                response = LoginAuthentication<T, Q>(loginModel);
+                response = LoginAuthentication<Q>(loginModel);
             else
                 response = AuthenticateUserOffline<Q>(loginModel);
             return response;
