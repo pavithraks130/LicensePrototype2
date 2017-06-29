@@ -9,6 +9,10 @@ namespace LicenseServer.Logic.DataLogic
 {
     public class NotificationLogic : BaseLogic
     {
+        /// <summary>
+        /// Get notification item from DB
+        /// </summary>
+        /// <returns></returns>
         public List<Notification> GetNotifications()
         {
             List<Notification> notificationsList = new List<Notification>();
@@ -16,6 +20,11 @@ namespace LicenseServer.Logic.DataLogic
             notificationsList = notificationObject.Select(n => AutoMapper.Mapper.Map<Notification>(n)).ToList();
             return notificationsList;
         }
+        /// <summary>
+        /// Create Notification item 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Notification CreateNotificationItem(Notification item)
         {
             Core.Model.Notification notificationItem = AutoMapper.Mapper.Map<Notification, Core.Model.Notification>(item);
@@ -24,6 +33,11 @@ namespace LicenseServer.Logic.DataLogic
             Work.NotificationRepository.Save();
             return AutoMapper.Mapper.Map<Notification>(notificationItem);
         }
+        /// <summary>
+        /// Update Notification data
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Notification UpdateNotification(Notification item)
         {
             Core.Model.Notification notificationItem = Work.NotificationRepository.GetById(item.Id);
@@ -34,6 +48,12 @@ namespace LicenseServer.Logic.DataLogic
             return AutoMapper.Mapper.Map<Notification>(notificationItem);
 
         }
+
+        /// <summary>
+        /// Delete Notification data
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Notification DeleteNotificationItem(int id)
         {
             var notificationObj = Work.NotificationRepository.GetById(id);
