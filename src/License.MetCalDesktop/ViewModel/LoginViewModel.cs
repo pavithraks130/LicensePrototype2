@@ -178,7 +178,6 @@ namespace License.MetCalDesktop.ViewModel
                     IsEnableLogin = true;
                     return;
                 }
-                AppState.Instance.User = user;
                 AppState.Instance.IsUserLoggedIn = true;
                 if (AppState.Instance.IsNetworkAvilable())
                     LoadTeamsOnline();

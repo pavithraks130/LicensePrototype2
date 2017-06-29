@@ -26,7 +26,7 @@ namespace License.MetCalDesktop.businessLogic
         private APIInvoke _invoke = null;
         private FileIO _fileIO = null;
         private UserLogic _userlogic = new UserLogic();
-        
+
         public LoginLogic()
         {
             _invoke = new APIInvoke();
@@ -51,6 +51,7 @@ namespace License.MetCalDesktop.businessLogic
                 _authentication.OnpremiseToken = response.OnPremiseToken.access_token;
                 _authentication.CentralizedToken = response.CentralizedToken.access_token;
                 user = response.User;
+                AppState.Instance.User = user;
                 AppState.Instance.IsSuperAdmin = user.Roles.Contains("SuperAdmin");
                 if (AppState.Instance.IsSuperAdmin && AppState.Instance.IsNetworkAvilable())
                     SynchPurchaseOrder(user.ServerUserId);
@@ -169,8 +170,11 @@ namespace License.MetCalDesktop.businessLogic
                 ServiceType = ServiceType.CentralizeWebApi
             };
             var response = _invoke.InvokeService<SubscriptionList, SubscriptionList>(request);
-            if (response.Status && response.ResponseData.Subscriptions.Count > 0)
-                UpdateSubscriptionOnpremise(response.ResponseData);
+            if (response.Status)
+            {
+                if (response.ResponseData != null && response.ResponseData.Subscriptions != null && response.ResponseData.Subscriptions.Count > 0)
+                    UpdateSubscriptionOnpremise(response.ResponseData);
+            }
             else
                 ErrorMessage = response.Error.error + " " + response.Error.Message;
             //HttpClient client = AppState.CreateClient(ServiceType.CentralizeWebApi.ToString());
