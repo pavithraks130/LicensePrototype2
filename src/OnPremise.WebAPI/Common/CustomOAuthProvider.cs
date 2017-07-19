@@ -46,7 +46,7 @@ namespace OnPremise.WebAPI.Common
             var userModel = userLogic.AuthenticateUser(context.UserName, context.Password);
             if (userModel == null)
             {
-                context.SetError("Invalid Credentials");
+                context.SetError(Constants.UNAUTHORIZED_USER, "Username and password error");
                 return;
             }
             else
