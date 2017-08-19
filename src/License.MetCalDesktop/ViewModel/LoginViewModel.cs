@@ -174,7 +174,7 @@ namespace License.MetCalDesktop.ViewModel
                 //    user = logic.AuthenticateUser(Email, Password);
                 if (response == null)
                 {
-                    MessageBox.Show(logic.ErrorMessage);
+                    MessageBox.Show("Error Code:" +logic.ErrorMessage);
                     IsEnableLogin = true;
                     return;
                 }

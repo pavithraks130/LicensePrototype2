@@ -131,7 +131,7 @@ namespace License.MetCalWeb.Controllers
                 var resposne = _authentication.LoginAuthentication<User>(model);
                 if (!String.IsNullOrEmpty(resposne.ErrorMessage))
                 {
-                    ModelState.AddModelError("", resposne.ErrorMessage);
+                    ModelState.AddModelError("", "Error Code:"+resposne.ErrorMessage);
                     return View();
                 }
                 user = resposne.User;
@@ -218,8 +218,8 @@ namespace License.MetCalWeb.Controllers
                 ViewBag.IsTeamListPopupVisible = LicenseSessionState.Instance.TeamList.Count > 0 && LicenseSessionState.Instance.SelectedTeam == null;
                 return View();
             }
-            else
-                ModelState.AddModelError("", "Invalid Credentials");
+            //else
+            //    ModelState.AddModelError("", "Invalid Credentials");
             return View();
         }
 

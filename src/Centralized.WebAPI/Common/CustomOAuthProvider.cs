@@ -53,6 +53,7 @@ namespace Centralized.WebAPI.Common
             if (user == null)
             {
                 context.SetError("", "invalid grant");
+               // context.SetError(Constants.UNAUTHORIZED_USER,"Username and password error");
                 return;
             }
 
