@@ -501,11 +501,6 @@
             Updated Status
             </summary>
         </member>
-        <member name="F:Centralized.WebAPI.Common.Constants.UNAUTHORIZED_USER">
-            <summary>
-            UNAUTHORIZED USER
-            </summary>
-        </member>
         <member name="T:Centralized.WebAPI.Common.CustomOAuthProvider">
             <summary>
             Custom Auth Provider

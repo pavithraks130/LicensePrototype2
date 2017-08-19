@@ -240,7 +240,7 @@ namespace License.ServiceInvoke
                 case Functionality.UpdateAdminAccess: url = "api/TeamMember/UpdateAdminAccess"; break;
                 case Functionality.Delete: url = "api/TeamMember/Delete/" + id; break;
                 case Functionality.Revoke: url = "api/TeamMember/Revoke"; break;
-                case Functionality.UpdateInvite: url = "api/TeamMember/UpdateInvitation"; break;
+                case Functionality.UpdateInvite: url = "api/TeamMember/Update"; break;
             }
             return url;
         }
