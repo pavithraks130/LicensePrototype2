@@ -227,6 +227,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\ClientAppVerificationSettingsController.cs" />
     <Compile Include="Controllers\FeatureController.cs" />
     <Compile Include="Controllers\VISMADataController.cs" />
     <Compile Include="Controllers\HardwareController.cs" />
@@ -342,6 +343,9 @@
     <Content Include="Views\VISMAData\Upload.cshtml" />
     <Content Include="Views\Notification\Create.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\ClientAppVerificationSettings\Create.cshtml" />
+    <Content Include="Views\ClientAppVerificationSettings\Index.cshtml" />
+    <Content Include="Views\ClientAppVerificationSettings\Sync.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

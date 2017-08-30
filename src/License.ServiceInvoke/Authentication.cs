@@ -15,7 +15,7 @@ namespace License.ServiceInvoke
     public class Authentication
     {
         public string ApplicationCode { get; set; }
-        public string ApplicationType { get; set; }// = "WebPortal";
+        public string ApplicationSecretKey { get; set; }
         public string CentralizedToken { get; set; }
         public string OnpremiseToken { get; set; }
 
@@ -73,7 +73,9 @@ namespace License.ServiceInvoke
             if (apiResponse.Error == null)
             {
                 response.User = apiResponse.ResponseData;
-                if (ApplicationType == "MetCal")
+                var allowedAppForCredentialFile = "MetCal,Biomedical,Xray,Calibration";//System.Configuration.ConfigurationManager.AppSettings.Get("AppCodeForCredFile");
+                var allowedApplication = allowedAppForCredentialFile.Split(',');
+                if (allowedApplication.Contains(ApplicationCode))
                     _userLogic.CreateCredentialFile(apiResponse.ResponseData, loginModel.Password, LoginFileName);
             }
             else
@@ -133,7 +135,7 @@ namespace License.ServiceInvoke
                                 new KeyValuePair<string, string>("password", model.Password)
                             });
             if (webApiType == ServiceType.OnPremiseWebApi)
-                client.DefaultRequestHeaders.Add("Authorization", "Basic " + EncodeToBase64(string.Format("{0}:{1}", ApplicationCode, ApplicationType)));
+                client.DefaultRequestHeaders.Add("Authorization", "Basic " + EncodeToBase64(string.Format("{0}:{1}", ApplicationCode, ApplicationSecretKey)));
 
             var response = client.PostAsync("Authenticate", formContent).Result;
             if (response.IsSuccessStatusCode)

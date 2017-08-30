@@ -14,7 +14,7 @@ namespace License.MetCalWeb.Controllers
     /// <summary>
     /// Controler is used to perform the actions related to the Feature. CRUD operation for the Features
     /// </summary>
-    [Authorize(Roles = "BackendAdmin")]
+    [Authorize(Roles = "Fluke Admin")]
     [SessionExpire]
     public class FeatureController : BaseController
     {

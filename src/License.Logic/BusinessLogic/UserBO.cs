@@ -37,7 +37,7 @@ namespace License.Logic.BusinessLogic
             Initialize();
             UserDetails details = new UserDetails();
             var user = _userLogic.GetUserById(userId);
-            if (user.Roles.Contains("SuperAdmin"))
+            if (user.Roles.Contains("Super Admin"))
                 details.Teams = _teamLogic.GetTeamsByAdmin(userId);
             else
                 details.Teams = _teamLogic.GetTeamsByUser(userId);

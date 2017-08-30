@@ -124,6 +124,12 @@ namespace LicenseServer.Core.Infrastructure
         {
             get { return _notificationRepository ?? (_notificationRepository = new GenericRepository<Notification>(_context)); }
         }
+
+        private GenericRepository<ClientAppVerificationSettings> _clientApplicationSettingsRepository;
+        public GenericRepository<ClientAppVerificationSettings> ClientApplicationSettingsRepository
+        {
+            get { return _clientApplicationSettingsRepository ?? (_clientApplicationSettingsRepository = new GenericRepository<ClientAppVerificationSettings>(_context)); }
+        }
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

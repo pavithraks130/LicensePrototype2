@@ -1,0 +1,63 @@
+﻿@model IEnumerable<License.Models.ClientAppVerificationSettings>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="form-group">
+    <h2>Application Verification Details</h2>
+    <button class="btn btn-default btnCreate">Create SecretKey</button>
+</div>
+<div class="row">
+    <div>
+        <div class="container">
+            @if (Model != null)
+            {
+                <table class="table" style="table-layout:fixed; padding:10px">
+                    <tr>
+                        <th class="col-md-2"><label>Application Code</label></th>
+                        <th class="col-md-3"><label> Application SecretKey   </label> </th>
+                    </tr>
+                    @foreach (var obj in Model)
+                {
+                        <tr>
+                            <td class="col-md-2">@obj.ApplicationCode.ToString()</td>
+                            <td class="col-md-3">@obj.ApplicationSecretkey</td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    </div>
+
+</div>
+<div id='myModal' class='modal'>
+</div>
+
+@* Javascript *@
+<script>
+    $(function () {
+
+        $(".btnCreate").click(function () {
+
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "/ClientAppVerificationSettings/Create",
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $('#myModal').html(data);
+                    $('#myModal').modal(options);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        $("#closbtn").click(function () {
+            $('#myModal').html("");
+            $('#myModal').modal('hide');
+        });
+    });
+</script>

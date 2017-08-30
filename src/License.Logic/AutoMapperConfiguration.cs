@@ -63,6 +63,11 @@ namespace License.Logic
             cfg.CreateMap<Core.Model.Team, Team>().MaxDepth(3)
                 .ForMember(dest => dest.AdminUser, opt => opt.MapFrom(src => src.AdminUser));
 
+            cfg.CreateMap<Core.Model.ClientAppVerificationSettings, ClientAppVerificationSettings>();
+                //.ForMember(dest => dest.ApplicationCode, opt => opt.MapFrom(src => (ApplicationCodeType)Enum.Parse(typeof(ApplicationCodeType), src.ApplicationCode)));
+            cfg.CreateMap<ClientAppVerificationSettings, Core.Model.ClientAppVerificationSettings>();
+                //.ForMember(opt => opt.ApplicationCode, opt => opt.MapFrom(dest => dest.ApplicationCode.ToString()));
+
         }
 
     }

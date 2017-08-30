@@ -49,7 +49,7 @@ namespace LicenseServer.Logic
                 .ForMember(dest => dest.Subtype, opt => opt.MapFrom(src => src.Subtype));
             cfg.CreateMap<UserSubscription, LicenseServer.Core.Model.UserSubscription>();
 
-            cfg.CreateMap<LicenseServer.Core.Model.CartItem,CartItem>();
+            cfg.CreateMap<LicenseServer.Core.Model.CartItem, CartItem>();
             cfg.CreateMap<CartItem, LicenseServer.Core.Model.CartItem>();
 
             cfg.CreateMap<Feature, LicenseServer.Core.Model.Feature>();
@@ -77,6 +77,11 @@ namespace LicenseServer.Logic
 
             cfg.CreateMap<Core.Model.Notification, Notification>();
             cfg.CreateMap<Notification, Core.Model.Notification>();
+
+            cfg.CreateMap<Core.Model.ClientAppVerificationSettings, ClientAppVerificationSettings>();
+               // .ForMember(dest => dest.ApplicationCode, opt => opt.MapFrom(src => (ApplicationCodeType)Enum.Parse(typeof(ApplicationCodeType), src.ApplicationCode)));
+            cfg.CreateMap<ClientAppVerificationSettings, Core.Model.ClientAppVerificationSettings>();
+                //.ForMember(opt => opt.ApplicationCode, opt => opt.MapFrom(dest => dest.ApplicationCode.ToString()));
 
 
 

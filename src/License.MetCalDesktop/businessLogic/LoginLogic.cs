@@ -32,7 +32,7 @@ namespace License.MetCalDesktop.businessLogic
             _invoke = new APIInvoke();
             _authentication = new Authentication()
             {
-                ApplicationType = applicationSecretPass,
+                ApplicationSecretKey = applicationSecretPass,
                 ApplicationCode = applicationCode,
                 CentralizedToken = AppState.Instance.CentralizedToken == null ? "" : AppState.Instance.CentralizedToken.access_token,
                 OnpremiseToken = AppState.Instance.OnPremiseToken == null ? "" : AppState.Instance.OnPremiseToken.access_token

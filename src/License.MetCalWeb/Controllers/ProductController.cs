@@ -16,7 +16,7 @@ namespace License.MetCalWeb.Controllers
     /// <summary>
     /// Controller is used to perform the action relataed to the Product
     /// </summary>
-    [Authorize(Roles = "BackendAdmin")]
+    [Authorize(Roles = "Fluke Admin")]
     [SessionExpire]
     public class ProductController : BaseController
     {

@@ -47,7 +47,8 @@ namespace License.ServiceInvoke
         UserToken,
         Role,
         Notification,
-        VISMAData
+        VISMAData,
+        ClientAppVerificationSettings
     }
 
     public enum Functionality
@@ -102,6 +103,8 @@ namespace License.ServiceInvoke
         GetCartItems,
         UploadFile,
         GetUserDetailsById,
-        GetVISMADataByTestDevice
+        GetVISMADataByTestDevice,
+        Sync,
+        Verify
     }
 }

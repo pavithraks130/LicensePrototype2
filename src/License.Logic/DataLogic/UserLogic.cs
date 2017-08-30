@@ -34,7 +34,7 @@ namespace License.Logic.DataLogic
         /// <param name="u"></param>
         /// <param name="roleName"></param>
         /// <returns></returns>
-        public bool CreateUser(Registration u, string roleName = "SuperAdmin")
+        public bool CreateUser(Registration u, string roleName = "Super Admin")
         {
             User ur = new User()
             {
@@ -46,7 +46,7 @@ namespace License.Logic.DataLogic
                 ServerUserId = u.ServerUserId
             };
             AppUser user = AutoMapper.Mapper.Map<User, License.Core.Model.AppUser>(ur);
-            IdentityResult result;
+            IdentityResult result=null;
             Models.Role role = null;
             try
             {
@@ -55,10 +55,18 @@ namespace License.Logic.DataLogic
                 {
                     RoleLogic rolelogic = new RoleLogic();
                     rolelogic.RoleManager = RoleManager;
-                    bool isDefault = false;
-                    if (roleName == "SuperAdmin" || roleName == "TeamMember")
+                    bool isDefault = false; 
+                    if (roleName == "Super Admin" || roleName == "Tenant")
                         isDefault = true;
                     rolelogic.CreateRole(new Models.Role() { Name = roleName, IsDefault = isDefault });
+                }
+
+                // Creation Role if the Role Doen't exist.
+                if (RoleManager.FindByName("User") == null)
+                {
+                    RoleLogic rolelogic = new RoleLogic();
+                    rolelogic.RoleManager = RoleManager;
+                    rolelogic.CreateRole(new Models.Role() { Name = roleName, IsDefault = true });
                 }
 
                 // Check if user Record is Already created. If not exist then create User using Identity User manager
@@ -74,12 +82,16 @@ namespace License.Logic.DataLogic
                     userId = usr.Id;
 
                 // Check if User mapped to the specified Role  if not add role to user.
+                if ( !UserManager.IsInRole(userId,"User"))
+                    result = UserManager.AddToRole(userId, "User");
                 if (!UserManager.IsInRole(userId, roleName))
                     result = UserManager.AddToRole(userId, roleName);
-                else
+                else if (result == null)
                     result = new IdentityResult(new string[] { });
-                // Once User Creataed and if if user is Super Admin then create the default team  and set user as the admin to team
-                if (roleName == "SuperAdmin" && !String.IsNullOrEmpty(userId))
+
+
+                // Once User Creataed and if user is Super Admin then create the default team  and set user as the admin to team
+                if (roleName == "Super Admin" && !String.IsNullOrEmpty(userId))
                 {
                     TeamLogic teamLogic = new TeamLogic();
                     teamLogic.UserManager = UserManager;

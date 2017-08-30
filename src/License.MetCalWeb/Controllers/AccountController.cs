@@ -44,9 +44,9 @@ namespace License.MetCalWeb.Controllers
             _authentication = new Authentication();
             _invoke = new APIInvoke();
             _onPremiseSubscriptionLogic = new OnPremiseSubscriptionLogic();
-            _authentication.ApplicationType = "WebPortal";
-            _authentication.ApplicationCode = "kXtpZlZCESG7F8jo+uVuaA==";
-    }
+            _authentication.ApplicationSecretKey = System.Configuration.ConfigurationManager.AppSettings.Get("ApplicationSecretKey");// "kXtpZlZCESG7F8jo+uVuaA==";
+            _authentication.ApplicationCode = System.Configuration.ConfigurationManager.AppSettings.Get("ApplicationCode");//"MetCal";
+        }
 
         public ActionResult Register()
         {
@@ -142,13 +142,13 @@ namespace License.MetCalWeb.Controllers
                 //    //ModelState.AddModelError("", _accountLogic.ErrorMessage);
                 //    return View();
                 LicenseSessionState.Instance.User = user;
-                LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("BackendAdmin");
-                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("SuperAdmin");
+                LicenseSessionState.Instance.IsGlobalAdmin = LicenseSessionState.Instance.User.Roles.Contains("Fluke Admin");
+                LicenseSessionState.Instance.IsSuperAdmin = LicenseSessionState.Instance.User.Roles.Contains("Super Admin");
 
                 if (LicenseSessionState.Instance.IsSuperAdmin)
                     LicenseSessionState.Instance.IsAdmin = true;
                 else
-                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Admin");
+                    LicenseSessionState.Instance.IsAdmin = LicenseSessionState.Instance.User.Roles.Contains("Tenant Admin");
 
                 if (!LicenseSessionState.Instance.IsGlobalAdmin && !LicenseSessionState.Instance.IsAdmin)
                     LicenseSessionState.Instance.IsTeamMember = true;

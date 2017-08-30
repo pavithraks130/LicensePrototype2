@@ -14,7 +14,7 @@ namespace License.MetCalWeb.Controllers
     /// <summary>
     /// Controler consist of the functionality realted to Subscription category
     /// </summary>
-    [Authorize(Roles = "BackendAdmin")]
+    [Authorize(Roles = "Fluke Admin")]
     [SessionExpire]
     public class SubscriptionCategoryController : BaseController
     {

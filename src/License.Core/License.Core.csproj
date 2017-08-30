@@ -228,8 +228,17 @@
     <Compile Include="Migrations\201706200736496_TableRename.Designer.cs">
       <DependentUpon>201706200736496_TableRename.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708210516285_AddedApplicationSettingsTable.cs" />
+    <Compile Include="Migrations\201708210516285_AddedApplicationSettingsTable.Designer.cs">
+      <DependentUpon>201708210516285_AddedApplicationSettingsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708211157045_ChangesToClientAppVerification.cs" />
+    <Compile Include="Migrations\201708211157045_ChangesToClientAppVerification.Designer.cs">
+      <DependentUpon>201708211157045_ChangesToClientAppVerification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppUser.cs" />
+    <Compile Include="Model\ClientAppVerificationSettings.cs" />
     <Compile Include="Model\VISMAData.cs" />
     <Compile Include="Model\ProductLicense.cs" />
     <Compile Include="Model\Role.cs" />
@@ -335,6 +344,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706200736496_TableRename.resx">
       <DependentUpon>201706200736496_TableRename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708210516285_AddedApplicationSettingsTable.resx">
+      <DependentUpon>201708210516285_AddedApplicationSettingsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211157045_ChangesToClientAppVerification.resx">
+      <DependentUpon>201708211157045_ChangesToClientAppVerification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

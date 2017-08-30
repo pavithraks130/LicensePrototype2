@@ -32,8 +32,8 @@ namespace LicenseServer.Core.Migrations
                 org = context.Organization.Add(org);
                 context.SaveChanges();
                 Appuser user = new Appuser();
-                string roleName = "BackendAdmin";
-
+                string roleName = "Fluke Admin";
+                
                 user.FirstName = "admin";
                 user.Email = System.Configuration.ConfigurationSettings.AppSettings.Get("AdminUserName");
                 user.UserName = user.Email;

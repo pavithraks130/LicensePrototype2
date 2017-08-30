@@ -34,7 +34,7 @@ namespace LicenseServer.Logic
             return usersList;
         }
 
-        public Registration CreateUser(Registration u, string roleName = "BackendAdmin")
+        public Registration CreateUser(Registration u, string roleName = "Fluke Admin")
         {
             UserTokenLogic tokenLogic = new UserTokenLogic();
             var status = tokenLogic.VerifyUserToken(new License.Models.UserToken() { Email = u.Email, Token = u.Token });
@@ -43,12 +43,14 @@ namespace LicenseServer.Logic
                 ErrorMessage = "Invalid User Token";
                 return null;
             }
-            User ur = new User();
-            ur.FirstName = u.FirstName;
-            ur.LastName = u.LastName;
-            ur.Email = u.Email;
-            ur.PhoneNumber = u.PhoneNumber;
-            ur.UserName = u.Email;
+            User ur = new User()
+            {
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                UserName = u.Email
+            };
             var teamName = u.OrganizationName;
             OrganizationLogic logic = new OrganizationLogic();
             License.Models.Organization t = logic.GetOrganizationByName(teamName);

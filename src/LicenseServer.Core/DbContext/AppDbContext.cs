@@ -40,6 +40,8 @@ namespace LicenseServer.Core.DbContext
         public DbSet<ProductAdditionalOption> ProductAdditionalOption { get; set; }
 
         public DbSet<Notification> Notification { get; set; }
+
+        public DbSet<ClientAppVerificationSettings> ClientAppVerificationSettings { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

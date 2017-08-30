@@ -85,13 +85,19 @@ namespace License.Core.GenericRepository
             }
         }
 
-        private LicenseRepository<VISMAData > _VISMADataRepository;
-        public LicenseRepository<VISMAData > VISMADataRepository
+        private LicenseRepository<VISMAData> _VISMADataRepository;
+        public LicenseRepository<VISMAData> VISMADataRepository
         {
             get
             {
-                return _VISMADataRepository ?? (_VISMADataRepository = new LicenseRepository<VISMAData >(_dbContext));
+                return _VISMADataRepository ?? (_VISMADataRepository = new LicenseRepository<VISMAData>(_dbContext));
             }
+        }
+
+        private LicenseRepository<ClientAppVerificationSettings> _clientAppVerficationRepository;
+        public LicenseRepository<ClientAppVerificationSettings> ClientAppVerificationRepository
+        {
+            get { return _clientAppVerficationRepository ?? (_clientAppVerficationRepository = new LicenseRepository<ClientAppVerificationSettings>(_dbContext)); }
         }
 
         private bool disposed = false;

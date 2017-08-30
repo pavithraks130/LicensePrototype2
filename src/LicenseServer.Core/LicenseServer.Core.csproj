@@ -192,10 +192,19 @@
     <Compile Include="Migrations\201706210306113_NotificationTableUpdate.Designer.cs">
       <DependentUpon>201706210306113_NotificationTableUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708210514167_AddedApplicationSettingsTable.cs" />
+    <Compile Include="Migrations\201708210514167_AddedApplicationSettingsTable.Designer.cs">
+      <DependentUpon>201708210514167_AddedApplicationSettingsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708211151346_ChangesToPropClientAppVerficationSettings.cs" />
+    <Compile Include="Migrations\201708211151346_ChangesToPropClientAppVerficationSettings.Designer.cs">
+      <DependentUpon>201708211151346_ChangesToPropClientAppVerficationSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AppRole.cs" />
     <Compile Include="Model\Appuser.cs" />
     <Compile Include="Model\CartItem.cs" />
+    <Compile Include="Model\ClientAppVerificationSettings.cs" />
     <Compile Include="Model\Feature.cs" />
     <Compile Include="Model\Notification.cs" />
     <Compile Include="Model\Organization.cs" />
@@ -281,6 +290,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706210306113_NotificationTableUpdate.resx">
       <DependentUpon>201706210306113_NotificationTableUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708210514167_AddedApplicationSettingsTable.resx">
+      <DependentUpon>201708210514167_AddedApplicationSettingsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211151346_ChangesToPropClientAppVerficationSettings.resx">
+      <DependentUpon>201708211151346_ChangesToPropClientAppVerficationSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -25,16 +25,25 @@ namespace OnPremise.WebAPI.Common
             }
             else
             {
-                context.SetError("invalid_client", "Client credentials could not be retrieved through the Authorization header.");
+                context.SetError("invalid_client", "Application doesn't contain permission to access the service");
                 context.Rejected();
             }
         }
 
         private bool ValidateEncryptedApplicationIdentity(string clientId, string clientSecret)
         {
-            var decryptedApplicationIdentity = LicenseKey.EncryptDecrypt.DecryptString(clientId, clientSecret);
-            //TODO: Need this to be more robust, right now product IDS are being set in a range for a single product
-            return decryptedApplicationIdentity.Contains("TO");
+            ClientAppVerificationSettings setting = new ClientAppVerificationSettings()
+            {
+                ApplicationCode = clientId,
+                ApplicationSecretkey = clientSecret
+            };
+            ClientAppVerificationSettingsLogic logic = new ClientAppVerificationSettingsLogic();
+            var respoonse = logic.ValidateKey(setting);
+            return respoonse;
+
+            //var decryptedApplicationIdentity = LicenseKey.EncryptDecrypt.DecryptString(clientId, clientSecret);
+            ////TODO: Need this to be more robust, right now product IDS are being set in a range for a single product
+            //return decryptedApplicationIdentity.Contains("TO");
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)

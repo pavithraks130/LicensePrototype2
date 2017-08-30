@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CartItem.cs" />
     <Compile Include="ChangePassword.cs" />
+    <Compile Include="ClientAppVerificationSettings.cs" />
     <Compile Include="ConcurrentUserLogin.cs" />
     <Compile Include="URLData.cs" />
     <Compile Include="VISMAData.cs" />

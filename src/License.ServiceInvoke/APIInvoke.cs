@@ -92,6 +92,20 @@ namespace License.ServiceInvoke
                 case Modules.Notification: url = GetNotificationUrl(id, functionality, adminId); break;
                 case Modules.VISMAData: url = GetVISMADataUrl(id, functionality, adminId); break;
                 case Modules.Role: url = GetRoleUrl(id, functionality, adminId); break;
+                case Modules.ClientAppVerificationSettings: url = GetAppVerificationSettingsUrl(id, functionality, adminId); break;
+            }
+            return url;
+        }
+
+        private string GetAppVerificationSettingsUrl(string id, Functionality functionality, string adminId)
+        {
+            string url = string.Empty;
+            switch (functionality)
+            {
+                case Functionality.All: url = "api/ClientAppVerificationSettings/All"; break;
+                case Functionality.Create: url = "api/ClientAppVerificationSettings/Create"; break;
+                case Functionality.Verify: url = "api/ClientAppVerificationSettings/Verify"; break;
+                case Functionality.Sync: url = "api/ClientAppVerificationSettings/sync";break;
             }
             return url;
         }

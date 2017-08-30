@@ -50,6 +50,7 @@ namespace License.Core.DBContext
 
         public DbSet<TeamAsset> TeamAsset { get; set; }
 
-        public DbSet<VISMAData > VISMAData { get; set; }
+        public DbSet<VISMAData> VISMAData { get; set; }
+        public DbSet<ClientAppVerificationSettings> ClientAppVerificationSettings { get; set; }
     }
 }

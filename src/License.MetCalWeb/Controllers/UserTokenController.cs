@@ -16,7 +16,7 @@ namespace License.MetCalWeb.Controllers
     /// Controller for the User Token Option. User Token is used to control te registration  from anonymous user. This is the token provided by the Fluke Admin/ Global Admin 
     /// through mail. This token need to be specified during registration
     /// </summary>
-    [Authorize(Roles = "BackendAdmin")]
+    [Authorize(Roles = "Fluke Admin")]
     [SessionExpire]
     public class UserTokenController : BaseController
     {

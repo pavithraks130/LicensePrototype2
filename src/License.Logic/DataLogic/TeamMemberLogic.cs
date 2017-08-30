@@ -97,12 +97,12 @@ namespace License.Logic.DataLogic
             var teamMemberList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == userId && t.Team.AdminId == team.AdminId).ToList();
             if (adminStatus)
             {
-                if (!RoleManager.RoleExists("Admin"))
-                    RoleManager.Create(new Core.Model.Role() { Name = "Admin" , IsDefault = true});
-                UserManager.AddToRole(userId, "Admin");
+                if (!RoleManager.RoleExists("Tenant Admin"))
+                    RoleManager.Create(new Core.Model.Role() { Name = "Tenant Admin", IsDefault = true});
+                UserManager.AddToRole(userId, "Tenant Admin");
             }
             else
-                UserManager.RemoveFromRole(userId, "Admin");
+                UserManager.RemoveFromRole(userId, "Tenant Admin");
             int count = 0;
             foreach (var teamMembers in teamMemberList)
             {
@@ -170,7 +170,7 @@ namespace License.Logic.DataLogic
                 var membList = Work.TeamMemberRepository.GetData(t => t.InviteeUserId == teamObj.InviteeUserId && team.AdminId == teamObj.Team.AdminId).ToList();
                 int count = membList.Where(t => t.Id != teamObj.Id).Count();
                 if (teamObj.IsAdmin && count == 0)
-                    UserManager.RemoveFromRole(teamObj.InviteeUserId, "Admin");
+                    UserManager.RemoveFromRole(teamObj.InviteeUserId, "Tenant Admin");
 
                 teamObj = Work.TeamMemberRepository.Delete(teamObj);
                 Work.TeamMemberRepository.Save();

@@ -95,7 +95,7 @@ namespace License.Logic.BusinessLogic
                     Email = member.InviteeEmail,
                     Password = password
                 };
-                var status = userLogic.CreateUser(reg, "TeamMember");
+                var status = userLogic.CreateUser(reg, "Tenant");
                 if (status)
                     user = userLogic.GetUserByEmail(member.InviteeEmail);
                 else
